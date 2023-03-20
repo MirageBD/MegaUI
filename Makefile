@@ -56,9 +56,6 @@ $(BIN_DIR)/cursor_sprites1.bin: $(BIN_DIR)/cursor.bin
 	$(MC)
 	$(MC) $< cm1:1 d1:0 cl1:14000 rc1:0 sm1:1
 
-$(BIN_DIR)/samples.bin: $(BIN_DIR)/music.mod
-	$(MEGAMOD) $(BIN_DIR)/music.mod -o:$(BIN_DIR)
-
 $(EXE_DIR)/boot.o:	$(SRC_DIR)/boot.s \
 					$(SRC_DIR)/main.s \
 					$(SRC_DIR)/loader.s \
@@ -96,7 +93,7 @@ $(EXE_DIR)/boot.prg: $(EXE_DIR)/boot.o Linkfile
 	$(SED) $(CONVERTVICEMAP) < $(EXE_DIR)/boot.maptemp > boot.map
 	$(SED) $(CONVERTVICEMAP) < $(EXE_DIR)/boot.maptemp > boot.list
 
-$(EXE_DIR)/disk.d81: $(EXE_DIR)/boot.prg $(BIN_DIR)/samples.bin $(BIN_DIR)/font_chars1.bin $(BIN_DIR)/glyphs_chars1.bin $(BIN_DIR)/cursor_sprites1.bin
+$(EXE_DIR)/disk.d81: $(EXE_DIR)/boot.prg $(BIN_DIR)/font_chars1.bin $(BIN_DIR)/glyphs_chars1.bin $(BIN_DIR)/cursor_sprites1.bin
 	$(RM) $@
 	$(CC1541) -n "mega" -i " 2022" -d 19 -v\
 	 \
