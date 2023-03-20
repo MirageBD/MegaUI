@@ -1,0 +1,13 @@
+*.bb
+*.bc
+*.out
+*.prg
+*.d64
+*.d81
+*.exe
+*.o
+*~
+main.dbg
+main.map
+*.a
+exe/symbols
