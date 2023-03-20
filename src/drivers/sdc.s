@@ -1,55 +1,3 @@
-
-
-sdc_doesdrive2exist
-	
-		; Preserve the current drive so we can restore it later
-		lda #$04
-		sta $d640
-		clv
-		bcc sdc_error
-		pha
-
-		; Try to select drive 2
-		ldx #2
-		lda #$06
-		sta $d640
-		clv
-		bcc sdcdd2e1
-
-		; Restore the previously selected drive
-		plx
-		lda #$06
-		sta $d640
-		clv
-		bcc sdc_error
-
-		; The C flag was already set by the Hyppo service
-		rts
-
-sdcdd2e1
-		; If the error code in A is $80, the drive doesn’t exist; otherwise some other kind of error occurred
-		cmp #$80
-		bne sdc_error
-		; Forget about the current drive we preserved because it wasn’t changed
-		plx
-		; Clear the C flag because the drive doesn’t exist
-		clc
-		rts
-
-sdc_error
-
-	inc $d020
-	jmp sdc_error
-
-; ----------------------------------------------------------------------------------------------------
-
-sdc_selectdrive2
-		ldx #01
-		lda #$06
-		sta $d640
-		clv
-		rts
-
 ; ----------------------------------------------------------------------------------------------------
 
 sdc_opendir
@@ -111,7 +59,7 @@ sdc_opendir_error
 processdirentry
 		ldx #$00
 :		lda $7000,x
-pde1	sta $4701,x
+pde1	sta $4701,x					; temp - copy to where listbox entries are
 		inx
 		cpx #$10
 		bne :-
