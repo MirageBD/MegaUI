@@ -31,4 +31,10 @@ uiwindow_release
 uiwindow_move
 		rts
 
+uiwindow_keypress
+		rts
+
+uiwindow_keyrelease
+		rts		
+
 ; ----------------------------------------------------------------------------------------------------

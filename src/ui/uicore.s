@@ -172,6 +172,8 @@ ui_element_indiceshi
 		IMPLEMENT_UIEVENT press
 		IMPLEMENT_UIEVENT release
 		IMPLEMENT_UIEVENT move
+		IMPLEMENT_UIEVENT keypress
+		IMPLEMENT_UIEVENT keyrelease
 
 ; ----------------------------------------------------------------------------------------------------
 

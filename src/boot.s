@@ -27,6 +27,7 @@ basicend	.byte 0
 
 .include "drivers/mouse.s"
 .include "drivers/sdc.s"
+.include "drivers/keyboard.s"
 
 .include "ui/uicore.s"
 .include "ui/uirect.s"
@@ -34,6 +35,7 @@ basicend	.byte 0
 .include "ui/ui.s"
 .include "ui/uidebug.s"
 .include "ui/uimouse.s"
+.include "ui/uikeyboard.s"
 
 .include "ui/uielements/uielement.s"
 .include "ui/uielements/uidebugelement.s"

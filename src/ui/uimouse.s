@@ -255,10 +255,10 @@ uimouse_handle_event_loop
 		ldy uielement_prevhoverwindowcounter			; go throught all the previously hovered over windows
 		sty uielement_temp								; if the window was already hovered over then set the hover flag
 
-mhe_loop_prehoverwindows
+uimhe_loop_prehoverwindows
 		ldy uielement_temp								; otherwise handle the enter event
 		cpy #$00
-		beq mhe_entered
+		beq uimhe_entered
 		dey
 		lda uimouse_prevhoverwindows,y
 		sta zpptr1+1
@@ -268,56 +268,56 @@ mhe_loop_prehoverwindows
 		sty uielement_temp
 		lda zpptr0+0
 		cmp zpptr1+0
-		bne mhe_loop_prehoverwindows
+		bne uimhe_loop_prehoverwindows
 		lda zpptr0+1
 		cmp zpptr1+1
-		bne mhe_loop_prehoverwindows
+		bne uimhe_loop_prehoverwindows
 		clc
 		ldy #UIELEMENT::state
 		lda (zpptr0),y
 		adc #$01
 		sta (zpptr0),y
-		bra mhe_notentered
+		bra uimhe_notentered
 
-mhe_entered
+uimhe_entered
 		ldy #UIELEMENT::state
 		lda #$01
 		sta (zpptr0),y
 		jsr uimouse_handle_enter						; handle ENTER
-		bra mhe_handle_children
+		bra uimhe_handle_children
 
-mhe_notentered
+uimhe_notentered
 		lda mouse_pressed								; handle PRESS
-		beq mhe_notpressed
+		beq uimhe_notpressed
 		jsr uimouse_handle_press
-		bra mhe_handle_children
+		bra uimhe_handle_children
 
-mhe_notpressed
+uimhe_notpressed
 		lda mouse_released
-		beq mhe_handle_children
+		beq uimhe_handle_children
 		jsr uimouse_handle_release						; handle RELEASE
 		;bra mhe_handle_children
 
-mhe_handle_children
+uimhe_handle_children
 
 		lda mouse_xpos+0
 		cmp mouse_prevxpos+0
-		bne mhe_mouse_moved
+		bne uimhe_mouse_moved
 		lda mouse_xpos+1
 		cmp mouse_prevxpos+1
-		bne mhe_mouse_moved
+		bne uimhe_mouse_moved
 		lda mouse_ypos+0
 		cmp mouse_prevypos+0
-		bne mhe_mouse_moved
+		bne uimhe_mouse_moved
 		lda mouse_ypos+1
 		cmp mouse_prevypos+1
-		bne mhe_mouse_moved
-		bra mhe_mouse_didnt_move
+		bne uimhe_mouse_moved
+		bra uimhe_mouse_didnt_move
 
-mhe_mouse_moved
+uimhe_mouse_moved
 		jsr uimouse_handle_move
 
-mhe_mouse_didnt_move
+uimhe_mouse_didnt_move
 
 		ldy #UIELEMENT::children
 		lda (zpptr0),y

@@ -64,12 +64,14 @@ $(EXE_DIR)/boot.o:	$(SRC_DIR)/boot.s \
 					$(SRC_DIR)/uitext.s \
 					$(DRVRS_SRC_DIR)/mouse.s \
 					$(DRVRS_SRC_DIR)/sdc.s \
+					$(DRVRS_SRC_DIR)/keyboard.s \
 					$(UI_SRC_DIR)/uicore.s \
 					$(UI_SRC_DIR)/uirect.s \
 					$(UI_SRC_DIR)/uidraw.s \
 					$(UI_SRC_DIR)/ui.s \
 					$(UI_SRC_DIR)/uidebug.s \
 					$(UI_SRC_DIR)/uimouse.s \
+					$(UI_SRC_DIR)/uikeyboard.s \
 					$(UIELT_SRC_DIR)/uielement.s \
 					$(UIELT_SRC_DIR)/uidebugelement.s \
 					$(UIELT_SRC_DIR)/uiwindow.s \
@@ -131,7 +133,7 @@ run: $(EXE_DIR)/disk.d81
 # deploy disk to M65
 #	m65 -l COM3 -F
 #	mega65_ftp.exe -l COM3 -s 2000000 -c "cd /" \
-#	-c "put F:\mega\UI24\exe\disk.d81 ui.d81"
+#	-c "put D:\Mega\MegaUI\exe\disk.d81 megaui.d81"
 
 # start prg
 #	m65 -l COM3 -F -r $(EXE_DIR)/bootaddr.prg
@@ -142,7 +144,7 @@ run: $(EXE_DIR)/disk.d81
 #	m65 -l COM3 -T 'list'
 #	m65 -l COM3 -T 'list'
 #	m65 -l COM3 -T 'list'
-#	m65 -l COM3 -T 'mount "ui.d81"'
+#	m65 -l COM3 -T 'mount "megaui.d81"'
 #	m65 -l COM3 -T 'load "$$"'
 #	m65 -l COM3 -T 'list'
 #	m65 -l COM3 -T 'list'

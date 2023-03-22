@@ -265,6 +265,8 @@ ui_update
 
 		jsr mouse_update
 		jsr uimouse_update
+		jsr keyboard_update
+		jsr uikeyboard_update
         rts
 
 ; ----------------------------------------------------------------------------------------------------

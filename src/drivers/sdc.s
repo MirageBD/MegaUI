@@ -59,7 +59,7 @@ sdc_opendir_error
 processdirentry
 		ldx #$00
 :		lda $7000,x
-pde1	sta $4701,x					; temp - copy to where listbox entries are
+pde1	sta listboxtxt00,x					; temp - copy to where listbox entries are
 		inx
 		cpx #$10
 		bne :-

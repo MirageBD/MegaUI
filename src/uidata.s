@@ -92,7 +92,7 @@ button1_data			.byte 5*16+0, 5*16+8							; not pressed glyph, pressed glyph
 button2_data			.byte 5*16+4, 5*16+12							; not pressed glyph, pressed glyph
 						.word scrollbar1track, uiscrollbar_increase
 listbox1_data			.word scrollbar1_data							; pointer to start position
-						.byte 3											; selection index
+						.byte 0											; selection index
 						.word listboxtxt								; pointer to list of texts
 checkbox1_data			.byte 1											; disabled/enabled
 						.byte 6*16+3, 7*16+3							; disabled glyph, enabled glyph

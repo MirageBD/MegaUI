@@ -53,22 +53,27 @@ uielement_release
 uielement_move
 		rts
 
+uielement_keypress
+		rts
+
+uielement_keyrelease
+		rts
+
 uielement_listeners
 
 		jsr ui_getelementlistenersptr_3
 
 		ldy #$00					; read pointer to ui element to act upon
-
 :		lda (zpptr3),y
 		sta zpptr0+0
 		iny
 		lda (zpptr3),y
+		sta zpptr0+1
 		cmp #$ff
 		bne :+
 		rts
 
-:		sta zpptr0+1
-
+:
 		iny
 		lda (zpptr3),y
 		sta ui_sbl+1

@@ -15,7 +15,15 @@ uilabel_leave
 
 uilabel_move
 		rts
+
+uilabel_keypress
+		rts
+
+uilabel_keyrelease
+		rts
 		
+; ----------------------------------------------------------------------------------------------------
+
 uilabel_draw
 
 		jsr uidraw_set_draw_position

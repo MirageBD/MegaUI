@@ -25,6 +25,28 @@ uilistbox_leave
 uilistbox_move
 		rts
 
+uilistbox_keypress
+		lda keyboard_pressedeventarg
+		cmp KEYBOARD_CURSORDOWN
+		bne :+
+
+		jsr uilistbox_increase
+		jsr uilistbox_draw
+		rts
+
+:		cmp KEYBOARD_CURSORUP
+		bne :+
+		jsr uilistbox_decrease
+		jsr uilistbox_draw
+		;rts
+
+:		rts
+
+uilistbox_keyrelease
+		rts
+		
+; ----------------------------------------------------------------------------------------------------
+
 uilistbox_draw
 		jsr uilistbox_drawbkgreleased
 		jsr uilistbox_drawlistreleased
@@ -56,6 +78,28 @@ uilistbox_release
 		sta (zpptr1),y
 
 		jsr uilistbox_draw
+
+		rts
+
+uilistbox_increase
+		jsr ui_getelementdataptr_1	; get data ptr to zpptr1
+
+		clc
+		ldy #$02
+		lda (zpptr1),y
+		adc #$01
+		sta (zpptr1),y
+
+		rts
+
+uilistbox_decrease
+		jsr ui_getelementdataptr_1	; get data ptr to zpptr1
+
+		sec
+		ldy #$02
+		lda (zpptr1),y
+		sbc #$01
+		sta (zpptr1),y
 
 		rts
 

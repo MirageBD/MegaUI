@@ -29,6 +29,12 @@ uinineslice_release
 uinineslice_move
 		rts
 
+uinineslice_keypress
+		rts
+
+uinineslice_keyrelease
+		rts
+		
 ; ----------------------------------------------------------------------------------------------------
 
 uinineslice_drawreleased

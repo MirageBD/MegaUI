@@ -52,4 +52,10 @@ uidebugelement_move
 		;jsr uielement_move
 		rts
 
+uidebugelement_keypress
+		rts
+
+uidebugelement_keyrelease
+		rts
+		
 ; ----------------------------------------------------------------------------------------------------

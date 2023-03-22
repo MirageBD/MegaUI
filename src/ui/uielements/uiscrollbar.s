@@ -28,6 +28,14 @@ uiscrollbar_release
 uiscrollbar_move
 		rts
 
+uiscrollbar_keypress
+		rts
+
+uiscrollbar_keyrelease
+		rts
+
+; ----------------------------------------------------------------------------------------------------
+
 uiscrollbar_increase
 		jsr ui_getelementdataptr_tmp
 
@@ -54,7 +62,7 @@ uiscrollbar_decrease
 
 		jsr uiscrollbar_confine
 
-:		jsr uielement_listeners
+		jsr uielement_listeners
 
 		rts
 
