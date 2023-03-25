@@ -12,6 +12,9 @@ mouse_delta_adjust:
 mouse_temp1					.byte $00
 mouse_temp2					.byte $00
 
+mouse_d419					.byte $00
+mouse_d41a					.byte $00
+
 mouse_paddlex				.byte $00
 mouse_paddley				.byte $00
 
@@ -46,7 +49,36 @@ mouse_init
 
 mouse_update
 
+		; $dc00 = data port A
+		;	read/write:	bit 0...7 keyboard matrix columns
+		;	read:		joystick port 2:	bit 0..3 direction, but 4 fire button, 0 = activated
+		;	read:		lightpen:			bit 4 (as fire button), connected also with '/LP' (pin 9) of the vic
+		;	read:		paddles:			bit 2..3 fire buttons, bit 6..7 switch control port 1 (%01=Paddles A) or 2 (%10=Paddles B)
+		; $dc01 = data port B
+		;	read/write:	bit 0...7 keyboard matrix columns
+		;	read:		joystick port 1:	bit 0..3 direction, but 4 fire button, 0 = activated
+		;	read:		bit 6:				Timer A: Toggle/Impulse output (see register 14 bit 2)
+		;	read:		bit 7:				Timer B: Toggle/Impulse output (see register 15 bit 2)
+		; $dc02 = Data Direction Port A
+		; 	Bit X: 0=Input (read only), 1=Output (read and write)
+		; $dc03 = Data Direction Port B
+		; 	Bit X: 0=Input (read only), 1=Output (read and write)
+
+
+		lda #$00										; set data direction to  0=input (read only) for all 8 data lines
+		sta $dc02
+		lda #$40
+		sta $dc00
+
+;		ldx #$66
+;:		nop
+;		nop
+;		nop
+;		dex
+;		bne :-
+
 		lda $d419										; read paddle port and store mouse pos
+		sta mouse_d419
 		ldy mouse_paddlex
 		jsr mouse_count_delta
 		sty mouse_paddlex
@@ -59,6 +91,7 @@ mouse_update
 		sta mouse_xpos_plusborder+1
 
 		lda $d41a
+		sta mouse_d41a
 		ldy mouse_paddley
 		jsr mouse_count_delta
 		sty mouse_paddley
@@ -71,7 +104,10 @@ mouse_update
 		eor #$ff
 		adc mouse_ypos_plusborder+1
 		sta mouse_ypos_plusborder+1
-		
+
+		lda #$ff
+		sta $dc02
+	
 		lda mouse_xpos+0								; store previous positions
 		sta mouse_prevxpos+0
 		lda mouse_xpos+1
@@ -91,7 +127,7 @@ mouse_update
 
 		sec
 		lda mouse_ypos_plusborder+0
-		sbc $d048
+		sbc #$67 ; $d048
 		sta mouse_ypos+0
 		lda mouse_ypos_plusborder+1
 		sbc #$00
@@ -109,7 +145,7 @@ mouse_update
 		sta mouse_xpos_plusborder+1
 		clc												; mouse is constraint. calculate new plusborder values
 		lda mouse_ypos+0
-		adc $d048
+		adc #$67 ; $d048
 		sta mouse_ypos_plusborder+0
 		lda mouse_ypos+1
 		adc #$00

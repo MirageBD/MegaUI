@@ -41,8 +41,8 @@
 		eom
 
 		lda #%10000000									; force PAL mode, because I can't be bothered with fixing it for NTSC
-		trb $d06f										; clear bit 7 for PAL ; tsb $d06f ; set bit 7 for NTSC
-		;tsb $d06f										; clear bit 7 for PAL ; tsb $d06f ; set bit 7 for NTSC						
+		trb $d06f										; clear bit 7 for PAL ; trb $d06f 
+		;tsb $d06f										; set bit 7 for NTSC  ; tsb $d06f
 
 		lda #$41										; enable 40MHz
 		sta $00
@@ -167,7 +167,7 @@
 		lda #$00										; disable IRQ raster interrupts because C65 uses raster interrupts in the ROM
 		sta $d01a
 
-		lda #$00										; setup IRQ interrupt
+		lda #$ff										; setup IRQ interrupt
 		sta $d012
 		lda #<irq1
 		sta $fffe
@@ -233,18 +233,24 @@ irq1
 		phy
 		phz
 
-		;lda #$08
-		;sta $d020
+		lda #$08
+		sta $d020
 		jsr ui_update
 		lda #$00
 		sta $d020
 
-		lda #$97
+		lda #$ff
 		sta $d012
-		lda #<irq2
+		lda #<irq1
 		sta $fffe
-		lda #>irq2
+		lda #>irq1
 		sta $ffff
+		;lda #$97
+		;sta $d012
+		;lda #<irq2
+		;sta $fffe
+		;lda #>irq2
+		;sta $ffff
 
 		plz
 		ply
@@ -261,7 +267,7 @@ irq2
 		phy
 		phz
 
-		lda #$00
+		lda #$01
 		sta $d012
 		lda #<irq1
 		sta $fffe

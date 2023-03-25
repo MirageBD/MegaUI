@@ -1,5 +1,8 @@
 ; ----------------------------------------------------------------------------------------------------
 
+.define UILISTBOX_SCROLLBAR_DATAOFFSET 0
+
+
 uilistbox_selected_index		.byte 0
 uilistbox_startpos				.byte 0
 uilistbox_current_draw_pos		.byte 0
@@ -31,13 +34,15 @@ uilistbox_keypress
 		bne :+
 
 		jsr uilistbox_increase
-		jsr uilistbox_draw
+		jsr uilistbox_confine
+		jsr uielement_listeners
 		rts
 
 :		cmp KEYBOARD_CURSORUP
 		bne :+
 		jsr uilistbox_decrease
-		jsr uilistbox_draw
+		jsr uilistbox_confine
+		jsr uielement_listeners
 		;rts
 
 :		rts
@@ -58,16 +63,16 @@ uilistbox_press
 uilistbox_release
 		jsr uimouse_calculate_pos_in_uielement
 
-		jsr ui_getelementdataptr_1	; get data ptr to zpptr1
+		jsr ui_getelementdataptr_1						; get data ptr to zpptr1
 
-		ldy #$00
+		ldy #$00										; put pointer to start position in zpptr2
 		lda (zpptr1),y
 		sta zpptr2+0
 		iny
 		lda (zpptr1),y
 		sta zpptr2+1
 
-		lda uimouse_uielement_ypos+0	; set selected index + added start address
+		lda uimouse_uielement_ypos+0					; set selected index + added start address
 		lsr
 		lsr
 		lsr
@@ -82,10 +87,10 @@ uilistbox_release
 		rts
 
 uilistbox_increase
-		jsr ui_getelementdataptr_1	; get data ptr to zpptr1
+		jsr ui_getelementdataptr_1						; get data ptr to zpptr1
 
 		clc
-		ldy #$02
+		ldy #$02										; get selection index
 		lda (zpptr1),y
 		adc #$01
 		sta (zpptr1),y
@@ -93,14 +98,41 @@ uilistbox_increase
 		rts
 
 uilistbox_decrease
-		jsr ui_getelementdataptr_1	; get data ptr to zpptr1
+		jsr ui_getelementdataptr_1						; get data ptr to zpptr1
 
 		sec
-		ldy #$02
+		ldy #$02										; get selection index
 		lda (zpptr1),y
 		sbc #$01
 		sta (zpptr1),y
 
+		rts
+
+uilistbox_confine
+		jsr ui_getelementdataptr_1						; get data ptr to zpptr1
+
+		ldy #$00										; put start position in zpptr2
+		lda (zpptr1),y
+		sta zpptr2+0
+		iny
+		lda (zpptr1),y
+		sta zpptr2+1
+
+		ldy #$02										; get selection index
+		lda (zpptr1),y
+		bpl :+											; if negative then it's definitely wrong
+		lda #$00
+		sta (zpptr1),y
+
+:		ldy #$00
+		cmp (zpptr2),y
+		bpl :+											; if smaller than start position, then adjust
+		sec
+		lda (zpptr2),y
+		sbc #$01
+		sta (zpptr2),y
+
+:
 		rts
 
 ; ----------------------------------------------------------------------------------------------------
@@ -139,9 +171,9 @@ uilistbox_drawlistreleased
 
 		jsr uidraw_set_draw_position
 
-		jsr ui_getelementdataptr_1	; get data ptr to zpptr1
+		jsr ui_getelementdataptr_1						; get data ptr to zpptr1
 
-		ldy #$00					; put startpos into zpptr2
+		ldy #$00										; put startpos into zpptr2
 		lda (zpptr1),y
 		sta zpptr2+0
 		iny
@@ -156,7 +188,7 @@ uilistbox_drawlistreleased
 		lda (zpptr1),y
 		sta uilistbox_selected_index
 
-		ldy #$03					; put start of text list into zpptr2
+		ldy #$04										; put start of text list into zpptr2
 		lda (zpptr1),y
 		sta zpptr2+0
 		iny
@@ -174,9 +206,7 @@ uilistbox_drawlistreleased
 		adc #$00
 		sta zpptr2+1
 
-		; start drawing the list
-
-uilistbox_drawlistreleased_loop
+uilistbox_drawlistreleased_loop							; start drawing the list
 
 		lda uilistbox_current_draw_pos
 		cmp uilistbox_selected_index
@@ -184,20 +214,18 @@ uilistbox_drawlistreleased_loop
 
 		ldx uidraw_width
 		ldz #$00
-:
-		;lda #$93 ; dark red
+:		;lda #$93 ; dark red
 		;lda #$b6 ; dark purple
 		;lda #$ca ; dodger blue
-		lda #$f0 ; dark blue
 		;lda #$8d ; dark orange
+		lda #$f0 ; dark blue
 		sta [uidraw_colptr],z
 		inz
 		inz
 		dex
 		bne :-
 
-:		; clear line
-		ldx uidraw_width
+:		ldx uidraw_width								; clear line
 		ldz #$00
 :		lda #$60
 		sta [uidraw_scrptr],z

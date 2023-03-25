@@ -10,6 +10,9 @@ bkgtxt_volume		.byte "volume", 0
 bkgtxt_checkbox		.byte "checkbox", 0
 bkgtxt_radiobutton	.byte "radiobtn", 0
 
+bkgtxt_paddlex		.byte "$d419", 0
+bkgtxt_paddley		.byte "$d41a", 0
+
 listboxtxt			.word listboxtxt00
 					.word listboxtxt01
 					.word listboxtxt02

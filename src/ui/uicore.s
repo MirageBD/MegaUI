@@ -26,6 +26,14 @@ q160						.dword 160
 .endscope
 .endmacro
 
+.macro DRAW_ELEMENT_NOW element, function
+		lda #<element
+		sta zpptr0+0
+		lda #>element
+		sta zpptr0+1
+		jsr function
+.endmacro
+
 ; ----------------------------------------------------------------------------------------------------
 
 .struct UIVARIABLES
@@ -63,6 +71,7 @@ q160						.dword 160
 		null
 		element
 		debugelement
+		hexlabel
 		window
 		button
 		cbutton
@@ -150,6 +159,7 @@ ui_element_indiceshi
 			.byte $00, $00
 			.byte <.ident(.sprintf("uielement_%s",		.string(eventtype))), >.ident(.sprintf("uielement_%s",		.string(eventtype)))
 			.byte <.ident(.sprintf("uidebugelement_%s",	.string(eventtype))), >.ident(.sprintf("uidebugelement_%s",	.string(eventtype)))
+			.byte <.ident(.sprintf("uihexlabel_%s",		.string(eventtype))), >.ident(.sprintf("uihexlabel_%s",		.string(eventtype)))
 			.byte <.ident(.sprintf("uiwindow_%s",		.string(eventtype))), >.ident(.sprintf("uiwindow_%s",		.string(eventtype)))
 			.byte <.ident(.sprintf("uibutton_%s",		.string(eventtype))), >.ident(.sprintf("uibutton_%s",		.string(eventtype)))
 			.byte <.ident(.sprintf("uicbutton_%s",		.string(eventtype))), >.ident(.sprintf("uicbutton_%s",		.string(eventtype)))
@@ -216,7 +226,25 @@ ui_getelementlistenersptr_3
 ui_textremap
 		.byte $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00
 		.byte $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00
-		.byte $60, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $6e, $00 ; [s             . ]
+		.byte $60, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $6d, $6e, $00 ; [s             . ]
+		.byte $70, $71, $72, $73, $74, $75, $76, $77, $78, $79, $00, $00, $00, $00, $00, $00 ; [0123456789      ]
+		.byte $40, $41, $42, $43, $44, $45, $46, $47, $48, $49, $4a, $4b, $4c, $4d, $4e, $4f ; [@abcdefghijklmno]
+		.byte $50, $51, $52, $53, $54, $55, $56, $57, $58, $59, $5a, $00, $00, $00, $00, $00 ; [pqrstuvwxyz     ]
+		.byte $40, $41, $42, $43, $44, $45, $46, $47, $48, $49, $4a, $4b, $4c, $4d, $4e, $4f ; [@abcdefghijklmno]
+		.byte $50, $51, $52, $53, $54, $55, $56, $57, $58, $59, $5a, $00, $00, $00, $00, $00 ; [pqrstuvwxyz     ]
+		.byte $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00
+		.byte $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00
+		.byte $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00
+		.byte $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00
+		.byte $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00
+		.byte $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00
+		.byte $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00
+		.byte $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00
+
+ui_bkgtextremap
+		.byte $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00
+		.byte $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00
+		.byte $60, $00, $00, $00, $64, $00, $00, $00, $00, $00, $00, $00, $00, $6d, $6e, $00 ; [s             . ]
 		.byte $70, $71, $72, $73, $74, $75, $76, $77, $78, $79, $00, $00, $00, $00, $00, $00 ; [0123456789      ]
 		.byte $40, $41, $42, $43, $44, $45, $46, $47, $48, $49, $4a, $4b, $4c, $4d, $4e, $4f ; [@abcdefghijklmno]
 		.byte $50, $51, $52, $53, $54, $55, $56, $57, $58, $59, $5a, $00, $00, $00, $00, $00 ; [pqrstuvwxyz     ]

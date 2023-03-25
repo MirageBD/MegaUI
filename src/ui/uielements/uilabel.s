@@ -41,8 +41,8 @@ uilabel_draw
 		ldz #$00
 :		lda (zpptr2),y
 		beq :+
-		clc
-		adc #32
+		tax
+		lda ui_bkgtextremap,x
 		sta [uidraw_scrptr],z
 		inz
 		lda #$04

@@ -74,6 +74,7 @@ $(EXE_DIR)/boot.o:	$(SRC_DIR)/boot.s \
 					$(UI_SRC_DIR)/uikeyboard.s \
 					$(UIELT_SRC_DIR)/uielement.s \
 					$(UIELT_SRC_DIR)/uidebugelement.s \
+					$(UIELT_SRC_DIR)/uihexlabel.s \
 					$(UIELT_SRC_DIR)/uiwindow.s \
 					$(UIELT_SRC_DIR)/uibutton.s \
 					$(UIELT_SRC_DIR)/uicbutton.s \
@@ -114,7 +115,7 @@ run: $(EXE_DIR)/disk.d81
 
 #	./windbg $(XMEGA65)
 
-	cmd.exe /c $(XMEGA65) -autoload -8 $(EXE_DIR)/disk.d81
+#	cmd.exe /c $(XMEGA65) -autoload -8 $(EXE_DIR)/disk.d81
 
 # reset
 #	m65 -l COM3 -F
@@ -131,26 +132,26 @@ run: $(EXE_DIR)/disk.d81
 #	-c "put F:\mega\ModPlayNew2\bin\uipal.bin uipal.bin" \
 
 # deploy disk to M65
-#	m65 -l COM3 -F
-#	mega65_ftp.exe -l COM3 -s 2000000 -c "cd /" \
-#	-c "put D:\Mega\MegaUI\exe\disk.d81 megaui.d81"
+	m65 -l COM3 -F
+	mega65_ftp.exe -l COM3 -s 2000000 -c "cd /" \
+	-c "put D:\Mega\MegaUI\exe\disk.d81 megaui.d81"
 
 # start prg
 #	m65 -l COM3 -F -r $(EXE_DIR)/bootaddr.prg
 #	m65 -l COM3 -F -4 -r $(EXE_DIR)/boot.prg	# start in C64 mode
 
 # start disk on M65
-#	m65 -l COM3 -F
-#	m65 -l COM3 -T 'list'
-#	m65 -l COM3 -T 'list'
-#	m65 -l COM3 -T 'list'
-#	m65 -l COM3 -T 'mount "megaui.d81"'
-#	m65 -l COM3 -T 'load "$$"'
-#	m65 -l COM3 -T 'list'
-#	m65 -l COM3 -T 'list'
-#	m65 -l COM3 -T 'load "boot"'
-#	m65 -l COM3 -T 'list'
-#	m65 -l COM3 -T 'run' 
+	m65 -l COM3 -F
+	m65 -l COM3 -T 'list'
+	m65 -l COM3 -T 'list'
+	m65 -l COM3 -T 'list'
+	m65 -l COM3 -T 'mount "megaui.d81"'
+	m65 -l COM3 -T 'load "$$"'
+	m65 -l COM3 -T 'list'
+	m65 -l COM3 -T 'list'
+	m65 -l COM3 -T 'load "boot"'
+	m65 -l COM3 -T 'list'
+	m65 -l COM3 -T 'run' 
 
 #	mega65_ftp.exe -l COM3 -s 2000000 -c "cd /" -c "put E:\mega\Loader\exe\disk.d81 DISK.D81"
 

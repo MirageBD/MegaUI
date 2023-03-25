@@ -20,6 +20,7 @@ window1area
 		UIELEMENT_ADD debugelement4,		debugelement,		cbuttonarea1,			$ffff,	21,  1, 14,  9,  0,		dummy_data,				dummy_listeners
 		UIELEMENT_ADD debugelement5,		debugelement,		checkboxarea1,			$ffff,	21, 11, 14,  5,  0,		dummy_data,				dummy_listeners
 		UIELEMENT_ADD debugelement6,		debugelement,		radiobtnarea1,			$ffff,	21, 17, 14,  7,  0,		dummy_data,				dummy_listeners
+		UIELEMENT_ADD debugelement7,		debugelement,		mousedebugarea1,		$ffff,	21, 25, 14, 17,  0,		dummy_data,				dummy_listeners
 		UIELEMENT_END
 
 window2area
@@ -63,6 +64,15 @@ radiobtnarea1
 
 ; ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ scrollbar elements
 
+mousedebugarea1
+		UIELEMENT_ADD paddlexlabel,			label,				$ffff,					$ffff,	 1,  1,  8,  1,  0,		paddlexlabel_data,		dummy_listeners
+		UIELEMENT_ADD hexlabel1,			hexlabel,			$ffff,					$ffff,	11,  1,  2,  1,  0,		hexlabel1_data,			dummy_listeners
+		UIELEMENT_ADD paddleylabel,			label,				$ffff,					$ffff,	 1,  3,  8,  1,  0,		paddleylabel_data,		dummy_listeners
+		UIELEMENT_ADD hexlabel2,			hexlabel,			$ffff,					$ffff,	11,  3,  2,  1,  0,		hexlabel2_data,			dummy_listeners
+		UIELEMENT_END
+
+; ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ scrollbar elements
+
 scrollbar1elements
 		UIELEMENT_ADD scrollbar1button1,	button,				$ffff,					$ffff,	0,  0,  2,  2,  0,		button1_data,			scrollbar1_listeners
 		UIELEMENT_ADD scrollbar1button2,	button,				$ffff,					$ffff,	0, 16,  2,  2,  0,		button2_data,			scrollbar1_listeners
@@ -72,10 +82,15 @@ scrollbar1elements
 ; ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ data
 
 nineslice1elements
-		UIELEMENT_ADD listbox1,				listbox,			$ffff,					$ffff,	1,  1, 13,  16,  0,		listbox1_data,			dummy_listeners
+		UIELEMENT_ADD listbox1,				listbox,			$ffff,					$ffff,	1,  1, 13,  16,  0,		listbox1_data,			scrollbar1_listeners
 		UIELEMENT_END
 
 ; ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ data
+
+paddlexlabel_data		.word bkgtxt_paddlex
+hexlabel1_data			.word mouse_d419 ; mouse_paddlex
+paddleylabel_data		.word bkgtxt_paddley
+hexlabel2_data			.word mouse_d41a ; mouse_paddley
 
 uilogo_data				.byte 8*16+0, 8*16+0							; disabled glyph, enabled glyph
 scrollbar1_data			.byte 0											; scrollbar position
@@ -93,6 +108,7 @@ button2_data			.byte 5*16+4, 5*16+12							; not pressed glyph, pressed glyph
 						.word scrollbar1track, uiscrollbar_increase
 listbox1_data			.word scrollbar1_data							; pointer to start position
 						.byte 0											; selection index
+						.byte 0											; number of entries
 						.word listboxtxt								; pointer to list of texts
 checkbox1_data			.byte 1											; disabled/enabled
 						.byte 6*16+3, 7*16+3							; disabled glyph, enabled glyph
