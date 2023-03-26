@@ -16,7 +16,7 @@ dummy_listeners			.word $ffff
 ; ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ child windows
 
 window1area
-		UIELEMENT_ADD debugelement3,		debugelement,		filearea1,				$ffff,	 1,  1, 19, 30,  0,		dummy_data,				dummy_listeners
+		UIELEMENT_ADD debugelement3,		debugelement,		filearea1,				$ffff,	 1,  1, 19, 29,  0,		dummy_data,				dummy_listeners
 		UIELEMENT_ADD debugelement4,		debugelement,		cbuttonarea1,			$ffff,	21,  1, 14,  9,  0,		dummy_data,				dummy_listeners
 		UIELEMENT_ADD debugelement5,		debugelement,		checkboxarea1,			$ffff,	21, 11, 14,  5,  0,		dummy_data,				dummy_listeners
 		UIELEMENT_ADD debugelement6,		debugelement,		radiobtnarea1,			$ffff,	21, 17, 14,  7,  0,		dummy_data,				dummy_listeners
@@ -74,8 +74,8 @@ mousedebugarea1
 ; ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ scrollbar elements
 
 scrollbar1elements
-		UIELEMENT_ADD scrollbar1button1,	button,				$ffff,					$ffff,	0,  0,  2,  2,  0,		button1_data,			scrollbar1_listeners
-		UIELEMENT_ADD scrollbar1button2,	button,				$ffff,					$ffff,	0, 16,  2,  2,  0,		button2_data,			scrollbar1_listeners
+		UIELEMENT_ADD scrollbar1button1,	scrollbutton,		$ffff,					$ffff,	0,  0,  2,  2,  0,		button1_data,			scrollbar1_listeners
+		UIELEMENT_ADD scrollbar1button2,	scrollbutton,		$ffff,					$ffff,	0, 16,  2,  2,  0,		button2_data,			scrollbar1_listeners
 		UIELEMENT_ADD scrollbar1track,		scrolltrack,		$ffff,					$ffff,	0,  2,  2, 14,  0,		scrollbar1_data,		scrollbar1_listeners
 		UIELEMENT_END
 

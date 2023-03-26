@@ -73,11 +73,12 @@ q160						.dword 160
 
 .enum UIELEMENTTYPE
 		null
-		element
+		element												; LV TODO - add ui in front of these for consistency?
 		debugelement
 		hexlabel
 		window
 		button
+		scrollbutton
 		cbutton
 		ctextbutton
 		scrollbar
@@ -167,6 +168,7 @@ ui_element_indiceshi
 			.byte <.ident(.sprintf("uihexlabel_%s",		.string(eventtype))), >.ident(.sprintf("uihexlabel_%s",		.string(eventtype)))
 			.byte <.ident(.sprintf("uiwindow_%s",		.string(eventtype))), >.ident(.sprintf("uiwindow_%s",		.string(eventtype)))
 			.byte <.ident(.sprintf("uibutton_%s",		.string(eventtype))), >.ident(.sprintf("uibutton_%s",		.string(eventtype)))
+			.byte <.ident(.sprintf("uiscrollbutton_%s",	.string(eventtype))), >.ident(.sprintf("uiscrollbutton_%s",	.string(eventtype)))
 			.byte <.ident(.sprintf("uicbutton_%s",		.string(eventtype))), >.ident(.sprintf("uicbutton_%s",		.string(eventtype)))
 			.byte <.ident(.sprintf("uictextbutton_%s",	.string(eventtype))), >.ident(.sprintf("uictextbutton_%s",	.string(eventtype)))
 			.byte <.ident(.sprintf("uiscrollbar_%s",	.string(eventtype))), >.ident(.sprintf("uiscrollbar_%s",	.string(eventtype)))

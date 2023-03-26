@@ -78,6 +78,7 @@ $(EXE_DIR)/boot.o:	$(SRC_DIR)/boot.s \
 					$(UIELT_SRC_DIR)/uihexlabel.s \
 					$(UIELT_SRC_DIR)/uiwindow.s \
 					$(UIELT_SRC_DIR)/uibutton.s \
+					$(UIELT_SRC_DIR)/uiscrollbutton.s \
 					$(UIELT_SRC_DIR)/uicbutton.s \
 					$(UIELT_SRC_DIR)/uictextbutton.s \
 					$(UIELT_SRC_DIR)/uiscrollbar.s \
