@@ -115,25 +115,25 @@ $(EXE_DIR)/disk.d81: $(EXE_DIR)/boot.prg $(BIN_DIR)/font_chars1.bin $(BIN_DIR)/g
 
 run: $(EXE_DIR)/disk.d81
 
-	cmd.exe /c $(XMEGA65) -autoload -8 $(EXE_DIR)/disk.d81
+#	cmd.exe /c $(XMEGA65) -autoload -8 $(EXE_DIR)/disk.d81
 
 # deploy disk to M65
-#	m65 -l COM3 -F
-#	mega65_ftp.exe -l COM3 -s 2000000 -c "cd /" \
-#	-c "put D:\Mega\MegaUI\exe\disk.d81 megaui.d81"
+	m65 -l COM3 -F
+	mega65_ftp.exe -l COM3 -s 2000000 -c "cd /" \
+	-c "put D:\Mega\MegaUI\exe\disk.d81 megaui.d81"
 
 # start disk on M65
-#	m65 -l COM3 -F
-#	m65 -l COM3 -T 'list'
-#	m65 -l COM3 -T 'list'
-#	m65 -l COM3 -T 'list'
-#	m65 -l COM3 -T 'mount "megaui.d81"'
-#	m65 -l COM3 -T 'load "$$"'
-#	m65 -l COM3 -T 'list'
-#	m65 -l COM3 -T 'list'
-#	m65 -l COM3 -T 'load "boot"'
-#	m65 -l COM3 -T 'list'
-#	m65 -l COM3 -T 'run' 
+	m65 -l COM3 -F
+	m65 -l COM3 -T 'list'
+	m65 -l COM3 -T 'list'
+	m65 -l COM3 -T 'list'
+	m65 -l COM3 -T 'mount "megaui.d81"'
+	m65 -l COM3 -T 'load "$$"'
+	m65 -l COM3 -T 'list'
+	m65 -l COM3 -T 'list'
+	m65 -l COM3 -T 'load "boot"'
+	m65 -l COM3 -T 'list'
+	m65 -l COM3 -T 'run' 
 
 # start debugger
 #	m65dbg --device /dev/ttyS2

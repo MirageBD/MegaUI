@@ -57,6 +57,9 @@ uilistbox_draw
 uilistbox_press
 		rts
 
+uilistbox_doubleclick
+		rts
+
 uilistbox_release
 		jsr uimouse_calculate_pos_in_uielement
 

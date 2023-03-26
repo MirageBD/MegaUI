@@ -293,6 +293,12 @@ uimhe_notentered
 		bra uimhe_handle_children
 
 uimhe_notpressed
+		lda mouse_doubleclicked
+		beq uimh_notdoubleclicked
+		jsr uimouse_handle_doubleclick
+		bra uimhe_handle_children
+
+uimh_notdoubleclicked		
 		lda mouse_released
 		beq uimhe_handle_children
 		jsr uimouse_handle_release						; handle RELEASE
@@ -382,6 +388,23 @@ uimouse_handle_release
 		sta uimouse_captured_element+0
 		sta uimouse_captured_element+1
 		SEND_EVENT release
+
+:		rts
+
+; ----------------------------------------------------------------------------------------------------
+
+uimouse_handle_doubleclick
+
+		lda zpptr0+0
+		cmp uimouse_captured_element+0
+		bne :+
+		lda zpptr0+1
+		cmp uimouse_captured_element+1
+		bne :+
+		lda #$00
+		sta uimouse_captured_element+0
+		sta uimouse_captured_element+1
+		SEND_EVENT doubleclick
 
 :		rts
 

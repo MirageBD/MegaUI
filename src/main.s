@@ -231,11 +231,11 @@ irq1
 		phy
 		phz
 
-		lda #$08
-		sta $d020
+		;lda #$08
+		;sta $d020
 		jsr ui_update
-		lda #$00
-		sta $d020
+		;lda #$00
+		;sta $d020
 
 		lda #$ff
 		sta $d012

@@ -4,7 +4,7 @@ uielement_layout
 		jsr uirect_calcminmax
 
 		jsr uistack_peekparent
-		ldy #UIELEMENT::parent				; set parent
+		ldy #UIELEMENT::parent							; set parent
 		lda uielement_parent_ptr+0
 		sta (zpptr0),y
 		iny
@@ -43,6 +43,9 @@ uielement_press
 		sta (zpptr0),y
     	rts
 
+uielement_doubleclick
+		rts
+
 uielement_release
 		ldy #UIELEMENT::state
 		lda (zpptr0),y
@@ -63,7 +66,7 @@ uielement_listeners
 
 		jsr ui_getelementlistenersptr_3
 
-		ldy #$00					; read pointer to ui element to act upon
+		ldy #$00										; read pointer to ui element to act upon
 :		lda (zpptr3),y
 		sta zpptr0+0
 		iny

@@ -24,6 +24,9 @@ uiwindow_press
 		jsr uielement_draw
 		rts
 
+uiwindow_doubleclick
+		rts
+
 uiwindow_release
 		jsr uielement_draw
 		rts

@@ -23,6 +23,9 @@ uinineslice_draw
 uinineslice_press
 		rts
 
+uinineslice_doubleclick
+		rts
+
 uinineslice_release
 		rts
 

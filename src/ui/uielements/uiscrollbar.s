@@ -22,6 +22,9 @@ uiscrollbar_draw
 uiscrollbar_press
     	rts
 
+uiscrollbar_doubleclick
+		rts
+
 uiscrollbar_release
     	rts
 

@@ -38,6 +38,12 @@ uibutton_press
 
 ; ----------------------------------------------------------------------------------------------------
 
+uibutton_doubleclick
+		jsr uibutton_release
+		rts
+
+; ----------------------------------------------------------------------------------------------------
+
 uibutton_release
 		jsr uielement_release
 		jsr uibutton_draw_released

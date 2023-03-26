@@ -27,17 +27,13 @@ mouse_ypos					.word $0080
 mouse_prevypos				.word $0080
 mouse_ypos_pressed			.word $0080
 
-mouse_pressed_timer			.word $00
+mouse_pressed				.byte $00			; this will be 1 for every frame that the button is pressed, not just 1 frame
+mouse_held					.byte $00
+mouse_released				.byte $00			; this will only be 1 in the frame in which the button was released
+mouse_doubleclicked			.byte $00
 
-mouse_pressed			; this will be 1 for every frame that the button is pressed, not just 1 frame
-		.byte $00
-
-mouse_held
-		.byte $00
-
-mouse_released			; this will only be 1 in the frame in which the button was released
-		.byte $00
-
+mouse_released_timer		.byte $00
+mouse_doubleclickthreshold	.byte $10
 
 ; ----------------------------------------------------------------------------------------------------
 
@@ -151,10 +147,17 @@ mouse_update
 		adc #$00
 		sta mouse_ypos_plusborder+1
 
-		lda #$00										; check if mouse button was pressed/released/etc.
-		sta mouse_released
-		lda #$00
+		inc mouse_released_timer
+		lda mouse_released_timer
+		cmp mouse_doubleclickthreshold
+		bmi :+
+		lda mouse_doubleclickthreshold
+		sta mouse_released_timer
+
+:		lda #$00										; check if mouse button was pressed/released/etc.
 		sta mouse_pressed
+		sta mouse_released
+		sta mouse_doubleclicked
 
         lda $dc01										; read gameport 1. assumes paddle one is selected in bit 6/7 of $dc00
         and #$10										; isolate button bit
@@ -163,10 +166,23 @@ mouse_update
 		lda mouse_held									; mouse is not pressed, check if it was pressed before
 		bne :+
 		bra mouse_check_end
-:		lda #$01
+:		lda #$01										; it was pressed before, so must be released now
 		sta mouse_released
 		lda #$00
 		sta mouse_held
+		lda mouse_released_timer						; read released timer
+		cmp mouse_doubleclickthreshold
+		beq mouse_event_startreleasedtimer				; it's the same as the theshold, so restart it
+		bra mouse_event_doubleclicked					; it's not, so this must be a double click
+
+mouse_event_startreleasedtimer
+		lda #$00
+		sta mouse_released_timer
+		bra mouse_check_end
+
+mouse_event_doubleclicked
+		lda #$01
+		sta mouse_doubleclicked
 		bra mouse_check_end
 
 mouse_event_pressed

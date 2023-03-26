@@ -30,25 +30,12 @@ uifilebox_keypress
 		cmp KEYBOARD_RETURN											; LV TODO - what if this is already checked for in uilistbox?
 		bne uifilebox_keypress_end
 
-		jsr uifilebox_getstringptr									; get filename/dir string
-		ldy #0
-:		lda (zpptrtmp),y
-		beq :+
-		and #$7f
-		sta sdc_transferbuffer,y
-		iny
-		bra :-
-:		sta sdc_transferbuffer,y
-		jsr sdc_chdir
-		jsr uifilebox_opendir
-		jsr uifilebox_draw
+		jsr uifilebox_doubleclick
 
 uifilebox_keypress_end
 		rts
 
 uifilebox_opendir
-		rts
-
 		jsr uifilebox_startaddentries
 
 		lda #<uifilebox_processdirentry
@@ -71,6 +58,23 @@ uifilebox_draw
 
 uifilebox_press
 		jsr uilistbox_press
+		rts
+
+uifilebox_doubleclick
+		jsr uifilebox_getstringptr									; get filename/dir string
+		ldy #0
+:		lda (zpptrtmp),y
+		beq :+
+		and #$7f
+		sta sdc_transferbuffer,y
+		iny
+		bra :-
+:		sta sdc_transferbuffer,y
+		jsr sdc_chdir
+		jsr uifilebox_opendir
+		jsr uifilebox_draw
+		jsr uielement_listeners
+
 		rts
 
 uifilebox_release

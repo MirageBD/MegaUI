@@ -40,6 +40,9 @@ uidebugelement_press
 		jsr uidebug_drawelement
     	rts
 
+uidebugelement_doubleclick
+		rts
+
 uidebugelement_release
 		jsr uielement_release
 

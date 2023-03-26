@@ -56,6 +56,9 @@ uilabel_draw
 uilabel_press
     	rts
 
+uilabel_doubleclick
+		rts
+
 uilabel_release
     	rts
 

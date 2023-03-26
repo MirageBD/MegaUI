@@ -98,6 +98,11 @@ uictextbutton_press
 
 ; ----------------------------------------------------------------------------------------------------
 
+uictextbutton_doubleclick
+		rts
+
+; ----------------------------------------------------------------------------------------------------
+
 uictextbutton_release
 		jsr uielement_release
 		jsr uicbutton_draw_released
