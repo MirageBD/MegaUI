@@ -16,11 +16,11 @@ dummy_listeners			.word $ffff
 ; ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ child windows
 
 window1area
-		UIELEMENT_ADD debugelement3,		debugelement,		scrollarea1,			$ffff,	 1,  1, 19, 30,  0,		dummy_data,				dummy_listeners
+		UIELEMENT_ADD debugelement3,		debugelement,		filearea1,				$ffff,	 1,  1, 19, 30,  0,		dummy_data,				dummy_listeners
 		UIELEMENT_ADD debugelement4,		debugelement,		cbuttonarea1,			$ffff,	21,  1, 14,  9,  0,		dummy_data,				dummy_listeners
 		UIELEMENT_ADD debugelement5,		debugelement,		checkboxarea1,			$ffff,	21, 11, 14,  5,  0,		dummy_data,				dummy_listeners
 		UIELEMENT_ADD debugelement6,		debugelement,		radiobtnarea1,			$ffff,	21, 17, 14,  7,  0,		dummy_data,				dummy_listeners
-		UIELEMENT_ADD debugelement7,		debugelement,		mousedebugarea1,		$ffff,	21, 25, 14, 17,  0,		dummy_data,				dummy_listeners
+		UIELEMENT_ADD debugelement7,		debugelement,		mousedebugarea1,		$ffff,	21, 25, 14,  5,  0,		dummy_data,				dummy_listeners
 		UIELEMENT_END
 
 window2area
@@ -29,7 +29,7 @@ window2area
 
 ; ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ scrollbar elements
 
-scrollarea1
+filearea1
 		UIELEMENT_ADD nineslice1,			nineslice,			nineslice1elements,		$ffff,	 1,  1, 15, 18,  0,		dummy_data,				dummy_listeners
 		UIELEMENT_ADD scrollbar1,			scrollbar,			scrollbar1elements,		$ffff,	16,  1,  4, 18,  0,		scrollbar1_data,		dummy_listeners
 		UIELEMENT_END
@@ -82,7 +82,7 @@ scrollbar1elements
 ; ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ data
 
 nineslice1elements
-		UIELEMENT_ADD listbox1,				listbox,			$ffff,					$ffff,	1,  1, 13,  16,  0,		listbox1_data,			scrollbar1_listeners
+		UIELEMENT_ADD filebox1,				filebox,			$ffff,					$ffff,	1,  1, 13,  16,  0,		filebox1_data,			scrollbar1_listeners
 		UIELEMENT_END
 
 ; ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ data
@@ -92,7 +92,7 @@ hexlabel1_data			.word mouse_d419 ; mouse_paddlex
 paddleylabel_data		.word bkgtxt_paddley
 hexlabel2_data			.word mouse_d41a ; mouse_paddley
 
-uilogo_data				.byte 8*16+0, 8*16+0							; disabled glyph, enabled glyph
+uilogo_data				.byte 9*16+0, 9*16+0							; disabled glyph, enabled glyph
 scrollbar1_data			.byte 0											; scrollbar position
 
 label1_data				.word bkgtxt_sample
@@ -106,7 +106,7 @@ button1_data			.byte 5*16+0, 5*16+8							; not pressed glyph, pressed glyph
 						.word scrollbar1track, uiscrollbar_decrease
 button2_data			.byte 5*16+4, 5*16+12							; not pressed glyph, pressed glyph
 						.word scrollbar1track, uiscrollbar_increase
-listbox1_data			.word scrollbar1_data							; pointer to start position
+filebox1_data			.word scrollbar1_data							; pointer to start position
 						.byte 0											; selection index
 						.byte 0											; number of entries
 						.word listboxtxt								; pointer to list of texts
@@ -129,7 +129,7 @@ radiobuttongroupindex	.byte 1
 
 scrollbar1_listeners	.word scrollbar1track
 						.word uiscrolltrack_draw
-						.word listbox1
+						.word filebox1
 						.word uilistbox_draw
 						.word $ffff
 

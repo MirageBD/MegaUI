@@ -46,7 +46,7 @@ uihexlabel_draw
 		lsr
 		lsr
 		tax
-		lda hextodecfont2,x
+		lda hextodec,x
 		sta [uidraw_scrptr],z
 		inz
 		lda #$04
@@ -56,7 +56,7 @@ uihexlabel_draw
 		lda (zpptr2),y
 		and #$0f
 		tax
-		lda hextodecfont2,x
+		lda hextodec,x
 		sta [uidraw_scrptr],z
 		inz
 		lda #$04

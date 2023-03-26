@@ -89,14 +89,14 @@ uiscrollbar_confine
 		sta (zpptrtmp),y
 		rts
 
-:		ldy #UIELEMENT::height
-		lda (zpptr0),y
-		sec
-		sbc #$01
-		ldy #$00
-		cmp (zpptrtmp),y
-		bpl :+
-		sta (zpptrtmp),y
+:		;ldy #UIELEMENT::height							; LV - todo. don't clamp by element height but by number of listbox entries
+		;lda (zpptr0),y
+		;sec
+		;sbc #$01
+		;ldy #$00
+		;cmp (zpptrtmp),y
+		;bpl :+
+		;sta (zpptrtmp),y
 
 :		rts
 

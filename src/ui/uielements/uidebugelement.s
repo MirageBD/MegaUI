@@ -11,7 +11,7 @@ uidebugelement_focus
 uidebugelement_enter
 		jsr uielement_enter
 
-		lda #$e8
+		lda #$88
 		sta uidebug_debugcolour
 		jsr uidebug_drawelement
 
@@ -20,14 +20,14 @@ uidebugelement_enter
 uidebugelement_leave
 		jsr uielement_leave
 
-		lda #$e0
+		lda #$80
 		sta uidebug_debugcolour
 		jsr uidebug_drawelement
 		rts
 
 uidebugelement_draw
 
-		lda #$e0
+		lda #$80
 		sta uidebug_debugcolour
 		jsr uidebug_drawelement
     	rts
@@ -35,7 +35,7 @@ uidebugelement_draw
 uidebugelement_press
 		jsr uielement_press
 
-		lda #$f0
+		lda #$88
 		sta uidebug_debugcolour
 		jsr uidebug_drawelement
     	rts
@@ -43,7 +43,7 @@ uidebugelement_press
 uidebugelement_release
 		jsr uielement_release
 
-		lda #$e8
+		lda #$80
 		sta uidebug_debugcolour
 		jsr uidebug_drawelement
     	rts

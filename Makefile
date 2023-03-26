@@ -84,6 +84,7 @@ $(EXE_DIR)/boot.o:	$(SRC_DIR)/boot.s \
 					$(UIELT_SRC_DIR)/uilabel.s \
 					$(UIELT_SRC_DIR)/uinineslice.s \
 					$(UIELT_SRC_DIR)/uilistbox.s \
+					$(UIELT_SRC_DIR)/uifilebox.s \
 					$(UIELT_SRC_DIR)/uicheckbox.s \
 					$(UIELT_SRC_DIR)/uiradiobutton.s \
 					$(UIELT_SRC_DIR)/uiimage.s \
@@ -113,32 +114,12 @@ $(EXE_DIR)/disk.d81: $(EXE_DIR)/boot.prg $(BIN_DIR)/font_chars1.bin $(BIN_DIR)/g
 
 run: $(EXE_DIR)/disk.d81
 
-#	./windbg $(XMEGA65)
-
 #	cmd.exe /c $(XMEGA65) -autoload -8 $(EXE_DIR)/disk.d81
-
-# reset
-#	m65 -l COM3 -F
-
-# deploy assets
-#	mega65_ftp.exe -l COM3 -s 2000000 -c "cd /" \
-#	-c "put F:\mega\ModPlayNew2\bin\song.bin song.bin" \
-#	-c "put F:\mega\ModPlayNew2\bin\patterns.bin patterns.bin" \
-#	-c "put F:\mega\ModPlayNew2\bin\samples.bin samples.bin" \
-#	-c "put F:\mega\ModPlayNew2\bin\instrmts.bin instrmts.bin" \
-#	-c "put F:\mega\ModPlayNew2\bin\uichars.bin uichars.bin" \
-#	-c "put F:\mega\ModPlayNew2\bin\glchars.bin glchars.bin" \
-#	-c "put F:\mega\ModPlayNew2\bin\glscreen.bin glscreen.bin" \
-#	-c "put F:\mega\ModPlayNew2\bin\uipal.bin uipal.bin" \
 
 # deploy disk to M65
 	m65 -l COM3 -F
 	mega65_ftp.exe -l COM3 -s 2000000 -c "cd /" \
 	-c "put D:\Mega\MegaUI\exe\disk.d81 megaui.d81"
-
-# start prg
-#	m65 -l COM3 -F -r $(EXE_DIR)/bootaddr.prg
-#	m65 -l COM3 -F -4 -r $(EXE_DIR)/boot.prg	# start in C64 mode
 
 # start disk on M65
 	m65 -l COM3 -F
@@ -153,10 +134,8 @@ run: $(EXE_DIR)/disk.d81
 	m65 -l COM3 -T 'list'
 	m65 -l COM3 -T 'run' 
 
-#	mega65_ftp.exe -l COM3 -s 2000000 -c "cd /" -c "put E:\mega\Loader\exe\disk.d81 DISK.D81"
-
 # start debugger
-#	m65dbg --device /dev/ttyS2
+	m65dbg --device /dev/ttyS2
 
 clean:
 	$(RM) $(EXE_DIR)/*.*

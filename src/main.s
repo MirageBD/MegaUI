@@ -142,8 +142,6 @@
 		FLOPPY_FAST_LOAD spritepal,			$30, $35
 		jsr fl_exit
 
-		jsr sdc_opendir
-
 		sei
 
 		lda #$35

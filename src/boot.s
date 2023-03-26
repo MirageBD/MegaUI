@@ -49,6 +49,7 @@ basicend	.byte 0
 .include "ui/uielements/uilabel.s"
 .include "ui/uielements/uinineslice.s"
 .include "ui/uielements/uilistbox.s"
+.include "ui/uielements/uifilebox.s"
 .include "ui/uielements/uicheckbox.s"
 .include "ui/uielements/uiradiobutton.s"
 .include "ui/uielements/uiimage.s"

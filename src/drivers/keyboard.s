@@ -1,4 +1,3 @@
-
 ; KEYBOARD MATRIX
 ;
 ;         0        1        2         3       4         5       6        7        8
@@ -60,10 +59,13 @@
 ; |   | SCROLL |        |        |        |        |        |        |        |
 ; +---+--------+--------+--------+--------+--------+--------+--------+--------+
 
+.define KEYBOARD_RETURN			#1
 .define KEYBOARD_CURSORRIGHT	#2
 .define KEYBOARD_CURSORDOWN		#7
 .define KEYBOARD_CURSORLEFT		#$80 + 2
 .define KEYBOARD_CURSORUP		#$80 + 7
+
+; ----------------------------------------------------------------------------------------------------
 
 keyboard_matrix ; columns
 
@@ -77,12 +79,14 @@ keyboard_matrix ; columns
 		.byte $00, $00, $00, $00, $00, $00, $00, $00
 		.byte $00, $00, $00, $00, $00, $00, $00, $00
 
+; ----------------------------------------------------------------------------------------------------
+
 keyboard_update
 
-		ldx #$00    				; column
+		ldx #$00    									; column
 keyboard_testmatrixloop
-		stx $d614					; put column into $d614
-		lda $d613					; read back keys being pressed in column
+		stx $d614										; put column into $d614
+		lda $d613										; read back keys being pressed in column
 		eor #$ff
 		sta keyboard_columnkeys,x
 		inx
@@ -139,7 +143,7 @@ keyboard_testkeysloop
 		sta keyboard_shouldsendpressevent
 		sta keyboard_shouldsendreleaseevent
 
-		lda $d60f							; handle special cases for cursorleft and cursorup
+		lda $d60f										; handle special cases for cursorleft and cursorup
 		and #%00000001
 		beq :+
 		lda KEYBOARD_CURSORLEFT
@@ -156,29 +160,25 @@ keyboard_testkeysloop
 		cmp #$ff
 		beq keyboard_nothingpressed
 
-keyboard_somethingpressed					; something is pressed
+keyboard_somethingpressed								; something is pressed
 		cmp keyboard_prevpressed
-		beq keyboard_endchecks				; same key pressed, don't do anything
+		beq keyboard_endchecks							; same key pressed, don't do anything
 		lda #$01
-		sta keyboard_shouldsendpressevent	; different key pressed, queue keypressed event
+		sta keyboard_shouldsendpressevent				; different key pressed, queue keypressed event
 		lda keyboard_pressed
 		sta keyboard_pressedeventarg
 		bra keyboard_endchecks
 
-keyboard_nothingpressed						; nothing is pressed
+keyboard_nothingpressed									; nothing is pressed
 		lda keyboard_prevpressed
-		cmp #$ff							; and nothing was previously pressed, do nothing
+		cmp #$ff										; and nothing was previously pressed, do nothing
 		beq keyboard_endchecks
 		lda keyboard_prevpressed
 		sta keyboard_releasedeventarg
-		lda #$01							; something was pressed previously, queue keyreleased event
+		lda #$01										; something was pressed previously, queue keyreleased event
 		sta keyboard_shouldsendreleaseevent
 
 keyboard_endchecks
-
-
-
-
 
 keyboard_update_end
 
@@ -195,6 +195,8 @@ keyboard_set_keypressed
 		sta keyboard_pressed
 		pla
 		rts
+
+; ----------------------------------------------------------------------------------------------------
 
 keyboard_pressed
 		.byte $ff
@@ -214,8 +216,7 @@ keyboard_shouldsendreleaseevent
 keyboard_releasedeventarg
 		.byte $00
 
-;keyboard_released
-;		.byte $ff
-
 keyboard_columnkeys
 		.byte $00, $00, $00, $00, $00, $00, $00, $00, $00
+
+; ----------------------------------------------------------------------------------------------------

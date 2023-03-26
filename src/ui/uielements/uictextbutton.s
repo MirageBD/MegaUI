@@ -72,8 +72,8 @@ uictextbutton_draw
 		ldz #$00
 :		lda (zpptr2),y
 		beq :+
-		sec
-		sbc #32
+		tax
+		lda ui_textremap,x
 		sta [uidraw_scrptr],z
 		inz
 		lda #$04

@@ -50,12 +50,12 @@ uiscrolltrack_press
 		bra :++
 
 :		lda uimouse_uielement_ypos+1
-		ror
+		;ror
 		lda uimouse_uielement_ypos+0
-		ror
-		clc
-		lsr
-		lsr
+		;ror
+		;clc
+		;lsr
+		;lsr
 
 :		jsr uiscrollbar_setposition
 		rts
@@ -145,8 +145,12 @@ uiscrollpuck_draw_released
 
 		jsr ui_getelementdataptr_tmp
 
-		ldy #$00
+		ldy #$00								; get scrollbar position
 		lda (zpptrtmp),y
+
+		lsr										; LV - todo - calculate proper value! divide by 4 for now
+		lsr
+
 		tax
 
 :		dex

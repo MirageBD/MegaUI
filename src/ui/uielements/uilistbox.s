@@ -1,8 +1,5 @@
 ; ----------------------------------------------------------------------------------------------------
 
-.define UILISTBOX_SCROLLBAR_DATAOFFSET 0
-
-
 uilistbox_selected_index		.byte 0
 uilistbox_startpos				.byte 0
 uilistbox_current_draw_pos		.byte 0
@@ -49,7 +46,7 @@ uilistbox_keypress
 
 uilistbox_keyrelease
 		rts
-		
+
 ; ----------------------------------------------------------------------------------------------------
 
 uilistbox_draw
@@ -85,6 +82,92 @@ uilistbox_release
 		jsr uilistbox_draw
 
 		rts
+
+; ----------------------------------------------------------------------------------------------------
+
+uilistbox_entrycounter
+		.byte $00
+
+uilistbox_startaddentries
+
+		lda #$00
+		sta uilistbox_entrycounter
+
+		jsr ui_getelementdataptr_1						; get data ptr to zpptr1
+
+		ldy #$00										; get pointer to scrollbar data
+		lda (zpptr1),y
+		sta zpptr2+0
+		iny
+		lda (zpptr1),y
+		sta zpptr2+1
+
+		lda #$00
+
+		ldy #$00
+		sta (zpptr2),y									; set scrollbar position to 0
+
+		ldy #$02
+		sta (zpptr1),y									; set selection index to 0
+		ldy #$03
+		sta (zpptr1),y									; set number of entries to 0
+
+		ldy #$04										; put start of text list into zpptr2
+		lda (zpptr1),y
+		sta zpptr2+0
+		iny
+		lda (zpptr1),y
+		sta zpptr2+1
+
+		ldy #$00										; put pointer to actual text entry in zpptrtmp
+		lda (zpptr2),y
+		sta zpptrtmp+0
+		iny
+		lda (zpptr2),y
+		sta zpptrtmp+1
+
+		rts
+
+uilistbox_endaddentries
+		ldy #$00
+		lda #$ff
+		sta (zpptr2),y
+		iny
+		sta (zpptr2),y
+		rts
+
+; ----------------------------------------------------------------------------------------------------
+
+uilistbox_getstringptr
+
+		jsr ui_getelementdataptr_1						; get data ptr to zpptr1
+
+		ldy #$04										; put start of text list into zpptr2
+		lda (zpptr1),y
+		sta zpptr2+0
+		iny
+		lda (zpptr1),y
+		sta zpptr2+1
+
+		ldy #$02										; get selection index
+		lda (zpptr1),y
+		asl												; *2
+		adc zpptr2+0									; add to text list ptr
+		sta zpptr2+0
+		lda zpptr2+1
+		adc #$00
+		sta zpptr2+1
+
+		ldy #$00										; put pointer to actual text entry in zpptrtmp
+		lda (zpptr2),y
+		sta zpptrtmp+0
+		iny
+		lda (zpptr2),y
+		sta zpptrtmp+1
+
+		rts
+
+; ----------------------------------------------------------------------------------------------------
 
 uilistbox_increase
 		jsr ui_getelementdataptr_1						; get data ptr to zpptr1
@@ -132,8 +215,7 @@ uilistbox_confine
 		sbc #$01
 		sta (zpptr2),y
 
-:
-		rts
+:		rts
 
 ; ----------------------------------------------------------------------------------------------------
 

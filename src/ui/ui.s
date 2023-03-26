@@ -268,8 +268,8 @@ ui_update
 		jsr keyboard_update
 		jsr uikeyboard_update
 
-		DRAW_ELEMENT_NOW hexlabel1, uihexlabel_draw
-		DRAW_ELEMENT_NOW hexlabel2, uihexlabel_draw
+		UICORE_DRAWELEMENT hexlabel1, uihexlabel_draw			; LV TODO - add update timer and move this to manager of some kind
+		UICORE_DRAWELEMENT hexlabel2, uihexlabel_draw
 
         rts
 
@@ -277,9 +277,6 @@ ui_update
 
 hextodec
 		.byte $30, $31, $32, $33, $34, $35, $36, $37, $38, $39, $01, $02, $03, $04, $05, $06
-
-hextodecfont2
-		.byte $70, $71, $72, $73, $74, $75, $76, $77, $78, $79, $41, $42, $43, $44, $45, $46
 
 hextodec_normalized
 		.byte $00, $01, $02, $03, $04, $05, $06, $07, $08, $09, $0a, $0b, $0c, $0d, $0e, $0f

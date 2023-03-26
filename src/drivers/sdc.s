@@ -1,42 +1,40 @@
 ; ----------------------------------------------------------------------------------------------------
 
+.define sdc_transferbuffer $7000
+
+; ----------------------------------------------------------------------------------------------------
+
 sdc_opendir
+
 		lda #$00
 		sta $d640
 		nop
 		ldz #$00
 
-		; Open the current working directory
-		lda #$12
+		lda #$12										; open the current working directory
 		sta $d640
 		clv
 		bcc sdc_opendir_error
 
-		; Transfer the directory file descriptor into X
-		tax
-		; Set Y to the MSB of the transfer area
-		ldy #$70; #>$cf00
-sdcod1
-		; Read the directory entry
-		lda #$14
+		tax												; transfer the directory file descriptor into X
+		ldy #>sdc_transferbuffer						; set Y to the MSB of the transfer area
+
+sdcod1	lda #$14										; read the directory entry
 		sta $d640
 		clv
 		bcc sdcod2
-
-		; Call processdirentry (assumed to be defined elsewhere)
 		phx
 		phy
-		jsr processdirentry
+
+sdc_processdirentryptr		
+		jsr $babe										; call function that handles the retrieved filename
 		ply
 		plx
 		bra sdcod1
 
-sdcod2
-		; If the error code in A is $85 we have reached the end of the directory otherwise there’s been an error
-		cmp #$85
+sdcod2	cmp #$85										; if the error code in A is $85 we have reached the end of the directory otherwise there’s been an error
 		bne sdc_opendir_error
-		; Close the directory file descriptor in X
-		lda #$16
+		lda #$16										; close the directory file descriptor in X
 		sta $d640
 		clv
 		bcc sdc_opendir_error
@@ -46,7 +44,6 @@ sdc_opendir_error
 		lda #$38
 		sta $d640
 		clv
-		sta $cfff
 
 :		lda #$06
 		sta $d020
@@ -56,19 +53,27 @@ sdc_opendir_error
 
 ; ----------------------------------------------------------------------------------------------------
 
-processdirentry
-		ldx #$00
-:		lda $7000,x
-pde1	sta listboxtxt00,x					; temp - copy to where listbox entries are
-		inx
-		cpx #$10
-		bne :-
+sdc_chdir
 
-		clc
-		lda pde1+1
-		adc #$10
-		sta pde1+1
+		lda #$00
+		sta sdc_transferbuffer,y
 
+		ldy #>sdc_transferbuffer						; set the hyppo filename from transferbuffer
+		lda #$2e
+		sta $d640
+		clv
+		bcc :+
+		lda #$34										; find the FAT dir entry
+		sta $d640
+		clv
+		bcc :+
+		lda #$0c										; chdir into the directory
+		sta $d640
+		clv
+		rts
+
+:		inc $d020
+		jmp :-
 		rts
 
 ; ----------------------------------------------------------------------------------------------------
