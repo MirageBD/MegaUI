@@ -1,5 +1,36 @@
 ; ----------------------------------------------------------------------------------------------------
 
+; Q registers for offset calculations
+
+uiscrolltrack_startpos			.byte $00, $00, $00, $00
+uiscrolltrack_numentries		.byte $00, $00, $00, $00
+uiscrolltrack_height			.byte $00, $00, $00, $00
+
+uiscrolltrack_numerator			.byte $00, $00, $00, $00
+uiscrolltrack_denominator		.byte $00, $00, $00, $00
+
+; ----------------------------------------------------------------------------------------------------
+
+uiscrolltrack_resetqvalues
+
+		lda #$00
+		sta uiscrolltrack_numentries+0
+		sta uiscrolltrack_numentries+1
+		sta uiscrolltrack_numentries+2
+		sta uiscrolltrack_numentries+3
+		sta uiscrolltrack_height+0
+		sta uiscrolltrack_height+1
+		sta uiscrolltrack_height+2
+		sta uiscrolltrack_height+3
+		sta uiscrolltrack_startpos+0
+		sta uiscrolltrack_startpos+1
+		sta uiscrolltrack_startpos+2
+		sta uiscrolltrack_startpos+3
+
+		rts
+
+; ----------------------------------------------------------------------------------------------------
+
 uiscrolltrack_layout
 		jsr uielement_layout
 		rts
@@ -40,6 +71,8 @@ uiscrolltrack_press
 
 		jsr uimouse_calculate_pos_in_uielement
 
+		jsr uiscrolltrack_resetqvalues
+
 		; check position within track, set position
 		jsr ui_getelementdataptr_tmp
 
@@ -47,17 +80,40 @@ uiscrolltrack_press
 		cmp #$ff
 		bne :+
 		lda #$00
-		bra :++
+		jmp :++
 
-:		lda uimouse_uielement_ypos+1
-		;ror
+:
 		lda uimouse_uielement_ypos+0
-		;ror
-		;clc
-		;lsr
-		;lsr
+		sta uiscrolltrack_startpos+2
+		lda uimouse_uielement_ypos+1
+		sta uiscrolltrack_startpos+3
+
+		ldy #$02
+		lda (zpptrtmp),y						; num entries: 20
+		sta uiscrolltrack_numentries+2
+
+		ldy #UIELEMENT::height					; height: 14
+		lda (zpptr0),y
+		sta uiscrolltrack_height+2
+
+		MATH_SUB uiscrolltrack_numentries,	uiscrolltrack_height,		uiscrolltrack_numerator
+		MATH_MUL uiscrolltrack_startpos,	uiscrolltrack_numerator,	uiscrolltrack_numerator
+
+		clc
+		lda uiscrolltrack_height+2
+		adc #$02
+		sta uiscrolltrack_height+2
+
+		MATH_DIV uiscrolltrack_numerator, uiscrolltrack_height, uiscrolltrack_numerator
+		MATH_ROUND uiscrolltrack_numerator, uiscrolltrack_numerator
+
+		lda uiscrolltrack_numerator+2
+		lsr
+		lsr
+		lsr
 
 :		jsr uiscrollbar_setposition
+
 		rts
 
 ; ----------------------------------------------------------------------------------------------------
@@ -139,31 +195,13 @@ uiscrolltrack_draw_released
 
 ; ----------------------------------------------------------------------------------------------------
 
-uiscrolltrack_startpos			.byte $00, $00, $00, $00
-uiscrolltrack_numentries		.byte $00, $00, $00, $00
-uiscrolltrack_height			.byte $00, $00, $00, $00
-uiscrolltrack_numerator			.byte $00, $00, $00, $00
-uiscrolltrack_denominator		.byte $00, $00, $00, $00
-
 uiscrollpuck_draw_released
 
 		jsr uidraw_set_draw_position
 
 		jsr ui_getelementdataptr_tmp
 
-		lda #$00
-		sta uiscrolltrack_numentries+0
-		sta uiscrolltrack_numentries+1
-		sta uiscrolltrack_numentries+2
-		sta uiscrolltrack_numentries+3
-		sta uiscrolltrack_height+0
-		sta uiscrolltrack_height+1
-		sta uiscrolltrack_height+2
-		sta uiscrolltrack_height+3
-		sta uiscrolltrack_startpos+0
-		sta uiscrolltrack_startpos+1
-		sta uiscrolltrack_startpos+2
-		sta uiscrolltrack_startpos+3
+		jsr uiscrolltrack_resetqvalues
 
 		ldy #$02
 		lda (zpptrtmp),y						; num entries: 20
@@ -181,15 +219,11 @@ uiscrollpuck_draw_released
 		rts										; dont draw puck if entries < height
 
 :		ldy #$00
-		lda (zpptrtmp),y						; startpos: 0,1,2,3, etc.
+		lda (zpptrtmp),y						; startpos: 0,1,2,3,4.
 		sta uiscrolltrack_startpos+2
 
 		MATH_SUB uiscrolltrack_numentries,	uiscrolltrack_height,		uiscrolltrack_denominator ; 20-14=6
-		MATH_MUL uiscrolltrack_numentries,	uiscrolltrack_denominator,	uiscrolltrack_denominator ; 20*6=120
-
-		MATH_MUL uiscrolltrack_numentries,	uiscrolltrack_startpos,		uiscrolltrack_numerator ; 0, 20, 40, 80, etc.
-
-		MATH_DIV uiscrolltrack_numerator,	uiscrolltrack_denominator,	uiscrolltrack_denominator
+		MATH_DIV uiscrolltrack_startpos,	uiscrolltrack_denominator,	uiscrolltrack_denominator ; 0/6, 1/6, 2/6, 3/6, 4/6
 
 		sec
 		lda uiscrolltrack_height+2
@@ -197,7 +231,6 @@ uiscrollpuck_draw_released
 		sta uiscrolltrack_height+2
 
 		MATH_MUL uiscrolltrack_height,		uiscrolltrack_denominator,	uiscrolltrack_denominator ; 0, 20, 40, 80, etc.
-
 		MATH_ROUND uiscrolltrack_denominator, uiscrolltrack_denominator
 
 		ldx uiscrolltrack_denominator+2

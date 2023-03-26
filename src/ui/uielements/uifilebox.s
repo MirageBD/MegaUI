@@ -30,7 +30,7 @@ uifilebox_keypress
 		cmp KEYBOARD_RETURN											; LV TODO - what if this is already checked for in uilistbox?
 		bne uifilebox_keypress_end
 
-		jsr uifilebox_getstringptr									; get 
+		jsr uifilebox_getstringptr									; get filename/dir string
 		ldy #0
 :		lda (zpptrtmp),y
 		beq :+

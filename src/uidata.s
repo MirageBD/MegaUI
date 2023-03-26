@@ -95,7 +95,7 @@ hexlabel2_data			.word mouse_d41a
 uilogo_data				.byte 9*16+0, 9*16+0							; disabled glyph, enabled glyph
 scrollbar1_data			.byte 0											; scrollbar position
 						.byte 0											; selection index
-						.byte 20										; number of entries
+						.byte 30										; number of entries
 
 label1_data				.word bkgtxt_sample
 label2_data				.word bkgtxt_volume
