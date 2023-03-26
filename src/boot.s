@@ -4,6 +4,7 @@
 ; .feature org_per_seg
 
 .include "macros.s"
+.include "mathmacros.s"
 
 filebuffer = $0200
 

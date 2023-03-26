@@ -30,14 +30,14 @@ uilistbox_keypress
 		cmp KEYBOARD_CURSORDOWN
 		bne :+
 
-		jsr uilistbox_increase
+		jsr uilistbox_increase_selection
 		jsr uilistbox_confine
 		jsr uielement_listeners
 		rts
 
 :		cmp KEYBOARD_CURSORUP
 		bne :+
-		jsr uilistbox_decrease
+		jsr uilistbox_decrease_selection
 		jsr uilistbox_confine
 		jsr uielement_listeners
 		;rts
@@ -76,8 +76,8 @@ uilistbox_release
 		clc
 		ldy #$00
 		adc (zpptr2),y
-		ldy #$02
-		sta (zpptr1),y
+		ldy #$01
+		sta (zpptr2),y
 
 		jsr uilistbox_draw
 
@@ -85,34 +85,26 @@ uilistbox_release
 
 ; ----------------------------------------------------------------------------------------------------
 
-uilistbox_entrycounter
-		.byte $00
-
 uilistbox_startaddentries
-
-		lda #$00
-		sta uilistbox_entrycounter
 
 		jsr ui_getelementdataptr_1						; get data ptr to zpptr1
 
 		ldy #$00										; get pointer to scrollbar data
 		lda (zpptr1),y
-		sta zpptr2+0
+		sta zpptr3+0
 		iny
 		lda (zpptr1),y
-		sta zpptr2+1
+		sta zpptr3+1
 
 		lda #$00
-
 		ldy #$00
-		sta (zpptr2),y									; set scrollbar position to 0
-
+		sta (zpptr3),y									; set scrollbar position to 0
+		ldy #$01
+		sta (zpptr3),y									; set selection index to 0
 		ldy #$02
-		sta (zpptr1),y									; set selection index to 0
-		ldy #$03
-		sta (zpptr1),y									; set number of entries to 0
+		sta (zpptr3),y									; set number of entries to 0
 
-		ldy #$04										; put start of text list into zpptr2
+		ldy #$02										; put start of text list into zpptr2
 		lda (zpptr1),y
 		sta zpptr2+0
 		iny
@@ -142,15 +134,22 @@ uilistbox_getstringptr
 
 		jsr ui_getelementdataptr_1						; get data ptr to zpptr1
 
-		ldy #$04										; put start of text list into zpptr2
+		ldy #$02										; put start of text list into zpptr2
 		lda (zpptr1),y
 		sta zpptr2+0
 		iny
 		lda (zpptr1),y
 		sta zpptr2+1
 
-		ldy #$02										; get selection index
+		ldy #$00										; get pointer to scrollbar data
 		lda (zpptr1),y
+		sta zpptrtmp+0
+		iny
+		lda (zpptr1),y
+		sta zpptrtmp+1
+
+		ldy #$01										; get selection index
+		lda (zpptrtmp),y
 		asl												; *2
 		adc zpptr2+0									; add to text list ptr
 		sta zpptr2+0
@@ -169,25 +168,39 @@ uilistbox_getstringptr
 
 ; ----------------------------------------------------------------------------------------------------
 
-uilistbox_increase
+uilistbox_increase_selection
 		jsr ui_getelementdataptr_1						; get data ptr to zpptr1
 
-		clc
-		ldy #$02										; get selection index
+		ldy #$00
 		lda (zpptr1),y
+		sta zpptr2+0
+		iny
+		lda (zpptr1),y
+		sta zpptr2+1
+
+		clc
+		ldy #$01										; get selection index
+		lda (zpptr2),y
 		adc #$01
-		sta (zpptr1),y
+		sta (zpptr2),y
 
 		rts
 
-uilistbox_decrease
+uilistbox_decrease_selection
 		jsr ui_getelementdataptr_1						; get data ptr to zpptr1
 
-		sec
-		ldy #$02										; get selection index
+		ldy #$00
 		lda (zpptr1),y
+		sta zpptr2+0
+		iny
+		lda (zpptr1),y
+		sta zpptr2+1
+
+		sec
+		ldy #$01										; get selection index
+		lda (zpptr2),y
 		sbc #$01
-		sta (zpptr1),y
+		sta (zpptr2),y
 
 		rts
 
@@ -201,11 +214,11 @@ uilistbox_confine
 		lda (zpptr1),y
 		sta zpptr2+1
 
-		ldy #$02										; get selection index
-		lda (zpptr1),y
+		ldy #$01										; get selection index
+		lda (zpptr2),y
 		bpl :+											; if negative then it's definitely wrong
 		lda #$00
-		sta (zpptr1),y
+		sta (zpptr2),y
 
 :		ldy #$00
 		cmp (zpptr2),y
@@ -213,6 +226,26 @@ uilistbox_confine
 		sec
 		lda (zpptr2),y
 		sbc #$01
+		sta (zpptr2),y
+
+:		ldy #$02										; if bigger than numentries, then adjust
+		cmp (zpptr2),y
+		bmi :+
+		lda (zpptr2),y
+		sec
+		sbc #$01
+		ldy #$01
+		sta (zpptr2),y
+
+:		ldy #$01										; get selection index 18
+		lda (zpptr2),y
+		clc
+		adc #$01
+		ldy #UIELEMENT::height
+		sec
+		sbc (zpptr0),y									; subtract height 17-16
+		bmi :+
+		ldy #$00										; 1
 		sta (zpptr2),y
 
 :		rts
@@ -266,11 +299,11 @@ uilistbox_drawlistreleased
 		lda (zpptr2),y
 		sta uilistbox_startpos
 
-		ldy #$02
-		lda (zpptr1),y
+		ldy #$01
+		lda (zpptr2),y
 		sta uilistbox_selected_index
 
-		ldy #$04										; put start of text list into zpptr2
+		ldy #$02										; put start of text list into zpptr2
 		lda (zpptr1),y
 		sta zpptr2+0
 		iny

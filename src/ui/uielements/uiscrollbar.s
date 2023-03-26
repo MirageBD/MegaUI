@@ -82,22 +82,30 @@ uiscrollbar_setposition
 
 uiscrollbar_confine
 
-		ldy #$00
+		ldy #$00										; get start pos
 		lda (zpptrtmp),y
 		bpl :+
-		lda #$00
+		lda #$00										; smaller than 0, set to 0
 		sta (zpptrtmp),y
 		rts
 
-:		;ldy #UIELEMENT::height							; LV - todo. don't clamp by element height but by number of listbox entries
-		;lda (zpptr0),y
-		;sec
-		;sbc #$01
-		;ldy #$00
-		;cmp (zpptrtmp),y
-		;bpl :+
-		;sta (zpptrtmp),y
+:		ldy #$02										; get number of entries
+		lda (zpptrtmp),y
+		ldy #UIELEMENT::height							; subtract height
+		sec
+		sbc (zpptr0),y
+		sec
+		sbc #$02
+		bpl :+											; smaller than 0 ? i.e. entries fit into box without scrolling
+		lda #$00
+		sta (zpptrtmp),y								; set scrolpos to 0
+
+:		ldy #$00
+		cmp (zpptrtmp),y								; compare with startpos
+		bpl :+											; if bigger than ok
+		sta (zpptrtmp),y
 
 :		rts
+
 
 ; ----------------------------------------------------------------------------------------------------

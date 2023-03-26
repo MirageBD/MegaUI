@@ -30,7 +30,7 @@ uifilebox_keypress
 		cmp KEYBOARD_RETURN											; LV TODO - what if this is already checked for in uilistbox?
 		bne uifilebox_keypress_end
 
-		jsr uifilebox_getstringptr
+		jsr uifilebox_getstringptr									; get 
 		ldy #0
 :		lda (zpptrtmp),y
 		beq :+
@@ -47,6 +47,8 @@ uifilebox_keypress_end
 		rts
 
 uifilebox_opendir
+		rts
+
 		jsr uifilebox_startaddentries
 
 		lda #<uifilebox_processdirentry
@@ -89,12 +91,12 @@ uifilebox_getstringptr
 		jsr uilistbox_getstringptr
 		rts
 
-uifilebox_increase
-		jsr uilistbox_increase
+uifilebox_increase_selection
+		jsr uilistbox_increase_selection
 		rts
 
-uifilebox_decrease
-		jsr uilistbox_decrease
+uifilebox_decrease_selection
+		jsr uilistbox_decrease_selection
 		rts
 
 uifilebox_confine
@@ -105,11 +107,11 @@ uifilebox_confine
 
 uifilebox_processdirentry
 
-		clc													; increase number of entries
-		ldy #$03
-		lda (zpptr1),y
+		clc												; increase number of entries
+		ldy #$02
+		lda (zpptr3),y
 		adc #$01
-		sta (zpptr1),y
+		sta (zpptr3),y
 
 		ldy #$00											; set list pointer to text
 		lda zpptrtmp+0
@@ -118,7 +120,7 @@ uifilebox_processdirentry
 		lda zpptrtmp+1
 		sta (zpptr2),y
 
-		clc
+		clc													; add 2 to move to next list ptr entry
 		lda zpptr2+0
 		adc #$02
 		sta zpptr2+0
@@ -126,14 +128,14 @@ uifilebox_processdirentry
 		adc #$00
 		sta zpptr2+1
 
-		ldy #$00
+		ldy #$00											; read until 0
 :		lda sdc_transferbuffer,y
 		beq :+
 		sta (zpptrtmp),y
 		iny
 		bra :-
 
-:		sta (zpptrtmp),y
+:		sta (zpptrtmp),y									; add length of text to pointer
 		iny
 		tya
 		clc

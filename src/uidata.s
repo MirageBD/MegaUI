@@ -88,12 +88,14 @@ nineslice1elements
 ; ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ data
 
 paddlexlabel_data		.word bkgtxt_paddlex
-hexlabel1_data			.word mouse_d419 ; mouse_paddlex
+hexlabel1_data			.word mouse_d419
 paddleylabel_data		.word bkgtxt_paddley
-hexlabel2_data			.word mouse_d41a ; mouse_paddley
+hexlabel2_data			.word mouse_d41a
 
 uilogo_data				.byte 9*16+0, 9*16+0							; disabled glyph, enabled glyph
 scrollbar1_data			.byte 0											; scrollbar position
+						.byte 0											; selection index
+						.byte 20										; number of entries
 
 label1_data				.word bkgtxt_sample
 label2_data				.word bkgtxt_volume
@@ -107,8 +109,6 @@ button1_data			.byte 5*16+0, 5*16+8							; not pressed glyph, pressed glyph
 button2_data			.byte 5*16+4, 5*16+12							; not pressed glyph, pressed glyph
 						.word scrollbar1track, uiscrollbar_increase
 filebox1_data			.word scrollbar1_data							; pointer to start position
-						.byte 0											; selection index
-						.byte 0											; number of entries
 						.word listboxtxt								; pointer to list of texts
 checkbox1_data			.byte 1											; disabled/enabled
 						.byte 6*16+3, 7*16+3							; disabled glyph, enabled glyph
