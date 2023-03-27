@@ -61,7 +61,7 @@ uiscrolltrack_keyrelease
 
 uiscrolltrack_draw
 		jsr uiscrolltrack_draw_released
-		jsr uiscrollpuck_draw_released
+		jsr uiscrolltrack_draw_released_puck
 		rts
 
 ; ----------------------------------------------------------------------------------------------------
@@ -82,8 +82,7 @@ uiscrolltrack_press
 		lda #$00
 		jmp :++
 
-:
-		lda uimouse_uielement_ypos+0
+:		lda uimouse_uielement_ypos+0
 		sta uiscrolltrack_startpos+2
 		lda uimouse_uielement_ypos+1
 		sta uiscrolltrack_startpos+3
@@ -101,7 +100,7 @@ uiscrolltrack_press
 
 		clc
 		lda uiscrolltrack_height+2
-		adc #$02
+		adc #$01
 		sta uiscrolltrack_height+2
 
 		MATH_DIV uiscrolltrack_numerator, uiscrolltrack_height, uiscrolltrack_numerator
@@ -200,7 +199,7 @@ uiscrolltrack_draw_released
 
 ; ----------------------------------------------------------------------------------------------------
 
-uiscrollpuck_draw_released
+uiscrolltrack_draw_released_puck
 
 		jsr uidraw_set_draw_position
 

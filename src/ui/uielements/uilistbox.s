@@ -223,35 +223,43 @@ uilistbox_confine
 		lda #$00
 		sta (zpptr2),y
 
-:		ldy #$00
-		cmp (zpptr2),y
-		bpl :+											; if smaller than start position, then adjust
-		sec
-		lda (zpptr2),y
-		sbc #$01
-		sta (zpptr2),y
-
-:		ldy #$02										; if bigger than numentries, then adjust
-		cmp (zpptr2),y
-		bmi :+
+:		ldy #$02
+		cmp (zpptr2),y									; compare with numentries
+		bmi :+											; ok when smaller
 		lda (zpptr2),y
 		sec
 		sbc #$01
 		ldy #$01
 		sta (zpptr2),y
+		rts
 
-:		ldy #$01										; get selection index 18
+:		sec												; get selection index and subtract startpos
+		ldy #$00
+		sbc (zpptr2),y
+
+		bpl :+											; ok when > 0
+		ldy #$01										; when < get selection index and put in startpos
 		lda (zpptr2),y
+		ldy #$00
+		sta (zpptr2),y
+		rts
+
+:		ldy #UIELEMENT::height							; compare with height
+		cmp (zpptr0),y
+		bpl :+											; ok if < height
+		rts
+
+:		ldy #$01										; get selection index
+		lda (zpptr2),y
+		sec
+		ldy #UIELEMENT::height
+		sbc (zpptr0),y
 		clc
 		adc #$01
-		ldy #UIELEMENT::height
-		sec
-		sbc (zpptr0),y									; subtract height 17-16
-		bmi :+
-		ldy #$00										; 1
-		sta (zpptr2),y
+		ldy #$00
+		sta (zpptr2),y									; put in startpos
 
-:		rts
+		rts
 
 ; ----------------------------------------------------------------------------------------------------
 
