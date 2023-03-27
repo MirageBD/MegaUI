@@ -59,13 +59,13 @@ uiradiobutton_draw
 		; uiradiobutton_not_selected
 
 		ldz #$00
-		lda #6*16+5
+		lda #3*16+12
 		sta [uidraw_scrptr],z
 		rts
 
 uiradiobutton_selected
 		ldz #$00
-		lda #7*16+5
+		lda #3*16+13
 		sta [uidraw_scrptr],z
 		rts
 

@@ -11,7 +11,7 @@ uidebugelement_focus
 uidebugelement_enter
 		jsr uielement_enter
 
-		lda #$88
+		lda #6*16+8
 		sta uidebug_debugcolour
 		jsr uidebug_drawelement
 
@@ -20,14 +20,14 @@ uidebugelement_enter
 uidebugelement_leave
 		jsr uielement_leave
 
-		lda #$80
+		lda #6*16+0
 		sta uidebug_debugcolour
 		jsr uidebug_drawelement
 		rts
 
 uidebugelement_draw
 
-		lda #$80
+		lda #6*16+0
 		sta uidebug_debugcolour
 		jsr uidebug_drawelement
     	rts
@@ -35,7 +35,7 @@ uidebugelement_draw
 uidebugelement_press
 		jsr uielement_press
 
-		lda #$88
+		lda #6*16+8
 		sta uidebug_debugcolour
 		jsr uidebug_drawelement
     	rts
@@ -46,7 +46,7 @@ uidebugelement_doubleclick
 uidebugelement_release
 		jsr uielement_release
 
-		lda #$80
+		lda #6*16+0
 		sta uidebug_debugcolour
 		jsr uidebug_drawelement
     	rts

@@ -10,7 +10,7 @@ dummy_listeners			.word $ffff
 
 		UIELEMENT_ADD ui_windows1,			debugelement,		window1area,			$ffff,	 1,  1, 36, 45,  0,		dummy_data,				dummy_listeners
 		UIELEMENT_ADD ui_windows2,			debugelement,		window2area,			$ffff,	38,  1, 41, 45, 20,		dummy_data,				dummy_listeners
-		UIELEMENT_ADD ui_logo,				image,				$ffff,					$ffff,	69, 47, 10,  2,  0,		uilogo_data,			dummy_listeners
+		UIELEMENT_ADD ui_logo,				image,				$ffff,					$ffff,	68, 47, 11,  2,  0,		uilogo_data,			dummy_listeners
 		UIELEMENT_END
 
 ; ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ child windows
@@ -92,7 +92,7 @@ hexlabel1_data			.word mouse_d419
 paddleylabel_data		.word bkgtxt_paddley
 hexlabel2_data			.word mouse_d41a
 
-uilogo_data				.byte 9*16+0, 9*16+0							; disabled glyph, enabled glyph
+uilogo_data				.byte 14*16+0, 14*16+0							; disabled glyph, enabled glyph
 scrollbar1_data			.byte 0											; scrollbar position
 						.byte 0											; selection index
 						.byte 30										; number of entries
@@ -104,25 +104,25 @@ radiobuttonlabel_data	.word bkgtxt_radiobutton
 ctextbutton1_data		.word btntxt_button0
 ctextbutton2_data		.word btntxt_button1
 ctextbutton3_data		.word btntxt_button2
-button1_data			.byte 5*16+0, 5*16+8							; not pressed glyph, pressed glyph
+button1_data			.byte 4*16+0, 4*16+4							; not pressed glyph, pressed glyph
 						.word scrollbar1track, uiscrollbar_decrease
-button2_data			.byte 5*16+4, 5*16+12							; not pressed glyph, pressed glyph
+button2_data			.byte 4*16+8, 4*16+12							; not pressed glyph, pressed glyph
 						.word scrollbar1track, uiscrollbar_increase
 filebox1_data			.word scrollbar1_data							; pointer to start position
 						.word listboxtxt								; pointer to list of texts
 checkbox1_data			.byte 1											; disabled/enabled
-						.byte 6*16+3, 7*16+3							; disabled glyph, enabled glyph
+						.byte 3*16+8, 3*16+10							; disabled glyph, enabled glyph
 checkbox2_data			.byte 0											; disabled/enabled
-						.byte 6*16+3, 7*16+3							; disabled glyph, enabled glyph
+						.byte 3*16+8, 3*16+10							; disabled glyph, enabled glyph
 radiobutton1_data		.byte 0											; index
 						.word radiobuttongroupindex						; pointer to group index
-						.byte 6*16+5, 7*16+5							; disabled glyph, enabled glyph
+						.byte 3*16+12, 3*16+13							; disabled glyph, enabled glyph
 radiobutton2_data		.byte 1											; index
 						.word radiobuttongroupindex						; pointer to group index
-						.byte 6*16+5, 7*16+5							; disabled glyph, enabled glyph
+						.byte 3*16+12, 3*16+13							; disabled glyph, enabled glyph
 radiobutton3_data		.byte 2											; index
 						.word radiobuttongroupindex						; pointer to group index
-						.byte 6*16+5, 7*16+5							; disabled glyph, enabled glyph
+						.byte 3*16+12, 3*16+13							; disabled glyph, enabled glyph
 radiobuttongroupindex	.byte 1
 
 ; ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ listeners

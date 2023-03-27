@@ -140,7 +140,7 @@ uiscrolltrack_draw_released
 		ldx uidraw_width
 		ldy uidraw_height
 
-		ldy #6*16+6
+		ldy #5*16+0
 		ldx #$00
 		ldz #$00						; draw top of scrolltrack
 		tya
@@ -245,12 +245,12 @@ uiscrolltrack_draw_released_puck
 		bra :-
 
 :
-		lda #6*16+12
+		lda #5*16+6
 		ldz #$00
 		sta [uidraw_scrptr],z
 		inz
 		inz
-		lda #6*16+13
+		lda #5*16+7
 		sta [uidraw_scrptr],z
 
 		rts
