@@ -61,6 +61,7 @@ q160						.dword 160
 		depth		.byte
 		data		.word
 		listeners	.word
+		flags		.byte
 
 		state		.byte			; variables
 		layoutxpos	.byte
@@ -95,28 +96,25 @@ q160						.dword 160
 .enum UISTATE
 		hover		= %00000001		;
 									; %00000010 is used in code to decide hover flag
-		enabled		= %00000100		; enabled/disabled.
-		pressed		= %00001000		; also called 'active'
-		focussed	= %00010000		; for accessability. border around elements
-		selected	= %00100000		; checkbox, radiobutton, etc.
-		dragged		= %01000000
-		on			= %10000000		; on/off. same as selected?
+		pressed		= %00000100		; also called 'active'
 .endenum
 
 .enum UISTATEMASK
 		hover		= %11111110		;
 									; %00000010 is used in code to decide hover flag
-		enabled		= %11111011		; enabled/disabled.
-		pressed		= %11110111		; also called 'active'
-		focussed	= %11101111		; for accessability. border around elements
-		selected	= %11011111		; checkbox, radiobutton, etc.
-		dragged		= %10111111
-		on			= %01111111		; on/off. same as selected?
+		pressed		= %11111011		; also called 'active'
 .endenum
+
+.enum UIFLAGS
+		enabled		= %00000001
+		visible		= %00000010
+.endenum
+
+.define uidefaultflags	%00000011
 
 ; ----------------------------------------------------------------------------------------------------
 
-.macro UIELEMENT_ADD name, elementtype, child, parent, xpos, ypos, width, height, depth, data, listeners
+.macro UIELEMENT_ADD name, elementtype, child, parent, xpos, ypos, width, height, depth, data, listeners, flags
 .ident(.sprintf("%s", .string(name)))
 		.byte UIELEMENTTYPE::elementtype
 		.word child
@@ -124,6 +122,7 @@ q160						.dword 160
 		.byte xpos, ypos, width, height, depth
 		.word data
 		.word listeners
+		.byte flags
 		.res .sizeof(UIVARIABLES)
 .endmacro
 

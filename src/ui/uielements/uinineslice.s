@@ -91,7 +91,9 @@ uinineslice_drawreleased
 		inz
 		pha
 		phx
-:		inz
+:		lda #$00
+		sta [uidraw_colptr],z
+		inz
 		inz
 		dex
 		bne :-

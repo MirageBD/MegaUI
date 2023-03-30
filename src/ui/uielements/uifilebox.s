@@ -36,6 +36,8 @@ uifilebox_keypress_end
 		rts
 
 uifilebox_opendir
+		rts
+		
 		jsr uifilebox_startaddentries
 
 		lda #<uifilebox_processdirentry

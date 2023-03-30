@@ -345,7 +345,11 @@ uimhe_mouse_didnt_move
 ; ----------------------------------------------------------------------------------------------------
 
 uimouse_handle_move
-		lda uimouse_captured_element+1
+		jsr uimouse_checkflags
+		bne :+
+		rts
+
+:		lda uimouse_captured_element+1
 		bne :+
 		rts
 
@@ -371,14 +375,21 @@ uimouse_handle_move
 ; ----------------------------------------------------------------------------------------------------
 
 uimouse_handle_enter
-		SEND_EVENT enter
+		jsr uimouse_checkflags
+		bne :+
+		rts
+
+:		SEND_EVENT enter
 		rts
 
 ; ----------------------------------------------------------------------------------------------------
 
 uimouse_handle_release
+		jsr uimouse_checkflags
+		bne :+
+		rts
 
-		lda zpptr0+0
+:		lda zpptr0+0
 		cmp uimouse_captured_element+0
 		bne :+
 		lda zpptr0+1
@@ -394,8 +405,11 @@ uimouse_handle_release
 ; ----------------------------------------------------------------------------------------------------
 
 uimouse_handle_doubleclick
+		jsr uimouse_checkflags
+		bne :+
+		rts
 
-		lda zpptr0+0
+:		lda zpptr0+0
 		cmp uimouse_captured_element+0
 		bne :+
 		lda zpptr0+1
@@ -411,13 +425,24 @@ uimouse_handle_doubleclick
 ; ----------------------------------------------------------------------------------------------------
 
 uimouse_handle_press
+		jsr uimouse_checkflags
+		bne :+
+		rts
 
-		lda zpptr0+0
+:		lda zpptr0+0
 		sta uimouse_captured_element+0
 		lda zpptr0+1
 		sta uimouse_captured_element+1
 		SEND_EVENT press
 
+		rts
+
+; ----------------------------------------------------------------------------------------------------
+
+uimouse_checkflags
+		ldy #UIELEMENT::flags
+		lda (zpptr0),y
+		and #UIFLAGS::enabled
 		rts
 
 ; ----------------------------------------------------------------------------------------------------

@@ -231,7 +231,7 @@ uiscrolltrack_draw_released_puck
 
 		sec
 		lda uiscrolltrack_height+2
-		sbc #$03
+		sbc #$02
 		sta uiscrolltrack_height+2
 
 		MATH_MUL uiscrolltrack_height,		uiscrolltrack_denominator,	uiscrolltrack_denominator ; 0, 20, 40, 80, etc.

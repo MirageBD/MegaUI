@@ -98,7 +98,7 @@ uiscrollbar_confine
 		sec
 		sbc (zpptr0),y
 		sec
-		sbc #$02
+		sbc #$04 ; 										; LV TODO - subtracting 4 here for scrollbar buttons. Is that really right?
 		bpl :+											; smaller than 0 ? i.e. entries fit into box without scrolling
 		lda #$00
 		sta (zpptrtmp),y								; set scrolpos to 0

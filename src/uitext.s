@@ -1,17 +1,14 @@
 .align 256
 
-btntxt_button0		.byte "button 0", 0
-btntxt_button1		.byte "button 1", 0
-btntxt_button2		.byte "button 2", 0
+uitxt_button0		.byte "button 00", 0
+uitxt_button1		.byte "button 01", 0
+uitxt_button2		.byte "button 02", 0
 
-bkgtxt_sample		.byte "sample", 0 ; 64 = space
-bkgtxt_volume		.byte "volume", 0
+uitxt_checkbox		.byte "checkbox", 0
+uitxt_radiobutton	.byte "radiobtn", 0
 
-bkgtxt_checkbox		.byte "checkbox", 0
-bkgtxt_radiobutton	.byte "radiobtn", 0
-
-bkgtxt_paddlex		.byte "$d419", 0
-bkgtxt_paddley		.byte "$d41a", 0
+uitxt_paddlex		.byte "$d419", 0
+uitxt_paddley		.byte "$d41a", 0
 
 .align 256
 listboxtxt			.word listboxtxt00
@@ -87,7 +84,7 @@ listboxtxt26		.byte "27          ", 0
 listboxtxt27		.byte "28          ", 0
 listboxtxt28		.byte "29          ", 0
 listboxtxt29		.byte "30          ", 0
-listboxtxt30		.byte "            ", 0
+listboxtxt30		.byte "31          ", 0
 listboxtxt31		.byte "            ", 0
 listboxtxt32		.byte "            ", 0
 listboxtxt33		.byte "            ", 0
