@@ -39,6 +39,7 @@ basicend	.byte 0
 .include "ui/uikeyboard.s"
 
 .include "ui/uielements/uielement.s"
+.include "ui/uielements/uiroot.s"
 .include "ui/uielements/uidebugelement.s"
 .include "ui/uielements/uihexlabel.s"
 .include "ui/uielements/uiwindow.s"

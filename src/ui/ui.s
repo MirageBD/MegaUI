@@ -92,9 +92,9 @@ ui_setup
         jsr uidraw_clearscreen
  		jsr uimouse_init
 
-		lda #<ui_windows1								; get pointer to window x
+		lda #<ui_root1								; get pointer to window x
 		sta uielement_ptr+0
-		lda #>ui_windows1
+		lda #>ui_root1
 		sta uielement_ptr+1
 		lda #$00
 		sta uielement_layoutxpos

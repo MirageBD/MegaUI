@@ -74,6 +74,7 @@ $(EXE_DIR)/boot.o:	$(SRC_DIR)/boot.s \
 					$(UI_SRC_DIR)/uimouse.s \
 					$(UI_SRC_DIR)/uikeyboard.s \
 					$(UIELT_SRC_DIR)/uielement.s \
+					$(UIELT_SRC_DIR)/uiroot.s \
 					$(UIELT_SRC_DIR)/uidebugelement.s \
 					$(UIELT_SRC_DIR)/uihexlabel.s \
 					$(UIELT_SRC_DIR)/uiwindow.s \

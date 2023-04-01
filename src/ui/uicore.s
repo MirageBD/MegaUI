@@ -41,6 +41,7 @@ q160						.dword 160
 ; ----------------------------------------------------------------------------------------------------
 
 .struct UIVARIABLES
+		parent		.word
 		state		.byte
 		layoutxpos	.byte
 		layoutypos	.byte
@@ -53,7 +54,6 @@ q160						.dword 160
 .struct UIELEMENT
 		type		.byte			; immutables
 		children	.word
-		parent		.word
 		xpos		.byte
 		ypos		.byte
 		width		.byte
@@ -63,7 +63,8 @@ q160						.dword 160
 		listeners	.word
 		flags		.byte
 
-		state		.byte			; variables
+		parent		.word			; variables
+		state		.byte
 		layoutxpos	.byte
 		layoutypos	.byte
 		xmin		.word
@@ -75,6 +76,7 @@ q160						.dword 160
 .enum UIELEMENTTYPE
 		null
 		element												; LV TODO - add ui in front of these for consistency?
+		root
 		debugelement
 		hexlabel
 		window
@@ -114,11 +116,10 @@ q160						.dword 160
 
 ; ----------------------------------------------------------------------------------------------------
 
-.macro UIELEMENT_ADD name, elementtype, child, parent, xpos, ypos, width, height, depth, data, listeners, flags
+.macro UIELEMENT_ADD name, elementtype, child, xpos, ypos, width, height, depth, data, listeners, flags
 .ident(.sprintf("%s", .string(name)))
 		.byte UIELEMENTTYPE::elementtype
 		.word child
-		.word parent
 		.byte xpos, ypos, width, height, depth
 		.word data
 		.word listeners
@@ -163,6 +164,7 @@ ui_element_indiceshi
 		.ident(.sprintf("uieventptrs_%s", .string(eventtype)))
 			.byte $00, $00
 			.byte <.ident(.sprintf("uielement_%s",		.string(eventtype))), >.ident(.sprintf("uielement_%s",		.string(eventtype)))
+			.byte <.ident(.sprintf("uiroot_%s",			.string(eventtype))), >.ident(.sprintf("uiroot_%s",			.string(eventtype)))
 			.byte <.ident(.sprintf("uidebugelement_%s",	.string(eventtype))), >.ident(.sprintf("uidebugelement_%s",	.string(eventtype)))
 			.byte <.ident(.sprintf("uihexlabel_%s",		.string(eventtype))), >.ident(.sprintf("uihexlabel_%s",		.string(eventtype)))
 			.byte <.ident(.sprintf("uiwindow_%s",		.string(eventtype))), >.ident(.sprintf("uiwindow_%s",		.string(eventtype)))

@@ -5,9 +5,9 @@ uikeyboard_update
         lda keyboard_shouldsendreleaseevent
         beq uikeyboard_update_end
 
-		lda #<ui_windows1								; get pointer to window x
+		lda #<ui_root1								; get pointer to window x
 		sta uielement_ptr+0
-		lda #>ui_windows1
+		lda #>ui_root1
 		sta uielement_ptr+1
 
         jsr uikeyboard_handle_event
