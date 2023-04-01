@@ -34,7 +34,7 @@ uiradiobutton_draw
 
 		jsr ui_getelementdataptr_1
 
-		ldy #$03							; pointer to group index goes to zpptr2
+		ldy #$04							; pointer to group index goes to zpptr2
 		lda (zpptr1),y
 		sta zpptr2+0
 		iny
@@ -45,17 +45,14 @@ uiradiobutton_draw
 		lda (zpptr2),y
 		ldy #$02
 		cmp (zpptr1),y						; compare with this index
-		beq uiradiobutton_selected
+		beq :+
 
-		; uiradiobutton_not_selected
-
-		ldz #$00
+		ldz #$00							; uiradiobutton not selected
 		lda #3*16+12
 		sta [uidraw_scrptr],z
 		rts
 
-uiradiobutton_selected
-		ldz #$00
+:		ldz #$00							; uiradiobutton selected
 		lda #3*16+13
 		sta [uidraw_scrptr],z
 		rts
@@ -65,7 +62,7 @@ uiradiobutton_selected
 uiradiobutton_release
 		jsr ui_getelementdataptr_1
 
-		ldy #$03							; pointer to group index goes to zpptr2
+		ldy #$04							; pointer to group index goes to zpptr2
 		lda (zpptr1),y
 		sta zpptr2+0
 		iny

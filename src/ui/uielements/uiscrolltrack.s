@@ -57,6 +57,13 @@ uiscrolltrack_keypress
 uiscrolltrack_keyrelease
 		rts
 
+uiscrolltrack_doubleclick
+		rts
+
+uiscrolltrack_release
+		jsr uielement_release
+	   	rts
+
 ; ----------------------------------------------------------------------------------------------------
 
 uiscrolltrack_draw
@@ -67,8 +74,6 @@ uiscrolltrack_draw
 ; ----------------------------------------------------------------------------------------------------
 
 uiscrolltrack_press
-		;jsr uielement_press
-
 		jsr uimouse_calculate_pos_in_uielement
 
 		jsr uiscrolltrack_resetqvalues
@@ -87,7 +92,7 @@ uiscrolltrack_press
 		lda uimouse_uielement_ypos+1
 		sta uiscrolltrack_startpos+3
 
-		ldy #$04
+		ldy #$06
 		lda (zpptrtmp),y						; num entries: 20
 		sta uiscrolltrack_numentries+2
 
@@ -115,17 +120,6 @@ uiscrolltrack_press
 		jsr uielement_calluifunc
 
 		rts
-
-; ----------------------------------------------------------------------------------------------------
-
-uiscrolltrack_doubleclick
-		rts
-
-; ----------------------------------------------------------------------------------------------------
-
-uiscrolltrack_release
-		jsr uielement_release
-	   	rts
 
 ; ----------------------------------------------------------------------------------------------------
 
@@ -208,7 +202,7 @@ uiscrolltrack_draw_released_puck
 
 		jsr uiscrolltrack_resetqvalues
 
-		ldy #$04
+		ldy #$06
 		lda (zpptrtmp),y						; num entries: 20
 		sta uiscrolltrack_numentries+2
 

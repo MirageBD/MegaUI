@@ -28,11 +28,14 @@ uilistbox_press
 uilistbox_doubleclick
 		rts
 
+uilistbox_keyrelease
+		rts
+
 uilistbox_keypress
 		lda keyboard_pressedeventarg
+
 		cmp KEYBOARD_CURSORDOWN
 		bne :+
-
 		jsr uilistbox_increase_selection
 		jsr uilistbox_confine
 		jsr uielement_calluifunc		
@@ -43,12 +46,7 @@ uilistbox_keypress
 		jsr uilistbox_decrease_selection
 		jsr uilistbox_confine
 		jsr uielement_calluifunc		
-		;rts
-
 :		rts
-
-uilistbox_keyrelease
-		rts
 
 ; ----------------------------------------------------------------------------------------------------
 
@@ -76,7 +74,7 @@ uilistbox_release
 		clc
 		ldy #$02
 		adc (zpptr2),y
-		ldy #$03
+		ldy #$04
 		sta (zpptr2),y
 
 		jsr uilistbox_draw
@@ -148,7 +146,7 @@ uilistbox_getstringptr
 		lda (zpptr1),y
 		sta zpptrtmp+1
 
-		ldy #$03										; get selection index
+		ldy #$04										; get selection index
 		lda (zpptrtmp),y
 		asl												; *2
 		adc zpptr2+0									; add to text list ptr
@@ -179,7 +177,7 @@ uilistbox_increase_selection
 		sta zpptr2+1
 
 		clc
-		ldy #$03										; get selection index
+		ldy #$04										; get selection index
 		lda (zpptr2),y
 		adc #$01
 		sta (zpptr2),y
@@ -197,7 +195,7 @@ uilistbox_decrease_selection
 		sta zpptr2+1
 
 		sec
-		ldy #$03										; get selection index
+		ldy #$04										; get selection index
 		lda (zpptr2),y
 		sbc #$01
 		sta (zpptr2),y
@@ -214,19 +212,19 @@ uilistbox_confine
 		lda (zpptr1),y
 		sta zpptr2+1
 
-		ldy #$03										; get selection index
+		ldy #$04										; get selection index
 		lda (zpptr2),y
 		bpl :+											; if negative then it's definitely wrong
 		lda #$00
 		sta (zpptr2),y
 
-:		ldy #$04
+:		ldy #$06
 		cmp (zpptr2),y									; compare with numentries
 		bmi :+											; ok when smaller
 		lda (zpptr2),y
 		sec
 		sbc #$01
-		ldy #$03
+		ldy #$04										 ; get selection
 		sta (zpptr2),y
 		rts
 
@@ -235,7 +233,7 @@ uilistbox_confine
 		sbc (zpptr2),y
 
 		bpl :+											; ok when > 0
-		ldy #$03										; when < get selection index and put in startpos
+		ldy #$04										; when < get selection index and put in startpos
 		lda (zpptr2),y
 		ldy #$02
 		sta (zpptr2),y
@@ -246,7 +244,7 @@ uilistbox_confine
 		bpl :+											; ok if < height
 		rts
 
-:		ldy #$03										; get selection index
+:		ldy #$04										; get selection index
 		lda (zpptr2),y
 		sec
 		ldy #UIELEMENT::height
@@ -307,7 +305,7 @@ uilistbox_drawlistreleased
 		lda (zpptr2),y
 		sta uilistbox_startpos
 
-		ldy #$03
+		ldy #$04
 		lda (zpptr2),y
 		sta uilistbox_selected_index
 

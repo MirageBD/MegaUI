@@ -43,8 +43,26 @@ uielement_press
 		sta (zpptr0),y
     	rts
 
-uielement_iterator
-		.byte $00
+uielement_doubleclick
+		rts
+
+uielement_release
+		ldy #UIELEMENT::state
+		lda (zpptr0),y
+		and #UISTATEMASK::pressed
+		sta (zpptr0),y
+		rts
+
+uielement_move
+		rts
+
+uielement_keypress
+		rts
+
+uielement_keyrelease
+		rts
+
+; ----------------------------------------------------------------------------------------------------
 
 uielement_calluifunc
 
@@ -91,25 +109,6 @@ uecuf5	jsr $babe							; execute function
 		bra uecuf1
 
 uielement_calluifunc_end
-		rts
-
-uielement_doubleclick
-		rts
-
-uielement_release
-		ldy #UIELEMENT::state
-		lda (zpptr0),y
-		and #UISTATEMASK::pressed
-		sta (zpptr0),y
-		rts
-
-uielement_move
-		rts
-
-uielement_keypress
-		rts
-
-uielement_keyrelease
 		rts
 
 ; ----------------------------------------------------------------------------------------------------

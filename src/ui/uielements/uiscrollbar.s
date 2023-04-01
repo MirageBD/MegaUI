@@ -86,7 +86,7 @@ uiscrollbar_confine
 		sta (zpptrtmp),y
 		rts
 
-:		ldy #$04										; get number of entries
+:		ldy #$06										; get number of entries
 		lda (zpptrtmp),y
 		ldy #UIELEMENT::height							; subtract height
 		sec
