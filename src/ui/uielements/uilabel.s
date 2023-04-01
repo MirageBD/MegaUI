@@ -39,7 +39,7 @@ uilabel_draw
 
 		jsr ui_getelementdataptr_1
 
-        ldy #$00
+        ldy #$02
 		lda (zpptr1),y
 		sta zpptr2+0
 		iny

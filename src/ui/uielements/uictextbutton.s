@@ -13,40 +13,32 @@ uictextbutton_layout
 
 		rts
 
-; ----------------------------------------------------------------------------------------------------
-
 uictextbutton_focus
 		rts
 
-; ----------------------------------------------------------------------------------------------------
-
 uictextbutton_enter
-		jsr uielement_enter
 		rts
 
-; ----------------------------------------------------------------------------------------------------
-
 uictextbutton_leave
-		jsr uielement_leave
 		jsr uicbutton_draw_released
 		rts
 
-; ----------------------------------------------------------------------------------------------------
-
 uictextbutton_move
-		;jsr uielement_move
 		rts
-
-; ----------------------------------------------------------------------------------------------------
 
 uictextbutton_keypress
 		rts
 
-; ----------------------------------------------------------------------------------------------------
-
 uictextbutton_keyrelease
 		rts
-		
+
+uictextbutton_press
+		jsr uicbutton_draw_pressed
+		rts
+
+uictextbutton_doubleclick
+		rts
+	
 ; ----------------------------------------------------------------------------------------------------
 
 uictextbutton_draw
@@ -61,7 +53,7 @@ uictextbutton_draw
 
 		jsr ui_getelementdataptr_1
 
-        ldy #$00
+        ldy #$02
 		lda (zpptr1),y
 		sta zpptr2+0
 		iny
@@ -81,30 +73,14 @@ uictextbutton_draw
 		inz
 		iny
  		bra :-
-:
 
-		lda #$00
+:		lda #$00
 		sta uidraw_xposoffset
 		sta uidraw_yposoffset
 
 		rts
 
-; ----------------------------------------------------------------------------------------------------
-
-uictextbutton_press
-		;jsr uielement_press
-		jsr uicbutton_draw_pressed
-		rts
-
-; ----------------------------------------------------------------------------------------------------
-
-uictextbutton_doubleclick
-		rts
-
-; ----------------------------------------------------------------------------------------------------
-
 uictextbutton_release
-		;jsr uielement_release
 		jsr uicbutton_draw_released
 
 		lda zpptr0+0

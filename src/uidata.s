@@ -5,7 +5,6 @@
 
 root
 		UIELEMENT_ADD ui_root1,				root,				windows,				0,  0, 80, 50,  0,		$ffff,					uidefaultflags
-
 		UIELEMENT_END
 
 ; ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ main windows
@@ -27,7 +26,7 @@ window1area
 		UIELEMENT_END
 
 window2area
-		UIELEMENT_ADD playbutton,			button,				$ffff,					 1,  1,  2,  2,  0,		playbutton_data,		uidefaultflags
+		UIELEMENT_ADD playbutton,			button,				$ffff,					 2,  2,  2,  2,  0,		playbutton_data,		uidefaultflags
 		;UIELEMENT_ADD debugelement2,		debugelement,		$ffff,					 1,  1, 37, 19,  0,		$ffff,					uidefaultflags
 		UIELEMENT_END
 
@@ -91,55 +90,55 @@ nineslice1elements
 
 ; ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ data
 
-paddlexlabel_data			.word uitxt_paddlex
-hexlabel1_data				.word mouse_d419
-paddleylabel_data			.word uitxt_paddley
-hexlabel2_data				.word mouse_d41a
+paddlexlabel_data			.word $ffff,							uitxt_paddlex
+hexlabel1_data				.word $ffff,							mouse_d419
+paddleylabel_data			.word $ffff,							uitxt_paddley
+hexlabel2_data				.word $ffff,							mouse_d41a
 
-uilogo_data					.word ((14*16+ 0) | (14*16+ 0)<<8)
+uilogo_data					.word $ffff,							((14*16+ 0) | (14*16+ 0)<<8)
 
-scrollbar_data				.word scrollbar_functions, 			0, 0, 30	; start position, selection index, number of entries
+scrollbar_data				.word scrollbar_functions, 				0, 0, 30	; start position, selection index, number of entries
 
-checkboxlabel_data			.word uitxt_checkbox
-radiobuttonlabel_data		.word uitxt_radiobutton
+checkboxlabel_data			.word $ffff,							uitxt_checkbox
+radiobuttonlabel_data		.word $ffff,							uitxt_radiobutton
 
-ctextbutton1_data			.word uitxt_button0
-ctextbutton2_data			.word uitxt_button1
-ctextbutton3_data			.word uitxt_button2
+ctextbutton1_data			.word $ffff,							uitxt_button0
+ctextbutton2_data			.word $ffff,							uitxt_button1
+ctextbutton3_data			.word $ffff,							uitxt_button2
 
-scrollbuttonup_data			.word scrollbuttonup_functions,		((4*16+ 0) | (4*16+ 4)<<8)
-scrollbuttondown_data		.word scrollbuttondown_functions,	((4*16+ 8) | (4*16+12)<<8)
+scrollbuttonup_data			.word scrollbuttonup_functions,			((4*16+ 0) | (4*16+ 4)<<8)
+scrollbuttondown_data		.word scrollbuttondown_functions,		((4*16+ 8) | (4*16+12)<<8)
 
-filebox1_data				.word scrollbar_functions,			scrollbar_data, listboxtxt
-checkbox1_data				.word $ffff,						1, ((3*16+ 8) | (3*16+10)<<8)
-checkbox2_data				.word $ffff,						0, ((3*16+ 8) | (3*16+10)<<8)
+filebox1_data				.word scrollbar_functions,				scrollbar_data, listboxtxt
+checkbox1_data				.word $ffff,							1, ((3*16+ 8) | (3*16+10)<<8)
+checkbox2_data				.word $ffff,							0, ((3*16+ 8) | (3*16+10)<<8)
 
 radiobuttongroupindex		.word 1
-radiobutton1_data			.word radiobutton_functions,		0, radiobuttongroupindex
-radiobutton2_data			.word radiobutton_functions,		1, radiobuttongroupindex
-radiobutton3_data			.word radiobutton_functions,		2, radiobuttongroupindex
+radiobutton1_data			.word radiobutton_functions,			0, radiobuttongroupindex
+radiobutton2_data			.word radiobutton_functions,			1, radiobuttongroupindex
+radiobutton3_data			.word radiobutton_functions,			2, radiobuttongroupindex
 
-playbutton_data				.word $ffff,						((8*16+0) | (8*16+4)<<8)
+playbutton_data				.word $ffff,							((8*16+0) | (8*16+4)<<8)
 
 ; ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ listeners
 
-scrollbuttonup_functions	.word scrollbar1track,	uiscrollbar_decrease
-							.word scrollbar1track,	uiscrolltrack_draw
-							.word filebox1,			uilistbox_draw
+scrollbuttonup_functions	.word scrollbar1track,					uiscrollbar_decrease
+							.word scrollbar1track,					uiscrolltrack_draw
+							.word filebox1,							uilistbox_draw
 							.word $ffff
 
-scrollbuttondown_functions	.word scrollbar1track,	uiscrollbar_increase
-							.word scrollbar1track,	uiscrolltrack_draw
-							.word filebox1,			uilistbox_draw
+scrollbuttondown_functions	.word scrollbar1track,					uiscrollbar_increase
+							.word scrollbar1track,					uiscrolltrack_draw
+							.word filebox1,							uilistbox_draw
 							.word $ffff
 
-scrollbar_functions			.word scrollbar1track,	uiscrolltrack_draw
-							.word filebox1,			uilistbox_draw
+scrollbar_functions			.word scrollbar1track,					uiscrolltrack_draw
+							.word filebox1,							uilistbox_draw
 							.word $ffff
 
-radiobutton_functions		.word radiobutton1,		uiradiobutton_draw
-							.word radiobutton2,		uiradiobutton_draw
-							.word radiobutton3,		uiradiobutton_draw
+radiobutton_functions		.word radiobutton1,						uiradiobutton_draw
+							.word radiobutton2,						uiradiobutton_draw
+							.word radiobutton3,						uiradiobutton_draw
 							.word $ffff
 
 ; ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------

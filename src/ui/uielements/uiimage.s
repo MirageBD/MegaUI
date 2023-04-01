@@ -34,10 +34,9 @@ uiimage_release
 uiimage_draw
 
 		jsr uidraw_set_draw_position
-
 		jsr ui_getelementdataptr_1
 
-		ldy #$01
+		ldy #$02
 		lda (zpptr1),y
 		tay
 
