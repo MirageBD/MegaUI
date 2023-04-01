@@ -35,12 +35,14 @@ uilistbox_keypress
 
 		jsr uilistbox_increase_selection
 		jsr uilistbox_confine
+		jsr uielement_calluifunc		
 		rts
 
 :		cmp KEYBOARD_CURSORUP
 		bne :+
 		jsr uilistbox_decrease_selection
 		jsr uilistbox_confine
+		jsr uielement_calluifunc		
 		;rts
 
 :		rts
@@ -60,7 +62,7 @@ uilistbox_release
 
 		jsr ui_getelementdataptr_1						; get data ptr to zpptr1
 
-		ldy #$00										; put scrollbar1_data in zpptr2
+		ldy #$02										; put scrollbar1_data in zpptr2
 		lda (zpptr1),y
 		sta zpptr2+0
 		iny
@@ -87,7 +89,7 @@ uilistbox_startaddentries
 
 		jsr ui_getelementdataptr_1						; get data ptr to zpptr1
 
-		ldy #$00										; get pointer to scrollbar data
+		ldy #$02										; put scrollbar1_data in zpptr3
 		lda (zpptr1),y
 		sta zpptr3+0
 		iny
@@ -132,21 +134,21 @@ uilistbox_getstringptr
 
 		jsr ui_getelementdataptr_1						; get data ptr to zpptr1
 
-		ldy #$02										; put start of text list into zpptr2
+		ldy #$04										; put start of text list into zpptr2
 		lda (zpptr1),y
 		sta zpptr2+0
 		iny
 		lda (zpptr1),y
 		sta zpptr2+1
 
-		ldy #$00										; get pointer to scrollbar data
+		ldy #$02										; get pointer to scrollbar data
 		lda (zpptr1),y
 		sta zpptrtmp+0
 		iny
 		lda (zpptr1),y
 		sta zpptrtmp+1
 
-		ldy #$01										; get selection index
+		ldy #$03										; get selection index
 		lda (zpptrtmp),y
 		asl												; *2
 		adc zpptr2+0									; add to text list ptr
@@ -169,7 +171,7 @@ uilistbox_getstringptr
 uilistbox_increase_selection
 		jsr ui_getelementdataptr_1						; get data ptr to zpptr1
 
-		ldy #$00										; put scrollbar1_data in zpptr2
+		ldy #$02										; put scrollbar1_data in zpptr2
 		lda (zpptr1),y
 		sta zpptr2+0
 		iny
@@ -187,7 +189,7 @@ uilistbox_increase_selection
 uilistbox_decrease_selection
 		jsr ui_getelementdataptr_1						; get data ptr to zpptr1
 
-		ldy #$00										; put scrollbar1_data in zpptr2
+		ldy #$02										; put scrollbar1_data in zpptr2
 		lda (zpptr1),y
 		sta zpptr2+0
 		iny
@@ -205,7 +207,7 @@ uilistbox_decrease_selection
 uilistbox_confine
 		jsr ui_getelementdataptr_1						; get data ptr to zpptr1
 
-		ldy #$00										; put scrollbar1_data in zpptr2
+		ldy #$02										; put scrollbar1_data in zpptr2
 		lda (zpptr1),y
 		sta zpptr2+0
 		iny
@@ -224,18 +226,18 @@ uilistbox_confine
 		lda (zpptr2),y
 		sec
 		sbc #$01
-		ldy #$01
+		ldy #$03
 		sta (zpptr2),y
 		rts
 
 :		sec												; get selection index and subtract startpos
-		ldy #$00
+		ldy #$02
 		sbc (zpptr2),y
 
 		bpl :+											; ok when > 0
 		ldy #$03										; when < get selection index and put in startpos
 		lda (zpptr2),y
-		ldy #$00
+		ldy #$02
 		sta (zpptr2),y
 		rts
 
@@ -294,7 +296,7 @@ uilistbox_drawlistreleased
 
 		jsr ui_getelementdataptr_1						; get data ptr to zpptr1
 
-		ldy #$00										; put scrollbar1_data into zpptr2
+		ldy #$02										; put scrollbar1_data into zpptr2
 		lda (zpptr1),y
 		sta zpptr2+0
 		iny
@@ -309,7 +311,7 @@ uilistbox_drawlistreleased
 		lda (zpptr2),y
 		sta uilistbox_selected_index
 
-		ldy #$02										; put listboxtxt into zpptr2
+		ldy #$04										; put listboxtxt into zpptr2
 		lda (zpptr1),y
 		sta zpptr2+0
 		iny

@@ -110,7 +110,8 @@ button1_data			.word button1_functions
 button2_data			.word button2_functions
 						.byte 4*16+8, 4*16+12							; not pressed glyph, pressed glyph
 
-filebox1_data			.word scrollbar1_data							; pointer to start position
+filebox1_data			.word scrollbar1_functions
+						.word scrollbar1_data							; pointer to start position
 						.word listboxtxt								; pointer to list of texts
 checkbox1_data			.byte 1											; disabled/enabled
 						.byte 3*16+8, 3*16+10							; disabled glyph, enabled glyph
