@@ -34,7 +34,28 @@ uibutton_draw
 uibutton_press
 		jsr uielement_press
 		jsr uibutton_draw_pressed
-		rts
+
+		jsr ui_getelementdataptr_1
+
+        ldy #$00					; read pointer to ui element to act upon
+		lda (zpptr1),y
+		sta zpptr0+0
+		iny
+		lda (zpptr1),y
+		sta zpptr0+1
+		cmp #$ff
+		beq :+
+
+        ldy #$02					; read function to call (second and third byte of data)
+		lda (zpptr1),y
+		sta zpptr2+0
+		iny
+		lda (zpptr1),y
+		sta zpptr2+1
+
+		jsr (zpptr2)				; execute function
+
+:		rts
 
 ; ----------------------------------------------------------------------------------------------------
 
@@ -50,14 +71,16 @@ uibutton_release
 
 		jsr ui_getelementdataptr_1
 
-        ldy #$02					; read pointer to ui element to act upon
+        ldy #$04					; read pointer to ui element to act upon
 		lda (zpptr1),y
 		sta zpptr0+0
 		iny
 		lda (zpptr1),y
 		sta zpptr0+1
+		cmp #$ff
+		beq :+
 
-        ldy #$04					; read function to call (second and third byte of data)
+        ldy #$06					; read function to call (second and third byte of data)
 		lda (zpptr1),y
 		sta zpptr2+0
 		iny
@@ -66,7 +89,7 @@ uibutton_release
 
 		jsr (zpptr2)				; execute function
 
-	   	rts
+:	   	rts
 
 ; ----------------------------------------------------------------------------------------------------
 
@@ -92,7 +115,7 @@ uibutton_draw_pressed
 
 		jsr ui_getelementdataptr_1
 
-        ldy #$01
+        ldy #$09
 		lda (zpptr1),y
 		tay
 
@@ -128,7 +151,7 @@ uibutton_draw_released
 
 		jsr ui_getelementdataptr_1
 
-		ldy #$00
+		ldy #$08
 		lda (zpptr1),y
 		tay
 

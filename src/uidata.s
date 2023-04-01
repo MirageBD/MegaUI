@@ -32,7 +32,8 @@ window1area
 		UIELEMENT_END
 
 window2area
-		UIELEMENT_ADD debugelement2,		debugelement,		$ffff,					 1,  1, 37, 19,  0,		dummy_data,				dummy_listeners,		uidefaultflags
+		UIELEMENT_ADD playbutton,			button,				$ffff,					 1,  1,  2,  2,  0,		playbutton_data,		dummy_listeners,		uidefaultflags
+		;UIELEMENT_ADD debugelement2,		debugelement,		$ffff,					 1,  1, 37, 19,  0,		dummy_data,				dummy_listeners,		uidefaultflags
 		UIELEMENT_END
 
 ; ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ scrollbar elements
@@ -81,8 +82,8 @@ mousedebugarea1
 ; ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ scrollbar elements
 
 scrollbar1elements
-		UIELEMENT_ADD scrollbar1button1,	scrollbutton,		$ffff,					 0,  0,  2,  2,  0,		button1_data,			scrollbar1_listeners,	uidefaultflags
-		UIELEMENT_ADD scrollbar1button2,	scrollbutton,		$ffff,					 0, 14,  2,  2,  0,		button2_data,			scrollbar1_listeners,	uidefaultflags
+		UIELEMENT_ADD scrollbar1button1,	button,				$ffff,					 0,  0,  2,  2,  0,		button1_data,			scrollbar1_listeners,	uidefaultflags
+		UIELEMENT_ADD scrollbar1button2,	button,				$ffff,					 0, 14,  2,  2,  0,		button2_data,			scrollbar1_listeners,	uidefaultflags
 		UIELEMENT_ADD scrollbar1track,		scrolltrack,		$ffff,					 0,  2,  2, 12,  0,		scrollbar1_data,		scrollbar1_listeners,	uidefaultflags
 		UIELEMENT_END
 
@@ -101,19 +102,19 @@ paddleylabel_data		.word uitxt_paddley
 hexlabel2_data			.word mouse_d41a
 
 uilogo_data				.byte 14*16+0, 14*16+0							; disabled glyph, enabled glyph
-scrollbar1_data			.byte 0											; scrollbar position
-						.byte 0											; selection index
-						.byte 30										; number of entries
+scrollbar1_data			.byte 0, 0, 30									; scrollbar position, selection index, number of entries
 
 checkboxlabel_data		.word uitxt_checkbox
 radiobuttonlabel_data	.word uitxt_radiobutton
 ctextbutton1_data		.word uitxt_button0
 ctextbutton2_data		.word uitxt_button1
 ctextbutton3_data		.word uitxt_button2
-button1_data			.byte 4*16+0, 4*16+4							; not pressed glyph, pressed glyph
-						.word scrollbar1track, uiscrollbar_decrease
-button2_data			.byte 4*16+8, 4*16+12							; not pressed glyph, pressed glyph
-						.word scrollbar1track, uiscrollbar_increase
+button1_data			.word scrollbar1track, uiscrollbar_decrease		; press UI event
+						.word $ffff, $ffff								; release UI event
+						.byte 4*16+0, 4*16+4							; not pressed glyph, pressed glyph
+button2_data			.word scrollbar1track, uiscrollbar_increase		; press UI event
+						.word $ffff, $ffff								; release UI event
+						.byte 4*16+8, 4*16+12							; not pressed glyph, pressed glyph
 filebox1_data			.word scrollbar1_data							; pointer to start position
 						.word listboxtxt								; pointer to list of texts
 checkbox1_data			.byte 1											; disabled/enabled
@@ -130,6 +131,10 @@ radiobutton3_data		.byte 2											; index
 						.word radiobuttongroupindex						; pointer to group index
 						.byte 3*16+12, 3*16+13							; disabled glyph, enabled glyph
 radiobuttongroupindex	.byte 1
+
+playbutton_data			.word $ffff, $ffff								; press UI event
+						.word $ffff, $ffff								; release UI event
+						.byte 8*16+0, 8*16+4							; not pressed glyph, pressed glyph
 
 ; ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ listeners
 
