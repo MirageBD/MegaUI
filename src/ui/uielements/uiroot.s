@@ -28,7 +28,7 @@ uiroot_draw
 	   	rts
 
 uiroot_press
-		jsr uielement_press
+		;jsr uielement_press
     	rts
 
 uiroot_doubleclick

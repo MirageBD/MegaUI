@@ -70,7 +70,7 @@ uicheckbox_draw
 ; ----------------------------------------------------------------------------------------------------
 
 uicheckbox_press
-		jsr uielement_press
+		;jsr uielement_press
 		rts
 
 ; ----------------------------------------------------------------------------------------------------
@@ -81,7 +81,7 @@ uicheckbox_doubleclick
 ; ----------------------------------------------------------------------------------------------------
 
 uicheckbox_release
-		jsr uielement_release
+		;jsr uielement_release
 
 		jsr ui_getelementdataptr_1
 

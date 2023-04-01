@@ -67,7 +67,7 @@ uiscrolltrack_draw
 ; ----------------------------------------------------------------------------------------------------
 
 uiscrolltrack_press
-		jsr uielement_press
+		;jsr uielement_press
 
 		jsr uimouse_calculate_pos_in_uielement
 
@@ -87,7 +87,7 @@ uiscrolltrack_press
 		lda uimouse_uielement_ypos+1
 		sta uiscrolltrack_startpos+3
 
-		ldy #$02
+		ldy #$04
 		lda (zpptrtmp),y						; num entries: 20
 		sta uiscrolltrack_numentries+2
 
@@ -112,6 +112,7 @@ uiscrolltrack_press
 		lsr
 
 :		jsr uiscrollbar_setposition
+		jsr uielement_calluifunc
 
 		rts
 
@@ -207,7 +208,7 @@ uiscrolltrack_draw_released_puck
 
 		jsr uiscrolltrack_resetqvalues
 
-		ldy #$02
+		ldy #$04
 		lda (zpptrtmp),y						; num entries: 20
 		sta uiscrolltrack_numentries+2
 
@@ -222,7 +223,7 @@ uiscrolltrack_draw_released_puck
 		bpl :+
 		rts										; dont draw puck if entries < height
 
-:		ldy #$00
+:		ldy #$02
 		lda (zpptrtmp),y						; startpos: 0,1,2,3,4.
 		sta uiscrolltrack_startpos+2
 

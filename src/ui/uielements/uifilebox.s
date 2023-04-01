@@ -2,9 +2,7 @@
 
 uifilebox_layout
 		jsr uilistbox_layout
-
 		jsr uifilebox_opendir
-
 		rts
 
 uifilebox_focus
@@ -75,8 +73,6 @@ uifilebox_doubleclick
 		jsr sdc_chdir
 		jsr uifilebox_opendir
 		jsr uifilebox_draw
-		jsr uielement_listeners
-
 		rts
 
 uifilebox_release
@@ -113,7 +109,7 @@ uifilebox_confine
 
 uifilebox_processdirentry
 
-		clc												; increase number of entries
+		clc													; increase number of entries
 		ldy #$02
 		lda (zpptr3),y
 		adc #$01

@@ -42,7 +42,7 @@ uiscrollbar_keyrelease
 uiscrollbar_increase
 		jsr ui_getelementdataptr_tmp
 
-		ldy #$00
+		ldy #$02
 		lda (zpptrtmp),y
 		clc
 		adc #$01
@@ -50,14 +50,12 @@ uiscrollbar_increase
 
 		jsr uiscrollbar_confine
 
-		jsr uielement_listeners
-
 		rts
 
 uiscrollbar_decrease
 		jsr ui_getelementdataptr_tmp
 
-		ldy #$00
+		ldy #$02
 		lda (zpptrtmp),y
 		sec
 		sbc #$01
@@ -65,19 +63,15 @@ uiscrollbar_decrease
 
 		jsr uiscrollbar_confine
 
-		jsr uielement_listeners
-
 		rts
 
 uiscrollbar_setposition
 		jsr ui_getelementdataptr_tmp
 
-		ldy #$00
+		ldy #$02
 		sta (zpptrtmp),y
 
 		jsr uiscrollbar_confine
-
-		jsr uielement_listeners
 
 		rts
 
@@ -85,14 +79,14 @@ uiscrollbar_setposition
 
 uiscrollbar_confine
 
-		ldy #$00										; get start pos
+		ldy #$02										; get start pos
 		lda (zpptrtmp),y
 		bpl :+
 		lda #$00										; smaller than 0, set to 0
 		sta (zpptrtmp),y
 		rts
 
-:		ldy #$02										; get number of entries
+:		ldy #$04										; get number of entries
 		lda (zpptrtmp),y
 		ldy #UIELEMENT::height							; subtract height
 		sec
@@ -103,7 +97,7 @@ uiscrollbar_confine
 		lda #$00
 		sta (zpptrtmp),y								; set scrolpos to 0
 
-:		ldy #$00
+:		ldy #$02
 		cmp (zpptrtmp),y								; compare with startpos
 		bpl :+											; if bigger than ok
 		sta (zpptrtmp),y

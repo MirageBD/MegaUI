@@ -21,7 +21,16 @@ uilabel_keypress
 
 uilabel_keyrelease
 		rts
-		
+
+uilabel_press
+    	rts
+
+uilabel_doubleclick
+		rts
+
+uilabel_release
+    	rts
+
 ; ----------------------------------------------------------------------------------------------------
 
 uilabel_draw
@@ -51,15 +60,6 @@ uilabel_draw
 		iny
  		bra :-
 :
-    	rts
-
-uilabel_press
-    	rts
-
-uilabel_doubleclick
-		rts
-
-uilabel_release
     	rts
 
 ; ----------------------------------------------------------------------------------------------------

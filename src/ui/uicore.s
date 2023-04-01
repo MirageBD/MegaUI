@@ -60,7 +60,6 @@ q160						.dword 160
 		height		.byte
 		depth		.byte
 		data		.word
-		listeners	.word
 		flags		.byte
 
 		parent		.word			; variables
@@ -94,6 +93,22 @@ q160						.dword 160
 		image
 .endenum
 
+.enum UIEVENTTYPE
+		press						;
+		longpress					;
+		release						;
+		doubleclick					;
+		keypress					;
+		keyrelease
+
+		layout						;
+		draw						;
+		focus
+		enter						;
+		leave						;
+		move						;
+.endenum
+
 .enum UISTATE
 		hover		= %00000001		;
 									; %00000010 is used in code to decide hover flag
@@ -115,13 +130,12 @@ q160						.dword 160
 
 ; ----------------------------------------------------------------------------------------------------
 
-.macro UIELEMENT_ADD name, elementtype, child, xpos, ypos, width, height, depth, data, listeners, flags
+.macro UIELEMENT_ADD name, elementtype, child, xpos, ypos, width, height, depth, data, flags
 .ident(.sprintf("%s", .string(name)))
 		.byte UIELEMENTTYPE::elementtype
 		.word child
 		.byte xpos, ypos, width, height, depth
 		.word data
-		.word listeners
 		.byte flags
 		.res .sizeof(UIVARIABLES)
 .endmacro
@@ -197,36 +211,30 @@ ui_element_indiceshi
 
 ui_getelementdataptr_1
 
+		pha
+		phy
 		ldy #UIELEMENT::data+0
         lda (zpptr0),y
 		sta zpptr1+0
 		ldy #UIELEMENT::data+1
         lda (zpptr0),y
 		sta zpptr1+1
+		ply
+		pla
 		rts
 
 ui_getelementdataptr_tmp
 
 		pha
+		phy
 		ldy #UIELEMENT::data+0
 		lda (zpptr0),y
 		sta zpptrtmp+0
 		ldy #UIELEMENT::data+1
 		lda (zpptr0),y
 		sta zpptrtmp+1
+		ply
 		pla
-		rts
-
-; ----------------------------------------------------------------------------------------------------
-
-ui_getelementlistenersptr_3
-
-		ldy #UIELEMENT::listeners+0
-        lda (zpptr0),y
-		sta zpptr3+0
-		ldy #UIELEMENT::listeners+1
-        lda (zpptr0),y
-		sta zpptr3+1
 		rts
 
 ; ----------------------------------------------------------------------------------------------------

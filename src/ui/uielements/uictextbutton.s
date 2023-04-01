@@ -92,7 +92,7 @@ uictextbutton_draw
 ; ----------------------------------------------------------------------------------------------------
 
 uictextbutton_press
-		jsr uielement_press
+		;jsr uielement_press
 		jsr uicbutton_draw_pressed
 		rts
 
@@ -104,7 +104,7 @@ uictextbutton_doubleclick
 ; ----------------------------------------------------------------------------------------------------
 
 uictextbutton_release
-		jsr uielement_release
+		;jsr uielement_release
 		jsr uicbutton_draw_released
 
 		lda zpptr0+0

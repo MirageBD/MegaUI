@@ -33,7 +33,7 @@ uidebugelement_draw
     	rts
 
 uidebugelement_press
-		jsr uielement_press
+		;jsr uielement_press
 
 		lda #6*16+8
 		sta uidebug_debugcolour
@@ -44,7 +44,7 @@ uidebugelement_doubleclick
 		rts
 
 uidebugelement_release
-		jsr uielement_release
+		;jsr uielement_release
 
 		lda #6*16+0
 		sta uidebug_debugcolour
