@@ -95,14 +95,14 @@ uilistbox_startaddentries
 		sta zpptr3+1
 
 		lda #$00
-		ldy #$00
-		sta (zpptr3),y									; set scrollbar position to 0
-		ldy #$01
-		sta (zpptr3),y									; set selection index to 0
 		ldy #$02
+		sta (zpptr3),y									; set scrollbar position to 0
+		ldy #$04
+		sta (zpptr3),y									; set selection index to 0
+		ldy #$06
 		sta (zpptr3),y									; set number of entries to 0
 
-		ldy #$02										; put start of text list into zpptr2
+		ldy #$04										; put start of text list into zpptr2
 		lda (zpptr1),y
 		sta zpptr2+0
 		iny

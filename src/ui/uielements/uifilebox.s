@@ -34,7 +34,7 @@ uifilebox_keypress_end
 		rts
 
 uifilebox_opendir
-		rts
+		;rts
 		
 		jsr uifilebox_startaddentries
 
@@ -110,7 +110,7 @@ uifilebox_confine
 uifilebox_processdirentry
 
 		clc													; increase number of entries
-		ldy #$02
+		ldy #$06
 		lda (zpptr3),y
 		adc #$01
 		sta (zpptr3),y
