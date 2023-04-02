@@ -1,15 +1,56 @@
 ; ----------------------------------------------------------------------------------------------------
 
 uielement_layout
-		jsr uirect_calcminmax
-
-		jsr uistack_peekparent
 		ldy #UIELEMENT::parent							; set parent
 		lda uielement_parent_ptr+0
 		sta (zpptr0),y
+		sta zpptrtmp+0
 		iny
 		lda uielement_parent_ptr+1
 		sta (zpptr0),y
+		sta zpptrtmp+1
+
+		ldy #UIELEMENT::height
+		lda (zpptr0),y
+		bpl :+
+
+		clc
+		lda (zpptrtmp),y
+		adc (zpptr0),y
+		sta (zpptr0),y
+
+:		ldy #UIELEMENT::width
+		lda (zpptr0),y
+		bpl :+
+
+		clc
+		lda (zpptrtmp),y
+		adc (zpptr0),y
+		sta (zpptr0),y
+
+:		ldy #UIELEMENT::xpos
+		lda (zpptr0),y
+		bpl :+
+
+		clc
+		ldy #UIELEMENT::width
+		lda (zpptrtmp),y
+		ldy #UIELEMENT::xpos
+		adc (zpptr0),y
+		sta (zpptr0),y
+
+:		ldy #UIELEMENT::ypos
+		lda (zpptr0),y
+		bpl :+
+
+		clc
+		ldy #UIELEMENT::height
+		lda (zpptrtmp),y
+		ldy #UIELEMENT::ypos
+		adc (zpptr0),y
+		sta (zpptr0),y
+
+:		jsr uirect_calcminmax
 
     	rts
 

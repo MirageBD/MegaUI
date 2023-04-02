@@ -239,8 +239,7 @@ uiscrolltrack_draw_released_puck
 		jsr uidraw_increase_row
 		bra :-
 
-:
-		lda #5*16+6
+:		lda #5*16+6
 		ldz #$00
 		sta [uidraw_scrptr],z
 		inz

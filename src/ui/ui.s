@@ -177,26 +177,6 @@ uistack_popparent
 		sta uielement_layoutypos
 		rts
 
-uistack_peekparent
-		ldx uistackptr
-		cpx #$00
-		beq :+
-		dex
-		dex
-		dex
-		dex
-		dex
-		lda uistack+1,x
-		sta uielement_parent_ptr+0
-		lda uistack+2,x
-		sta uielement_parent_ptr+1
-		rts
-
-:		lda #$00
-		sta uielement_parent_ptr+0
-		sta uielement_parent_ptr+1
-		rts
-
 ; ----------------------------------------------------------------------------------------------------
 
 ui_draw_windows
@@ -231,6 +211,10 @@ ui_draw_windows
 		bra :--
 
 :		; recursively handle children
+		lda zpptr0+0
+		sta uielement_parent_ptr+0
+		lda zpptr0+1
+		sta uielement_parent_ptr+1
 		jsr uistack_pushparent
 		jsr uihelper_store_minxy
 		ldy #UIELEMENT::children

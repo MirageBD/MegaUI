@@ -17,6 +17,7 @@ uictextbutton_focus
 		rts
 
 uictextbutton_enter
+		jsr uielement_enter
 		rts
 
 uictextbutton_leave
