@@ -83,9 +83,7 @@ uictextbutton_draw
 
 uictextbutton_release
 		jsr uicbutton_draw_released
-
-		lda zpptr0+0
-		DEBUG_COLOUR
+		jsr uielement_calluifunc
 
 	   	rts
 

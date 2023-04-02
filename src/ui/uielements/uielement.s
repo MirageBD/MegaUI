@@ -144,7 +144,7 @@ uecuf4	lda $babe,y
 		iny
 
 		phy
-uecuf5	jsr $babe							; execute function
+uecuf5	jsr $babe								; execute function
 		ply
 
 		bra uecuf1

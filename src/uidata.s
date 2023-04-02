@@ -39,9 +39,9 @@ filearea1
 ; ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ scrollbar elements
 
 cbuttonarea1
-		UIELEMENT_ADD textbutton1,			ctextbutton,		$ffff,					 1,  1, -2,  3,  0,		ctextbutton1_data,		uidefaultflags
-		UIELEMENT_ADD textbutton2,			ctextbutton,		$ffff,					 1,  3, -2,  3,  0,		ctextbutton2_data,		0
-		UIELEMENT_ADD textbutton3,			ctextbutton,		$ffff,					 1,  5, -2,  3,  0,		ctextbutton3_data,		uidefaultflags
+		UIELEMENT_ADD ctextbutton1,			ctextbutton,		$ffff,					 1,  1, -2,  3,  0,		ctextbutton1_data,		uidefaultflags
+		UIELEMENT_ADD ctextbutton2,			ctextbutton,		$ffff,					 1,  3, -2,  3,  0,		ctextbutton2_data,		uidefaultflags
+		UIELEMENT_ADD ctextbutton3,			ctextbutton,		$ffff,					 1,  5, -2,  3,  0,		ctextbutton3_data,		uidefaultflags
 		UIELEMENT_END
 
 ; ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ scrollbar elements
@@ -102,9 +102,9 @@ scrollbar_data				.word scrollbar_functions, 				0, 0, 30	; start position, sele
 checkboxlabel_data			.word $ffff,							uitxt_checkbox
 radiobuttonlabel_data		.word $ffff,							uitxt_radiobutton
 
-ctextbutton1_data			.word $ffff,							uitxt_button0
-ctextbutton2_data			.word $ffff,							uitxt_button1
-ctextbutton3_data			.word $ffff,							uitxt_button2
+ctextbutton1_data			.word ctextbutton1_functions,			uitxt_button0
+ctextbutton2_data			.word ctextbutton2_functions,			uitxt_button1
+ctextbutton3_data			.word ctextbutton3_functions,			uitxt_button2
 
 scrollbuttonup_data			.word scrollbuttonup_functions,			((4*16+ 0) | (4*16+ 4)<<8)
 scrollbuttondown_data		.word scrollbuttondown_functions,		((4*16+ 8) | (4*16+12)<<8)
@@ -140,5 +140,31 @@ radiobutton_functions		.word radiobutton1,						uiradiobutton_draw
 							.word radiobutton2,						uiradiobutton_draw
 							.word radiobutton3,						uiradiobutton_draw
 							.word $ffff
+
+ctextbutton1_functions		.word ctextbutton1,						custom_colourborder_pink
+							.word $ffff
+
+ctextbutton2_functions		.word ctextbutton2,						custom_colourborder_lightblue
+							.word $ffff
+
+ctextbutton3_functions		.word ctextbutton3,						custom_colourborder_cyan
+							.word $ffff
+
+; ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+custom_colourborder_pink
+		lda #$60
+		DEBUG_COLOUR
+		rts
+
+custom_colourborder_lightblue
+		lda #$a0
+		DEBUG_COLOUR
+		rts
+
+custom_colourborder_cyan
+		lda #$c0
+		DEBUG_COLOUR
+		rts
 
 ; ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
