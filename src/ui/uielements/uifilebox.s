@@ -1,5 +1,11 @@
 ; ----------------------------------------------------------------------------------------------------
 
+uifilebox_selected_index		.byte 0
+uifilebox_startpos				.byte 0
+uifilebox_current_draw_pos		.byte 0
+
+; ----------------------------------------------------------------------------------------------------
+
 uifilebox_layout
 		jsr uilistbox_layout
 		jsr uifilebox_opendir
@@ -34,17 +40,27 @@ uifilebox_keypress_end
 		rts
 
 uifilebox_opendir
-		;rts
+		rts
 		
 		jsr uifilebox_startaddentries
 
-		lda #<uifilebox_processdirentry
+		; handle directories first
+		lda #<uifilebox_processdirentry_directory
 		sta sdc_processdirentryptr+1
-		lda #>uifilebox_processdirentry
+		lda #>uifilebox_processdirentry_directory
 		sta sdc_processdirentryptr+2
 
 		jsr sdc_opendir
-		
+
+		; then handle regular files
+
+		lda #<uifilebox_processdirentry_file
+		sta sdc_processdirentryptr+1
+		lda #>uifilebox_processdirentry_file
+		sta sdc_processdirentryptr+2
+
+		jsr sdc_opendir
+
 		jsr uifilebox_endaddentries
 		rts
 
@@ -53,7 +69,8 @@ uifilebox_keyrelease
 		rts
 		
 uifilebox_draw
-		jsr uilistbox_draw
+		jsr uilistbox_drawbkgreleased
+		jsr uifilebox_drawlistreleased
 		rts
 
 uifilebox_press
@@ -76,7 +93,8 @@ uifilebox_doubleclick
 		rts
 
 uifilebox_release
-		jsr uilistbox_release
+		jsr uilistbox_setselectedindex
+		jsr uifilebox_draw
 		rts
 
 ; ----------------------------------------------------------------------------------------------------
@@ -107,6 +125,26 @@ uifilebox_confine
 
 ; ----------------------------------------------------------------------------------------------------
 
+uifilebox_processdirentry_file
+
+		lda sdc_transferbuffer+$0056
+		and #%00010000
+		cmp #%00010000
+		beq :+												; if it's a directoy then skip
+		jmp uifilebox_processdirentry
+:		rts		
+
+uifilebox_processdirentry_directory
+
+		lda sdc_transferbuffer+$0056
+		and #%00010000
+		cmp #%00010000
+		bne :+												; if it's not a directoy then skip
+		jmp uifilebox_processdirentry
+:		rts		
+
+; ----------------------------------------------------------------------------------------------------
+
 uifilebox_processdirentry
 
 		clc													; increase number of entries
@@ -130,17 +168,44 @@ uifilebox_processdirentry
 		adc #$00
 		sta zpptr2+1
 
-		ldy #$00											; read until 0
-:		lda sdc_transferbuffer,y
+		ldy #$00
+
+		lda sdc_transferbuffer+$0056,x
+		sta (zpptrtmp),y
+		iny
+
+		ldx #$00
+:		lda sdc_transferbuffer+$0041,x
+		cmp #$20
 		beq :+
 		sta (zpptrtmp),y
 		iny
-		bra :-
+		inx
+		cpx #$08
+		bne :-
 
-:		sta (zpptrtmp),y									; add length of text to pointer
+:		lda sdc_transferbuffer+$0041+8						; read extension. if it's a space then don't add dot or extension
+		cmp #$20
+		beq :++
+
+		lda #$2e											; add dot
+		sta (zpptrtmp),y
 		iny
-		tya
+
+		ldx #$00
+:		lda sdc_transferbuffer+$0041+8,x
+		sta (zpptrtmp),y
+		iny
+		inx
+		cpx #$03
+		bne :-
+
+:		lda #$00											; add 0 string terminator
+		sta (zpptrtmp),y
+		iny
+
 		clc
+		tya
 		adc zpptrtmp+0
 		sta zpptrtmp+0
 		lda zpptrtmp+1
@@ -151,3 +216,109 @@ uifilebox_processdirentry
 
 ; ----------------------------------------------------------------------------------------------------
 
+uifilebox_drawlistreleased
+
+		jsr uidraw_set_draw_position
+
+		jsr ui_getelementdataptr_1						; get data ptr to zpptr1
+
+		ldy #$02										; put scrollbar1_data into zpptr2
+		lda (zpptr1),y
+		sta zpptr2+0
+		iny
+		lda (zpptr1),y
+		sta zpptr2+1
+
+		ldy #$02										; store startpos
+		lda (zpptr2),y
+		sta uifilebox_startpos
+
+		ldy #$04
+		lda (zpptr2),y
+		sta uifilebox_selected_index
+
+		ldy #$04										; put listboxtxt into zpptr2
+		lda (zpptr1),y
+		sta zpptr2+0
+		iny
+		lda (zpptr1),y
+		sta zpptr2+1
+
+		clc
+		ldy #$00
+		lda uifilebox_startpos
+		sta uifilebox_current_draw_pos
+		asl
+		adc zpptr2+0
+		sta zpptr2+0
+		lda zpptr2+1
+		adc #$00
+		sta zpptr2+1
+
+uifilebox_drawlistreleased_loop							; start drawing the list
+
+		lda uifilebox_current_draw_pos
+		cmp uifilebox_selected_index
+		bne :++
+
+		ldx uidraw_width
+		ldz #$00
+:		lda #$f0 ; dark blue
+		sta [uidraw_colptr],z
+		inz
+		inz
+		dex
+		bne :-
+
+:		ldx uidraw_width								; clear line
+		ldz #$00
+:		lda #$60
+		sta [uidraw_scrptr],z
+		inz
+		lda #$04
+		sta [uidraw_scrptr],z
+		inz
+		dex
+		bne :-
+
+		ldy #$00
+		lda (zpptr2),y
+		sta zpptrtmp+0
+		iny
+		lda (zpptr2),y
+		sta zpptrtmp+1
+		cmp #$ff
+		beq :+++
+
+		ldy #$01										; set to 1 to skip file type and attribute bits
+		ldz #$00
+:		lda (zpptrtmp),y
+		tax
+		lda ui_textremap,x
+		beq :+
+		sta [uidraw_scrptr],z
+		inz
+		lda #$04
+		sta [uidraw_scrptr],z
+		inz
+		iny
+ 		bra :-
+
+:		clc
+		lda zpptr2+0
+		adc #$02
+		sta zpptr2+0
+		lda zpptr2+1
+		adc #$00
+		sta zpptr2+1
+
+:		jsr uidraw_increase_row
+		inc uifilebox_current_draw_pos
+
+		dec uidraw_height
+		lda uidraw_height
+		bne uifilebox_drawlistreleased_loop
+
+		rts
+
+; ----------------------------------------------------------------------------------------------------

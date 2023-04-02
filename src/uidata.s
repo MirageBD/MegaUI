@@ -124,16 +124,16 @@ playbutton_data				.word $ffff,							((8*16+0) | (8*16+4)<<8)
 
 scrollbuttonup_functions	.word scrollbar1track,					uiscrollbar_decrease
 							.word scrollbar1track,					uiscrolltrack_draw
-							.word filebox1,							uilistbox_draw
+							.word filebox1,							uifilebox_draw
 							.word $ffff
 
 scrollbuttondown_functions	.word scrollbar1track,					uiscrollbar_increase
 							.word scrollbar1track,					uiscrolltrack_draw
-							.word filebox1,							uilistbox_draw
+							.word filebox1,							uifilebox_draw
 							.word $ffff
 
 scrollbar_functions			.word scrollbar1track,					uiscrolltrack_draw
-							.word filebox1,							uilistbox_draw
+							.word filebox1,							uifilebox_draw
 							.word $ffff
 
 radiobutton_functions		.word radiobutton1,						uiradiobutton_draw

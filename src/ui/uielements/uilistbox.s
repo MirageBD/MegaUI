@@ -56,6 +56,11 @@ uilistbox_draw
 		rts
 
 uilistbox_release
+		jsr uilistbox_setselectedindex
+		jsr uilistbox_draw
+		rts
+
+uilistbox_setselectedindex
 		jsr uimouse_calculate_pos_in_uielement
 
 		jsr ui_getelementdataptr_1						; get data ptr to zpptr1
@@ -76,8 +81,6 @@ uilistbox_release
 		adc (zpptr2),y
 		ldy #$04
 		sta (zpptr2),y
-
-		jsr uilistbox_draw
 
 		rts
 
@@ -395,7 +398,6 @@ uilistbox_drawlistreleased_loop							; start drawing the list
 		lda uidraw_height
 		bne uilistbox_drawlistreleased_loop
 
-uilistbox_drawlistreleased_end
 		rts
 
 ; ----------------------------------------------------------------------------------------------------

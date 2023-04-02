@@ -54,45 +54,45 @@ listboxtxt			.word listboxtxt00
 					.word $ffff
 
 .align 256
-listboxtxt00		.byte "geos     d81", 0
-listboxtxt01		.byte "megaui   d81", 0
-listboxtxt02		.byte "xmas65   d81", 0
-listboxtxt03		.byte "samples  bin", 0
-listboxtxt04		.byte "glyphs   bin", 0
-listboxtxt05		.byte "font     bin", 0
-listboxtxt06		.byte "me       bin", 0
-listboxtxt07		.byte "to       bin", 0
-listboxtxt08		.byte "test     bin", 0
-listboxtxt09		.byte "foo      bin", 0
-listboxtxt10		.byte "bar      bin", 0
-listboxtxt11		.byte "megaui   d81", 0
-listboxtxt12		.byte "xmas65   d81", 0
-listboxtxt13		.byte "14          ", 0
-listboxtxt14		.byte "15          ", 0
-listboxtxt15		.byte "16          ", 0
-listboxtxt16		.byte "17          ", 0
-listboxtxt17		.byte "18          ", 0
-listboxtxt18		.byte "19          ", 0
-listboxtxt19		.byte "20          ", 0
-listboxtxt20		.byte "21          ", 0
-listboxtxt21		.byte "22          ", 0
-listboxtxt22		.byte "23          ", 0
-listboxtxt23		.byte "24          ", 0
-listboxtxt24		.byte "25          ", 0
-listboxtxt25		.byte "26          ", 0
-listboxtxt26		.byte "27          ", 0
-listboxtxt27		.byte "28          ", 0
-listboxtxt28		.byte "29          ", 0
-listboxtxt29		.byte "30          ", 0
-listboxtxt30		.byte "31          ", 0
-listboxtxt31		.byte "            ", 0
-listboxtxt32		.byte "            ", 0
-listboxtxt33		.byte "            ", 0
-listboxtxt34		.byte "            ", 0
-listboxtxt35		.byte "            ", 0
-listboxtxt36		.byte "            ", 0
-listboxtxt37		.byte "            ", 0
-listboxtxt38		.byte "            ", 0
-listboxtxt39		.byte "            ", 0
+listboxtxt00		.byte $00, "geos.d81", 0
+listboxtxt01		.byte $00, "megaui.d81", 0
+listboxtxt02		.byte $00, "xmas65.d81", 0
+listboxtxt03		.byte $00, "samples.bin", 0
+listboxtxt04		.byte $00, "glyphs.bin", 0
+listboxtxt05		.byte $00, "font.bin", 0
+listboxtxt06		.byte $00, "dir", 0
+listboxtxt07		.byte $00, "to.bin", 0
+listboxtxt08		.byte $00, "test.bin", 0
+listboxtxt09		.byte $00, "foo.bin", 0
+listboxtxt10		.byte $00, "bar.bin", 0
+listboxtxt11		.byte $00, "megaui.d81", 0
+listboxtxt12		.byte $00, "xmas65.d81", 0
+listboxtxt13		.byte $00, "14", 0
+listboxtxt14		.byte $00, "15", 0
+listboxtxt15		.byte $00, "16          ", 0
+listboxtxt16		.byte $00, "17          ", 0
+listboxtxt17		.byte $00, "18          ", 0
+listboxtxt18		.byte $00, "19          ", 0
+listboxtxt19		.byte $00, "20          ", 0
+listboxtxt20		.byte $00, "21          ", 0
+listboxtxt21		.byte $00, "22          ", 0
+listboxtxt22		.byte $00, "23          ", 0
+listboxtxt23		.byte $00, "24          ", 0
+listboxtxt24		.byte $00, "25          ", 0
+listboxtxt25		.byte $00, "26          ", 0
+listboxtxt26		.byte $00, "27          ", 0
+listboxtxt27		.byte $00, "28          ", 0
+listboxtxt28		.byte $00, "29          ", 0
+listboxtxt29		.byte $00, "30          ", 0
+listboxtxt30		.byte $00, "31          ", 0
+listboxtxt31		.byte $00, "            ", 0
+listboxtxt32		.byte $00, "            ", 0
+listboxtxt33		.byte $00, "            ", 0
+listboxtxt34		.byte $00, "            ", 0
+listboxtxt35		.byte $00, "            ", 0
+listboxtxt36		.byte $00, "            ", 0
+listboxtxt37		.byte $00, "            ", 0
+listboxtxt38		.byte $00, "            ", 0
+listboxtxt39		.byte $00, "            ", 0
 
 ; filename = 8.3 = 12 chars

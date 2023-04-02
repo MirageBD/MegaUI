@@ -11,7 +11,7 @@ sdc_opendir
 		nop
 		ldz #$00
 
-		lda #$12										; open the current working directory
+		lda #$12										; hyppo_opendir - open the current working directory
 		sta $d640
 		clv
 		bcc sdc_opendir_error
@@ -19,13 +19,13 @@ sdc_opendir
 		tax												; transfer the directory file descriptor into X
 		ldy #>sdc_transferbuffer						; set Y to the MSB of the transfer area
 
-sdcod1	lda #$14										; read the directory entry
+sdcod1	lda #$14										; hyppo_readdir - read the directory entry
 		sta $d640
 		clv
 		bcc sdcod2
+
 		phx
 		phy
-
 sdc_processdirentryptr		
 		jsr $babe										; call function that handles the retrieved filename
 		ply

@@ -134,7 +134,7 @@ run: $(EXE_DIR)/disk.d81
 #	m65 -l COM3 -T 'list'
 #	m65 -l COM3 -T 'load "boot"'
 #	m65 -l COM3 -T 'list'
-#	m65 -l COM3 -T 'run' 
+#	m65 -l COM3 -T 'run'
 
 # start debugger
 #	m65dbg --device /dev/ttyS2
