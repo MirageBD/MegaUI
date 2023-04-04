@@ -5,6 +5,7 @@
 uiscrolltrack_startpos			.byte $00, $00, $00, $00
 uiscrolltrack_numentries		.byte $00, $00, $00, $00
 uiscrolltrack_height			.byte $00, $00, $00, $00
+uiscrolltrack_listheight		.byte $00, $00, $00, $00
 
 uiscrolltrack_numerator			.byte $00, $00, $00, $00
 uiscrolltrack_denominator		.byte $00, $00, $00, $00
@@ -75,30 +76,40 @@ uiscrolltrack_draw
 
 uiscrolltrack_press
 		jsr uimouse_calculate_pos_in_uielement
-
 		jsr uiscrolltrack_resetqvalues
-
-		; check position within track, set position
 		jsr ui_getelementdataptr_tmp
 
-		lda uimouse_uielement_ypos+1
+		lda uimouse_uielement_ypos+1			; check position within track, set position
 		cmp #$ff
 		bne :+
 		lda #$00
 		jmp :++
 
-:		lda uimouse_uielement_ypos+0
+:		lda uimouse_uielement_ypos+0			; for now, put position in track in uiscrolltrack_startpos
 		sta uiscrolltrack_startpos+2
 		lda uimouse_uielement_ypos+1
 		sta uiscrolltrack_startpos+3
 
-		ldy #$06
-		lda (zpptrtmp),y						; num entries: 20
-		sta uiscrolltrack_numentries+2
+		ldy #$08								; get pointer to element that holds the list in zpptr2
+		lda (zpptrtmp),y
+		sta zpptr2+0
+		iny
+		lda (zpptrtmp),y
+		sta zpptr2+1
 
-		ldy #UIELEMENT::height					; height: 14
+		ldy #UIELEMENT::height					; list height: 12
+		lda (zpptr2),y
+		sta uiscrolltrack_listheight+2
+
+		ldy #UIELEMENT::height					; track height: 8-1=7
 		lda (zpptr0),y
+		sec
+		sbc #$01
 		sta uiscrolltrack_height+2
+
+		ldy #$06
+		lda (zpptrtmp),y						; list entries: 30
+		sta uiscrolltrack_numentries+2
 
 		MATH_SUB uiscrolltrack_numentries,	uiscrolltrack_height,		uiscrolltrack_numerator
 		MATH_MUL uiscrolltrack_startpos,	uiscrolltrack_numerator,	uiscrolltrack_numerator
@@ -202,35 +213,40 @@ uiscrolltrack_draw_released_puck
 
 		jsr uiscrolltrack_resetqvalues
 
+		ldy #$08								; get pointer to element that holds the list
+		lda (zpptrtmp),y
+		sta zpptr2+0
+		iny
+		lda (zpptrtmp),y
+		sta zpptr2+1
+
 		ldy #$06
-		lda (zpptrtmp),y						; num entries: 20
+		lda (zpptrtmp),y						; num entries: 30
 		sta uiscrolltrack_numentries+2
 
-		ldy #UIELEMENT::height					; height: 14
-		lda (zpptr0),y
-		clc
-		adc #$02
-		sta uiscrolltrack_height+2
+		ldy #UIELEMENT::height					; list height: 12
+		lda (zpptr2),y
+		sta uiscrolltrack_listheight+2
 
 		lda uiscrolltrack_numentries+2
-		cmp uiscrolltrack_height+2
+		cmp uiscrolltrack_listheight+2
 		bpl :+
-		rts										; dont draw puck if entries < height
+		rts										; dont draw puck if entries < list height
 
-:		ldy #$02
+:		ldy #UIELEMENT::height					; track height: 8-1=7
+		lda (zpptr0),y
+		sec
+		sbc #$01
+		sta uiscrolltrack_height+2
+
+		ldy #$02
 		lda (zpptrtmp),y						; startpos: 0,1,2,3,4.
 		sta uiscrolltrack_startpos+2
 
-		MATH_SUB uiscrolltrack_numentries,	uiscrolltrack_height,		uiscrolltrack_denominator ; 20-14=6
-		MATH_DIV uiscrolltrack_startpos,	uiscrolltrack_denominator,	uiscrolltrack_denominator ; 0/6, 1/6, 2/6, 3/6, 4/6
-
-		sec
-		lda uiscrolltrack_height+2
-		sbc #$02
-		sta uiscrolltrack_height+2
-
-		MATH_MUL uiscrolltrack_height,		uiscrolltrack_denominator,	uiscrolltrack_denominator ; 0, 20, 40, 80, etc.
-		MATH_ROUND uiscrolltrack_denominator, uiscrolltrack_denominator
+		MATH_SUB uiscrolltrack_numentries,	uiscrolltrack_listheight,	uiscrolltrack_numerator		; 20-12=8
+		MATH_DIV uiscrolltrack_startpos,	uiscrolltrack_numerator,	uiscrolltrack_denominator	; 0/5, 1/5
+		MATH_MUL uiscrolltrack_denominator,	uiscrolltrack_height,		uiscrolltrack_denominator	; 5* 0/5, 5*1/5 = 1
+		;MATH_ROUND uiscrolltrack_denominator, uiscrolltrack_denominator
 
 		ldx uiscrolltrack_denominator+2
 
