@@ -123,12 +123,12 @@ ctextbutton1_data			.word ctextbutton1_functions,			uitxt_button0
 ctextbutton2_data			.word ctextbutton2_functions,			uitxt_button1
 ctextbutton3_data			.word ctextbutton3_functions,			uitxt_button2
 
-fa1scrollbar_data			.word fa1scrollbar_functions, 			0, 0, 30, fa1filebox	; start position, selection index, number of entries
+fa1scrollbar_data			.word fa1scrollbar_functions, 			0, 0, 30, fa1filebox	; start position, selection index, number of entries, ptr to list
 fa1filebox_data				.word fa1scrollbar_functions,			fa1scrollbar_data, fa1boxtxt
 fa1scrollbuttonup_data		.word fa1scrollbuttonup_functions,		((4*16+ 0) | (4*16+ 4)<<8)
 fa1scrollbuttondown_data	.word fa1scrollbuttondown_functions,	((4*16+ 8) | (4*16+12)<<8)
 
-la1scrollbar_data			.word la1scrollbar_functions, 			0, 0, 13, la1listbox	; start position, selection index, number of entries
+la1scrollbar_data			.word la1scrollbar_functions, 			0, 0, 13, la1listbox	; start position, selection index, number of entries, ptr to list
 la1listbox_data				.word la1scrollbar_functions,			la1scrollbar_data, la1boxtxt
 la1scrollbuttonup_data		.word la1scrollbuttonup_functions,		((4*16+ 0) | (4*16+ 4)<<8)
 la1scrollbuttondown_data	.word la1scrollbuttondown_functions,	((4*16+ 8) | (4*16+12)<<8)

@@ -82,8 +82,7 @@ uiscrolltrack_press
 		lda uimouse_uielement_ypos+1			; check position within track, set position
 		cmp #$ff
 		bne :+
-		lda #$00
-		jmp :++
+		rts
 
 :		lda uimouse_uielement_ypos+0			; for now, put position in track in uiscrolltrack_startpos
 		sta uiscrolltrack_startpos+2
@@ -111,7 +110,7 @@ uiscrolltrack_press
 		lda (zpptrtmp),y						; list entries: 30
 		sta uiscrolltrack_numentries+2
 
-		MATH_SUB uiscrolltrack_numentries,	uiscrolltrack_height,		uiscrolltrack_numerator
+		MATH_SUB uiscrolltrack_numentries,	uiscrolltrack_height,		uiscrolltrack_numerator ; $17
 		MATH_MUL uiscrolltrack_startpos,	uiscrolltrack_numerator,	uiscrolltrack_numerator
 
 		clc
@@ -119,13 +118,19 @@ uiscrolltrack_press
 		adc #$01
 		sta uiscrolltrack_height+2
 
-		MATH_DIV uiscrolltrack_numerator, uiscrolltrack_height, uiscrolltrack_numerator
-		MATH_ROUND uiscrolltrack_numerator, uiscrolltrack_numerator
+		MATH_DIV uiscrolltrack_numerator, uiscrolltrack_height, uiscrolltrack_denominator
 
-		lda uiscrolltrack_numerator+2
-		lsr
-		lsr
-		lsr
+		clc
+		ror uiscrolltrack_denominator+3
+		ror uiscrolltrack_denominator+2
+		clc
+		ror uiscrolltrack_denominator+3
+		ror uiscrolltrack_denominator+2
+		clc
+		ror uiscrolltrack_denominator+3
+		ror uiscrolltrack_denominator+2
+
+		lda uiscrolltrack_denominator+2
 
 :		jsr uiscrollbar_setposition
 		jsr uielement_calluifunc
