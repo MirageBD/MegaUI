@@ -119,7 +119,7 @@ uimouse_update
 
 		jsr uimouse_update_sprite
 
-		lda #<ui_root1								; get pointer to window x
+		lda #<ui_root1									; get pointer to window x
 		sta uielement_ptr+0
 		lda #>ui_root1
 		sta uielement_ptr+1
@@ -284,27 +284,27 @@ uimhe_entered
 		lda #$01
 		sta (zpptr0),y
 		jsr uimouse_handle_enter						; handle ENTER
-		bra uimhe_handle_children
+		bra uimhe_checkmove
 
 uimhe_notentered
 		lda mouse_pressed								; handle PRESS
 		beq uimhe_notpressed
 		jsr uimouse_handle_press
-		bra uimhe_handle_children
+		bra uimhe_checkmove
 
 uimhe_notpressed
 		lda mouse_doubleclicked
 		beq uimh_notdoubleclicked
 		jsr uimouse_handle_doubleclick
-		bra uimhe_handle_children
+		bra uimhe_checkmove
 
 uimh_notdoubleclicked		
 		lda mouse_released
-		beq uimhe_handle_children
+		beq uimhe_checkmove
 		jsr uimouse_handle_release						; handle RELEASE
 		;bra mhe_handle_children
 
-uimhe_handle_children
+uimhe_checkmove
 
 		lda mouse_xpos+0
 		cmp mouse_prevxpos+0
@@ -345,23 +345,29 @@ uimhe_mouse_didnt_move
 ; ----------------------------------------------------------------------------------------------------
 
 uimouse_handle_move
+
 		jsr uimouse_checkflags
 		bne :+
 		rts
 
-:		lda uimouse_captured_element+1
+:		lda uimouse_captured_element+1			; is there ANY captured element?
 		bne :+
+		rts
+
+:		lda zpptr0+0
+		cmp uimouse_captured_element+0			; is it this one?
+		beq :+
+		rts
+
+:		lda zpptr0+1
+		cmp uimouse_captured_element+1
+		beq :+
 		rts
 
 :		lda zpptr0+0
 		pha
 		lda zpptr0+1
 		pha
-
-		lda uimouse_captured_element+0
-		sta zpptr0+0
-		lda uimouse_captured_element+1
-		sta zpptr0+1
 
 		SEND_EVENT move
 
