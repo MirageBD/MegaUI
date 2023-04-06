@@ -77,3 +77,29 @@ sdc_chdir
 		rts
 
 ; ----------------------------------------------------------------------------------------------------
+
+sdc_d81attach0
+
+		lda #$00
+		sta sdc_transferbuffer,y
+
+		ldy #>sdc_transferbuffer						; set the hyppo filename from transferbuffer
+		lda #$2e
+		sta $d640
+		clv
+		bcc sdc_d81attach0_error
+
+		lda #$40										; Attach the disk image
+		sta $d640
+		clv
+		bcc sdc_d81attach0_error
+		rts
+
+sdc_d81attach0_error
+:		lda #$02
+		sta $d020
+		lda #$03
+		sta $d020
+		jmp :-
+
+; ----------------------------------------------------------------------------------------------------

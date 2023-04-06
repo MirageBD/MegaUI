@@ -68,7 +68,7 @@ $(BIN_DIR)/cursor_sprites1.bin: $(BIN_DIR)/cursor.bin
 
 $(EXE_DIR)/boot.o:	$(SRC_DIR)/boot.s \
 					$(SRC_DIR)/main.s \
-					$(SRC_DIR)/loader.s \
+					$(SRC_DIR)/irqload.s \
 					$(SRC_DIR)/macros.s \
 					$(SRC_DIR)/mathmacros.s \
 					$(SRC_DIR)/uidata.s \
