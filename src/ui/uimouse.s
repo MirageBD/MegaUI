@@ -129,9 +129,18 @@ uimouse_update
 		lda #$00
 		sta uielement_hoverwindowcounter
 
-		jsr uimouse_handle_event
+		lda uimouse_captured_element+1					; is there a captured element?
+		beq :+
+		lda uimouse_captured_element+0
+		sta zpptr0+0
+		lda uimouse_captured_element+1
+		sta zpptr0+1
+		jsr uimouse_handle_events2
+		rts
 
-		ldy uielement_prevhoverwindowcounter			; go through all the previous hovered windows and decrease the hover flag
+:		jsr uimouse_handle_event						; no captured element - go through all elements
+
+:		ldy uielement_prevhoverwindowcounter			; go through all the previous hovered windows and decrease the hover flag
 		sty uielement_temp								; if it's no longer hovered over then send a leave event
 :		ldy uielement_temp
 		cpy #$00
@@ -243,7 +252,7 @@ uimouse_handle_event_loop
 		bcs :+											; we are inside the rect, do the rest
 		bra uimouse_handle_event_loop					; we're not inside the rect, continue with the loop
 
-:		ldy uielement_hoverwindowcounter				; add to focussed window list
+:		ldy uielement_hoverwindowcounter				; we are inside the rect - add to focussed window list
 		lda zpptr0+0
 		sta uimouse_hoverwindows,y
 		iny
@@ -277,14 +286,41 @@ uimhe_loop_prehoverwindows
 		lda (zpptr0),y
 		adc #$01
 		sta (zpptr0),y
-		bra uimhe_notentered
+		bra uimhe_handle_this
 
 uimhe_entered
 		ldy #UIELEMENT::state
 		lda #$01
 		sta (zpptr0),y
 		jsr uimouse_handle_enter						; handle ENTER
-		bra uimhe_checkmove
+		bra uimhe_handle_children
+
+uimhe_handle_this
+
+		jsr uimouse_handle_events2
+
+uimhe_handle_children
+
+		ldy #UIELEMENT::children
+		lda (zpptr0),y
+		cmp #$ff
+		bne :+
+		jmp uimouse_handle_event_loop
+
+:		jsr uistack_pushparent							; recursively handle children
+		ldy #UIELEMENT::children
+		lda (zpptr0),y
+		sta uielement_ptr+0
+		iny
+		lda (zpptr0),y
+		sta uielement_ptr+1
+		jsr uimouse_handle_event
+		jsr uistack_popparent
+		jmp uimouse_handle_event_loop
+
+; ----------------------------------------------------------------------------------------------------
+
+uimouse_handle_events2
 
 uimhe_notentered
 		lda mouse_pressed								; handle PRESS
@@ -302,7 +338,6 @@ uimh_notdoubleclicked
 		lda mouse_released
 		beq uimhe_checkmove
 		jsr uimouse_handle_release						; handle RELEASE
-		;bra mhe_handle_children
 
 uimhe_checkmove
 
@@ -324,23 +359,8 @@ uimhe_mouse_moved
 		jsr uimouse_handle_move
 
 uimhe_mouse_didnt_move
-
-		ldy #UIELEMENT::children
-		lda (zpptr0),y
-		cmp #$ff
-		bne :+
-		jmp uimouse_handle_event_loop
-
-:		jsr uistack_pushparent							; recursively handle children
-		ldy #UIELEMENT::children
-		lda (zpptr0),y
-		sta uielement_ptr+0
-		iny
-		lda (zpptr0),y
-		sta uielement_ptr+1
-		jsr uimouse_handle_event
-		jsr uistack_popparent
-		jmp uimouse_handle_event_loop
+		
+		rts
 
 ; ----------------------------------------------------------------------------------------------------
 
@@ -350,24 +370,19 @@ uimouse_handle_move
 		bne :+
 		rts
 
-:		lda uimouse_captured_element+1			; is there ANY captured element?
+:		lda uimouse_captured_element+1					; is there a captured element?
 		bne :+
-		rts
-
-:		lda zpptr0+0
-		cmp uimouse_captured_element+0			; is it this one?
-		beq :+
-		rts
-
-:		lda zpptr0+1
-		cmp uimouse_captured_element+1
-		beq :+
 		rts
 
 :		lda zpptr0+0
 		pha
 		lda zpptr0+1
 		pha
+
+		lda uimouse_captured_element+0
+		sta zpptr0+0
+		lda uimouse_captured_element+1
+		sta zpptr0+1
 
 		SEND_EVENT move
 

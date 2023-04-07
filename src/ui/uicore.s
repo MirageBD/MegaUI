@@ -17,7 +17,7 @@ q160						.dword 160
 .macro DEBUG_COLOUR
 .scope
 		sta $d020
-		ldy #$40
+		ldy #$10
 		ldx #$00
 :		dex
 		bne :-

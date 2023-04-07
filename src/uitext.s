@@ -49,7 +49,6 @@ fa1boxtxt			.word fa1boxtxt00
 					.word fa1boxtxt01
 					.word fa1boxtxt02
 					.word fa1boxtxt03
-					.word $ffff
 					.word fa1boxtxt04
 					.word fa1boxtxt05
 					.word fa1boxtxt06
