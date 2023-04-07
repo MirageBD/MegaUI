@@ -129,18 +129,16 @@ uimouse_update
 		lda #$00
 		sta uielement_hoverwindowcounter
 
-		lda uimouse_captured_element+1					; is there a captured element?
-		beq :+
-		lda uimouse_captured_element+0
+		lda uimouse_captured_element+0					; ALWAYS handle the captured element
 		sta zpptr0+0
 		lda uimouse_captured_element+1
 		sta zpptr0+1
-		jsr uimouse_handle_events2
-		rts
+		beq :+
+		jsr uimhe_handle_captured						; This is the captured element - don't do the inside-rect-check but always execute
 
-:		jsr uimouse_handle_event						; no captured element - go through all elements
+:		jsr uimouse_handle_event
 
-:		ldy uielement_prevhoverwindowcounter			; go through all the previous hovered windows and decrease the hover flag
+		ldy uielement_prevhoverwindowcounter			; go through all the previous hovered windows and decrease the hover flag
 		sty uielement_temp								; if it's no longer hovered over then send a leave event
 :		ldy uielement_temp
 		cpy #$00
@@ -245,7 +243,7 @@ uimouse_handle_event_loop
 		ldy #UIELEMENT::type							; are we at the end of the list?
 		lda (zpptr0),y
 		cmp #UIELEMENTTYPE::null
-		bne :+											; nope, test if we're inside the rect
+		bne :+											; nope. test if we're inside the rect or if this is the captured element.
 		rts
 
 :		jsr uimouse_test_minmax
@@ -265,9 +263,9 @@ uimouse_handle_event_loop
 		sty uielement_temp								; if the window was already hovered over then set the hover flag
 
 uimhe_loop_prehoverwindows
-		ldy uielement_temp								; otherwise handle the enter event
+		ldy uielement_temp
 		cpy #$00
-		beq uimhe_entered
+		beq uimhe_entered								; otherwise handle the enter event
 		dey
 		lda uimouse_prevhoverwindows,y
 		sta zpptr1+1
@@ -286,7 +284,7 @@ uimhe_loop_prehoverwindows
 		lda (zpptr0),y
 		adc #$01
 		sta (zpptr0),y
-		bra uimhe_handle_this
+		bra uimhe_notentered
 
 uimhe_entered
 		ldy #UIELEMENT::state
@@ -295,9 +293,51 @@ uimhe_entered
 		jsr uimouse_handle_enter						; handle ENTER
 		bra uimhe_handle_children
 
-uimhe_handle_this
+uimhe_notentered
 
-		jsr uimouse_handle_events2
+		lda uimouse_captured_element+0
+		cmp zpptr0+0
+		bne :+
+		lda uimouse_captured_element+1
+		cmp zpptr0+1
+		bne :+
+		rts
+
+:
+uimhe_handle_captured
+
+		lda mouse_xpos+0
+		cmp mouse_prevxpos+0
+		bne uimhe_mouse_moved
+		lda mouse_xpos+1
+		cmp mouse_prevxpos+1
+		bne uimhe_mouse_moved
+		lda mouse_ypos+0
+		cmp mouse_prevypos+0
+		bne uimhe_mouse_moved
+		lda mouse_ypos+1
+		cmp mouse_prevypos+1
+		bne uimhe_mouse_moved
+		bra uimhe_notmoved
+
+uimhe_mouse_moved
+		jsr uimouse_handle_move							; handle MOVE
+
+uimhe_notmoved
+		lda mouse_doubleclicked
+		beq uimh_notdoubleclicked
+		jsr uimouse_handle_doubleclick
+		bra uimhe_handle_children						; if double clicked then skip press/release tests
+
+uimh_notdoubleclicked
+		lda mouse_pressed								; handle PRESS
+		beq uimhe_notpressed
+		jsr uimouse_handle_press
+
+uimhe_notpressed
+		lda mouse_released
+		beq uimhe_handle_children
+		jsr uimouse_handle_release						; handle RELEASE
 
 uimhe_handle_children
 
@@ -320,82 +360,19 @@ uimhe_handle_children
 
 ; ----------------------------------------------------------------------------------------------------
 
-uimouse_handle_events2
-
-uimhe_notentered
-		lda mouse_pressed								; handle PRESS
-		beq uimhe_notpressed
-		jsr uimouse_handle_press
-		bra uimhe_checkmove
-
-uimhe_notpressed
-		lda mouse_doubleclicked
-		beq uimh_notdoubleclicked
-		jsr uimouse_handle_doubleclick
-		bra uimhe_checkmove
-
-uimh_notdoubleclicked		
-		lda mouse_released
-		beq uimhe_checkmove
-		jsr uimouse_handle_release						; handle RELEASE
-
-uimhe_checkmove
-
-		lda mouse_xpos+0
-		cmp mouse_prevxpos+0
-		bne uimhe_mouse_moved
-		lda mouse_xpos+1
-		cmp mouse_prevxpos+1
-		bne uimhe_mouse_moved
-		lda mouse_ypos+0
-		cmp mouse_prevypos+0
-		bne uimhe_mouse_moved
-		lda mouse_ypos+1
-		cmp mouse_prevypos+1
-		bne uimhe_mouse_moved
-		bra uimhe_mouse_didnt_move
-
-uimhe_mouse_moved
-		jsr uimouse_handle_move
-
-uimhe_mouse_didnt_move
-		
-		rts
-
-; ----------------------------------------------------------------------------------------------------
-
 uimouse_handle_move
 
 		jsr uimouse_checkflags
 		bne :+
 		rts
 
-:		lda uimouse_captured_element+1					; is there a captured element?
-		bne :+
-		rts
-
-:		lda zpptr0+0
-		pha
-		lda zpptr0+1
-		pha
-
-		lda uimouse_captured_element+0
-		sta zpptr0+0
-		lda uimouse_captured_element+1
-		sta zpptr0+1
-
-		SEND_EVENT move
-
-		pla
-		sta zpptr0+1
-		pla
-		sta zpptr0+0
-
+:		SEND_EVENT move
 		rts
 
 ; ----------------------------------------------------------------------------------------------------
 
 uimouse_handle_enter
+
 		jsr uimouse_checkflags
 		bne :+
 		rts
@@ -412,13 +389,16 @@ uimouse_handle_release
 
 :		lda zpptr0+0
 		cmp uimouse_captured_element+0
-		bne :+
+		bne :++
 		lda zpptr0+1
 		cmp uimouse_captured_element+1
-		bne :+
+		bne :++
 		lda #$00
 		sta uimouse_captured_element+0
 		sta uimouse_captured_element+1
+
+:		jsr uimouse_test_minmax
+		bcc :+											; we are inside the rect, do the rest
 		SEND_EVENT release
 
 :		rts

@@ -10,8 +10,8 @@ root
 ; ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ main windows
 
 windows
-		UIELEMENT_ADD ui_windows1,				debugelement,		window1area,			 1,  0, 38, 45,  0,		$ffff,						uidefaultflags
-		UIELEMENT_ADD ui_windows2,				debugelement,		window2area,			40,  0, 39, 45, 20,		$ffff,						uidefaultflags
+		UIELEMENT_ADD ui_windows1,				debugelement,		window1area,			 1,  0, 38, 34,  0,		$ffff,						uidefaultflags
+		UIELEMENT_ADD ui_windows2,				debugelement,		window2area,			40,  0, 39, 34, 20,		$ffff,						uidefaultflags
 		UIELEMENT_ADD ui_logo,					image,				$ffff,					68, 47, 11,  2,  0,		uilogo_data,				uidefaultflags
 		UIELEMENT_END
 
@@ -197,15 +197,30 @@ ctextbutton3_functions			.word ctextbutton3,						custom_colourborder_cyan
 custom_colourborder_pink
 		lda #$60
 		DEBUG_COLOUR
+		DEBUG_COLOUR
+		DEBUG_COLOUR
+		DEBUG_COLOUR
+		lda #$00
+		DEBUG_COLOUR
 		rts
 
 custom_colourborder_lightblue
 		lda #$a0
 		DEBUG_COLOUR
+		DEBUG_COLOUR
+		DEBUG_COLOUR
+		DEBUG_COLOUR
+		lda #$00
+		DEBUG_COLOUR
 		rts
 
 custom_colourborder_cyan
 		lda #$c0
+		DEBUG_COLOUR
+		DEBUG_COLOUR
+		DEBUG_COLOUR
+		DEBUG_COLOUR
+		lda #$00
 		DEBUG_COLOUR
 		rts
 

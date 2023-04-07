@@ -38,6 +38,7 @@ uictextbutton_press
 		rts
 
 uictextbutton_doubleclick
+		jsr uicbutton_draw_released
 		rts
 	
 ; ----------------------------------------------------------------------------------------------------
