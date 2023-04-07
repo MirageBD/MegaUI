@@ -274,7 +274,7 @@ uilistbox_drawbkgreleased
 
 :		ldx uidraw_width
 		ldz #$00
-:		lda #$00
+:		lda #$08										; mid gray background
 		sta [uidraw_colptr],z
 		inz
 		inz
@@ -334,28 +334,36 @@ uilistbox_drawlistreleased_loop							; start drawing the list
 
 		lda uilistbox_current_draw_pos
 		cmp uilistbox_selected_index
-		bne :++
+		bne :+
 
-		ldx uidraw_width
-		ldz #$00
-:		;lda #$93 ; dark red
+		lda #$00
+		sta ulb_font
+		;lda #$93 ; dark red
 		;lda #$b6 ; dark purple
 		;lda #$ca ; dodger blue
 		;lda #$8d ; dark orange
 		lda #$f0 ; dark blue
-		sta [uidraw_colptr],z
-		inz
-		inz
-		dex
-		bne :-
+		sta ulb_fontcolour
+		bra :++
+
+:		lda #$80
+		sta ulb_font
+		lda #$0f ; dark blue
+		sta ulb_fontcolour
 
 :		ldx uidraw_width								; clear line
 		ldz #$00
-:		lda #$60
+:		lda #$20
+		clc
+		adc ulb_font
 		sta [uidraw_scrptr],z
+		lda ulb_fontcolour
+		sta [uidraw_colptr],z
 		inz
 		lda #$04
 		sta [uidraw_scrptr],z
+		lda #$00
+		sta [uidraw_colptr],z
 		inz
 		dex
 		bne :-
@@ -375,10 +383,16 @@ uilistbox_drawlistreleased_loop							; start drawing the list
 		tax
 		lda ui_textremap,x
 		beq :+
+		clc
+		adc ulb_font
 		sta [uidraw_scrptr],z
+		lda ulb_fontcolour
+		sta [uidraw_colptr],z
 		inz
 		lda #$04
 		sta [uidraw_scrptr],z
+		lda #$00
+		sta [uidraw_colptr],z
 		inz
 		iny
  		bra :-
@@ -396,8 +410,15 @@ uilistbox_drawlistreleased_loop							; start drawing the list
 
 		dec uidraw_height
 		lda uidraw_height
-		bne uilistbox_drawlistreleased_loop
+		beq :+
+		jmp uilistbox_drawlistreleased_loop
 
-		rts
+:		rts
 
 ; ----------------------------------------------------------------------------------------------------
+
+ulb_font
+		.byte $80	; $00 (white text on coloured background) or $80 (coloured text on black background)
+
+ulb_fontcolour
+		.byte $0f

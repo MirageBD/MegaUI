@@ -114,7 +114,43 @@ uifilebox_endaddentries
 		rts
 
 uifilebox_getstringptr
-		jsr uilistbox_getstringptr
+		jsr ui_getelementdataptr_1						; get data ptr to zpptr1
+
+		ldy #$04										; put start of text list into zpptr2
+		lda (zpptr1),y
+		sta zpptr2+0
+		iny
+		lda (zpptr1),y
+		sta zpptr2+1
+
+		ldy #$02										; get pointer to scrollbar data
+		lda (zpptr1),y
+		sta zpptrtmp+0
+		iny
+		lda (zpptr1),y
+		sta zpptrtmp+1
+
+		ldy #$04										; get selection index
+		lda (zpptrtmp),y
+		asl												; *2
+		adc zpptr2+0									; add to text list ptr
+		sta zpptr2+0
+		lda zpptr2+1
+		adc #$00
+		sta zpptr2+1
+
+		clc
+		ldy #$00										; put pointer to actual text entry in zpptrtmp. skip 2 over attribute and extension type
+		lda (zpptr2),y
+		adc #$02
+		sta zpptrtmp+0
+		sta $cf00
+		iny
+		lda (zpptr2),y
+		adc #$00
+		sta zpptrtmp+1
+		sta $cf01
+		
 		rts
 
 uifilebox_increase_selection
@@ -176,7 +212,26 @@ uifilebox_processdirentry
 
 		ldy #$00
 
-		lda sdc_transferbuffer+$0056,x
+		; 0 Read only
+		; 1 Hidden
+		; 2 System
+		; 3 Volume label
+		; 4 Sub-directory
+		; 5 Archive
+		; 2 bits free
+
+		lda sdc_transferbuffer+$0056						; read attribute and store in first byte
+		sta (zpptrtmp),y
+
+		and #%00010000
+		cmp #%00010000
+		bne :+
+
+		lda #$3f											; colour directory differently
+		bra :++
+
+:		lda #$0f
+:		iny
 		sta (zpptrtmp),y
 		iny
 
@@ -198,7 +253,7 @@ uifilebox_processdirentry
 		sta (zpptrtmp),y
 		iny
 
-		ldx #$00
+		ldx #$00											; read extension
 :		lda sdc_transferbuffer+$0041+8,x
 		sta (zpptrtmp),y
 		iny
@@ -263,54 +318,61 @@ uifilebox_drawlistreleased
 
 uifilebox_drawlistreleased_loop							; start drawing the list
 
-		lda uifilebox_current_draw_pos
-		cmp uifilebox_selected_index
-		bne :++
-
-		ldx uidraw_width
-		ldz #$00
-:		lda #$f0 ; dark blue
-		sta [uidraw_colptr],z
-		inz
-		inz
-		dex
-		bne :-
-
-:		ldx uidraw_width								; clear line
-		ldz #$00
-:		lda #$60
-		sta [uidraw_scrptr],z
-		inz
-		lda #$04
-		sta [uidraw_scrptr],z
-		inz
-		dex
-		bne :-
-
 		ldy #$00
 		lda (zpptr2),y
 		sta zpptrtmp+0
 		iny
 		lda (zpptr2),y
 		sta zpptrtmp+1
-		cmp #$ff
-		beq :+++
 
-		ldy #$01										; set to 1 to skip file type and attribute bits
+		lda uifilebox_current_draw_pos
+		cmp uifilebox_selected_index
+		bne :+
+
+		lda #$00
+		sta ufb_font
+		lda #$f0 ; dark blue
+		sta ufb_fontcolour
+		bra :++
+
+:		lda #$80
+		sta ufb_font
+		ldy #$01
+		lda (zpptrtmp),y
+		sta ufb_fontcolour
+
+:		ldx uidraw_width								; clear line
 		ldz #$00
-:		lda (zpptrtmp),y
-		tax
-		lda ui_textremap,x
-		beq :+
+:		lda #$20
+		clc
+		adc ufb_font
 		sta [uidraw_scrptr],z
+		lda ufb_fontcolour
+		sta [uidraw_colptr],z
 		inz
 		lda #$04
 		sta [uidraw_scrptr],z
+		lda #$00
+		sta [uidraw_colptr],z
 		inz
-		iny
- 		bra :-
+		dex
+		bne :-
 
-:		clc
+		lda zpptrtmp+1
+		cmp #$ff
+		beq :+++
+
+		ldy #$00
+		lda (zpptrtmp),y
+		and #%00010000
+		cmp #%00010000
+		bne :+
+		jsr uifilebox_drawdirectory
+		bra :++
+
+:		jsr uifilebox_drawfile
+
+:		clc												; increase textlist pointer by 2 to go to next entry
 		lda zpptr2+0
 		adc #$02
 		sta zpptr2+0
@@ -323,8 +385,126 @@ uifilebox_drawlistreleased_loop							; start drawing the list
 
 		dec uidraw_height
 		lda uidraw_height
-		bne uifilebox_drawlistreleased_loop
+		beq :+
+		jmp uifilebox_drawlistreleased_loop
 
-		rts
+:		rts
 
 ; ----------------------------------------------------------------------------------------------------
+
+uifilebox_drawfile
+
+		ldy #$02										; set to 2 to skip 'file type and attribute bits' and 'extension type'
+		ldz #$00
+:		lda (zpptrtmp),y
+		cmp #$2e
+		beq :+
+		tax
+		lda ui_textremap,x
+		beq :++
+		clc
+		adc ufb_font
+		sta [uidraw_scrptr],z
+		lda ufb_fontcolour
+		sta [uidraw_colptr],z
+		inz
+		lda #$04
+		sta [uidraw_scrptr],z
+		lda #$00
+		sta [uidraw_colptr],z
+		inz
+		iny
+ 		bra :-
+
+:		lda #$20										; add spaces until extension
+		clc
+		adc ufb_font
+		sta [uidraw_scrptr],z
+		lda ufb_fontcolour
+		sta [uidraw_colptr],z
+		inz
+		lda #$04
+		sta [uidraw_scrptr],z
+		lda #$00
+		sta [uidraw_colptr],z
+		inz
+		cpz #2*10
+		bne :-
+
+		iny
+:		lda (zpptrtmp),y								; draw extension until end of line
+		tax
+		lda ui_textremap,x
+		beq :+
+		clc
+		adc ufb_font
+		sta [uidraw_scrptr],z
+		lda ufb_fontcolour
+		sta [uidraw_colptr],z
+		inz
+		lda #$04
+		sta [uidraw_scrptr],z
+		lda #$00
+		sta [uidraw_colptr],z
+		inz
+		iny
+ 		bra :-		
+		
+:		rts
+
+; ----------------------------------------------------------------------------------------------------
+
+uifilebox_drawdirectory
+
+		ldy #$02										; set to 2 to skip 'file type and attribute bits' and 'extension type'
+		ldz #$00
+:		lda (zpptrtmp),y
+		beq :+
+		tax
+		lda ui_textremap,x
+		beq :++
+		clc
+		adc ufb_font
+		sta [uidraw_scrptr],z
+		lda ufb_fontcolour
+		sta [uidraw_colptr],z
+		inz
+		lda #$04
+		sta [uidraw_scrptr],z
+		lda #$00
+		sta [uidraw_colptr],z
+		inz
+		iny
+ 		bra :-
+
+:		rts
+
+; ----------------------------------------------------------------------------------------------------
+
+uifilebox_drawemptyline
+
+		ldy #$02										; set to 2 to skip 'file type and attribute bits' and 'extension type'
+		ldz #$00
+:		lda #$20
+		sta [uidraw_scrptr],z
+		lda ufb_fontcolour
+		sta [uidraw_colptr],z
+		inz
+		lda #$04
+		sta [uidraw_scrptr],z
+		lda #$00
+		sta [uidraw_colptr],z
+		inz
+		iny
+		cpy uidraw_height
+ 		bne :-
+
+:		rts
+
+; ----------------------------------------------------------------------------------------------------
+
+ufb_font
+		.byte $00	; $00 (white text on coloured background) or $80 (coloured text on black background)
+
+ufb_fontcolour
+		.byte $04

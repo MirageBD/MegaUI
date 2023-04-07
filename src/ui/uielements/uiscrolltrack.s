@@ -132,7 +132,7 @@ uiscrolltrack_press
 
 		lda uiscrolltrack_denominator+2
 
-:		jsr uiscrollbar_setposition
+		jsr uiscrollbar_setposition
 		jsr uielement_calluifunc
 
 		rts
