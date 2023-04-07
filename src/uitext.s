@@ -43,6 +43,40 @@ la1boxtxt10			.byte "develop", 0
 la1boxtxt11			.byte "for m65", 0
 la1boxtxt12			.byte "will you?", 0
 
+.align 256
+
+tvboxtxt			.word tvboxtxt00
+					.word tvboxtxt01
+					.word tvboxtxt02
+					.word tvboxtxt03
+					.word tvboxtxt04
+					.word tvboxtxt05
+					.word tvboxtxt06
+					.word tvboxtxt07
+					.word tvboxtxt08
+					.word tvboxtxt09
+					.word tvboxtxt10
+					.word tvboxtxt11
+					.word tvboxtxt12
+					.word $ffff
+
+.align 256
+
+tvboxtxt00			.byte "this is where the trackview data will go", 0
+tvboxtxt01			.byte "i will need extra functions to draw", 0
+tvboxtxt02			.byte "", 0
+tvboxtxt03			.byte "- notes", 0
+tvboxtxt04			.byte "- samples", 0
+tvboxtxt05			.byte "- effects", 0
+tvboxtxt06			.byte "- cursor", 0
+tvboxtxt07			.byte "", 0
+tvboxtxt08			.byte "should look something like this", 0
+tvboxtxt09			.byte "", 0
+tvboxtxt10			.byte "... .. .. ...    ... .. .. ...    ... .. .. ...    ... .. .. ...", 0
+tvboxtxt11			.byte "d-6 01 .. f05    ... .. .. ...    ... .. .. ...    ... .. .. ...", 0
+tvboxtxt12			.byte "c-5 04 .. c10    ... .. .. ...    ... .. .. ...    ... .. .. ...", 0
+tvboxtxt13			.byte "... .. .. ...    ... .. .. ...    ... .. .. ...    ... .. .. ...", 0
+
 
 .align 256
 fa1boxtxt			.word fa1boxtxt00
@@ -90,17 +124,17 @@ fa1boxtxt			.word fa1boxtxt00
 .align 256
 fa1boxtxt00			.byte %00010000, $c0, ".", 0
 fa1boxtxt01			.byte %00010000, $c0, "..", 0
-fa1boxtxt02			.byte %00100000, $3f, "xmas65.d81", 0
-fa1boxtxt03			.byte %00100000, $0f, "samples.bin", 0
-fa1boxtxt04			.byte %00100000, $0f, "glyphs.bin", 0
-fa1boxtxt05			.byte %00100000, $0f, "font.bin", 0
-fa1boxtxt06			.byte %00010000, $c0, "dir", 0
-fa1boxtxt07			.byte %00100000, $0f, "to.bin", 0
-fa1boxtxt08			.byte %00100000, $0f, "cs", 0
-fa1boxtxt09			.byte %00100000, $0f, "foo.bin", 0
-fa1boxtxt10			.byte %00100000, $0f, "bar.bin", 0
-fa1boxtxt11			.byte %00100000, $3f, "megaui.d81", 0
-fa1boxtxt12			.byte %00100000, $3f, "xmas65.d81", 0
+fa1boxtxt02			.byte %00010000, $c0, "dir", 0
+fa1boxtxt03			.byte %00100000, $3f, "xmas65.d81", 0
+fa1boxtxt04			.byte %00100000, $3f, "megaui.d81", 0
+fa1boxtxt05			.byte %00100000, $3f, "xmas65.d81", 0
+fa1boxtxt06			.byte %00100000, $0f, "samples.bin", 0
+fa1boxtxt07			.byte %00100000, $0f, "glyphs.bin", 0
+fa1boxtxt08			.byte %00100000, $0f, "font.bin", 0
+fa1boxtxt09			.byte %00100000, $0f, "to.bin", 0
+fa1boxtxt10			.byte %00100000, $0f, "cs", 0
+fa1boxtxt11			.byte %00100000, $0f, "foo.bin", 0
+fa1boxtxt12			.byte %00100000, $0f, "bar.bin", 0
 fa1boxtxt13			.byte %00000000, $0f, "14", 0
 fa1boxtxt14			.byte %00000000, $0f, "15", 0
 fa1boxtxt15			.byte %00000000, $0f, "16          ", 0

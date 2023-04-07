@@ -12,6 +12,7 @@ root
 windows
 		UIELEMENT_ADD ui_windows1,				debugelement,		window1area,			 1,  0, 38, 34,  0,		$ffff,						uidefaultflags
 		UIELEMENT_ADD ui_windows2,				debugelement,		window2area,			40,  0, 39, 34, 20,		$ffff,						uidefaultflags
+		UIELEMENT_ADD ui_trackview,				nineslice,			trackviewelements,		 1, 34, 78, 12, 20,		$ffff,						uidefaultflags	
 		UIELEMENT_ADD ui_logo,					image,				$ffff,					68, 47, 11,  2,  0,		uilogo_data,				uidefaultflags
 		UIELEMENT_END
 
@@ -34,13 +35,13 @@ window2area
 ; ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ scrollbar elements
 
 listarea1
-		UIELEMENT_ADD nineslice1,				nineslice,			listarea1elements,		 1,  1, -2, -2,  0,		$ffff,						uidefaultflags
+		UIELEMENT_ADD la1nineslice,				nineslice,			listarea1elements,		 1,  1, -2, -2,  0,		$ffff,						uidefaultflags
 		UIELEMENT_END
 
 ; ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ scrollbar elements
 
 filearea1
-		UIELEMENT_ADD nineslice2,				nineslice,			filearea1elements,		 1,  1, -2, -2,  0,		$ffff,						uidefaultflags
+		UIELEMENT_ADD fa1nineslice,				nineslice,			filearea1elements,		 1,  1, -2, -2,  0,		$ffff,						uidefaultflags
 		UIELEMENT_END
 
 ; ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ scrollbar elements
@@ -106,6 +107,19 @@ la1scrollbarelements
 		UIELEMENT_ADD la1scrollbartrack,		scrolltrack,		$ffff,					 0,  2,  2, -4,  0,		la1scrollbar_data,			uidefaultflags
 		UIELEMENT_END
 
+; ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ scrollbar elements
+
+trackviewelements
+		UIELEMENT_ADD tvlistbox,				listbox,			$ffff,					 5,  1,-14, -2,  0,		tvlistbox_data,				uidefaultflags
+		UIELEMENT_ADD tvscrollbar,				scrollbar,			tvscrollbarelements,	-3,  1,  2, -2,  0,		tvscrollbar_data,			uidefaultflags
+		UIELEMENT_END
+
+tvscrollbarelements
+		UIELEMENT_ADD tvscrollbarbutton1,		button,				$ffff,					 0,  0,  2,  2,  0,		tvscrollbuttonup_data,		uidefaultflags
+		UIELEMENT_ADD tvscrollbarbutton2,		button,				$ffff,					 0, -2,  2,  2,  0,		tvscrollbuttondown_data,	uidefaultflags
+		UIELEMENT_ADD tvscrollbartrack,			scrolltrack,		$ffff,					 0,  2,  2, -4,  0,		tvscrollbar_data,			uidefaultflags
+		UIELEMENT_END
+
 ; ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ data
 
 paddlexlabel_data			.word $ffff,							uitxt_paddlex
@@ -132,6 +146,11 @@ la1scrollbar_data			.word la1scrollbar_functions, 			0, 0, 13, la1listbox	; star
 la1listbox_data				.word la1scrollbar_functions,			la1scrollbar_data, la1boxtxt
 la1scrollbuttonup_data		.word la1scrollbuttonup_functions,		((4*16+ 0) | (4*16+ 4)<<8)
 la1scrollbuttondown_data	.word la1scrollbuttondown_functions,	((4*16+ 8) | (4*16+12)<<8)
+
+tvscrollbar_data			.word tvscrollbar_functions, 			0, 0, 13, tvlistbox	; start position, selection index, number of entries, ptr to list
+tvlistbox_data				.word tvscrollbar_functions,			tvscrollbar_data, tvboxtxt
+tvscrollbuttonup_data		.word tvscrollbuttonup_functions,		((4*16+ 0) | (4*16+ 4)<<8)
+tvscrollbuttondown_data		.word tvscrollbuttondown_functions,		((4*16+ 8) | (4*16+12)<<8)
 
 checkbox1_data				.word $ffff,							1, ((3*16+ 8) | (3*16+10)<<8)
 checkbox2_data				.word $ffff,							0, ((3*16+ 8) | (3*16+10)<<8)
@@ -175,6 +194,23 @@ la1scrollbuttondown_functions	.word la1scrollbartrack,				uiscrollbar_increase
 la1scrollbar_functions			.word la1scrollbartrack,				uiscrolltrack_draw
 								.word la1listbox,						uilistbox_draw
 								.word $ffff
+
+
+
+tvscrollbuttonup_functions		.word tvscrollbartrack,					uiscrollbar_decrease
+								.word tvscrollbartrack,					uiscrolltrack_draw
+								.word tvlistbox,						uitrackview_draw
+								.word $ffff
+
+tvscrollbuttondown_functions	.word tvscrollbartrack,					uiscrollbar_increase
+								.word tvscrollbartrack,					uiscrolltrack_draw
+								.word tvlistbox,						uitrackview_draw
+								.word $ffff
+
+tvscrollbar_functions			.word tvscrollbartrack,					uiscrolltrack_draw
+								.word tvlistbox,						uitrackview_draw
+								.word $ffff
+
 
 
 

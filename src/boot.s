@@ -55,6 +55,7 @@ basicend	.byte 0
 .include "ui/uielements/uicheckbox.s"
 .include "ui/uielements/uiradiobutton.s"
 .include "ui/uielements/uiimage.s"
+.include "ui/uielements/uitrackview.s"
 
 .include "uidata.s"
 .include "uitext.s"

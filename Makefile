@@ -1,6 +1,6 @@
 # -----------------------------------------------------------------------------
 
-megabuild		= 1
+megabuild		= 0
 finalbuild		= 1
 attachdebugger	= 0
 
@@ -98,6 +98,7 @@ $(EXE_DIR)/boot.o:	$(SRC_DIR)/boot.s \
 					$(UIELT_SRC_DIR)/uicheckbox.s \
 					$(UIELT_SRC_DIR)/uiradiobutton.s \
 					$(UIELT_SRC_DIR)/uiimage.s \
+					$(UIELT_SRC_DIR)/uitrackview.s \
 					Makefile Linkfile
 	$(AS) $(ASFLAGS) -o $@ $<
 

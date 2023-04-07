@@ -91,6 +91,7 @@ q160						.dword 160
 		checkbox
 		radiobutton
 		image
+		trackview
 .endenum
 
 .enum UIEVENTTYPE
@@ -193,6 +194,7 @@ ui_element_indiceshi
 			.byte <.ident(.sprintf("uicheckbox_%s",		.string(eventtype))), >.ident(.sprintf("uicheckbox_%s",		.string(eventtype)))
 			.byte <.ident(.sprintf("uiradiobutton_%s",	.string(eventtype))), >.ident(.sprintf("uiradiobutton_%s",	.string(eventtype)))
 			.byte <.ident(.sprintf("uiimage_%s",		.string(eventtype))), >.ident(.sprintf("uiimage_%s",		.string(eventtype)))
+			.byte <.ident(.sprintf("uitrackview_%s",	.string(eventtype))), >.ident(.sprintf("uitrackview_%s",	.string(eventtype)))
 .endmacro
 
 		IMPLEMENT_UIEVENT layout
