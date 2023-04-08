@@ -10,9 +10,9 @@ root
 ; ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ main windows
 
 windows
-		UIELEMENT_ADD ui_windows1,				debugelement,		window1area,			 1,  0, 38, 34,  0,		$ffff,						uidefaultflags
-		UIELEMENT_ADD ui_windows2,				debugelement,		window2area,			40,  0, 39, 34, 20,		$ffff,						uidefaultflags
-		UIELEMENT_ADD ui_trackview,				nineslice,			trackviewelements,		 1, 34, 78, 12, 20,		$ffff,						uidefaultflags	
+		UIELEMENT_ADD ui_windows1,				debugelement,		window1area,			 1,  0, 38, 18,  0,		$ffff,						uidefaultflags
+		UIELEMENT_ADD ui_windows2,				debugelement,		window2area,			40,  0, 39, 18, 20,		$ffff,						uidefaultflags
+		UIELEMENT_ADD ui_trackview,				nineslice,			trackviewelements,		 1, 25, 78, 21, 20,		$ffff,						uidefaultflags	
 		UIELEMENT_ADD ui_logo,					image,				$ffff,					68, 47, 11,  2,  0,		uilogo_data,				uidefaultflags
 		UIELEMENT_END
 
@@ -20,15 +20,15 @@ windows
 
 window1area
 		UIELEMENT_ADD debugelementfa1,			debugelement,		filearea1,				 1,  1, 20, 16,  0,		$ffff,						uidefaultflags
-		UIELEMENT_ADD debugelementla1,			debugelement,		listarea1,				 1, 17, 20, 16,  0,		$ffff,						uidefaultflags
 		UIELEMENT_ADD debugelementcba1,			debugelement,		cbuttonarea1,			22,  1, 15,  9,  0,		$ffff,						uidefaultflags
 		UIELEMENT_ADD debugelementca1,			debugelement,		checkboxarea1,			22, 10, 15,  7,  0,		$ffff,						uidefaultflags
-		UIELEMENT_ADD debugelementrba1,			debugelement,		radiobtnarea1,			22, 17, 15,  9,  0,		$ffff,						uidefaultflags
-		UIELEMENT_ADD debugelementmsa1,			debugelement,		mousedebugarea1,		22, 26, 15,  7,  0,		$ffff,						uidefaultflags
 		UIELEMENT_END
 
 window2area
-		UIELEMENT_ADD playbutton,				button,				$ffff,					 2,  2,  2,  2,  0,		playbutton_data,			uidefaultflags
+		UIELEMENT_ADD debugelementla1,			debugelement,		listarea1,				 1,  1, 20, 16,  0,		$ffff,						uidefaultflags
+		UIELEMENT_ADD debugelementrba1,			debugelement,		radiobtnarea1,			22,  1, 15,  9,  0,		$ffff,						uidefaultflags
+		UIELEMENT_ADD debugelementmsa1,			debugelement,		mousedebugarea1,		22, 10, 15,  7,  0,		$ffff,						uidefaultflags
+		;UIELEMENT_ADD playbutton,				button,				$ffff,					 2,  2,  2,  2,  0,		playbutton_data,			uidefaultflags
 		;UIELEMENT_ADD debugelement2,			debugelement,		$ffff,					 1,  1, 37, 19,  0,		$ffff,						uidefaultflags
 		UIELEMENT_END
 
@@ -110,8 +110,8 @@ la1scrollbarelements
 ; ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ scrollbar elements
 
 trackviewelements
-		UIELEMENT_ADD tvlistbox,				listbox,			$ffff,					 5,  1,-14, -2,  0,		tvlistbox_data,				uidefaultflags
-		UIELEMENT_ADD tvscrollbar,				scrollbar,			tvscrollbarelements,	-3,  1,  2, -2,  0,		tvscrollbar_data,			uidefaultflags
+		UIELEMENT_ADD tvlistbox,				trackview,			$ffff,					 5,  3,-14, -6,  0,		tvlistbox_data,				uidefaultflags
+		UIELEMENT_ADD tvscrollbar,				scrollbar,			tvscrollbarelements,	-4,  3,  2, -5,  0,		tvscrollbar_data,			uidefaultflags
 		UIELEMENT_END
 
 tvscrollbarelements
@@ -147,7 +147,7 @@ la1listbox_data				.word la1scrollbar_functions,			la1scrollbar_data, la1boxtxt
 la1scrollbuttonup_data		.word la1scrollbuttonup_functions,		((4*16+ 0) | (4*16+ 4)<<8)
 la1scrollbuttondown_data	.word la1scrollbuttondown_functions,	((4*16+ 8) | (4*16+12)<<8)
 
-tvscrollbar_data			.word tvscrollbar_functions, 			0, 0, 13, tvlistbox	; start position, selection index, number of entries, ptr to list
+tvscrollbar_data			.word tvscrollbar_functions, 			0, 1, 63+2*7+2, tvlistbox		; start position, selection index, number of entries, ptr to list
 tvlistbox_data				.word tvscrollbar_functions,			tvscrollbar_data, tvboxtxt
 tvscrollbuttonup_data		.word tvscrollbuttonup_functions,		((4*16+ 0) | (4*16+ 4)<<8)
 tvscrollbuttondown_data		.word tvscrollbuttondown_functions,		((4*16+ 8) | (4*16+12)<<8)

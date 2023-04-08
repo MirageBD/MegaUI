@@ -320,7 +320,6 @@ uilistbox_drawlistreleased
 		sta zpptr2+1
 
 		clc
-		ldy #$00
 		lda uilistbox_startpos
 		sta uilistbox_current_draw_pos
 		asl

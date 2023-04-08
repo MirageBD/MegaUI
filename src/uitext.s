@@ -58,24 +58,125 @@ tvboxtxt			.word tvboxtxt00
 					.word tvboxtxt10
 					.word tvboxtxt11
 					.word tvboxtxt12
+					.word tvboxtxt13
+					.word tvboxtxt14
+					.word tvboxtxt15
+					.word tvboxtxt16
+					.word tvboxtxt17
+					.word tvboxtxt18
+					.word tvboxtxt19
+					.word tvboxtxt20
+					.word tvboxtxt21
+					.word tvboxtxt22
+					.word tvboxtxt23
+					.word tvboxtxt24
+					.word tvboxtxt25
+					.word tvboxtxt26
+					.word tvboxtxt27
+					.word tvboxtxt28
+					.word tvboxtxt29
+					.word tvboxtxt30
+					.word tvboxtxt31
+					.word tvboxtxt32
+					.word tvboxtxt33
+					.word tvboxtxt34
+					.word tvboxtxt35
+					.word tvboxtxt36
+					.word tvboxtxt37
+					.word tvboxtxt38
+					.word tvboxtxt39
+					.word tvboxtxt40
+					.word tvboxtxt41
+					.word tvboxtxt42
+					.word tvboxtxt43
+					.word tvboxtxt44
+					.word tvboxtxt45
+					.word tvboxtxt46
+					.word tvboxtxt47
+					.word tvboxtxt48
+					.word tvboxtxt49
+					.word tvboxtxt50
+					.word tvboxtxt51
+					.word tvboxtxt52
+					.word tvboxtxt53
+					.word tvboxtxt54
+					.word tvboxtxt55
+					.word tvboxtxt56
+					.word tvboxtxt57
+					.word tvboxtxt58
+					.word tvboxtxt59
+					.word tvboxtxt60
+					.word tvboxtxt61
+					.word tvboxtxt62
+					.word tvboxtxt63
 					.word $ffff
 
 .align 256
 
-tvboxtxt00			.byte "this is where the trackview data will go", 0
-tvboxtxt01			.byte "i will need extra functions to draw", 0
-tvboxtxt02			.byte "", 0
-tvboxtxt03			.byte "- notes", 0
-tvboxtxt04			.byte "- samples", 0
-tvboxtxt05			.byte "- effects", 0
-tvboxtxt06			.byte "- cursor", 0
-tvboxtxt07			.byte "", 0
-tvboxtxt08			.byte "should look something like this", 0
-tvboxtxt09			.byte "", 0
-tvboxtxt10			.byte "... .. .. ...    ... .. .. ...    ... .. .. ...    ... .. .. ...", 0
-tvboxtxt11			.byte "d-6 01 .. f05    ... .. .. ...    ... .. .. ...    ... .. .. ...", 0
-tvboxtxt12			.byte "c-5 04 .. c10    ... .. .. ...    ... .. .. ...    ... .. .. ...", 0
-tvboxtxt13			.byte "... .. .. ...    ... .. .. ...    ... .. .. ...    ... .. .. ...", 0
+tvboxtxt00			.byte "00. .. .. ...    ... .. .. ...    ... .. .. ...    ... .. .. ...", 0
+tvboxtxt01			.byte "01. .. .. ...    ... .. .. ...    ... .. .. ...    ... .. .. ...", 0
+tvboxtxt02			.byte "02. .. .. ...    ... .. .. ...    ... .. .. ...    ... .. .. ...", 0
+tvboxtxt03			.byte "03. .. .. ...    ... .. .. ...    ... .. .. ...    ... .. .. ...", 0
+tvboxtxt04			.byte "04. .. .. ...    ... .. .. ...    ... .. .. ...    ... .. .. ...", 0
+tvboxtxt05			.byte "05. .. .. ...    ... .. .. ...    ... .. .. ...    ... .. .. ...", 0
+tvboxtxt06			.byte "06. .. .. ...    ... .. .. ...    ... .. .. ...    ... .. .. ...", 0
+tvboxtxt07			.byte "07. .. .. ...    ... .. .. ...    ... .. .. ...    ... .. .. ...", 0
+tvboxtxt08			.byte "08. .. .. ...    ... .. .. ...    ... .. .. ...    ... .. .. ...", 0
+tvboxtxt09			.byte "09. .. .. ...    ... .. .. ...    ... .. .. ...    ... .. .. ...", 0
+tvboxtxt10			.byte "0a. .. .. ...    ... .. .. ...    ... .. .. ...    ... .. .. ...", 0
+tvboxtxt11			.byte "0b. .. .. ...    ... .. .. ...    ... .. .. ...    ... .. .. ...", 0
+tvboxtxt12			.byte "0c. .. .. ...    ... .. .. ...    ... .. .. ...    ... .. .. ...", 0
+tvboxtxt13			.byte "0d. .. .. ...    ... .. .. ...    ... .. .. ...    ... .. .. ...", 0
+tvboxtxt14			.byte "0e. .. .. ...    ... .. .. ...    ... .. .. ...    ... .. .. ...", 0
+tvboxtxt15			.byte "0f. .. .. ...    ... .. .. ...    ... .. .. ...    ... .. .. ...", 0
+tvboxtxt16			.byte "10. .. .. ...    ... .. .. ...    ... .. .. ...    ... .. .. ...", 0
+tvboxtxt17			.byte "11. .. .. ...    ... .. .. ...    ... .. .. ...    ... .. .. ...", 0
+tvboxtxt18			.byte "12. .. .. ...    ... .. .. ...    ... .. .. ...    ... .. .. ...", 0
+tvboxtxt19			.byte "13. .. .. ...    ... .. .. ...    ... .. .. ...    ... .. .. ...", 0
+tvboxtxt20			.byte "14. .. .. ...    ... .. .. ...    ... .. .. ...    ... .. .. ...", 0
+tvboxtxt21			.byte "15. .. .. ...    ... .. .. ...    ... .. .. ...    ... .. .. ...", 0
+tvboxtxt22			.byte "16. .. .. ...    ... .. .. ...    ... .. .. ...    ... .. .. ...", 0
+tvboxtxt23			.byte "17. .. .. ...    ... .. .. ...    ... .. .. ...    ... .. .. ...", 0
+tvboxtxt24			.byte "18. .. .. ...    ... .. .. ...    ... .. .. ...    ... .. .. ...", 0
+tvboxtxt25			.byte "19. .. .. ...    ... .. .. ...    ... .. .. ...    ... .. .. ...", 0
+tvboxtxt26			.byte "1a. .. .. ...    ... .. .. ...    ... .. .. ...    ... .. .. ...", 0
+tvboxtxt27			.byte "1b. .. .. ...    ... .. .. ...    ... .. .. ...    ... .. .. ...", 0
+tvboxtxt28			.byte "1c. .. .. ...    ... .. .. ...    ... .. .. ...    ... .. .. ...", 0
+tvboxtxt29			.byte "1d. .. .. ...    ... .. .. ...    ... .. .. ...    ... .. .. ...", 0
+tvboxtxt30			.byte "1e. .. .. ...    ... .. .. ...    ... .. .. ...    ... .. .. ...", 0
+tvboxtxt31			.byte "1f. .. .. ...    ... .. .. ...    ... .. .. ...    ... .. .. ...", 0
+tvboxtxt32			.byte "20. .. .. ...    ... .. .. ...    ... .. .. ...    ... .. .. ...", 0
+tvboxtxt33			.byte "21. .. .. ...    ... .. .. ...    ... .. .. ...    ... .. .. ...", 0
+tvboxtxt34			.byte "22. .. .. ...    ... .. .. ...    ... .. .. ...    ... .. .. ...", 0
+tvboxtxt35			.byte "23. .. .. ...    ... .. .. ...    ... .. .. ...    ... .. .. ...", 0
+tvboxtxt36			.byte "24. .. .. ...    ... .. .. ...    ... .. .. ...    ... .. .. ...", 0
+tvboxtxt37			.byte "25. .. .. ...    ... .. .. ...    ... .. .. ...    ... .. .. ...", 0
+tvboxtxt38			.byte "26. .. .. ...    ... .. .. ...    ... .. .. ...    ... .. .. ...", 0
+tvboxtxt39			.byte "27. .. .. ...    ... .. .. ...    ... .. .. ...    ... .. .. ...", 0
+tvboxtxt40			.byte "28. .. .. ...    ... .. .. ...    ... .. .. ...    ... .. .. ...", 0
+tvboxtxt41			.byte "29. .. .. ...    ... .. .. ...    ... .. .. ...    ... .. .. ...", 0
+tvboxtxt42			.byte "2a. .. .. ...    ... .. .. ...    ... .. .. ...    ... .. .. ...", 0
+tvboxtxt43			.byte "2b. .. .. ...    ... .. .. ...    ... .. .. ...    ... .. .. ...", 0
+tvboxtxt44			.byte "2c. .. .. ...    ... .. .. ...    ... .. .. ...    ... .. .. ...", 0
+tvboxtxt45			.byte "2d. .. .. ...    ... .. .. ...    ... .. .. ...    ... .. .. ...", 0
+tvboxtxt46			.byte "2e. .. .. ...    ... .. .. ...    ... .. .. ...    ... .. .. ...", 0
+tvboxtxt47			.byte "2f. .. .. ...    ... .. .. ...    ... .. .. ...    ... .. .. ...", 0
+tvboxtxt48			.byte "30. .. .. ...    ... .. .. ...    ... .. .. ...    ... .. .. ...", 0
+tvboxtxt49			.byte "31. .. .. ...    ... .. .. ...    ... .. .. ...    ... .. .. ...", 0
+tvboxtxt50			.byte "32. .. .. ...    ... .. .. ...    ... .. .. ...    ... .. .. ...", 0
+tvboxtxt51			.byte "33. .. .. ...    ... .. .. ...    ... .. .. ...    ... .. .. ...", 0
+tvboxtxt52			.byte "34. .. .. ...    ... .. .. ...    ... .. .. ...    ... .. .. ...", 0
+tvboxtxt53			.byte "35. .. .. ...    ... .. .. ...    ... .. .. ...    ... .. .. ...", 0
+tvboxtxt54			.byte "36. .. .. ...    ... .. .. ...    ... .. .. ...    ... .. .. ...", 0
+tvboxtxt55			.byte "37. .. .. ...    ... .. .. ...    ... .. .. ...    ... .. .. ...", 0
+tvboxtxt56			.byte "38. .. .. ...    ... .. .. ...    ... .. .. ...    ... .. .. ...", 0
+tvboxtxt57			.byte "39. .. .. ...    ... .. .. ...    ... .. .. ...    ... .. .. ...", 0
+tvboxtxt58			.byte "3a. .. .. ...    ... .. .. ...    ... .. .. ...    ... .. .. ...", 0
+tvboxtxt59			.byte "3b. .. .. ...    ... .. .. ...    ... .. .. ...    ... .. .. ...", 0
+tvboxtxt60			.byte "3c. .. .. ...    ... .. .. ...    ... .. .. ...    ... .. .. ...", 0
+tvboxtxt61			.byte "3d. .. .. ...    ... .. .. ...    ... .. .. ...    ... .. .. ...", 0
+tvboxtxt62			.byte "3e. .. .. ...    ... .. .. ...    ... .. .. ...    ... .. .. ...", 0
+tvboxtxt63			.byte "3f. .. .. ...    ... .. .. ...    ... .. .. ...    ... .. .. ...", 0
 
 
 .align 256

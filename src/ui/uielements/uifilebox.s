@@ -144,12 +144,10 @@ uifilebox_getstringptr
 		lda (zpptr2),y
 		adc #$02
 		sta zpptrtmp+0
-		sta $cf00
 		iny
 		lda (zpptr2),y
 		adc #$00
 		sta zpptrtmp+1
-		sta $cf01
 		
 		rts
 
@@ -306,7 +304,6 @@ uifilebox_drawlistreleased
 		sta zpptr2+1
 
 		clc
-		ldy #$00
 		lda uifilebox_startpos
 		sta uifilebox_current_draw_pos
 		asl
@@ -499,7 +496,7 @@ uifilebox_drawemptyline
 		cpy uidraw_height
  		bne :-
 
-:		rts
+		rts
 
 ; ----------------------------------------------------------------------------------------------------
 

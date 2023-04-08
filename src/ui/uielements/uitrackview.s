@@ -1,8 +1,10 @@
 ; ----------------------------------------------------------------------------------------------------
 
-uitrackview_selected_index		.byte 0
+uitrackview_selected_index			.byte 0
 uitrackview_startpos				.byte 0
 uitrackview_current_draw_pos		.byte 0
+uitrackview_middlepos				.byte 0
+uitrackview_rowpos					.byte 0
 
 ; ----------------------------------------------------------------------------------------------------
 
@@ -36,8 +38,8 @@ uitrackview_keypress
 
 		cmp KEYBOARD_CURSORDOWN
 		bne :+
-		jsr uilistbox_increase_selection
-		jsr uilistbox_confine
+		jsr uitrackview_increase_selection
+		jsr uitrackview_confine
 		jsr uielement_calluifunc		
 		rts
 
@@ -72,6 +74,11 @@ uitrackview_setselectedindex
 		lda (zpptr1),y
 		sta zpptr2+1
 
+		ldy #UIELEMENT::height
+		lda (zpptr0),y
+		lsr
+		sta uitrackview_middlepos
+
 		lda uimouse_uielement_ypos+0					; set selected index + added start address
 		lsr
 		lsr
@@ -79,54 +86,11 @@ uitrackview_setselectedindex
 		clc
 		ldy #$02
 		adc (zpptr2),y
+		sec
+		sbc uitrackview_middlepos
 		ldy #$04
 		sta (zpptr2),y
 
-		rts
-
-; ----------------------------------------------------------------------------------------------------
-
-uitrackview_startaddentries
-
-		jsr ui_getelementdataptr_1						; get data ptr to zpptr1
-
-		ldy #$02										; put scrollbar1_data in zpptr3
-		lda (zpptr1),y
-		sta zpptr3+0
-		iny
-		lda (zpptr1),y
-		sta zpptr3+1
-
-		lda #$00
-		ldy #$02
-		sta (zpptr3),y									; set scrollbar position to 0
-		ldy #$04
-		sta (zpptr3),y									; set selection index to 0
-		ldy #$06
-		sta (zpptr3),y									; set number of entries to 0
-
-		ldy #$04										; put start of text list into zpptr2
-		lda (zpptr1),y
-		sta zpptr2+0
-		iny
-		lda (zpptr1),y
-		sta zpptr2+1
-
-		ldy #$00										; put pointer to actual text entry in zpptrtmp
-		lda (zpptr2),y
-		sta zpptrtmp+0
-		iny
-		lda (zpptr2),y
-		sta zpptrtmp+1
-
-		rts
-
-uitrackview_endaddentries
-		ldy #$00
-		lda #$ff
-		sta (zpptr2),y
-		iny
-		sta (zpptr2),y
 		rts
 
 ; ----------------------------------------------------------------------------------------------------
@@ -236,7 +200,7 @@ uitrackview_drawbkgreleased
 
 :		ldx uidraw_width
 		ldz #$00
-:		lda #$08										; mid gray background
+:		lda #$f0										; dark blue background
 		sta [uidraw_colptr],z
 		inz
 		inz
@@ -266,6 +230,10 @@ uitrackview_drawlistreleased
 		lda (zpptr1),y
 		sta zpptr2+1
 
+		lda uidraw_height								; $0f
+		lsr
+		sta uitrackview_middlepos						; $07
+
 		ldy #$02										; store startpos
 		lda (zpptr2),y
 		sta uitrackview_startpos
@@ -281,26 +249,53 @@ uitrackview_drawlistreleased
 		lda (zpptr1),y
 		sta zpptr2+1
 
-		clc
-		ldy #$00
-		lda uitrackview_startpos
+		sec
+		lda uitrackview_startpos						; add startpos to listboxtxt pointer
+		sbc uitrackview_middlepos
 		sta uitrackview_current_draw_pos
-		asl
+		bpl :+
+		lda #$00
+:		asl
+		clc
 		adc zpptr2+0
 		sta zpptr2+0
 		lda zpptr2+1
 		adc #$00
 		sta zpptr2+1
 
-uitrackview_drawlistreleased_loop							; start drawing the list
+		lda #$00
+		sta uitrackview_rowpos
 
-		lda uitrackview_current_draw_pos
+uitrackview_drawlistreleased_loop						; start drawing the list
+
+		ldy #$00
+		lda (zpptr2),y
+		sta zpptrtmp+0
+		iny
+		lda (zpptr2),y
+		sta zpptrtmp+1
+
+		lda uitrackview_rowpos
+		cmp uitrackview_middlepos
+		bne :+
+		lda #$00
+		sta utv_font
+		lda #$f0
+		sta utv_fontcolour
+		bra :+++
+
+:		lda uitrackview_current_draw_pos
 		cmp uitrackview_selected_index
 		bne :+
-
 		lda #$80
 		sta utv_font
-		lda #$e3
+		lda #$3f
+		sta utv_fontcolour
+		bra :++
+
+:		lda #$80
+		sta utv_font
+		lda #$f0
 		sta utv_fontcolour
 
 :		ldx uidraw_width								; clear line
@@ -309,7 +304,7 @@ uitrackview_drawlistreleased_loop							; start drawing the list
 		clc
 		adc utv_font
 		sta [uidraw_scrptr],z
-		lda ulb_fontcolour
+		lda utv_fontcolour
 		sta [uidraw_colptr],z
 		inz
 		lda #$04
@@ -320,25 +315,23 @@ uitrackview_drawlistreleased_loop							; start drawing the list
 		dex
 		bne :-
 
-		ldy #$00
-		lda (zpptr2),y
-		sta zpptrtmp+0
-		iny
-		lda (zpptr2),y
-		sta zpptrtmp+1
+		lda uitrackview_current_draw_pos
+		bmi uitrackview_increaserow
+
+		lda zpptrtmp+1
 		cmp #$ff
-		beq :+++
+		beq uitrackview_increaserow
 
 		ldy #$00
 		ldz #$00
 :		lda (zpptrtmp),y
 		tax
 		lda ui_textremap,x
-		beq :+
+		beq uitrackview_increasepointerandrow
 		clc
-		adc ulb_font
+		adc utv_font
 		sta [uidraw_scrptr],z
-		lda ulb_fontcolour
+		lda utv_fontcolour
 		sta [uidraw_colptr],z
 		inz
 		lda #$04
@@ -349,7 +342,8 @@ uitrackview_drawlistreleased_loop							; start drawing the list
 		iny
  		bra :-
 
-:		clc
+uitrackview_increasepointerandrow
+		clc
 		lda zpptr2+0
 		adc #$02
 		sta zpptr2+0
@@ -357,8 +351,10 @@ uitrackview_drawlistreleased_loop							; start drawing the list
 		adc #$00
 		sta zpptr2+1
 
-:		jsr uidraw_increase_row
+uitrackview_increaserow
+		jsr uidraw_increase_row
 		inc uitrackview_current_draw_pos
+		inc uitrackview_rowpos
 
 		dec uidraw_height
 		lda uidraw_height
@@ -373,4 +369,6 @@ utv_font
 		.byte $80	; $00 (white text on coloured background) or $80 (coloured text on black background)
 
 utv_fontcolour
-		.byte $0f
+		.byte $f0
+
+; ----------------------------------------------------------------------------------------------------
