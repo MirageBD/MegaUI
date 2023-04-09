@@ -14,7 +14,7 @@ windows
 		UIELEMENT_ADD ui_windows2,				debugelement,		window2area,			40,  0, 39, 18, 20,		$ffff,						uidefaultflags
 
 
-		UIELEMENT_ADD ui_trackview,				nineslice,			trackviewelements,		 1, 25, 78, 21, 20,		$ffff,						uidefaultflags	
+		UIELEMENT_ADD ui_patternview,			nineslice,			patternviewelements,	 1, 25, 78, 21, 20,		$ffff,						uidefaultflags	
 		;UIELEMENT_ADD ui_logo,					image,				$ffff,					68, 47, 11,  2,  0,		uilogo_data,				uidefaultflags
 
 		UIELEMENT_ADD ptrnidxlabel,				hexlabel,			$ffff,					 1, 19,  2,  1,  0,		hexlabelptrnidx_data,		uidefaultflags
@@ -116,8 +116,8 @@ la1scrollbarelements
 
 ; ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ scrollbar elements
 
-trackviewelements
-		UIELEMENT_ADD tvlistbox,				trackview,			$ffff,					 5,  4,-14, -6,  0,		tvlistbox_data,				uidefaultflags
+patternviewelements
+		UIELEMENT_ADD tvlistbox,				patternview,			$ffff,					 5,  4,-14, -6,  0,		tvlistbox_data,				uidefaultflags
 		UIELEMENT_ADD tvscrollbar,				scrollbar,			tvscrollbarelements,	-4,  4,  2, -6,  0,		tvscrollbar_data,			uidefaultflags
 		UIELEMENT_END
 
@@ -128,6 +128,8 @@ tvscrollbarelements
 		UIELEMENT_END
 
 ; ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ data
+
+.align 256
 
 paddlexlabel_data			.word $ffff,							uitxt_paddlex
 hexlabel1_data				.word $ffff,							mouse_d419, 1
@@ -140,9 +142,9 @@ hexlabel2_data				.word $ffff,							mouse_d41a, 1
 ; cntPepSeqP = current pattern
 ; cntPepPRow = current row
 
-hexlabelptrnidx_data		.word $ffff,							uitrackview_patternindex, 1
-hexlabelptrnptr_data		.word $ffff,							uitrackview_patternptr, 4
-hexlabelptrnrow_data		.word $ffff,							uitrackview_patternrow, 1
+hexlabelptrnidx_data		.word $ffff,							uipatternview_patternindex, 1
+hexlabelptrnptr_data		.word $ffff,							uipatternview_patternptr, 4
+hexlabelptrnrow_data		.word $ffff,							uipatternview_patternrow, 1
 
 
 
@@ -218,16 +220,16 @@ la1scrollbar_functions			.word la1scrollbartrack,				uiscrolltrack_draw
 
 tvscrollbuttonup_functions		.word tvscrollbartrack,					uiscrollbar_decrease
 								.word tvscrollbartrack,					uiscrolltrack_draw
-								.word tvlistbox,						uitrackview_draw
+								.word tvlistbox,						uipatternview_draw
 								.word $ffff
 
 tvscrollbuttondown_functions	.word tvscrollbartrack,					uiscrollbar_increase
 								.word tvscrollbartrack,					uiscrolltrack_draw
-								.word tvlistbox,						uitrackview_draw
+								.word tvlistbox,						uipatternview_draw
 								.word $ffff
 
 tvscrollbar_functions			.word tvscrollbartrack,					uiscrolltrack_draw
-								.word tvlistbox,						uitrackview_draw
+								.word tvlistbox,						uipatternview_draw
 								.word $ffff
 
 
@@ -266,13 +268,13 @@ userfunc_stopmod
 
 userfunc_pausemod
 
-		lda #$c0
-		DEBUG_COLOUR
-		DEBUG_COLOUR
-		DEBUG_COLOUR
-		DEBUG_COLOUR
-		lda #$00
-		DEBUG_COLOUR
+		;lda #$c0
+		;DEBUG_COLOUR
+		;DEBUG_COLOUR
+		;DEBUG_COLOUR
+		;DEBUG_COLOUR
+		;lda #$00
+		;DEBUG_COLOUR
 		rts
 
 peppitoPlaying

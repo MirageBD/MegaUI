@@ -91,7 +91,7 @@ q160						.dword 160
 		checkbox
 		radiobutton
 		image
-		trackview
+		patternview
 .endenum
 
 .enum UIEVENTTYPE
@@ -147,7 +147,7 @@ q160						.dword 160
 
 ; ----------------------------------------------------------------------------------------------------
 
-ui_element_indiceslo
+ui_element_indiceslo										; maximum allowed number of ui children is 32
 	.repeat	32, wid
 		.byte	<(.sizeof(UIELEMENT) * wid)
 	.endrepeat
@@ -194,7 +194,7 @@ ui_element_indiceshi
 			.byte <.ident(.sprintf("uicheckbox_%s",		.string(eventtype))), >.ident(.sprintf("uicheckbox_%s",		.string(eventtype)))
 			.byte <.ident(.sprintf("uiradiobutton_%s",	.string(eventtype))), >.ident(.sprintf("uiradiobutton_%s",	.string(eventtype)))
 			.byte <.ident(.sprintf("uiimage_%s",		.string(eventtype))), >.ident(.sprintf("uiimage_%s",		.string(eventtype)))
-			.byte <.ident(.sprintf("uitrackview_%s",	.string(eventtype))), >.ident(.sprintf("uitrackview_%s",	.string(eventtype)))
+			.byte <.ident(.sprintf("uipatternview_%s",	.string(eventtype))), >.ident(.sprintf("uipatternview_%s",	.string(eventtype)))
 .endmacro
 
 		IMPLEMENT_UIEVENT layout

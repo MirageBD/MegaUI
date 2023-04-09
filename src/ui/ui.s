@@ -188,7 +188,7 @@ ui_draw_windows
 		ldy uielement_counter
 
 		clc
-		lda uielement_ptr+0								; get pointer to window x
+		lda uielement_ptr+0								; get pointer to ui root
 		adc ui_element_indiceslo,y
 		sta zpptr0+0
 		lda uielement_ptr+1
@@ -255,11 +255,11 @@ ui_update
 		UICORE_CALLELEMENTFUNCTION hexlabel1, uihexlabel_draw			; LV TODO - add update timer and move this to manager of some kind
 		UICORE_CALLELEMENTFUNCTION hexlabel2, uihexlabel_draw
 
-		UICORE_CALLELEMENTFUNCTION tvlistbox, uitrackview_update
+		UICORE_CALLELEMENTFUNCTION tvlistbox, uipatternview_update
 
 		UICORE_CALLELEMENTFUNCTION ptrnidxlabel, uihexlabel_draw
 		UICORE_CALLELEMENTFUNCTION ptrnptrlabel, uihexlabel_draw
-		UICORE_CALLELEMENTFUNCTION tvlistbox, uitrackview_draw
+		UICORE_CALLELEMENTFUNCTION tvlistbox, uipatternview_draw
 		;UICORE_CALLELEMENTFUNCTION ptrnrowlabel, uihexlabel_draw
 
         rts

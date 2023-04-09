@@ -1,21 +1,21 @@
 ; ----------------------------------------------------------------------------------------------------
 
-uitrackview_startpos				.byte 0
-uitrackview_current_draw_pos		.byte 0
-uitrackview_middlepos				.byte 0
-uitrackview_rowpos					.byte 0
+uipatternview_startpos				.byte 0
+uipatternview_current_draw_pos		.byte 0
+uipatternview_middlepos				.byte 0
+uipatternview_rowpos					.byte 0
 
 ; ----------------------------------------------------------------------------------------------------
 
-uitrackview_patternindex			.byte 0
-uitrackview_patternptr				.dword 0
-uitrackview_patternrow				.byte 0
+uipatternview_patternindex			.byte 0
+uipatternview_patternptr				.dword 0
+uipatternview_patternrow				.byte 0
 
 ; ----------------------------------------------------------------------------------------------------
 
-uitrackview_update
+uipatternview_update
 		lda cntPepSeqP
-		sta uitrackview_patternindex
+		sta uipatternview_patternindex
 
 		taz
 		lda	[ptrPepMSeq],z
@@ -24,18 +24,18 @@ uitrackview_update
 		tax
 
 		lda	adrPepPtn0+0,x
-		sta	uitrackview_patternptr+0
+		sta	uipatternview_patternptr+0
 		lda	adrPepPtn0+1,x
-		sta	uitrackview_patternptr+1
+		sta	uipatternview_patternptr+1
 		lda	adrPepPtn0+2,x
-		sta	uitrackview_patternptr+2
+		sta	uipatternview_patternptr+2
 		lda	adrPepPtn0+3,x
-		sta	uitrackview_patternptr+3
+		sta	uipatternview_patternptr+3
 
 		lda cntPepPRow
-		sta uitrackview_patternrow
+		sta uipatternview_patternrow
 
-		jsr uitrackview_decodepattern
+		jsr uipatternview_decodepattern
 
 		lda peppitoPlaying
 		bne :+
@@ -52,7 +52,7 @@ uitrackview_update
 		sta zpptr2+1
 
 		ldy #$02										; store startpos
-		lda uitrackview_patternrow
+		lda uipatternview_patternrow
 		sta (zpptr2),y
 
 		jsr uielement_calluifunc
@@ -61,15 +61,15 @@ uitrackview_update
 
 ; ----------------------------------------------------------------------------------------------------
 
-uitrackview_decodepattern
+uipatternview_decodepattern
 
-		lda uitrackview_patternptr+0
+		lda uipatternview_patternptr+0
 		sta zpptrtmp+0
-		lda uitrackview_patternptr+1
+		lda uipatternview_patternptr+1
 		sta zpptrtmp+1
-		lda uitrackview_patternptr+2
+		lda uipatternview_patternptr+2
 		sta zpptrtmp+2
-		lda uitrackview_patternptr+3
+		lda uipatternview_patternptr+3
 		sta zpptrtmp+3
 
 		lda #<tvboxtxt0
@@ -78,50 +78,50 @@ uitrackview_decodepattern
 		sta zpptr2+1
 
 		lda #$00
-		sta utv_decoderow
+		sta upv_decoderow
 
-utvdp_rowloop
+upvdp_rowloop
 		lda #$00
-		sta utv_decodechannel
+		sta upv_decodechannel
 
-utvdp_channelloop
+upvdp_channelloop
 		ldy #$00
 
 		ldz #$00									; get sample number
 		lda [zpptrtmp],z
 		and #$f0
-		sta uitrackview_sample
+		sta uipatternview_sample
 		ldz #$02
 		lda [zpptrtmp],z
 		lsr
 		lsr
 		lsr
 		lsr
-		ora uitrackview_sample
-		sta uitrackview_sample
+		ora uipatternview_sample
+		sta uipatternview_sample
 
 		ldz #$01									; get note period
 		lda [zpptrtmp],z
-		sta uitrackview_noteperiod+0
+		sta uipatternview_noteperiod+0
 		ldz #$00
 		lda [zpptrtmp],z
 		and #$0f
-		sta uitrackview_noteperiod+1
+		sta uipatternview_noteperiod+1
 
 		ldz #$02									; get effect command
 		lda [zpptrtmp],z
 		and #$0f
-		sta uitrackview_effectcommand
+		sta uipatternview_effectcommand
 		ldz #$03									; get effect data
 		lda [zpptrtmp],z
-		sta uitrackview_effectdata
+		sta uipatternview_effectdata
 
 		ldx #$00									; find string for note period
-:		lda utv_tunefreq+0,x
-		cmp uitrackview_noteperiod+0
+:		lda upv_tunefreq+0,x
+		cmp uipatternview_noteperiod+0
 		bne :+
-		lda utv_tunefreq+1,x
-		cmp uitrackview_noteperiod+1
+		lda upv_tunefreq+1,x
+		cmp uipatternview_noteperiod+1
 		beq :++
 :		inx
 		inx
@@ -131,10 +131,10 @@ utvdp_channelloop
 :		txa
 		lsr
 		tax
-		lda utv_times3table,x
+		lda upv_times3table,x
 		tax
 
-		lda utv_tunenote+0,x						; write note string to list
+		lda upv_tunenote+0,x						; write note string to list
 		cmp #$2e
 		bne :+
 
@@ -153,19 +153,19 @@ utvdp_channelloop
 		sta (zpptr2),y
 		iny
 
-:		lda utv_tunenote+0,x						; write note string to list
+:		lda upv_tunenote+0,x						; write note string to list
 		sta (zpptr2),y
 		iny
-		lda utv_tunenote+1,x
+		lda upv_tunenote+1,x
 		sta (zpptr2),y
 		iny
-		lda utv_tunenote+2,x
+		lda upv_tunenote+2,x
 		sta (zpptr2),y
 		iny
 
 		iny
 
-		lda uitrackview_sample						; write sample num to list
+		lda uipatternview_sample					; write sample num to list
 		bne :+
 
 		lda #$ff									; write gray sample colour code to list
@@ -183,7 +183,7 @@ utvdp_channelloop
 		sta (zpptr2),y
 		iny
 
-:		lda uitrackview_sample						; write sample num to list
+:		lda uipatternview_sample					; write sample num to list
 		beq :+
 		lsr
 		lsr
@@ -193,7 +193,7 @@ utvdp_channelloop
 		lda hextodec,x
 		sta (zpptr2),y
 		iny
-		lda uitrackview_sample
+		lda uipatternview_sample
 		and #$0f
 		tax
 		lda hextodec,x
@@ -227,12 +227,12 @@ utvdp_channelloop
 		lda #$ff									; write effect command colour code to list
 		sta (zpptr2),y
 		iny
-		ldx uitrackview_effectcommand
-		lda utv_effectcommandtocolour,x
+		ldx uipatternview_effectcommand
+		lda upv_effectcommandtocolour,x
 		sta (zpptr2),y
 		iny
 
-		lda uitrackview_effectcommand				; write effect command to list
+		lda uipatternview_effectcommand				; write effect command to list
 		beq :+
 		tax
 		lda hextodec,x
@@ -249,7 +249,7 @@ utvdp_channelloop
 		iny
 		bra :++
 
-:		lda uitrackview_effectdata					; write effect data to list
+:		lda uipatternview_effectdata				; write effect data to list
 		lsr
 		lsr
 		lsr
@@ -258,7 +258,7 @@ utvdp_channelloop
 		lda hextodec,x
 		sta (zpptr2),y
 		iny
-		lda uitrackview_effectdata
+		lda uipatternview_effectdata
 		and #$0f
 		tax
 		lda hextodec,x
@@ -287,12 +287,12 @@ utvdp_channelloop
 		adc #0
 		sta zpptr2+1
 
-		inc utv_decodechannel
-		lda utv_decodechannel
+		inc upv_decodechannel
+		lda upv_decodechannel
 		cmp #$04
 		beq :+
 
-		jmp utvdp_channelloop
+		jmp upvdp_channelloop
 
 :		sec											; subtract 3 to skip trailing zero byte
 		lda zpptr2+0
@@ -302,93 +302,93 @@ utvdp_channelloop
 		sbc #0
 		sta zpptr2+1
 
-		inc utv_decoderow
-		lda utv_decoderow
+		inc upv_decoderow
+		lda upv_decoderow
 		cmp #64
 		beq :+
 
-		jmp utvdp_rowloop
+		jmp upvdp_rowloop
 
 :		rts
 
-utv_decodechannel
+upv_decodechannel
 		.byte 0
 
-utv_decoderow
+upv_decoderow
 		.byte 0
 
-uitrackview_sample
+uipatternview_sample
 		.byte 0
 
-uitrackview_noteperiod
+uipatternview_noteperiod
 		.word 0
 
-uitrackview_effectcommand
+uipatternview_effectcommand
 		.byte 0
 
-uitrackview_effectdata
+uipatternview_effectdata
 		.byte 0
 
-uitrackview_notestring
+uipatternview_notestring
 		.byte 0, 0, 0
 
 ; ----------------------------------------------------------------------------------------------------
 
-uitrackview_layout
+uipatternview_layout
 		jsr uielement_layout
 		rts
 
-uitrackview_focus
+uipatternview_focus
 		rts
 
-uitrackview_enter
+uipatternview_enter
 		rts
 
-uitrackview_leave
+uipatternview_leave
 		rts
 
-uitrackview_move
+uipatternview_move
 		rts
 
-uitrackview_press
+uipatternview_press
 		rts
 
-uitrackview_doubleclick
+uipatternview_doubleclick
 		rts
 
-uitrackview_keyrelease
+uipatternview_keyrelease
 		rts
 
-uitrackview_keypress
+uipatternview_keypress
 		lda keyboard_pressedeventarg
 
 		cmp KEYBOARD_CURSORDOWN
 		bne :+
-		jsr uitrackview_increase_selection
-		jsr uitrackview_confine
+		jsr uipatternview_increase_selection
+		jsr uipatternview_confine
 		jsr uielement_calluifunc		
 		rts
 
 :		cmp KEYBOARD_CURSORUP
 		bne :+
-		jsr uitrackview_decrease_selection
-		jsr uitrackview_confine
+		jsr uipatternview_decrease_selection
+		jsr uipatternview_confine
 		jsr uielement_calluifunc		
 :		rts
 
 ; ----------------------------------------------------------------------------------------------------
 
-uitrackview_draw
-		;jsr uitrackview_drawbkgreleased
-		jsr uitrackview_drawlistreleased
+uipatternview_draw
+		;jsr uipatternview_drawbkgreleased
+		jsr uipatternview_drawlistreleased
 		rts
 
-uitrackview_release
-		jsr uitrackview_setselectedindex
-		jsr uitrackview_draw
+uipatternview_release
+		jsr uipatternview_setselectedindex
+		jsr uipatternview_draw
 		rts
 
-uitrackview_setselectedindex
+uipatternview_setselectedindex
 		jsr uimouse_calculate_pos_in_uielement
 
 		jsr ui_getelementdataptr_1						; get data ptr to zpptr1
@@ -403,7 +403,7 @@ uitrackview_setselectedindex
 		ldy #UIELEMENT::height
 		lda (zpptr0),y
 		lsr
-		sta uitrackview_middlepos
+		sta uipatternview_middlepos
 
 		lda uimouse_uielement_ypos+0					; set selected index + added start address
 		lsr
@@ -413,7 +413,7 @@ uitrackview_setselectedindex
 		ldy #$02
 		adc (zpptr2),y
 		sec
-		sbc uitrackview_middlepos
+		sbc uipatternview_middlepos
 		ldy #$02
 		sta (zpptr2),y
 
@@ -421,7 +421,7 @@ uitrackview_setselectedindex
 
 ; ----------------------------------------------------------------------------------------------------
 
-uitrackview_increase_selection
+uipatternview_increase_selection
 		jsr ui_getelementdataptr_1						; get data ptr to zpptr1
 
 		ldy #$02										; put scrollbar1_data in zpptr2
@@ -439,7 +439,7 @@ uitrackview_increase_selection
 
 		rts
 
-uitrackview_decrease_selection
+uipatternview_decrease_selection
 		jsr ui_getelementdataptr_1						; get data ptr to zpptr1
 
 		ldy #$02										; put scrollbar1_data in zpptr2
@@ -457,7 +457,7 @@ uitrackview_decrease_selection
 
 		rts
 
-uitrackview_confine
+uipatternview_confine
 		jsr ui_getelementdataptr_1						; get data ptr to zpptr1
 
 		ldy #$02										; put scrollbar1_data in zpptr2
@@ -513,7 +513,7 @@ uitrackview_confine
 
 ; ----------------------------------------------------------------------------------------------------
 
-uitrackview_drawbkgreleased
+uipatternview_drawbkgreleased
 
 		jsr uidraw_set_draw_position
 
@@ -543,7 +543,7 @@ uitrackview_drawbkgreleased
 
 ; ----------------------------------------------------------------------------------------------------
 
-uitrackview_drawlistreleased
+uipatternview_drawlistreleased
 
 		jsr uidraw_set_draw_position
 
@@ -558,11 +558,11 @@ uitrackview_drawlistreleased
 
 		lda uidraw_height								; $0f
 		lsr
-		sta uitrackview_middlepos						; $07
+		sta uipatternview_middlepos						; $07
 
 		ldy #$02										; store startpos
 		lda (zpptr2),y
-		sta uitrackview_startpos
+		sta uipatternview_startpos
 
 		ldy #$04										; put listboxtxt into zpptr2
 		lda (zpptr1),y
@@ -572,9 +572,9 @@ uitrackview_drawlistreleased
 		sta zpptr2+1
 
 		sec
-		lda uitrackview_startpos						; add startpos to listboxtxt pointer
-		sbc uitrackview_middlepos
-		sta uitrackview_current_draw_pos
+		lda uipatternview_startpos						; add startpos to listboxtxt pointer
+		sbc uipatternview_middlepos
+		sta uipatternview_current_draw_pos
 		bpl :+
 		lda #$00
 :		asl
@@ -586,9 +586,9 @@ uitrackview_drawlistreleased
 		sta zpptr2+1
 
 		lda #$00
-		sta uitrackview_rowpos
+		sta uipatternview_rowpos
 
-uitrackview_drawlistreleased_loop						; start drawing the list
+uipatternview_drawlistreleased_loop						; start drawing the list
 
 		ldy #$00
 		lda (zpptr2),y
@@ -597,27 +597,27 @@ uitrackview_drawlistreleased_loop						; start drawing the list
 		lda (zpptr2),y
 		sta zpptrtmp+1
 
-		lda uitrackview_rowpos
-		cmp uitrackview_middlepos
+		lda uipatternview_rowpos
+		cmp uipatternview_middlepos
 		bne :+
 		lda #$c0
-		sta utv_font
+		sta upv_font
 		lda #$f0
-		sta utv_fontcolour
+		sta upv_fontcolour
 		bra :++
 
 :		lda #$80
-		sta utv_font
+		sta upv_font
 		lda #$f0
-		sta utv_fontcolour
+		sta upv_fontcolour
 
 :		ldx uidraw_width								; clear line
 		ldz #$00
 :		lda #$20
 		clc
-		adc utv_font
+		adc upv_font
 		sta [uidraw_scrptr],z
-		lda utv_fontcolour
+		lda upv_fontcolour
 		sta [uidraw_colptr],z
 		inz
 		lda #$04
@@ -628,29 +628,29 @@ uitrackview_drawlistreleased_loop						; start drawing the list
 		dex
 		bne :-
 
-		lda uitrackview_current_draw_pos
-		bmi uitrackview_increaserow
+		lda uipatternview_current_draw_pos
+		bmi uipatternview_increaserow
 
 		lda zpptrtmp+1
 		cmp #$ff
-		beq uitrackview_increaserow
+		beq uipatternview_increaserow
 
 		ldy #$00
 		ldz #$00
 :		lda (zpptrtmp),y
-		beq uitrackview_increasepointerandrow
+		beq uipatternview_increasepointerandrow
 		cmp #$ff
 		bne :+
 		iny
 		lda (zpptrtmp),y
-		sta utv_fontcolour
+		sta upv_fontcolour
 		iny
 		bra :-
 
 :		clc
-		adc utv_font
+		adc upv_font
 		sta [uidraw_scrptr],z
-		lda utv_fontcolour
+		lda upv_fontcolour
 		sta [uidraw_colptr],z
 		inz
 		lda #$04
@@ -661,7 +661,7 @@ uitrackview_drawlistreleased_loop						; start drawing the list
 		iny
  		bra :--
 
-uitrackview_increasepointerandrow
+uipatternview_increasepointerandrow
 		clc
 		lda zpptr2+0
 		adc #$02
@@ -670,33 +670,33 @@ uitrackview_increasepointerandrow
 		adc #$00
 		sta zpptr2+1
 
-uitrackview_increaserow
+uipatternview_increaserow
 		jsr uidraw_increase_row
-		inc uitrackview_current_draw_pos
-		inc uitrackview_rowpos
+		inc uipatternview_current_draw_pos
+		inc uipatternview_rowpos
 
 		dec uidraw_height
 		lda uidraw_height
 		beq :+
-		jmp uitrackview_drawlistreleased_loop
+		jmp uipatternview_drawlistreleased_loop
 
 :		rts
 
 ; ----------------------------------------------------------------------------------------------------
 
-utv_font
-		.byte $80	; $00 (white text on coloured background) or $80 (coloured text on black background)
+upv_font
+		.byte $80
 
-utv_fontcolour
+upv_fontcolour
 		.byte $f0
 
-utv_tunefreq
+upv_tunefreq
 		.word 0
 		.word 856, 808, 762, 720, 678, 640, 604, 570, 538, 508, 480, 453
 		.word 428, 404, 381, 360, 339, 320, 302, 285, 269, 254, 240, 226
 		.word 214, 202, 190, 180, 170, 160, 151, 143, 135, 127, 120, 113
 
-utv_tunenote
+upv_tunenote
 		; "C-1", "C#1", "D-1", "D#1", "E-1", "F-1", "F#1", "G-1", "G#1", "A-1", "A#1", "B-1"
 		; "C-2", "C#2", "D-2", "D#2", "E-2", "F-2", "F#2", "G-2", "G#2", "A-2", "A#2", "B-2"
 		; "C-3", "C#3", "D-3", "D#3", "E-3", "F-3", "F#3", "G-3", "G#3", "A-3", "A#3", "B-3"
@@ -706,12 +706,12 @@ utv_tunenote
 		.byte $03, $2d, $32,    $03, $23, $32,    $04, $2d, $32,    $04, $23, $32,    $05, $2d, $32,    $06, $2d, $32,    $06, $23, $32,    $07, $2d, $32,    $07, $23, $32,    $01, $2d, $32,    $01, $23, $32,    $02, $2d, $32
 		.byte $03, $2d, $33,    $03, $23, $33,    $04, $2d, $33,    $04, $23, $33,    $05, $2d, $33,    $06, $2d, $33,    $06, $23, $33,    $07, $2d, $33,    $07, $23, $33,    $01, $2d, $33,    $01, $23, $33,    $02, $2d, $33
 
-utv_times3table
+upv_times3table
 .repeat 37, I
 		.byte I*3
 .endrepeat
 
-utv_effectcommandtocolour
+upv_effectcommandtocolour
 		.byte $04, $be, $be, $be, $be, $be, $be, $be, $be, $be, $be, $3d, $be, $3d, $be, $3d
 
 ; ----------------------------------------------------------------------------------------------------
