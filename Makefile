@@ -1,6 +1,6 @@
 # -----------------------------------------------------------------------------
 
-megabuild		= 0
+megabuild		= 1
 finalbuild		= 1
 attachdebugger	= 0
 
@@ -117,10 +117,9 @@ $(EXE_DIR)/disk.d81: $(EXE_DIR)/boot.prg $(BIN_DIR)/font_chars1.bin $(BIN_DIR)/g
 	 -f "00" -w $(BIN_DIR)/font_chars1.bin \
 	 -f "01" -w $(BIN_DIR)/glyphs_chars1.bin \
 	 -f "02" -w $(BIN_DIR)/glyphs_pal1.bin \
-	 -f "03" -w $(BIN_DIR)/glyphs_cols0.bin \
-	 -f "04" -w $(BIN_DIR)/cursor_sprites1.bin \
-	 -f "05" -w $(BIN_DIR)/cursor_pal1.bin \
-	 -f "06" -w $(BIN_DIR)/song.mod \
+	 -f "03" -w $(BIN_DIR)/cursor_sprites1.bin \
+	 -f "04" -w $(BIN_DIR)/cursor_pal1.bin \
+	 -f "05" -w $(BIN_DIR)/song.mod \
 	$@
 
 # -----------------------------------------------------------------------------

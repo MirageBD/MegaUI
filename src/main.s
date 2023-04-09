@@ -1,7 +1,5 @@
 
-.define mod_instruments			$9000	; size = 32 * 16 = $0200
 .define uipal					$9800	; size = $0300
-.define mod_song				$9c00	; size = $0040?
 
 .define screen					$a000	; size = 80*50*2 = $1f40
 
@@ -9,8 +7,6 @@
 .define sprites					$c100
 .define spritepal				$c800
 .define emptychar				$cf80	; size = 64
-
-.define uiattributes			$e000	; size = 80*50*2 = $1f40			; currently not used for anything
 
 .define uichars					$10000	; size = $4000
 .define glchars					$14000	; size = $2000
@@ -139,10 +135,9 @@
 		FLOPPY_FAST_LOAD uichars,			$30, $30
 		FLOPPY_FAST_LOAD glchars,			$30, $31
 		FLOPPY_FAST_LOAD uipal,				$30, $32
-		FLOPPY_FAST_LOAD uiattributes,		$30, $33
-		FLOPPY_FAST_LOAD sprites,			$30, $34
-		FLOPPY_FAST_LOAD spritepal,			$30, $35
-		FLOPPY_FAST_LOAD moddata,			$30, $36
+		FLOPPY_FAST_LOAD sprites,			$30, $33
+		FLOPPY_FAST_LOAD spritepal,			$30, $34
+		FLOPPY_FAST_LOAD moddata,			$30, $35
 		jsr fl_exit
 
 		sei

@@ -335,22 +335,16 @@ uilistbox_drawlistreleased_loop							; start drawing the list
 		cmp uilistbox_selected_index
 		bne :+
 
-		lda #$00
+		lda #$c0
 		sta ulb_font
-		;lda #$93 ; dark red
-		;lda #$b6 ; dark purple
-		;lda #$ca ; dodger blue
-		;lda #$8d ; dark orange
-		lda #$f0 ; dark blue
-		sta ulb_fontcolour
 		bra :++
 
 :		lda #$80
 		sta ulb_font
-		lda #$0f ; dark blue
-		sta ulb_fontcolour
 
-:		ldx uidraw_width								; clear line
+:		lda #$0f
+		sta ulb_fontcolour
+		ldx uidraw_width								; clear line
 		ldz #$00
 :		lda #$20
 		clc

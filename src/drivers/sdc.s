@@ -55,9 +55,6 @@ sdc_opendir_error
 
 sdc_chdir
 
-		lda #$00
-		sta sdc_transferbuffer,y
-
 		ldy #>sdc_transferbuffer						; set the hyppo filename from transferbuffer
 		lda #$2e
 		sta $d640
@@ -70,6 +67,31 @@ sdc_chdir
 		lda #$0c										; chdir into the directory
 		sta $d640
 		clv
+		rts
+
+:		;inc $d020
+		;jmp :-
+		rts
+
+; ----------------------------------------------------------------------------------------------------
+
+sdc_openfile
+
+		ldy #>sdc_transferbuffer						; set the hyppo filename from transferbuffer
+		lda #$2e
+		sta $d640
+		clv
+		bcc :+
+
+		ldx #<$00020000
+		ldy #>$00020000
+		ldz #($00020000 & $ff0000) >> 16
+
+		lda #$36									; $36 for chip RAM at $00ZZYYXX
+		sta $d640									; Mega65.HTRAP00
+		clv											; Wasted instruction slot required following hyper trap instruction
+		bcc :+
+
 		rts
 
 :		;inc $d020

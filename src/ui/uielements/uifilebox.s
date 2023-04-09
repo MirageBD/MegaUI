@@ -85,18 +85,42 @@ uifilebox_press
 
 uifilebox_doubleclick
 		jsr uifilebox_getstringptr									; get filename/dir string
-		ldy #0
+
+		ldx #$00
+		ldy #$02														; skip attributes and file type
 :		lda (zpptrtmp),y
 		beq :+
 		and #$7f
-		sta sdc_transferbuffer,y
+		sta sdc_transferbuffer,x
 		iny
+		inx
 		bra :-
-:		sta sdc_transferbuffer,y
+:		sta sdc_transferbuffer,x
+
+		ldy #$00													; get attribute and check if it's a directory
+		lda (zpptrtmp),y
+		sta $cf00
+		and #%00010000
+		cmp #%00010000
+		bne :+
+
 		jsr sdc_chdir
 		jsr uifilebox_opendir
 		jsr uifilebox_draw
-		rts
+		bra :++
+
+:		jsr sdc_openfile
+		lda #<.loword(moddata)
+		sta adrPepMODL+0
+		lda #>.loword(moddata)
+		sta adrPepMODL+1
+		lda #<.hiword(moddata)
+		sta adrPepMODH+0
+		lda #>.hiword(moddata)
+		sta adrPepMODH+1
+		jsr peppitoInit
+
+:		rts
 
 uifilebox_release
 		jsr uilistbox_setselectedindex
@@ -140,13 +164,11 @@ uifilebox_getstringptr
 		sta zpptr2+1
 
 		clc
-		ldy #$00										; put pointer to actual text entry in zpptrtmp. skip 2 over attribute and extension type
+		ldy #$00										; put pointer to actual text entry in zpptrtmp
 		lda (zpptr2),y
-		adc #$02
 		sta zpptrtmp+0
 		iny
 		lda (zpptr2),y
-		adc #$00
 		sta zpptrtmp+1
 		
 		rts
@@ -208,8 +230,6 @@ uifilebox_processdirentry
 		adc #$00
 		sta zpptr2+1
 
-		ldy #$00
-
 		; 0 Read only
 		; 1 Hidden
 		; 2 System
@@ -218,6 +238,7 @@ uifilebox_processdirentry
 		; 5 Archive
 		; 2 bits free
 
+		ldy #$00
 		lda sdc_transferbuffer+$0056						; read attribute and store in first byte
 		sta (zpptrtmp),y
 
@@ -225,7 +246,7 @@ uifilebox_processdirentry
 		cmp #%00010000
 		bne :+
 
-		lda #$3f											; colour directory differently
+		lda #$31											; colour directory differently
 		bra :++
 
 :		lda #$0f
@@ -326,19 +347,18 @@ uifilebox_drawlistreleased_loop							; start drawing the list
 		cmp uifilebox_selected_index
 		bne :+
 
-		lda #$00
+		lda #$c0
 		sta ufb_font
-		lda #$f0 ; dark blue
-		sta ufb_fontcolour
 		bra :++
 
 :		lda #$80
 		sta ufb_font
-		ldy #$01
+
+:		ldy #$01
 		lda (zpptrtmp),y
 		sta ufb_fontcolour
 
-:		ldx uidraw_width								; clear line
+		ldx uidraw_width								; clear line
 		ldz #$00
 :		lda #$20
 		clc

@@ -25,6 +25,7 @@ basicend	.byte 0
 
 .include "main.s"
 .include "irqload.s"
+.include "modplay.s"
 
 .include "drivers/mouse.s"
 .include "drivers/sdc.s"
@@ -59,7 +60,5 @@ basicend	.byte 0
 
 .include "uidata.s"
 .include "uitext.s"
-
-.include "modplay.s"
 
 ; ----------------------------------------------------------------------------------------------------

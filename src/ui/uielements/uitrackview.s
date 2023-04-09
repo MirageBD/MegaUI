@@ -134,14 +134,26 @@ utvdp_channelloop
 		lda utv_times3table,x
 		tax
 
-		lda #$ff									; write note colour code to list
+		lda utv_tunenote+0,x						; write note string to list
+		cmp #$2e
+		bne :+
+
+		lda #$ff									; write gray note colour code to list
 		sta (zpptr2),y
 		iny
-		lda #$e0
+		lda #$04
+		sta (zpptr2),y
+		iny
+		bra :++
+
+:		lda #$ff									; write note colour code to list
+		sta (zpptr2),y
+		iny
+		lda #$0c
 		sta (zpptr2),y
 		iny
 
-		lda utv_tunenote+0,x						; write note string to list
+:		lda utv_tunenote+0,x						; write note string to list
 		sta (zpptr2),y
 		iny
 		lda utv_tunenote+1,x
@@ -153,14 +165,25 @@ utvdp_channelloop
 
 		iny
 
-		lda #$ff									; write sample colour code to list
+		lda uitrackview_sample						; write sample num to list
+		bne :+
+
+		lda #$ff									; write gray sample colour code to list
 		sta (zpptr2),y
 		iny
-		lda #$d0
+		lda #$04
+		sta (zpptr2),y
+		iny
+		bra :++
+
+:		lda #$ff									; write sample colour code to list
+		sta (zpptr2),y
+		iny
+		lda #$31
 		sta (zpptr2),y
 		iny
 
-		lda uitrackview_sample						; write sample num to list
+:		lda uitrackview_sample						; write sample num to list
 		beq :+
 		lsr
 		lsr
@@ -189,11 +212,11 @@ utvdp_channelloop
 		lda #$ff									; write volume colour code to list
 		sta (zpptr2),y
 		iny
-		lda #$08
+		lda #$04
 		sta (zpptr2),y
 		iny
 
-		lda #$2e									; write volume to list
+		lda #$2d									; write volume to list
 		sta (zpptr2),y
 		iny
 		sta (zpptr2),y
@@ -204,7 +227,8 @@ utvdp_channelloop
 		lda #$ff									; write effect command colour code to list
 		sta (zpptr2),y
 		iny
-		lda #$b0
+		ldx uitrackview_effectcommand
+		lda utv_effectcommandtocolour,x
 		sta (zpptr2),y
 		iny
 
@@ -219,29 +243,13 @@ utvdp_channelloop
 :		lda #$2e									; write ... if effect command is 0
 		sta (zpptr2),y
 		iny
-
-		lda #$ff									; write effect command colour code to list
-		sta (zpptr2),y
-		iny
-		lda #$08
-		sta (zpptr2),y
-		iny
-
-		lda #$2e
 		sta (zpptr2),y
 		iny
 		sta (zpptr2),y
 		iny
 		bra :++
 
-:		lda #$ff									; write effect command colour code to list
-		sta (zpptr2),y
-		iny
-		lda #$a0
-		sta (zpptr2),y
-		iny
-
-		lda uitrackview_effectdata					; write effect data to list
+:		lda uitrackview_effectdata					; write effect data to list
 		lsr
 		lsr
 		lsr
@@ -271,9 +279,9 @@ utvdp_channelloop
 		adc #$00
 		sta zpptrtmp+3
 
-		clc											; add 27 to get to second channel
+		clc											; add 25 to get to second channel
 		lda zpptr2+0
-		adc #27
+		adc #25
 		sta zpptr2+0
 		lda zpptr2+1
 		adc #0
@@ -592,7 +600,7 @@ uitrackview_drawlistreleased_loop						; start drawing the list
 		lda uitrackview_rowpos
 		cmp uitrackview_middlepos
 		bne :+
-		lda #$00
+		lda #$c0
 		sta utv_font
 		lda #$f0
 		sta utv_fontcolour
@@ -683,24 +691,27 @@ utv_fontcolour
 		.byte $f0
 
 utv_tunefreq
+		.word 0
 		.word 856, 808, 762, 720, 678, 640, 604, 570, 538, 508, 480, 453
 		.word 428, 404, 381, 360, 339, 320, 302, 285, 269, 254, 240, 226
 		.word 214, 202, 190, 180, 170, 160, 151, 143, 135, 127, 120, 113
-		.word 0
 
 utv_tunenote
 		; "C-1", "C#1", "D-1", "D#1", "E-1", "F-1", "F#1", "G-1", "G#1", "A-1", "A#1", "B-1"
 		; "C-2", "C#2", "D-2", "D#2", "E-2", "F-2", "F#2", "G-2", "G#2", "A-2", "A#2", "B-2"
 		; "C-3", "C#3", "D-3", "D#3", "E-3", "F-3", "F#3", "G-3", "G#3", "A-3", "A#3", "B-3"
 
+		.byte "..."
 		.byte $03, $2d, $31,    $03, $23, $31,    $04, $2d, $31,    $04, $23, $31,    $05, $2d, $31,    $06, $2d, $31,    $06, $23, $31,    $07, $2d, $31,    $07, $23, $31,    $01, $2d, $31,    $01, $23, $31,    $02, $2d, $31
 		.byte $03, $2d, $32,    $03, $23, $32,    $04, $2d, $32,    $04, $23, $32,    $05, $2d, $32,    $06, $2d, $32,    $06, $23, $32,    $07, $2d, $32,    $07, $23, $32,    $01, $2d, $32,    $01, $23, $32,    $02, $2d, $32
 		.byte $03, $2d, $33,    $03, $23, $33,    $04, $2d, $33,    $04, $23, $33,    $05, $2d, $33,    $06, $2d, $33,    $06, $23, $33,    $07, $2d, $33,    $07, $23, $33,    $01, $2d, $33,    $01, $23, $33,    $02, $2d, $33
-		.byte "..."
 
 utv_times3table
 .repeat 37, I
 		.byte I*3
 .endrepeat
+
+utv_effectcommandtocolour
+		.byte $04, $be, $be, $be, $be, $be, $be, $be, $be, $be, $be, $3d, $be, $3d, $be, $3d
 
 ; ----------------------------------------------------------------------------------------------------
