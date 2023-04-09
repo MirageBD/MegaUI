@@ -1,5 +1,10 @@
 ; ----------------------------------------------------------------------------------------------------
 
+uihexlabel_numberofbytes
+		.byte 0
+
+; ----------------------------------------------------------------------------------------------------
+
 uihexlabel_layout
         jsr uielement_layout
     	rts
@@ -37,9 +42,14 @@ uihexlabel_draw
 		lda (zpptr1),y
 		sta zpptr2+1
 
+        ldy #$04
+		lda (zpptr1),y
+		sta uihexlabel_numberofbytes
+
 		ldz #$00
-		ldy #$00
-		lda (zpptr2),y
+		ldy uihexlabel_numberofbytes
+		dey
+:		lda (zpptr2),y
 
 		lsr
 		lsr
@@ -61,6 +71,10 @@ uihexlabel_draw
 		inz
 		lda #$04
 		sta [uidraw_scrptr],z
+		inz
+
+		dey
+		bpl :-
 
     	rts
 

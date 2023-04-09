@@ -252,8 +252,15 @@ ui_update
 		jsr keyboard_update
 		jsr uikeyboard_update
 
-		UICORE_DRAWELEMENT hexlabel1, uihexlabel_draw			; LV TODO - add update timer and move this to manager of some kind
-		UICORE_DRAWELEMENT hexlabel2, uihexlabel_draw
+		UICORE_CALLELEMENTFUNCTION hexlabel1, uihexlabel_draw			; LV TODO - add update timer and move this to manager of some kind
+		UICORE_CALLELEMENTFUNCTION hexlabel2, uihexlabel_draw
+
+		UICORE_CALLELEMENTFUNCTION tvlistbox, uitrackview_update
+
+		UICORE_CALLELEMENTFUNCTION ptrnidxlabel, uihexlabel_draw
+		UICORE_CALLELEMENTFUNCTION ptrnptrlabel, uihexlabel_draw
+		UICORE_CALLELEMENTFUNCTION tvlistbox, uitrackview_draw
+		;UICORE_CALLELEMENTFUNCTION ptrnrowlabel, uihexlabel_draw
 
         rts
 

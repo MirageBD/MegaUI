@@ -17,6 +17,8 @@
 .define mod_patterns			$20000	; size = $6000 - lots of 0, RLE pack?
 .define mod_samples				$30000	; size = $25000
 
+.define moddata					$20000
+
 ; ----------------------------------------------------------------------------------------------------
 
 		sei
@@ -140,6 +142,7 @@
 		FLOPPY_FAST_LOAD uiattributes,		$30, $33
 		FLOPPY_FAST_LOAD sprites,			$30, $34
 		FLOPPY_FAST_LOAD spritepal,			$30, $35
+		FLOPPY_FAST_LOAD moddata,			$30, $36
 		jsr fl_exit
 
 		sei
@@ -150,6 +153,17 @@
 		lda #$00
 		sta $d020
 		sta $d021
+
+		lda #<.loword(moddata)
+		sta adrPepMODL+0
+		lda #>.loword(moddata)
+		sta adrPepMODL+1
+		lda #<.hiword(moddata)
+		sta adrPepMODH+0
+		lda #>.hiword(moddata)
+		sta adrPepMODH+1
+
+		jsr peppitoInit
 
 		jsr mouse_init									; initialise drivers
 
@@ -231,13 +245,18 @@ irq1
 		phy
 		phz
 
+		lda peppitoPlaying
+		beq :+
+		jsr peppitoPlay
+:
 		;lda #$08
 		;sta $d020
 		jsr ui_update
 		;lda #$00
 		;sta $d020
 
-		lda #$ff
+
+		lda #$00 ; ff
 		sta $d012
 		lda #<irq1
 		sta $fffe

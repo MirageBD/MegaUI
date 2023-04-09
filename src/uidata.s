@@ -12,8 +12,15 @@ root
 windows
 		UIELEMENT_ADD ui_windows1,				debugelement,		window1area,			 1,  0, 38, 18,  0,		$ffff,						uidefaultflags
 		UIELEMENT_ADD ui_windows2,				debugelement,		window2area,			40,  0, 39, 18, 20,		$ffff,						uidefaultflags
+
+
 		UIELEMENT_ADD ui_trackview,				nineslice,			trackviewelements,		 1, 25, 78, 21, 20,		$ffff,						uidefaultflags	
-		UIELEMENT_ADD ui_logo,					image,				$ffff,					68, 47, 11,  2,  0,		uilogo_data,				uidefaultflags
+		;UIELEMENT_ADD ui_logo,					image,				$ffff,					68, 47, 11,  2,  0,		uilogo_data,				uidefaultflags
+
+		UIELEMENT_ADD ptrnidxlabel,				hexlabel,			$ffff,					 1, 19,  2,  1,  0,		hexlabelptrnidx_data,		uidefaultflags
+		UIELEMENT_ADD ptrnptrlabel,				hexlabel,			$ffff,					 4, 19,  2,  1,  0,		hexlabelptrnptr_data,		uidefaultflags
+		;UIELEMENT_ADD ptrnrowlabel,				hexlabel,			$ffff,					14, 19,  2,  1,  0,		hexlabelptrnrow_data,		uidefaultflags
+
 		UIELEMENT_END
 
 ; ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ child windows
@@ -123,9 +130,21 @@ tvscrollbarelements
 ; ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ data
 
 paddlexlabel_data			.word $ffff,							uitxt_paddlex
-hexlabel1_data				.word $ffff,							mouse_d419
+hexlabel1_data				.word $ffff,							mouse_d419, 1
 paddleylabel_data			.word $ffff,							uitxt_paddley
-hexlabel2_data				.word $ffff,							mouse_d41a
+hexlabel2_data				.word $ffff,							mouse_d41a, 1
+
+; adrPepPtn0 = first pattern
+; ptrPepMSeq = pointers to patterns
+
+; cntPepSeqP = current pattern
+; cntPepPRow = current row
+
+hexlabelptrnidx_data		.word $ffff,							uitrackview_patternindex, 1
+hexlabelptrnptr_data		.word $ffff,							uitrackview_patternptr, 4
+hexlabelptrnrow_data		.word $ffff,							uitrackview_patternrow, 1
+
+
 
 uilogo_data					.word $ffff,							((14*16+ 0) | (14*16+ 0)<<8)
 
@@ -231,6 +250,11 @@ ctextbutton3_functions			.word ctextbutton3,						custom_colourborder_cyan
 ; ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 custom_colourborder_pink
+
+		jsr peppitoInit
+		lda #$01
+		sta peppitoPlaying
+
 		lda #$60
 		DEBUG_COLOUR
 		DEBUG_COLOUR
@@ -241,6 +265,13 @@ custom_colourborder_pink
 		rts
 
 custom_colourborder_lightblue
+
+		jsr peppitoStop
+		jsr peppitoInit
+
+		lda #$00
+		sta peppitoPlaying
+
 		lda #$a0
 		DEBUG_COLOUR
 		DEBUG_COLOUR
@@ -259,5 +290,8 @@ custom_colourborder_cyan
 		lda #$00
 		DEBUG_COLOUR
 		rts
+
+peppitoPlaying
+		.byte $00
 
 ; ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------

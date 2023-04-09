@@ -7,7 +7,7 @@
 .define zpptr1		        $8a
 .define zpptr2		        $8c
 .define zpptr3		        $8e
-.define zpptrtmp	        $90
+.define zpptrtmp	        $90			; used for z indexing into higher ram, so 4 bytes
 
 uicounter					.byte 0
 q160						.dword 160
@@ -33,7 +33,7 @@ q160						.dword 160
 		sta zpptr0+1
 .endmacro
 
-.macro UICORE_DRAWELEMENT element, function
+.macro UICORE_CALLELEMENTFUNCTION element, function
 		UICORE_SELECT_ELEMENT element
 		jsr function
 .endmacro

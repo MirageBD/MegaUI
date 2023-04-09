@@ -71,6 +71,7 @@ $(EXE_DIR)/boot.o:	$(SRC_DIR)/boot.s \
 					$(SRC_DIR)/mathmacros.s \
 					$(SRC_DIR)/uidata.s \
 					$(SRC_DIR)/uitext.s \
+					$(SRC_DIR)/modplay.s \
 					$(DRVRS_SRC_DIR)/mouse.s \
 					$(DRVRS_SRC_DIR)/sdc.s \
 					$(DRVRS_SRC_DIR)/keyboard.s \
@@ -119,6 +120,7 @@ $(EXE_DIR)/disk.d81: $(EXE_DIR)/boot.prg $(BIN_DIR)/font_chars1.bin $(BIN_DIR)/g
 	 -f "03" -w $(BIN_DIR)/glyphs_cols0.bin \
 	 -f "04" -w $(BIN_DIR)/cursor_sprites1.bin \
 	 -f "05" -w $(BIN_DIR)/cursor_pal1.bin \
+	 -f "06" -w $(BIN_DIR)/song.mod \
 	$@
 
 # -----------------------------------------------------------------------------
@@ -149,7 +151,7 @@ endif
 
 else
 
-	cmd.exe /c $(XMEGA65) -autoload -8 $(EXE_DIR)/disk.d81
+	cmd.exe /c $(XMEGA65) -mastervolume 50 -autoload -8 $(EXE_DIR)/disk.d81
 
 endif
 
