@@ -150,38 +150,39 @@ uichannelview_drawbarsreleased_end
 
 ; ----------------------------------------------------------------------------------------------------
 
-prevd72a	.byte $00
-
-
+prevd72as	.byte $00
+			.byte $00
+			.byte $00
+			.byte $00
 
 uichannelview_capturevu
-
-		lda $d72a
-		cmp prevd72a
-		bne :+
-		rts
-
-:		sta prevd72a
 
 		jsr ui_getelementdataptr_1
 
 		ldy #$02										; get channel number
 		lda (zpptr1),y
-
-		asl
-		asl
-		asl
-		asl
 		tax
+		asl
+		asl
+		asl
+		asl
+		tay
 
-		lda #%00000000									; disable audio DMA, so registers can latch
-		sta $d711
+		lda $d72a,y
+		cmp prevd72as,x
+		bne :+
+		rts
 
-		lda $d72a,x
+:		sta prevd72as,x
+
+;		lda #%00000000									; disable audio DMA, so registers can latch
+;		sta $d711
+
+		lda $d72a,y
 		sta $10
-		lda $d72b,x
+		lda $d72b,y
 		sta $11
-		lda $d72c,x
+		lda $d72c,y
 		sta $12
 		lda #$00
 		sta $13
@@ -194,14 +195,19 @@ uichannelview_capturevu
 		lsr
 		lsr
 		lsr
-		;lsr
+		lsr
+		clc
 		ldy #$06
+		adc (zpptr1),y
+		lsr
 		cmp (zpptr1),y
 		bmi :+
 		sta (zpptr1),y
 
-:		lda #%10000000									; enable audio DMA
-		sta $d711
+:
+
+;		lda #%10000000									; enable audio DMA
+;		sta $d711
 
 		rts
 

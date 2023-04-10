@@ -121,8 +121,8 @@ patternviewelements
 		UIELEMENT_ADD chanview2,				channelview,		$ffff,					22,  2, 13,  2,  0,		chanview2_data,				uidefaultflags
 		UIELEMENT_ADD chanview3,				channelview,		$ffff,					39,  2, 13,  2,  0,		chanview3_data,				uidefaultflags
 		UIELEMENT_ADD chanview4,				channelview,		$ffff,					56,  2, 13,  2,  0,		chanview4_data,				uidefaultflags
-		UIELEMENT_ADD tvlistbox,				patternview,		$ffff,					 5,  5,-14, -6,  0,		tvlistbox_data,				uidefaultflags
-		UIELEMENT_ADD tvscrollbar,				scrollbar,			tvscrollbarelements,	-4,  5,  2, -6,  0,		tvscrollbar_data,			uidefaultflags
+		UIELEMENT_ADD tvlistbox,				patternview,		$ffff,					 5,  5,-14, -7,  0,		tvlistbox_data,				uidefaultflags
+		UIELEMENT_ADD tvscrollbar,				scrollbar,			tvscrollbarelements,	-4,  5,  2, -7,  0,		tvscrollbar_data,			uidefaultflags
 		UIELEMENT_END
 
 tvscrollbarelements

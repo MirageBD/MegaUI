@@ -48,10 +48,13 @@ uisequenceview_release
 
 		jsr uimouse_calculate_pos_in_uielement
 
+		lsr uimouse_uielement_xpos+1
+		ror uimouse_uielement_xpos+0
+		lsr uimouse_uielement_xpos+1
+		ror uimouse_uielement_xpos+0
+		lsr uimouse_uielement_xpos+1
+		ror uimouse_uielement_xpos+0
 		lda uimouse_uielement_xpos+0
-		lsr
-		lsr
-		lsr
 		cmp uisequenceview_numpatterns
 		bpl :+
 
@@ -82,7 +85,9 @@ uisequenceview_drawbkgreleased
 
 :		ldx uidraw_width
 		ldz #$00
-:		lda #$00										; black background
+:		lda #$20
+		sta [uidraw_scrptr],z
+		lda #$00										; black background
 		sta [uidraw_colptr],z
 		inz
 		inz

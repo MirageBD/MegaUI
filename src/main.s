@@ -257,7 +257,7 @@ irq1
 		;sta $d020
 
 
-		lda #$00 ; ff
+		lda #$ff
 		sta $d012
 		lda #<irq1
 		sta $fffe
