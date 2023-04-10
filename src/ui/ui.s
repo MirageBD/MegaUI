@@ -184,7 +184,8 @@ ui_draw_windows
 		lda #$ff
 		sta uielement_counter
 
-:		inc uielement_counter
+ui_draw_window_loop
+		inc uielement_counter
 		ldy uielement_counter
 
 		clc
@@ -205,13 +206,13 @@ ui_draw_windows
 		SEND_EVENT draw
 
 		ldy #UIELEMENT::children
+		iny												; add 1 - we want to check for $xx $ff, not $ff xx !!!
 		lda (zpptr0),y
 		cmp #$ff
 		bne :+
-		bra :--
+		bra ui_draw_window_loop
 
-:		; recursively handle children
-		lda zpptr0+0
+:		lda zpptr0+0									; recursively handle children
 		sta uielement_parent_ptr+0
 		lda zpptr0+1
 		sta uielement_parent_ptr+1
@@ -225,7 +226,7 @@ ui_draw_windows
 		sta uielement_ptr+1
 		jsr ui_draw_windows
 		jsr uistack_popparent
-		bra :---
+		bra ui_draw_window_loop
 
 uihelper_store_minxy
 

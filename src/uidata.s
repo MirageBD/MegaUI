@@ -10,16 +10,17 @@ root
 ; ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ main windows
 
 windows
+
 		UIELEMENT_ADD ui_windows1,				debugelement,		window1area,			 1,  0, 38, 18,  0,		$ffff,						uidefaultflags
 		UIELEMENT_ADD ui_windows2,				debugelement,		window2area,			40,  0, 39, 18, 20,		$ffff,						uidefaultflags
 
-
-		UIELEMENT_ADD ui_patternview,			nineslice,			patternviewelements,	 1, 25, 78, 21, 20,		$ffff,						uidefaultflags	
-		;UIELEMENT_ADD ui_logo,					image,				$ffff,					68, 47, 11,  2,  0,		uilogo_data,				uidefaultflags
-
 		UIELEMENT_ADD ptrnidxlabel,				hexlabel,			$ffff,					 1, 19,  2,  1,  0,		hexlabelptrnidx_data,		uidefaultflags
 		UIELEMENT_ADD ptrnptrlabel,				hexlabel,			$ffff,					 4, 19,  2,  1,  0,		hexlabelptrnptr_data,		uidefaultflags
-		;UIELEMENT_ADD ptrnrowlabel,				hexlabel,			$ffff,					14, 19,  2,  1,  0,		hexlabelptrnrow_data,		uidefaultflags
+		UIELEMENT_ADD ptrnrowlabel,				hexlabel,			$ffff,					14, 19,  2,  1,  0,		hexlabelptrnrow_data,		uidefaultflags
+
+		UIELEMENT_ADD ui_patternview,			nineslice,			patternviewelements,	 1, 25, 78, 21, 20,		$ffff,						uidefaultflags	
+
+		UIELEMENT_ADD ui_logo,					image,				$ffff,					68, 47, 11,  2,  0,		uilogo_data,				uidefaultflags
 
 		UIELEMENT_END
 

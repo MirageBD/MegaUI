@@ -46,6 +46,7 @@ uikeyboard_handle_event_loop
 khe_handle_children
 
 		ldy #UIELEMENT::children
+		iny												; add 1 - we want to check for $xx $ff, not $ff xx !!!
 		lda (zpptr0),y
 		cmp #$ff
 		bne :+
