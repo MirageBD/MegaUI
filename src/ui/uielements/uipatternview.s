@@ -5,6 +5,9 @@ uipatternview_current_draw_pos		.byte 0
 uipatternview_middlepos				.byte 0
 uipatternview_rowpos				.byte 0
 
+uipatternview_cursorstart			.byte 4
+uipatternview_cursorend				.byte 6
+
 ; ----------------------------------------------------------------------------------------------------
 
 uipatternview_patternptr			.dword 0
@@ -361,16 +364,16 @@ uipatternview_keypress
 
 		cmp KEYBOARD_CURSORDOWN
 		bne :+
-		jsr uipatternview_increase_selection
-		jsr uipatternview_confine
-		jsr uielement_calluifunc		
+		;jsr uipatternview_increase_selection
+		;jsr uipatternview_confine
+		;jsr uielement_calluifunc		
 		rts
 
 :		cmp KEYBOARD_CURSORUP
 		bne :+
-		jsr uipatternview_decrease_selection
-		jsr uipatternview_confine
-		jsr uielement_calluifunc		
+		;jsr uipatternview_decrease_selection
+		;jsr uipatternview_confine
+		;jsr uielement_calluifunc		
 :		rts
 
 ; ----------------------------------------------------------------------------------------------------
@@ -597,69 +600,26 @@ uipatternview_drawlistreleased_loop						; start drawing the list
 		lda (zpptr2),y
 		sta zpptrtmp+1
 
-		lda uipatternview_rowpos
+		lda uipatternview_current_draw_pos
+		bpl :+
+
+		jsr uipatternview_drawemptyline							; before start of pattern draw empty lines
+		jmp uipatternview_increaserow
+
+:		lda zpptrtmp+1
+		cmp #$ff
+		bne :+
+		
+		jsr uipatternview_drawemptyline							; after end of pattern draw empty lines
+		jmp uipatternview_increaserow
+
+:		lda uipatternview_rowpos
 		cmp uipatternview_middlepos
 		bne :+
-		lda #$c0
-		sta upv_font
-		lda #$f0
-		sta upv_fontcolour
-		bra :++
+		jsr uipatternview_drawmiddleline
+		jmp uipatternview_increasepointerandrow
 
-:		lda #$80
-		sta upv_font
-		lda #$f0
-		sta upv_fontcolour
-
-:		ldx uidraw_width								; clear line
-		ldz #$00
-:		lda #$20
-		clc
-		adc upv_font
-		sta [uidraw_scrptr],z
-		lda upv_fontcolour
-		sta [uidraw_colptr],z
-		inz
-		lda #$04
-		sta [uidraw_scrptr],z
-		lda #$00
-		sta [uidraw_colptr],z
-		inz
-		dex
-		bne :-
-
-		lda uipatternview_current_draw_pos
-		bmi uipatternview_increaserow
-
-		lda zpptrtmp+1
-		cmp #$ff
-		beq uipatternview_increaserow
-
-		ldy #$00
-		ldz #$00
-:		lda (zpptrtmp),y
-		beq uipatternview_increasepointerandrow
-		cmp #$ff
-		bne :+
-		iny
-		lda (zpptrtmp),y
-		sta upv_fontcolour
-		iny
-		bra :-
-
-:		clc
-		adc upv_font
-		sta [uidraw_scrptr],z
-		lda upv_fontcolour
-		sta [uidraw_colptr],z
-		inz
-		lda #$04
-		sta [uidraw_scrptr],z
-		lda #$00
-		sta [uidraw_colptr],z
-		inz
-		iny
- 		bra :--
+:		jsr uipatternview_drawnonmiddleline
 
 uipatternview_increasepointerandrow
 		clc
@@ -684,8 +644,87 @@ uipatternview_increaserow
 
 ; ----------------------------------------------------------------------------------------------------
 
-upv_font
-		.byte $80
+uipatternview_drawemptyline
+
+		ldx uidraw_width								; clear line
+		ldz #$00
+:		lda #$20
+		clc
+		adc #$80
+		sta [uidraw_scrptr],z
+		inz
+		lda #$04
+		sta [uidraw_scrptr],z
+		inz
+		dex
+		bne :-
+		rts
+
+; ----------------------------------------------------------------------------------------------------
+
+uipatternview_drawnonmiddleline
+
+		ldy #$00
+		ldz #$00
+:		lda (zpptrtmp),y
+		beq :++
+		cmp #$ff
+		bne :+
+		iny
+		lda (zpptrtmp),y
+		sta upvdnml+1
+		iny
+		bra :-
+
+:		clc
+		adc #$80
+		sta [uidraw_scrptr],z
+upvdnml	lda #$00
+		sta [uidraw_colptr],z
+		inz
+		lda #$04
+		sta [uidraw_scrptr],z
+		lda #$00
+		sta [uidraw_colptr],z
+		inz
+		iny
+ 		bra :--
+
+:		rts
+
+; ----------------------------------------------------------------------------------------------------
+
+uipatternview_drawmiddleline
+
+		ldy #$00
+		ldz #$00
+:		lda (zpptrtmp),y
+		beq :++
+		cmp #$ff
+		bne :+
+		iny
+		lda (zpptrtmp),y
+		sta upvdml+1
+		iny
+		bra :-
+
+:		clc
+		adc #$c0
+		sta [uidraw_scrptr],z
+upvdml	lda #$00
+		sta [uidraw_colptr],z
+		inz
+		lda #$04
+		sta [uidraw_scrptr],z
+		lda #$00
+		sta [uidraw_colptr],z
+		inz
+		iny
+ 		bra :--
+
+:		rts
+
+; ----------------------------------------------------------------------------------------------------
 
 upv_fontcolour
 		.byte $f0

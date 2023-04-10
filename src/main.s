@@ -257,7 +257,11 @@ irq1
 		;sta $d020
 
 
+.if megabuild = 1
 		lda #$ff
+.else
+		lda #$00
+.endif
 		sta $d012
 		lda #<irq1
 		sta $fffe

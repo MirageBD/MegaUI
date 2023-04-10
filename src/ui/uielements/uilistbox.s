@@ -38,14 +38,15 @@ uilistbox_keypress
 		bne :+
 		jsr uilistbox_increase_selection
 		jsr uilistbox_confine
-		jsr uielement_calluifunc		
+		jsr uielement_calluifunc
 		rts
 
 :		cmp KEYBOARD_CURSORUP
 		bne :+
 		jsr uilistbox_decrease_selection
 		jsr uilistbox_confine
-		jsr uielement_calluifunc		
+		jsr uielement_calluifunc
+
 :		rts
 
 ; ----------------------------------------------------------------------------------------------------
@@ -81,89 +82,6 @@ uilistbox_setselectedindex
 		adc (zpptr2),y
 		ldy #$04
 		sta (zpptr2),y
-
-		rts
-
-; ----------------------------------------------------------------------------------------------------
-
-uilistbox_startaddentries
-
-		jsr ui_getelementdataptr_1						; get data ptr to zpptr1
-
-		ldy #$02										; put scrollbar1_data in zpptr3
-		lda (zpptr1),y
-		sta zpptr3+0
-		iny
-		lda (zpptr1),y
-		sta zpptr3+1
-
-		lda #$00
-		ldy #$02
-		sta (zpptr3),y									; set scrollbar position to 0
-		ldy #$04
-		sta (zpptr3),y									; set selection index to 0
-		ldy #$06
-		sta (zpptr3),y									; set number of entries to 0
-
-		ldy #$04										; put start of text list into zpptr2
-		lda (zpptr1),y
-		sta zpptr2+0
-		iny
-		lda (zpptr1),y
-		sta zpptr2+1
-
-		ldy #$00										; put pointer to actual text entry in zpptrtmp
-		lda (zpptr2),y
-		sta zpptrtmp+0
-		iny
-		lda (zpptr2),y
-		sta zpptrtmp+1
-
-		rts
-
-uilistbox_endaddentries
-		ldy #$00
-		lda #$ff
-		sta (zpptr2),y
-		iny
-		sta (zpptr2),y
-		rts
-
-; ----------------------------------------------------------------------------------------------------
-
-uilistbox_getstringptr
-
-		jsr ui_getelementdataptr_1						; get data ptr to zpptr1
-
-		ldy #$04										; put start of text list into zpptr2
-		lda (zpptr1),y
-		sta zpptr2+0
-		iny
-		lda (zpptr1),y
-		sta zpptr2+1
-
-		ldy #$02										; get pointer to scrollbar data
-		lda (zpptr1),y
-		sta zpptrtmp+0
-		iny
-		lda (zpptr1),y
-		sta zpptrtmp+1
-
-		ldy #$04										; get selection index
-		lda (zpptrtmp),y
-		asl												; *2
-		adc zpptr2+0									; add to text list ptr
-		sta zpptr2+0
-		lda zpptr2+1
-		adc #$00
-		sta zpptr2+1
-
-		ldy #$00										; put pointer to actual text entry in zpptrtmp
-		lda (zpptr2),y
-		sta zpptrtmp+0
-		iny
-		lda (zpptr2),y
-		sta zpptrtmp+1
 
 		rts
 
@@ -256,6 +174,89 @@ uilistbox_confine
 		adc #$01
 		ldy #$02
 		sta (zpptr2),y									; put in startpos
+
+		rts
+
+; ----------------------------------------------------------------------------------------------------
+
+uilistbox_startaddentries
+
+		jsr ui_getelementdataptr_1						; get data ptr to zpptr1
+
+		ldy #$02										; put scrollbar1_data in zpptr3
+		lda (zpptr1),y
+		sta zpptr3+0
+		iny
+		lda (zpptr1),y
+		sta zpptr3+1
+
+		lda #$00
+		ldy #$02
+		sta (zpptr3),y									; set scrollbar position to 0
+		ldy #$04
+		sta (zpptr3),y									; set selection index to 0
+		ldy #$06
+		sta (zpptr3),y									; set number of entries to 0
+
+		ldy #$04										; put start of text list into zpptr2
+		lda (zpptr1),y
+		sta zpptr2+0
+		iny
+		lda (zpptr1),y
+		sta zpptr2+1
+
+		ldy #$00										; put pointer to actual text entry in zpptrtmp
+		lda (zpptr2),y
+		sta zpptrtmp+0
+		iny
+		lda (zpptr2),y
+		sta zpptrtmp+1
+
+		rts
+
+uilistbox_endaddentries
+		ldy #$00
+		lda #$ff
+		sta (zpptr2),y
+		iny
+		sta (zpptr2),y
+		rts
+
+; ----------------------------------------------------------------------------------------------------
+
+uilistbox_getstringptr
+
+		jsr ui_getelementdataptr_1						; get data ptr to zpptr1
+
+		ldy #$04										; put start of text list into zpptr2
+		lda (zpptr1),y
+		sta zpptr2+0
+		iny
+		lda (zpptr1),y
+		sta zpptr2+1
+
+		ldy #$02										; get pointer to scrollbar data
+		lda (zpptr1),y
+		sta zpptrtmp+0
+		iny
+		lda (zpptr1),y
+		sta zpptrtmp+1
+
+		ldy #$04										; get selection index
+		lda (zpptrtmp),y
+		asl												; *2
+		adc zpptr2+0									; add to text list ptr
+		sta zpptr2+0
+		lda zpptr2+1
+		adc #$00
+		sta zpptr2+1
+
+		ldy #$00										; put pointer to actual text entry in zpptrtmp
+		lda (zpptr2),y
+		sta zpptrtmp+0
+		iny
+		lda (zpptr2),y
+		sta zpptrtmp+1
 
 		rts
 
