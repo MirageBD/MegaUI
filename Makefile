@@ -1,6 +1,6 @@
 # -----------------------------------------------------------------------------
 
-megabuild		= 0
+megabuild		= 1
 finalbuild		= 1
 attachdebugger	= 0
 
@@ -75,6 +75,7 @@ $(EXE_DIR)/boot.o:	$(SRC_DIR)/boot.s \
 					$(DRVRS_SRC_DIR)/mouse.s \
 					$(DRVRS_SRC_DIR)/sdc.s \
 					$(DRVRS_SRC_DIR)/keyboard.s \
+					$(UI_SRC_DIR)/uimacros.s \
 					$(UI_SRC_DIR)/uicore.s \
 					$(UI_SRC_DIR)/uirect.s \
 					$(UI_SRC_DIR)/uidraw.s \
@@ -101,6 +102,7 @@ $(EXE_DIR)/boot.o:	$(SRC_DIR)/boot.s \
 					$(UIELT_SRC_DIR)/uiimage.s \
 					$(UIELT_SRC_DIR)/uipatternview.s \
 					$(UIELT_SRC_DIR)/uisequenceview.s \
+					$(UIELT_SRC_DIR)/uichannelview.s \
 					Makefile Linkfile
 	$(AS) $(ASFLAGS) -o $@ $<
 

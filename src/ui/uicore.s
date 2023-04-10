@@ -1,40 +1,5 @@
-.define uidraw_scrptr		$80
-.define uidraw_colptr		$84
-
-.define zpptr0				$88
-.define zpptr1		        $8a
-.define zpptr2		        $8c
-.define zpptr3		        $8e
-.define zpptrtmp	        $90			; used for z indexing into higher ram, so 4 bytes
-
 uicounter					.byte 0
 q160						.dword 160
-
-; ----------------------------------------------------------------------------------------------------
-
-.macro DEBUG_COLOUR
-.scope
-		sta $d020
-		ldy #$10
-		ldx #$00
-:		dex
-		bne :-
-		dey
-		bne :-
-.endscope
-.endmacro
-
-.macro UICORE_SELECT_ELEMENT element
-		lda #<element
-		sta zpptr0+0
-		lda #>element
-		sta zpptr0+1
-.endmacro
-
-.macro UICORE_CALLELEMENTFUNCTION element, function
-		UICORE_SELECT_ELEMENT element
-		jsr function
-.endmacro
 
 ; ----------------------------------------------------------------------------------------------------
 
@@ -89,8 +54,10 @@ q160						.dword 160
 		checkbox
 		radiobutton
 		image
+
 		patternview
 		sequenceview
+		channelview
 .endenum
 
 .enum UIEVENTTYPE
@@ -193,8 +160,10 @@ ui_element_indiceshi
 			.byte <.ident(.sprintf("uicheckbox_%s",		.string(eventtype))), >.ident(.sprintf("uicheckbox_%s",		.string(eventtype)))
 			.byte <.ident(.sprintf("uiradiobutton_%s",	.string(eventtype))), >.ident(.sprintf("uiradiobutton_%s",	.string(eventtype)))
 			.byte <.ident(.sprintf("uiimage_%s",		.string(eventtype))), >.ident(.sprintf("uiimage_%s",		.string(eventtype)))
+
 			.byte <.ident(.sprintf("uipatternview_%s",	.string(eventtype))), >.ident(.sprintf("uipatternview_%s",	.string(eventtype)))
 			.byte <.ident(.sprintf("uisequenceview_%s",	.string(eventtype))), >.ident(.sprintf("uisequenceview_%s",	.string(eventtype)))
+			.byte <.ident(.sprintf("uichannelview_%s",	.string(eventtype))), >.ident(.sprintf("uichannelview_%s",	.string(eventtype)))
 .endmacro
 
 		IMPLEMENT_UIEVENT layout

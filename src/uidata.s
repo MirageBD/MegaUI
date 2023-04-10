@@ -16,8 +16,8 @@ windows
 		;UIELEMENT_ADD ptrnptrlabel,			hexlabel,			$ffff,					 4, 19,  2,  1,  0,		hexlabelptrnptr_data,		uidefaultflags
 		;UIELEMENT_ADD ptrnrowlabel,			hexlabel,			$ffff,					14, 19,  2,  1,  0,		hexlabelptrnrow_data,		uidefaultflags
 
-		UIELEMENT_ADD ui_sequenceview,			nineslice,			sequenceviewelements,	 1, 22, 78,  4, 20,		$ffff,						uidefaultflags	
-		UIELEMENT_ADD ui_patternview,			nineslice,			patternviewelements,	 1, 26, 78, 21, 20,		$ffff,						uidefaultflags	
+		UIELEMENT_ADD ui_sequenceview,			nineslice,			sequenceviewelements,	 1, 21, 78,  4, 20,		$ffff,						uidefaultflags	
+		UIELEMENT_ADD ui_patternview,			nineslice,			patternviewelements,	 1, 25, 78, 22, 20,		$ffff,						uidefaultflags	
 
 		UIELEMENT_ADD ui_logo,					image,				$ffff,					68, 47, 11,  2,  0,		uilogo_data,				uidefaultflags
 
@@ -117,8 +117,12 @@ la1scrollbarelements
 ; ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ scrollbar elements
 
 patternviewelements
-		UIELEMENT_ADD tvlistbox,				patternview,		$ffff,					 5,  4,-14, -6,  0,		tvlistbox_data,				uidefaultflags
-		UIELEMENT_ADD tvscrollbar,				scrollbar,			tvscrollbarelements,	-4,  4,  2, -6,  0,		tvscrollbar_data,			uidefaultflags
+		UIELEMENT_ADD chanview1,				channelview,		$ffff,					 5,  2, 13,  2,  0,		chanview1_data,				uidefaultflags
+		UIELEMENT_ADD chanview2,				channelview,		$ffff,					22,  2, 13,  2,  0,		chanview2_data,				uidefaultflags
+		UIELEMENT_ADD chanview3,				channelview,		$ffff,					39,  2, 13,  2,  0,		chanview3_data,				uidefaultflags
+		UIELEMENT_ADD chanview4,				channelview,		$ffff,					56,  2, 13,  2,  0,		chanview4_data,				uidefaultflags
+		UIELEMENT_ADD tvlistbox,				patternview,		$ffff,					 5,  5,-14, -6,  0,		tvlistbox_data,				uidefaultflags
+		UIELEMENT_ADD tvscrollbar,				scrollbar,			tvscrollbarelements,	-4,  5,  2, -6,  0,		tvscrollbar_data,			uidefaultflags
 		UIELEMENT_END
 
 tvscrollbarelements
@@ -134,6 +138,11 @@ sequenceviewelements
 		UIELEMENT_END
 
 ; ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ data
+
+chanview1_data				.word $ffff,							0, $a0, $06 ; channel, colour, vu strength
+chanview2_data				.word $ffff,							1, $31, $06
+chanview3_data				.word $ffff,							2, $7a, $06
+chanview4_data				.word $ffff,							3, $3d, $06
 
 sequenceview_data			.word $ffff,							0
 

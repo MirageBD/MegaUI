@@ -191,12 +191,14 @@ entry_main
 		cli
 		
 loop
-		lda $d72a
-		;and #$10
-		;sta $d020
+
+		UICORE_CALLELEMENTFUNCTION chanview1, uichannelview_capturevu
+		UICORE_CALLELEMENTFUNCTION chanview2, uichannelview_capturevu
+		UICORE_CALLELEMENTFUNCTION chanview3, uichannelview_capturevu
+		UICORE_CALLELEMENTFUNCTION chanview4, uichannelview_capturevu
+
 		jmp loop
 
-		
 		lda prevpos+0									; if none of the update registers have changed, don't show anything
 		cmp $d72a
 		bne showdebug

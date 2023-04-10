@@ -25,6 +25,8 @@ basicend	.byte 0
 
 			jmp entry_main
 
+.include "ui/uimacros.s"
+
 .include "main.s"
 .include "irqload.s"
 .include "modplay.s"
@@ -58,8 +60,10 @@ basicend	.byte 0
 .include "ui/uielements/uicheckbox.s"
 .include "ui/uielements/uiradiobutton.s"
 .include "ui/uielements/uiimage.s"
+
 .include "ui/uielements/uipatternview.s"
 .include "ui/uielements/uisequenceview.s"
+.include "ui/uielements/uichannelview.s"
 
 .include "uidata.s"
 .include "uitext.s"
