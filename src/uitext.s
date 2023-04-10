@@ -1,4 +1,4 @@
-.align 256
+.segment "TEXT"
 
 uitxt_button0		.byte "play", 0
 uitxt_button1		.byte "stop", 0
@@ -9,8 +9,6 @@ uitxt_radiobutton	.byte "radiobtn", 0
 
 uitxt_paddlex		.byte "$d419", 0
 uitxt_paddley		.byte "$d41a", 0
-
-.align 256
 
 la1boxtxt			.word la1boxtxt00
 					.word la1boxtxt01
@@ -33,8 +31,6 @@ la1boxtxt			.word la1boxtxt00
 					.word la1boxtxt18
 					.word $ffff
 
-.align 256
-
 la1boxtxt00			.byte "Lorem ipsum  ", 0
 la1boxtxt01			.byte "dolor sit    ", 0
 la1boxtxt02			.byte "amet, consec-", 0
@@ -55,15 +51,11 @@ la1boxtxt16			.byte "cus ante, in ", 0
 la1boxtxt17			.byte "sagittis ante", 0
 la1boxtxt18			.byte "nibh ut mi.  ", 0
 
-.align 256
-
 tvboxtxt
 .repeat 64, I
 					.word .ident(.sprintf("tvboxtxt%s", .string(I)))
 .endrepeat
 					.word $ffff
-
-.align 256
 
 .repeat 64,I
 	.ident(.sprintf("tvboxtxt%s", .string(I)))
@@ -81,6 +73,7 @@ tvboxtxt
 
 
 .align 256
+
 fa1boxtxt			.word fa1boxtxt00
 					.word fa1boxtxt01
 					.word fa1boxtxt02
@@ -103,24 +96,25 @@ fa1boxtxt			.word fa1boxtxt00
 					.word fa1boxtxt19
 					.word $ffff
 
-.align 256
-fa1boxtxt00			.byte %00010000, $c0, ".", 0
-fa1boxtxt01			.byte %00010000, $c0, "..", 0
-fa1boxtxt02			.byte %00010000, $c0, "directory", 0
-fa1boxtxt03			.byte %00100000, $31, "xmas65.d81", 0
-fa1boxtxt04			.byte %00100000, $31, "megaui.d81", 0
-fa1boxtxt05			.byte %00100000, $31, "xmas65.d81", 0
-fa1boxtxt06			.byte %00000000, $3d, "alphavil.mod", 0
-fa1boxtxt07			.byte %00000000, $3d, "cyberno2.mod", 0
-fa1boxtxt08			.byte %00000000, $3d, "impact14.mod", 0
-fa1boxtxt09			.byte %00000000, $3d, "spankit.mod", 0
-fa1boxtxt10			.byte %00000000, $3d, "testlast.mod", 0
-fa1boxtxt11			.byte %00000000, $3d, "spiritmx.mod", 0
-fa1boxtxt12			.byte %00000000, $3d, "nuseup42.mod", 0
-fa1boxtxt13			.byte %00100000, $0d, "samples.bin", 0
-fa1boxtxt14			.byte %00100000, $0d, "glyphs.bin", 0
-fa1boxtxt15			.byte %00100000, $0d, "font.bin", 0
-fa1boxtxt16			.byte %00100000, $0d, "to.bin", 0
-fa1boxtxt17			.byte %00100000, $0d, "cs.bin", 0
-fa1boxtxt18			.byte %00100000, $0d, "foo.bin", 0
-fa1boxtxt19			.byte %00100000, $0d, "bar.bin", 0
+.align 256			; leave enough room for fa1boxtxt to grow. 128 directory entries allowed
+
+fa1boxtxt00			.byte %00010000, $c0, ".",            0
+fa1boxtxt01			.byte %00010000, $c0, "..",           0
+fa1boxtxt02			.byte %00010000, $c0, "directory",    0
+fa1boxtxt03			.byte %00100000, $31, "xmas65.d81",   0
+fa1boxtxt04			.byte %00100000, $31, "megaui.d81",   0
+fa1boxtxt05			.byte %00100000, $31, "xmas65.d81",   0
+fa1boxtxt06			.byte %00100000, $3d, "alphavil.mod", 0
+fa1boxtxt07			.byte %00100000, $3d, "cyberno2.mod", 0
+fa1boxtxt08			.byte %00100000, $3d, "impact14.mod", 0
+fa1boxtxt09			.byte %00100000, $3d, "spankit.mod",  0
+fa1boxtxt10			.byte %00100000, $3d, "testlast.mod", 0
+fa1boxtxt11			.byte %00100000, $3d, "spiritmx.mod", 0
+fa1boxtxt12			.byte %00100000, $3d, "nuseup42.mod", 0
+fa1boxtxt13			.byte %00100000, $0d, "samples.bin",  0
+fa1boxtxt14			.byte %00100000, $0d, "glyphs.bin",   0
+fa1boxtxt15			.byte %00100000, $0d, "font.bin",     0
+fa1boxtxt16			.byte %00100000, $0d, "to.bin",       0
+fa1boxtxt17			.byte %00100000, $0d, "cs.bin",       0
+fa1boxtxt18			.byte %00100000, $0d, "foo.bin",      0
+fa1boxtxt19			.byte %00100000, $0d, "bar.bin",      0

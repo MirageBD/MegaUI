@@ -1,6 +1,4 @@
 
-.align 256
-
 ; ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ main windows
 
 root
@@ -130,24 +128,14 @@ tvscrollbarelements
 
 ; ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ data
 
-.align 256
-
 paddlexlabel_data			.word $ffff,							uitxt_paddlex
 hexlabel1_data				.word $ffff,							mouse_d419, 1
 paddleylabel_data			.word $ffff,							uitxt_paddley
 hexlabel2_data				.word $ffff,							mouse_d41a, 1
 
-; adrPepPtn0 = first pattern
-; ptrPepMSeq = pointers to patterns
-
-; cntPepSeqP = current pattern
-; cntPepPRow = current row
-
 hexlabelptrnidx_data		.word $ffff,							uipatternview_patternindex, 1
 hexlabelptrnptr_data		.word $ffff,							uipatternview_patternptr, 4
 hexlabelptrnrow_data		.word $ffff,							uipatternview_patternrow, 1
-
-
 
 uilogo_data					.word $ffff,							((14*16+ 0) | (14*16+ 0)<<8)
 

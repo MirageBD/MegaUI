@@ -23,6 +23,8 @@ filebuffer = $0200
 basicend	.byte 0
 			.byte 0
 
+			jmp entry_main
+
 .include "main.s"
 .include "irqload.s"
 .include "modplay.s"

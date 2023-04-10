@@ -1,5 +1,3 @@
-.align 256
-
 .define uidraw_scrptr		$80
 .define uidraw_colptr		$84
 

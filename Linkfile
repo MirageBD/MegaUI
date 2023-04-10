@@ -6,4 +6,6 @@ MEMORY
 SEGMENTS
 {
 	BASIC:			load=RAM, start=$2001;
+	MAIN:			load=RAM, align=256;
+	TEXT:			load=RAM, align=256;
 }
