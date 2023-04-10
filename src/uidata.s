@@ -12,11 +12,12 @@ windows
 		UIELEMENT_ADD ui_windows1,				debugelement,		window1area,			 1,  0, 38, 18,  0,		$ffff,						uidefaultflags
 		UIELEMENT_ADD ui_windows2,				debugelement,		window2area,			40,  0, 39, 18, 20,		$ffff,						uidefaultflags
 
-		UIELEMENT_ADD ptrnidxlabel,				hexlabel,			$ffff,					 1, 19,  2,  1,  0,		hexlabelptrnidx_data,		uidefaultflags
-		UIELEMENT_ADD ptrnptrlabel,				hexlabel,			$ffff,					 4, 19,  2,  1,  0,		hexlabelptrnptr_data,		uidefaultflags
-		UIELEMENT_ADD ptrnrowlabel,				hexlabel,			$ffff,					14, 19,  2,  1,  0,		hexlabelptrnrow_data,		uidefaultflags
+		;UIELEMENT_ADD ptrnidxlabel,			hexlabel,			$ffff,					 1, 19,  2,  1,  0,		hexlabelptrnidx_data,		uidefaultflags
+		;UIELEMENT_ADD ptrnptrlabel,			hexlabel,			$ffff,					 4, 19,  2,  1,  0,		hexlabelptrnptr_data,		uidefaultflags
+		;UIELEMENT_ADD ptrnrowlabel,			hexlabel,			$ffff,					14, 19,  2,  1,  0,		hexlabelptrnrow_data,		uidefaultflags
 
-		UIELEMENT_ADD ui_patternview,			nineslice,			patternviewelements,	 1, 25, 78, 21, 20,		$ffff,						uidefaultflags	
+		UIELEMENT_ADD ui_sequenceview,			nineslice,			sequenceviewelements,	 1, 22, 78,  4, 20,		$ffff,						uidefaultflags	
+		UIELEMENT_ADD ui_patternview,			nineslice,			patternviewelements,	 1, 26, 78, 21, 20,		$ffff,						uidefaultflags	
 
 		UIELEMENT_ADD ui_logo,					image,				$ffff,					68, 47, 11,  2,  0,		uilogo_data,				uidefaultflags
 
@@ -116,7 +117,7 @@ la1scrollbarelements
 ; ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ scrollbar elements
 
 patternviewelements
-		UIELEMENT_ADD tvlistbox,				patternview,			$ffff,					 5,  4,-14, -6,  0,		tvlistbox_data,				uidefaultflags
+		UIELEMENT_ADD tvlistbox,				patternview,		$ffff,					 5,  4,-14, -6,  0,		tvlistbox_data,				uidefaultflags
 		UIELEMENT_ADD tvscrollbar,				scrollbar,			tvscrollbarelements,	-4,  4,  2, -6,  0,		tvscrollbar_data,			uidefaultflags
 		UIELEMENT_END
 
@@ -128,12 +129,20 @@ tvscrollbarelements
 
 ; ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ data
 
+sequenceviewelements
+		UIELEMENT_ADD sequenceview1,			sequenceview,			$ffff,				 1,  1,-1, -1,  0,		sequenceview_data,			uidefaultflags
+		UIELEMENT_END
+
+; ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ data
+
+sequenceview_data			.word $ffff,							0
+
 paddlexlabel_data			.word $ffff,							uitxt_paddlex
 hexlabel1_data				.word $ffff,							mouse_d419, 1
 paddleylabel_data			.word $ffff,							uitxt_paddley
 hexlabel2_data				.word $ffff,							mouse_d41a, 1
 
-hexlabelptrnidx_data		.word $ffff,							uipatternview_patternindex, 1
+hexlabelptrnidx_data		.word $ffff,							uisequenceview_patternindex, 1
 hexlabelptrnptr_data		.word $ffff,							uipatternview_patternptr, 4
 hexlabelptrnrow_data		.word $ffff,							uipatternview_patternrow, 1
 

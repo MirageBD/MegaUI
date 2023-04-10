@@ -100,6 +100,7 @@ $(EXE_DIR)/boot.o:	$(SRC_DIR)/boot.s \
 					$(UIELT_SRC_DIR)/uiradiobutton.s \
 					$(UIELT_SRC_DIR)/uiimage.s \
 					$(UIELT_SRC_DIR)/uipatternview.s \
+					$(UIELT_SRC_DIR)/uisequenceview.s \
 					Makefile Linkfile
 	$(AS) $(ASFLAGS) -o $@ $<
 

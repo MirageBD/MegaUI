@@ -257,11 +257,14 @@ ui_update
 		UICORE_CALLELEMENTFUNCTION hexlabel2, uihexlabel_draw
 
 		UICORE_CALLELEMENTFUNCTION tvlistbox, uipatternview_update
+		UICORE_CALLELEMENTFUNCTION sequenceview1, uisequenceview_update
 
-		UICORE_CALLELEMENTFUNCTION ptrnidxlabel, uihexlabel_draw
-		UICORE_CALLELEMENTFUNCTION ptrnptrlabel, uihexlabel_draw
-		UICORE_CALLELEMENTFUNCTION tvlistbox, uipatternview_draw
+		;UICORE_CALLELEMENTFUNCTION ptrnidxlabel, uihexlabel_draw
+		;UICORE_CALLELEMENTFUNCTION ptrnptrlabel, uihexlabel_draw
 		;UICORE_CALLELEMENTFUNCTION ptrnrowlabel, uihexlabel_draw
+
+		UICORE_CALLELEMENTFUNCTION sequenceview1, uisequenceview_draw
+		UICORE_CALLELEMENTFUNCTION tvlistbox, uipatternview_draw
 
         rts
 

@@ -3,20 +3,17 @@
 uipatternview_startpos				.byte 0
 uipatternview_current_draw_pos		.byte 0
 uipatternview_middlepos				.byte 0
-uipatternview_rowpos					.byte 0
+uipatternview_rowpos				.byte 0
 
 ; ----------------------------------------------------------------------------------------------------
 
-uipatternview_patternindex			.byte 0
-uipatternview_patternptr				.dword 0
-uipatternview_patternrow				.byte 0
+uipatternview_patternptr			.dword 0
+uipatternview_patternrow			.byte 0
 
 ; ----------------------------------------------------------------------------------------------------
 
 uipatternview_update
 		lda cntPepSeqP
-		sta uipatternview_patternindex
-
 		taz
 		lda	[ptrPepMSeq],z
 		asl
@@ -41,8 +38,7 @@ uipatternview_update
 		bne :+
 		rts
 
-:
-		jsr ui_getelementdataptr_1						; get data ptr to zpptr1
+:		jsr ui_getelementdataptr_1						; get data ptr to zpptr1
 
 		ldy #$02										; put scrollbar1_data into zpptr2
 		lda (zpptr1),y
@@ -354,6 +350,7 @@ uipatternview_press
 		rts
 
 uipatternview_doubleclick
+		jsr uipatternview_release
 		rts
 
 uipatternview_keyrelease
@@ -386,6 +383,9 @@ uipatternview_draw
 uipatternview_release
 		jsr uipatternview_setselectedindex
 		jsr uipatternview_draw
+
+		jsr uielement_calluifunc
+
 		rts
 
 uipatternview_setselectedindex

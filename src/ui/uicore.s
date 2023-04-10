@@ -90,6 +90,7 @@ q160						.dword 160
 		radiobutton
 		image
 		patternview
+		sequenceview
 .endenum
 
 .enum UIEVENTTYPE
@@ -193,6 +194,7 @@ ui_element_indiceshi
 			.byte <.ident(.sprintf("uiradiobutton_%s",	.string(eventtype))), >.ident(.sprintf("uiradiobutton_%s",	.string(eventtype)))
 			.byte <.ident(.sprintf("uiimage_%s",		.string(eventtype))), >.ident(.sprintf("uiimage_%s",		.string(eventtype)))
 			.byte <.ident(.sprintf("uipatternview_%s",	.string(eventtype))), >.ident(.sprintf("uipatternview_%s",	.string(eventtype)))
+			.byte <.ident(.sprintf("uisequenceview_%s",	.string(eventtype))), >.ident(.sprintf("uisequenceview_%s",	.string(eventtype)))
 .endmacro
 
 		IMPLEMENT_UIEVENT layout

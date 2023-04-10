@@ -59,6 +59,7 @@ basicend	.byte 0
 .include "ui/uielements/uiradiobutton.s"
 .include "ui/uielements/uiimage.s"
 .include "ui/uielements/uipatternview.s"
+.include "ui/uielements/uisequenceview.s"
 
 .include "uidata.s"
 .include "uitext.s"
