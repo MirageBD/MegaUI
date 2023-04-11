@@ -364,16 +364,16 @@ uipatternview_keypress
 
 		cmp KEYBOARD_CURSORDOWN
 		bne :+
-		;jsr uipatternview_increase_selection
-		;jsr uipatternview_confine
-		;jsr uielement_calluifunc		
+		jsr uipatternview_increase_selection
+		jsr uipatternview_confine
+		jsr uielement_calluifunc
 		rts
 
 :		cmp KEYBOARD_CURSORUP
 		bne :+
-		;jsr uipatternview_decrease_selection
-		;jsr uipatternview_confine
-		;jsr uielement_calluifunc		
+		jsr uipatternview_decrease_selection
+		jsr uipatternview_confine
+		jsr uielement_calluifunc
 :		rts
 
 ; ----------------------------------------------------------------------------------------------------
@@ -385,6 +385,7 @@ uipatternview_draw
 
 uipatternview_release
 		jsr uipatternview_setselectedindex
+		jsr uipatternview_confine
 		jsr uipatternview_draw
 
 		jsr uielement_calluifunc
@@ -435,7 +436,7 @@ uipatternview_increase_selection
 		sta zpptr2+1
 
 		clc
-		ldy #$04										; get selection index
+		ldy #$02										; get start index
 		lda (zpptr2),y
 		adc #$01
 		sta (zpptr2),y
@@ -453,7 +454,7 @@ uipatternview_decrease_selection
 		sta zpptr2+1
 
 		sec
-		ldy #$04										; get selection index
+		ldy #$02										; get start index
 		lda (zpptr2),y
 		sbc #$01
 		sta (zpptr2),y
@@ -470,7 +471,7 @@ uipatternview_confine
 		lda (zpptr1),y
 		sta zpptr2+1
 
-		ldy #$04										; get selection index
+		ldy #$02										; get start index
 		lda (zpptr2),y
 		bpl :+											; if negative then it's definitely wrong
 		lda #$00
@@ -482,7 +483,7 @@ uipatternview_confine
 		lda (zpptr2),y
 		sec
 		sbc #$01
-		ldy #$04										 ; get selection
+		ldy #$02										; get start
 		sta (zpptr2),y
 		rts
 
@@ -491,7 +492,7 @@ uipatternview_confine
 		sbc (zpptr2),y
 
 		bpl :+											; ok when > 0
-		ldy #$04										; when < get selection index and put in startpos
+		ldy #$02										; when < get start index and put in startpos
 		lda (zpptr2),y
 		ldy #$02
 		sta (zpptr2),y
@@ -502,7 +503,7 @@ uipatternview_confine
 		bpl :+											; ok if < height
 		rts
 
-:		ldy #$04										; get selection index
+:		ldy #$02										; get start index
 		lda (zpptr2),y
 		sec
 		ldy #UIELEMENT::height
