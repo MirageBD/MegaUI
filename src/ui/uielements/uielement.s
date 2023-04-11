@@ -105,14 +105,19 @@ uielement_keyrelease
 
 ; ----------------------------------------------------------------------------------------------------
 
+rzpptr0	.word 0
+
 uielement_calluifunc
+
+		lda zpptr0+0
+		sta rzpptr0+0
+		lda zpptr0+1
+		sta rzpptr0+1
 
 		jsr ui_getelementdataptr_1
 
-		; LV TODO - check for ff first before populating everything?
-
 		ldy #$00								; put ptr to elements and functions in zpptr1
- 		lda (zpptr1),y
+ 		lda (zpptr1),y							; LV TODO - check for ff first before populating everything?
 		sta uecuf1+1
 		sta uecuf2+1
 		sta uecuf3+1
@@ -123,7 +128,7 @@ uielement_calluifunc
 		sta uecuf2+2
 		sta uecuf3+2
 		sta uecuf4+2
-		cmp #$ff								; back out if element/function ptr is null
+		cmp #$ff								; early out if element/function ptr is null
 		beq uielement_calluifunc_end
 
 		ldy #$00								; read ui element to act upon and put in zpptr0
@@ -150,6 +155,12 @@ uecuf5	jsr $babe								; execute function
 		bra uecuf1
 
 uielement_calluifunc_end
+
+		lda rzpptr0+0
+		sta zpptr0+0
+		lda rzpptr0+1
+		sta zpptr0+1
+
 		rts
 
 ; ----------------------------------------------------------------------------------------------------
