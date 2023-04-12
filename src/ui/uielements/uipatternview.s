@@ -5,8 +5,42 @@ uipatternview_current_draw_pos		.byte 0
 uipatternview_middlepos				.byte 0
 uipatternview_rowpos				.byte 0
 
-uipatternview_cursorstart			.byte 4
-uipatternview_cursorend				.byte 6
+upv_columnsubindices
+		.byte 0, 1, 2, 3, 4
+		.byte 0, 1, 2, 3, 4
+		.byte 0, 1, 2, 3, 4
+		.byte 0, 1, 2, 3, 4
+
+upv_columnindices
+		.byte 0, 0, 0, 0, 0
+		.byte 1, 1, 1, 1, 1
+		.byte 2, 2, 2, 2, 2
+		.byte 3, 3, 3, 3, 3
+
+upv_columnstarts
+		.byte      0,      6,      11,      16,      19
+		.byte 25 + 0, 25 + 6, 25 + 11, 25 + 16, 25 + 19
+		.byte 50 + 0, 50 + 6, 50 + 11, 50 + 16, 50 + 19
+		.byte 75 + 0, 75 + 6, 75 + 11, 75 + 16, 75 + 19
+
+upv_columnends		
+		.byte      5,      10,      15,      18,      21
+		.byte 25 + 5, 25 + 10, 25 + 15, 25 + 18, 25 + 21
+		.byte 50 + 5, 50 + 10, 50 + 15, 50 + 18, 50 + 21
+		.byte 75 + 5, 75 + 10, 75 + 15, 75 + 18, 75 + 21
+
+upv_reversecolumnlookup
+
+		; "... .. .. ...    "    4*17-4 = 64 wide    4*13+3*4 = 64 wide
+
+		.byte    0,    0,    0,    1,    1,    1,    2,    2,    2,    3,    3,    4,    4,    4,    4,    4,    4
+		.byte  5+0,  5+0,  5+0,  5+1,  5+1,  5+1,  5+2,  5+2,  5+2,  5+3,  5+3,  5+4,  5+4,  5+4,  5+4,  5+4,  5+4
+		.byte 10+0, 10+0, 10+0, 10+1, 10+1, 10+1, 10+2, 10+2, 10+2, 10+3, 10+3, 10+4, 10+4, 10+4, 10+4, 10+4, 10+4
+		.byte 15+0, 15+0, 15+0, 15+1, 15+1, 15+1, 15+2, 15+2, 15+2, 15+3, 15+3, 15+4, 15+4
+
+uipatternview_columnindex			.byte 0
+uipatternview_cursorstart			.byte 0
+uipatternview_cursorend				.byte 5
 
 ; ----------------------------------------------------------------------------------------------------
 
@@ -365,15 +399,31 @@ uipatternview_keypress
 		cmp KEYBOARD_CURSORDOWN
 		bne :+
 		jsr uipatternview_increase_selection
-		jsr uipatternview_confine
+		jsr uipatternview_confinevertical
 		jsr uielement_calluifunc
 		rts
 
 :		cmp KEYBOARD_CURSORUP
 		bne :+
 		jsr uipatternview_decrease_selection
-		jsr uipatternview_confine
+		jsr uipatternview_confinevertical
 		jsr uielement_calluifunc
+		rts
+:		
+		cmp KEYBOARD_CURSORLEFT
+		bne :+
+		dec uipatternview_columnindex
+		jsr uipatternview_setvariablesfromindex
+		jsr uielement_calluifunc
+		rts
+
+:		cmp KEYBOARD_CURSORRIGHT
+		bne :+
+		inc uipatternview_columnindex
+		jsr uipatternview_setvariablesfromindex
+		jsr uielement_calluifunc
+		rts
+
 :		rts
 
 ; ----------------------------------------------------------------------------------------------------
@@ -385,7 +435,7 @@ uipatternview_draw
 
 uipatternview_release
 		jsr uipatternview_setselectedindex
-		jsr uipatternview_confine
+		jsr uipatternview_confinevertical
 		jsr uipatternview_draw
 
 		jsr uielement_calluifunc
@@ -421,6 +471,31 @@ uipatternview_setselectedindex
 		ldy #$02
 		sta (zpptr2),y
 
+		lsr uimouse_uielement_xpos+1
+		ror uimouse_uielement_xpos+0
+		lsr uimouse_uielement_xpos+1
+		ror uimouse_uielement_xpos+0
+		lsr uimouse_uielement_xpos+1
+		ror uimouse_uielement_xpos+0
+		ldx uimouse_uielement_xpos+0
+
+		lda upv_reversecolumnlookup,x
+		sta uipatternview_columnindex
+		jsr uipatternview_setvariablesfromindex
+
+		rts
+
+; ----------------------------------------------------------------------------------------------------
+
+uipatternview_setvariablesfromindex
+
+		jsr uipatternview_confinehorizontal
+
+		ldx uipatternview_columnindex
+		lda upv_columnstarts,x
+		sta uipatternview_cursorstart
+		lda upv_columnends,x
+		sta uipatternview_cursorend
 		rts
 
 ; ----------------------------------------------------------------------------------------------------
@@ -461,7 +536,19 @@ uipatternview_decrease_selection
 
 		rts
 
-uipatternview_confine
+uipatternview_confinehorizontal
+
+		lda uipatternview_columnindex
+		bpl :+
+		lda #$00
+		sta uipatternview_columnindex
+:		cmp #20
+		bmi :+
+		lda #19
+		sta uipatternview_columnindex
+:		rts
+
+uipatternview_confinevertical
 		jsr ui_getelementdataptr_1						; get data ptr to zpptr1
 
 		ldy #$02										; put scrollbar1_data in zpptr2
@@ -477,10 +564,9 @@ uipatternview_confine
 		lda #$00
 		sta (zpptr2),y
 
-:		ldy #$06
-		cmp (zpptr2),y									; compare with numentries
+:		cmp #64											; compare with pattern height
 		bmi :+											; ok when smaller
-		lda (zpptr2),y
+		lda #64
 		sec
 		sbc #$01
 		ldy #$02										; get start
@@ -699,20 +785,40 @@ uipatternview_drawmiddleline
 
 		ldy #$00
 		ldz #$00
+:
+		cpy uipatternview_cursorstart
+		bmi :+
+		cpy uipatternview_cursorend
+		bpl :+
+
+		lda #$00
+		sta upvdml1+1
+		lda #$06
+		sta upvdml2+1
+		lda (zpptrtmp),y
+		beq uipatternview_drawmiddleline_end
+		cmp #$ff
+		bne :+++
+		iny
+		iny
+		bra :++
+
+:		lda #$c0
+		sta upvdml1+1
 :		lda (zpptrtmp),y
-		beq :++
+		beq uipatternview_drawmiddleline_end
 		cmp #$ff
 		bne :+
 		iny
 		lda (zpptrtmp),y
-		sta upvdml+1
+		sta upvdml2+1
 		iny
 		bra :-
 
 :		clc
-		adc #$c0
+upvdml1	adc #$c0
 		sta [uidraw_scrptr],z
-upvdml	lda #$00
+upvdml2	lda #$00
 		sta [uidraw_colptr],z
 		inz
 		lda #$04
@@ -721,9 +827,10 @@ upvdml	lda #$00
 		sta [uidraw_colptr],z
 		inz
 		iny
- 		bra :--
+ 		bra :----
 
-:		rts
+uipatternview_drawmiddleline_end
+		rts
 
 ; ----------------------------------------------------------------------------------------------------
 
