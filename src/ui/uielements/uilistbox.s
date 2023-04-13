@@ -28,9 +28,6 @@ uilistbox_press
 uilistbox_doubleclick
 		rts
 
-uilistbox_keyrelease
-		rts
-
 uilistbox_keypress
 		lda keyboard_pressedeventarg
 
@@ -48,6 +45,9 @@ uilistbox_keypress
 		jsr uielement_calluifunc
 
 :		rts
+
+uilistbox_keyrelease
+		rts
 
 ; ----------------------------------------------------------------------------------------------------
 

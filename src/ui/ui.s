@@ -94,8 +94,10 @@ ui_setup
 
 		lda #<ui_root1								; get pointer to window x
 		sta uielement_ptr+0
+		sta uikeyboard_focuselement+0
 		lda #>ui_root1
 		sta uielement_ptr+1
+		sta uikeyboard_focuselement+1
 		lda #$00
 		sta uielement_layoutxpos
 		sta uielement_layoutypos

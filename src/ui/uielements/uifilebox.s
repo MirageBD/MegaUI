@@ -39,6 +39,10 @@ uifilebox_keypress
 uifilebox_keypress_end
 		rts
 
+uifilebox_keyrelease
+		jsr uilistbox_keyrelease
+		rts
+
 uifilebox_opendir
 
 		; turn off disk access when running in xemu
@@ -70,10 +74,6 @@ uifilebox_opendir
 		jsr uifilebox_endaddentries
 		rts
 
-uifilebox_keyrelease
-		jsr uilistbox_keyrelease
-		rts
-		
 uifilebox_draw
 		jsr uilistbox_drawbkgreleased
 		jsr uifilebox_drawlistreleased

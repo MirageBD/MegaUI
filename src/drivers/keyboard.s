@@ -1,3 +1,18 @@
+; ----------------------------------------------------------------------------------------------------
+
+keyboard_pressed					.byte $ff
+keyboard_prevpressed				.byte $ff
+
+keyboard_shouldsendpressevent		.byte $00
+keyboard_shouldsendreleaseevent		.byte $00
+
+keyboard_pressedeventarg			.byte $00
+keyboard_releasedeventarg			.byte $00
+
+keyboard_columnkeys					.byte $00, $00, $00, $00, $00, $00, $00, $00, $00
+
+; ----------------------------------------------------------------------------------------------------
+
 ; KEYBOARD MATRIX
 ;
 ;         0        1        2         3       4         5       6        7        8
@@ -59,25 +74,81 @@
 ; |   | SCROLL |        |        |        |        |        |        |        |
 ; +---+--------+--------+--------+--------+--------+--------+--------+--------+
 
-.define KEYBOARD_RETURN			#1
-.define KEYBOARD_CURSORRIGHT	#2
-.define KEYBOARD_CURSORDOWN		#7
-.define KEYBOARD_CURSORLEFT		#$80 + 2
-.define KEYBOARD_CURSORUP		#$80 + 7
+keyboard_toascii
+;              0   1   2   3   4   5   6   7
+		.byte  0,  0,  0,  0,  0,  0,  0,  0; 0
+		.byte 51, 23,  1, 52, 26, 19,  5,  0; 1
+		.byte 53, 18,  4, 54,  3,  6, 20, 24; 2
+		.byte 55, 25,  7, 56,  2,  8, 21, 22; 3
+		.byte 57,  9, 10, 48, 13, 11, 15, 14; 4
+		.byte  0, 16, 12,  0,  0,  0,  0,  0; 5
+		.byte  0,  0,  0,  0,  0,  0,  0,  0; 6
+		.byte 49,  0,  0, 50,  0,  0, 17,  0; 7
+		.byte  0,  0,  0,  0,  0,  0,  0,  0; 8
+
+.define KEYBOARD_INSERTDEL		#0*8 + 0					; backspace in xemu
+.define KEYBOARD_RETURN			#0*8 + 1
+.define KEYBOARD_CURSORRIGHT	#0*8 + 2
+.define KEYBOARD_CURSORDOWN		#0*8 + 7
+.define KEYBOARD_CURSORLEFT		#$80 + 0*8+2
+.define KEYBOARD_CURSORUP		#$80 + 0*8+7
+.define KEYBOARD_KEY0			#4*8 + 3
+.define KEYBOARD_KEY1			#7*8 + 0
+.define KEYBOARD_KEY2			#7*8 + 3
+.define KEYBOARD_KEY3			#1*8 + 0
+.define KEYBOARD_KEY4			#1*8 + 3
+.define KEYBOARD_KEY5			#2*8 + 0
+.define KEYBOARD_KEY6			#2*8 + 3
+.define KEYBOARD_KEY7			#3*8 + 0
+.define KEYBOARD_KEY8			#3*8 + 3
+.define KEYBOARD_KEY9			#4*8 + 0
+.define KEYBOARD_NOKEY			#255
 
 ; ----------------------------------------------------------------------------------------------------
 
-keyboard_matrix ; columns
+keyboard_asciiishex
 
-		.byte $00, $00, $00, $00, $00, $00, $00, $00
-		.byte $00, $00, $ff, $00, $00, $00, $00, $00
-		.byte $00, $00, $00, $00, $00, $00, $00, $00
-		.byte $00, $00, $00, $00, $00, $00, $00, $00
-		.byte $00, $00, $00, $00, $00, $00, $00, $00
-		.byte $00, $00, $00, $00, $00, $00, $00, $00
-		.byte $00, $00, $00, $00, $00, $00, $00, $00
-		.byte $00, $00, $00, $00, $00, $00, $00, $00
-		.byte $00, $00, $00, $00, $00, $00, $00, $00
+		cmp #$30+0
+		bmi :+
+		cmp #$30+10
+		bpl :+
+		sec
+		rts
+
+:		cmp #1+0
+		bmi :+
+		cmp #1+6
+		bpl :+
+		sec
+		rts
+
+:		clc
+		rts
+; ----------------------------------------------------------------------------------------------------
+
+keyboard_asciiisalpha
+		cmp #1+0
+		bmi :+
+		cmp #1+26
+		bpl :+
+		sec
+		rts
+
+:		clc
+		rts
+
+; ----------------------------------------------------------------------------------------------------
+
+keyboard_asciiisnumeric
+		cmp #$30+0
+		bmi :+
+		cmp #$30+10
+		bpl :+
+		sec
+		rts
+
+:		clc
+		rts
 
 ; ----------------------------------------------------------------------------------------------------
 
@@ -195,28 +266,5 @@ keyboard_set_keypressed
 		sta keyboard_pressed
 		pla
 		rts
-
-; ----------------------------------------------------------------------------------------------------
-
-keyboard_pressed
-		.byte $ff
-
-keyboard_prevpressed
-		.byte $ff
-
-keyboard_shouldsendpressevent
-		.byte $00
-
-keyboard_pressedeventarg
-		.byte $00
-
-keyboard_shouldsendreleaseevent
-		.byte $00
-
-keyboard_releasedeventarg
-		.byte $00
-
-keyboard_columnkeys
-		.byte $00, $00, $00, $00, $00, $00, $00, $00, $00
 
 ; ----------------------------------------------------------------------------------------------------

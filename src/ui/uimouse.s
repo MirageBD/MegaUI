@@ -400,6 +400,12 @@ uimouse_handle_release
 
 :		jsr uimouse_test_minmax
 		bcc :+											; we are inside the rect, do the rest
+
+		lda zpptr0+0
+		sta uikeyboard_focuselement+0
+		lda zpptr0+1
+		sta uikeyboard_focuselement+1
+
 		SEND_EVENT release
 
 :		rts

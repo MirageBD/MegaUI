@@ -5,17 +5,9 @@ uipatternview_current_draw_pos		.byte 0
 uipatternview_middlepos				.byte 0
 uipatternview_rowpos				.byte 0
 
-upv_columnsubindices
-		.byte 0, 1, 2, 3, 4
-		.byte 0, 1, 2, 3, 4
-		.byte 0, 1, 2, 3, 4
-		.byte 0, 1, 2, 3, 4
-
-upv_columnindices
-		.byte 0, 0, 0, 0, 0
-		.byte 1, 1, 1, 1, 1
-		.byte 2, 2, 2, 2, 2
-		.byte 3, 3, 3, 3, 3
+uipatternview_columnindex			.byte 0
+uipatternview_cursorstart			.byte 0
+uipatternview_cursorend				.byte 5
 
 upv_columnstarts
 		.byte      0,      6,      11,      16,      19
@@ -32,15 +24,10 @@ upv_columnends
 upv_reversecolumnlookup
 
 		; "... .. .. ...    "    4*17-4 = 64 wide    4*13+3*4 = 64 wide
-
 		.byte    0,    0,    0,    1,    1,    1,    2,    2,    2,    3,    3,    4,    4,    4,    4,    4,    4
 		.byte  5+0,  5+0,  5+0,  5+1,  5+1,  5+1,  5+2,  5+2,  5+2,  5+3,  5+3,  5+4,  5+4,  5+4,  5+4,  5+4,  5+4
 		.byte 10+0, 10+0, 10+0, 10+1, 10+1, 10+1, 10+2, 10+2, 10+2, 10+3, 10+3, 10+4, 10+4, 10+4, 10+4, 10+4, 10+4
 		.byte 15+0, 15+0, 15+0, 15+1, 15+1, 15+1, 15+2, 15+2, 15+2, 15+3, 15+3, 15+4, 15+4
-
-uipatternview_columnindex			.byte 0
-uipatternview_cursorstart			.byte 0
-uipatternview_cursorend				.byte 5
 
 ; ----------------------------------------------------------------------------------------------------
 
@@ -69,7 +56,7 @@ uipatternview_update
 		lda cntPepPRow
 		sta uipatternview_patternrow
 
-		jsr uipatternview_decodepattern
+		; jsr uipatternview_decodepattern
 
 		lda peppitoPlaying
 		bne :+
@@ -123,38 +110,38 @@ upvdp_channelloop
 		ldz #$00									; get sample number
 		lda [zpptrtmp],z
 		and #$f0
-		sta uipatternview_sample
+		sta upv_decodesample
 		ldz #$02
 		lda [zpptrtmp],z
 		lsr
 		lsr
 		lsr
 		lsr
-		ora uipatternview_sample
-		sta uipatternview_sample
+		ora upv_decodesample
+		sta upv_decodesample
 
 		ldz #$01									; get note period
 		lda [zpptrtmp],z
-		sta uipatternview_noteperiod+0
+		sta upv_decodenoteperiod+0
 		ldz #$00
 		lda [zpptrtmp],z
 		and #$0f
-		sta uipatternview_noteperiod+1
+		sta upv_decodenoteperiod+1
 
 		ldz #$02									; get effect command
 		lda [zpptrtmp],z
 		and #$0f
-		sta uipatternview_effectcommand
+		sta upv_decodeeffectcommand
 		ldz #$03									; get effect data
 		lda [zpptrtmp],z
-		sta uipatternview_effectdata
+		sta upv_decodeeffectdata
 
 		ldx #$00									; find string for note period
 :		lda upv_tunefreq+0,x
-		cmp uipatternview_noteperiod+0
+		cmp upv_decodenoteperiod+0
 		bne :+
 		lda upv_tunefreq+1,x
-		cmp uipatternview_noteperiod+1
+		cmp upv_decodenoteperiod+1
 		beq :++
 :		inx
 		inx
@@ -198,7 +185,7 @@ upvdp_channelloop
 
 		iny
 
-		lda uipatternview_sample					; write sample num to list
+		lda upv_decodesample						; write sample num to list
 		bne :+
 
 		lda #$ff									; write gray sample colour code to list
@@ -216,7 +203,7 @@ upvdp_channelloop
 		sta (zpptr2),y
 		iny
 
-:		lda uipatternview_sample					; write sample num to list
+:		lda upv_decodesample						; write sample num to list
 		beq :+
 		lsr
 		lsr
@@ -226,7 +213,7 @@ upvdp_channelloop
 		lda hextodec,x
 		sta (zpptr2),y
 		iny
-		lda uipatternview_sample
+		lda upv_decodesample
 		and #$0f
 		tax
 		lda hextodec,x
@@ -260,12 +247,12 @@ upvdp_channelloop
 		lda #$ff									; write effect command colour code to list
 		sta (zpptr2),y
 		iny
-		ldx uipatternview_effectcommand
+		ldx upv_decodeeffectcommand
 		lda upv_effectcommandtocolour,x
 		sta (zpptr2),y
 		iny
 
-		lda uipatternview_effectcommand				; write effect command to list
+		lda upv_decodeeffectcommand					; write effect command to list
 		beq :+
 		tax
 		lda hextodec,x
@@ -282,7 +269,7 @@ upvdp_channelloop
 		iny
 		bra :++
 
-:		lda uipatternview_effectdata				; write effect data to list
+:		lda upv_decodeeffectdata					; write effect data to list
 		lsr
 		lsr
 		lsr
@@ -291,7 +278,7 @@ upvdp_channelloop
 		lda hextodec,x
 		sta (zpptr2),y
 		iny
-		lda uipatternview_effectdata
+		lda upv_decodeeffectdata
 		and #$0f
 		tax
 		lda hextodec,x
@@ -350,19 +337,19 @@ upv_decodechannel
 upv_decoderow
 		.byte 0
 
-uipatternview_sample
+upv_decodesample
 		.byte 0
 
-uipatternview_noteperiod
+upv_decodenoteperiod
 		.word 0
 
-uipatternview_effectcommand
+upv_decodeeffectcommand
 		.byte 0
 
-uipatternview_effectdata
+upv_decodeeffectdata
 		.byte 0
 
-uipatternview_notestring
+upv_decodenotestring
 		.byte 0, 0, 0
 
 ; ----------------------------------------------------------------------------------------------------
@@ -388,9 +375,6 @@ uipatternview_press
 
 uipatternview_doubleclick
 		jsr uipatternview_release
-		rts
-
-uipatternview_keyrelease
 		rts
 
 uipatternview_keypress
@@ -424,9 +408,52 @@ uipatternview_keypress
 		jsr uielement_calluifunc
 		rts
 
-:		rts
+:		jsr plottest
+		jsr uielement_calluifunc
+		rts
+
+uipatternview_keyrelease
+		rts
 
 ; ----------------------------------------------------------------------------------------------------
+
+plottest
+		ldx keyboard_pressedeventarg
+		lda keyboard_toascii,x
+		jsr keyboard_asciiishex
+		bcs :+
+		rts
+
+:		ldx uipatternview_startpos
+		lda upv_times97tablelo,x
+		sta zpptr2+0
+		lda upv_times97tablehi,x
+		sta zpptr2+1
+
+		clc
+		lda zpptr2+0
+		adc #<tvboxtxt0
+		sta zpptr2+0
+		lda zpptr2+1
+		adc #>tvboxtxt0
+		sta zpptr2+1
+
+		clc
+		lda zpptr2+0
+		adc uipatternview_cursorstart
+		sta zpptr2+0
+		lda zpptr2+1
+		adc #$00
+		sta zpptr2+1
+
+		ldy #$02
+		ldx keyboard_pressedeventarg
+		lda keyboard_toascii,x
+		sta (zpptr2),y
+		rts
+
+; ----------------------------------------------------------------------------------------------------
+
 
 uipatternview_draw
 		;jsr uipatternview_drawbkgreleased
@@ -856,6 +883,16 @@ upv_tunenote
 upv_times3table
 .repeat 37, I
 		.byte I*3
+.endrepeat
+
+upv_times97tablelo
+.repeat 64, I
+		.byte <(I*97)
+.endrepeat
+
+upv_times97tablehi
+.repeat 64, I
+		.byte >(I*97)
 .endrepeat
 
 upv_effectcommandtocolour
