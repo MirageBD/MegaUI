@@ -53,6 +53,88 @@ ui_init
 		and #%11001111									; clear bits 4 and 5 (BTPALSEL) so bitmap uses palette 0
 		sta $d070
 
+		lda #<sprptrs									; tell VIC-IV where the sprite pointers are (SPRPTRADR)
+		sta $d06c
+		lda #>sprptrs
+		sta $d06d
+		lda #(sprptrs & $ff0000) >> 16					; SPRPTRBNK
+		sta $d06e
+
+		lda #%10000000									; tell VIC-IV to expect two bytes per sprite pointer instead of one
+		tsb $d06e										; do this after setting sprite pointer address, because that uses $d06e as well
+
+		lda #%00000011									; enable sprite 0 (mouse cursor) and 1 (keyboard cursor)
+		sta $d015
+		sta $d057										; enable 64 pixel wide sprites. 16 pixels if in Full Colour Mode
+		sta $d06b										; enable Full Colour Mode (SPR16EN)
+		sta $d055										; sprite height enable (SPRHGTEN)
+		sta $d076										; enable SPRENVV400 for this sprite
+		lda #%00010000
+		tsb $d054										; enable SPR640 for all sprites
+
+		lda #16											; set sprite height to 16 pixels (SPRHGHT)
+		sta $d056
+
+		lda #%00000000									; disable stretch for both
+		sta $d017
+		sta $d01d
+
+		lda #$80										; sprite 0 x position
+		sta $d000
+		lda #%00000000
+		sta $d010										; sprite horizontal position MSBs
+		lda #%00000001
+		sta $d05f										; Sprite H640 X Super-MSBs
+
+		lda #$80										; sprite 0 y position
+		sta $d001
+		lda #%00000000
+		sta $d077										; Sprite V400 Y position MSBs
+		lda #%00000000
+		sta $d078										; Sprite V400 Y position super MSBs
+
+		lda #$80										; sprite 1 x position
+		sta $d002
+		lda #%00000000
+		sta $d010										; sprite horizontal position MSBs
+		lda #%00000001
+		sta $d05f										; Sprite H640 X Super-MSBs
+
+		lda #$80										; sprite 1 y position
+		sta $d003
+		lda #%00000000
+		sta $d077										; Sprite V400 Y position MSBs
+		lda #%00000000
+		sta $d078										; Sprite V400 Y position super MSBs
+
+		lda $d070										; select mapped bank with the upper 2 bits of $d070
+		and #%00111111
+		ora #%01000000									; select palette 01
+		sta $d070
+
+		ldx #$00										; set sprite palette - each sprite has a 16 colour palette
+:		lda spritepal+0*$0100,x
+		sta $d100,x
+		lda spritepal+1*$0100,x
+		sta $d200,x
+		lda spritepal+2*$0100,x
+		sta $d300,x
+		inx
+		cpx #$10
+		bne :-
+
+		lda #$00										; set transparent colours
+		sta $d027
+		sta $d028
+
+		lda $d070
+		and #%11110011									; set sprite palette to 01
+		ora #%00000100
+		sta $d070
+
+		jsr uimouse_init
+		jsr uikeyboard_init
+
 		; pal y border start
 		lda #<104
 		sta verticalcenter+0
@@ -90,8 +172,7 @@ ui_setup
 		sta uidraw_scrptr+3
 
         jsr uidraw_clearscreen
- 		jsr uimouse_init
-
+ 
 		lda #<ui_root1								; get pointer to window x
 		sta uielement_ptr+0
 		sta uikeyboard_focuselement+0

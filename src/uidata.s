@@ -16,8 +16,10 @@ windows
 		;UIELEMENT_ADD ptrnptrlabel,			hexlabel,			$ffff,					 4, 19,  2,  1,  0,		hexlabelptrnptr_data,		uidefaultflags
 		;UIELEMENT_ADD ptrnrowlabel,			hexlabel,			$ffff,					14, 19,  2,  1,  0,		hexlabelptrnrow_data,		uidefaultflags
 
-		UIELEMENT_ADD ui_sequenceview,			nineslice,			sequenceviewelements,	 1, 21, 78,  4, 20,		$ffff,						uidefaultflags	
-		UIELEMENT_ADD ui_patternview,			nineslice,			patternviewelements,	 1, 25, 78, 22, 20,		$ffff,						uidefaultflags	
+		UIELEMENT_ADD ui_textbox,				nineslice,			textboxelements,		 1, 18, 8+3+1+2,  3,  0,		$ffff,						uidefaultflags	
+
+		UIELEMENT_ADD ui_sequenceview,			nineslice,			sequenceviewelements,	 1, 21, 78,  4,  0,		$ffff,						uidefaultflags	
+		UIELEMENT_ADD ui_patternview,			nineslice,			patternviewelements,	 1, 25, 78, 22,  0,		$ffff,						uidefaultflags	
 
 		UIELEMENT_ADD ui_logo,					image,				$ffff,					68, 47, 11,  2,  0,		uilogo_data,				uidefaultflags
 
@@ -133,18 +135,24 @@ tvscrollbarelements
 
 ; ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ data
 
+textboxelements
+		UIELEMENT_ADD textbox1,					textbox,			$ffff,					 1,  1,-1, -1,  0,		textbox1_data,				uidefaultflags
+		UIELEMENT_END
+
 sequenceviewelements
-		UIELEMENT_ADD sequenceview1,			sequenceview,			$ffff,				 1,  1,-1, -1,  0,		sequenceview_data,			uidefaultflags
+		UIELEMENT_ADD sequenceview1,			sequenceview,		$ffff,					 1,  1,-1, -1,  0,		sequenceview_data,			uidefaultflags
 		UIELEMENT_END
 
 ; ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ data
 
-chanview1_data				.word $ffff,							0, $3d, $06 ; channel, colour, vu strength
+chanview1_data				.word $ffff,							0, $3d, $06				; channel, colour, vu strength
 chanview2_data				.word $ffff,							1, $31, $06
 chanview3_data				.word $ffff,							2, $7a, $06
 chanview4_data				.word $ffff,							3, $a0, $06
 
 sequenceview_data			.word $ffff,							0
+
+textbox1_data				.word $ffff,							uitxt_textbox1, 0, 0	; ptr to text, cursor position, end position
 
 paddlexlabel_data			.word $ffff,							uitxt_paddlex
 hexlabel1_data				.word $ffff,							mouse_d419, 1

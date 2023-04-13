@@ -5,6 +5,7 @@
 
 .define sprptrs					$c000
 .define sprites					$c100
+.define kbsprites				$c300
 .define spritepal				$c800
 .define emptychar				$cf80	; size = 64
 
@@ -140,8 +141,9 @@ entry_main
 		FLOPPY_FAST_LOAD glchars,			$30, $31
 		FLOPPY_FAST_LOAD uipal,				$30, $32
 		FLOPPY_FAST_LOAD sprites,			$30, $33
-		FLOPPY_FAST_LOAD spritepal,			$30, $34
-		FLOPPY_FAST_LOAD moddata,			$30, $35
+		FLOPPY_FAST_LOAD kbsprites,			$30, $34
+		FLOPPY_FAST_LOAD spritepal,			$30, $35
+		FLOPPY_FAST_LOAD moddata,			$30, $36
 		jsr fl_exit
 
 		sei

@@ -64,6 +64,10 @@ $(BIN_DIR)/cursor_sprites1.bin: $(BIN_DIR)/cursor.bin
 	$(MC)
 	$(MC) $< cm1:1 d1:0 cl1:14000 rc1:0 sm1:1
 
+$(BIN_DIR)/kbcursor_sprites1.bin: $(BIN_DIR)/kbcursor.bin
+	$(MC)
+	$(MC) $< cm1:1 d1:0 cl1:14000 rc1:0 sm1:1
+
 $(EXE_DIR)/boot.o:	$(SRC_DIR)/boot.s \
 					$(SRC_DIR)/main.s \
 					$(SRC_DIR)/irqload.s \
@@ -100,6 +104,7 @@ $(EXE_DIR)/boot.o:	$(SRC_DIR)/boot.s \
 					$(UIELT_SRC_DIR)/uicheckbox.s \
 					$(UIELT_SRC_DIR)/uiradiobutton.s \
 					$(UIELT_SRC_DIR)/uiimage.s \
+					$(UIELT_SRC_DIR)/uitextbox.s \
 					$(UIELT_SRC_DIR)/uipatternview.s \
 					$(UIELT_SRC_DIR)/uisequenceview.s \
 					$(UIELT_SRC_DIR)/uichannelview.s \
@@ -112,7 +117,7 @@ $(EXE_DIR)/boot.prg: $(EXE_DIR)/boot.o Linkfile
 	$(SED) $(CONVERTVICEMAP) < $(EXE_DIR)/boot.maptemp > boot.map
 	$(SED) $(CONVERTVICEMAP) < $(EXE_DIR)/boot.maptemp > boot.list
 
-$(EXE_DIR)/disk.d81: $(EXE_DIR)/boot.prg $(BIN_DIR)/font_chars1.bin $(BIN_DIR)/glyphs_chars1.bin $(BIN_DIR)/cursor_sprites1.bin
+$(EXE_DIR)/disk.d81: $(EXE_DIR)/boot.prg $(BIN_DIR)/font_chars1.bin $(BIN_DIR)/glyphs_chars1.bin $(BIN_DIR)/cursor_sprites1.bin $(BIN_DIR)/kbcursor_sprites1.bin
 	$(RM) $@
 	$(CC1541) -n "mega" -i " 2022" -d 19 -v\
 	 \
@@ -121,8 +126,9 @@ $(EXE_DIR)/disk.d81: $(EXE_DIR)/boot.prg $(BIN_DIR)/font_chars1.bin $(BIN_DIR)/g
 	 -f "01" -w $(BIN_DIR)/glyphs_chars1.bin \
 	 -f "02" -w $(BIN_DIR)/glyphs_pal1.bin \
 	 -f "03" -w $(BIN_DIR)/cursor_sprites1.bin \
-	 -f "04" -w $(BIN_DIR)/cursor_pal1.bin \
-	 -f "05" -w $(BIN_DIR)/song.mod \
+	 -f "04" -w $(BIN_DIR)/kbcursor_sprites1.bin \
+	 -f "05" -w $(BIN_DIR)/cursor_pal1.bin \
+	 -f "06" -w $(BIN_DIR)/song.mod \
 	$@
 
 # -----------------------------------------------------------------------------

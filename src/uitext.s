@@ -71,6 +71,7 @@ tvboxtxt
 		.byte 0
 .endrepeat
 
+uitxt_textbox1		.byte "12345678.123", 0
 
 .align 256
 

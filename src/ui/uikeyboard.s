@@ -4,6 +4,16 @@ uikeyboard_focuselement				.word 0
 
 ; ----------------------------------------------------------------------------------------------------
 
+uikeyboard_init
+
+		lda #<(kbsprites/64)
+		sta sprptrs+2
+		lda #>(kbsprites/64)
+		sta sprptrs+3
+		rts
+
+; ----------------------------------------------------------------------------------------------------
+
 uikeyboard_update
 
         lda keyboard_shouldsendreleaseevent
