@@ -5,6 +5,7 @@ uipatternview_current_draw_pos		.byte 0
 uipatternview_middlepos				.byte 0
 uipatternview_rowpos				.byte 0
 
+uipatternview_columninchannelindex	.byte 0
 uipatternview_columnindex			.byte 0
 uipatternview_cursorstart			.byte 0
 uipatternview_cursorend				.byte 5
@@ -28,6 +29,20 @@ upv_reversecolumnlookup
 		.byte  5+0,  5+0,  5+0,  5+1,  5+1,  5+1,  5+2,  5+2,  5+2,  5+3,  5+3,  5+4,  5+4,  5+4,  5+4,  5+4,  5+4
 		.byte 10+0, 10+0, 10+0, 10+1, 10+1, 10+1, 10+2, 10+2, 10+2, 10+3, 10+3, 10+4, 10+4, 10+4, 10+4, 10+4, 10+4
 		.byte 15+0, 15+0, 15+0, 15+1, 15+1, 15+1, 15+2, 15+2, 15+2, 15+3, 15+3, 15+4, 15+4
+
+upv_reversecolumninchannellookup
+
+		; "... .. .. ...    "    4*17-4 = 64 wide    4*13+3*4 = 64 wide
+		.byte    0,    0,    0,    1,    1,    1,    2,    2,    2,    3,    3,    4,    4,    4,    4,    4,    4
+		.byte    0,    0,    0,    1,    1,    1,    2,    2,    2,    3,    3,    4,    4,    4,    4,    4,    4
+		.byte    0,    0,    0,    1,    1,    1,    2,    2,    2,    3,    3,    4,    4,    4,    4,    4,    4
+		.byte    0,    0,    0,    1,    1,    1,    2,    2,    2,    3,    3,    4,    4,    4,    4,    4,    4
+
+upv_reversecolumnfoolookup
+		.byte    0, 1, 2, 3, 4
+		.byte    0, 1, 2, 3, 4
+		.byte    0, 1, 2, 3, 4
+		.byte    0, 1, 2, 3, 4
 
 ; ----------------------------------------------------------------------------------------------------
 
@@ -331,26 +346,13 @@ upvdp_channelloop
 
 :		rts
 
-upv_decodechannel
-		.byte 0
-
-upv_decoderow
-		.byte 0
-
-upv_decodesample
-		.byte 0
-
-upv_decodenoteperiod
-		.word 0
-
-upv_decodeeffectcommand
-		.byte 0
-
-upv_decodeeffectdata
-		.byte 0
-
-upv_decodenotestring
-		.byte 0, 0, 0
+upv_decodechannel			.byte 0
+upv_decoderow				.byte 0
+upv_decodesample			.byte 0
+upv_decodenoteperiod		.word 0
+upv_decodeeffectcommand		.byte 0
+upv_decodeeffectdata		.byte 0
+upv_decodenotestring		.byte 0, 0, 0
 
 ; ----------------------------------------------------------------------------------------------------
 
@@ -398,6 +400,9 @@ uipatternview_keypress
 		bne :+
 		dec uipatternview_columnindex
 		jsr uipatternview_setvariablesfromindex
+		ldx uipatternview_columnindex
+		lda upv_reversecolumnfoolookup,x
+		sta uipatternview_columninchannelindex
 		jsr uielement_calluifunc
 		rts
 
@@ -405,10 +410,19 @@ uipatternview_keypress
 		bne :+
 		inc uipatternview_columnindex
 		jsr uipatternview_setvariablesfromindex
+		ldx uipatternview_columnindex
+		lda upv_reversecolumnfoolookup,x
+		sta uipatternview_columninchannelindex
 		jsr uielement_calluifunc
 		rts
 
-:		jsr plottest
+:		lda uipatternview_columninchannelindex
+		bne :+
+		jsr upv_insert_note
+		jsr uielement_calluifunc
+		rts
+
+:		jsr upv_insert_alphanumeric
 		jsr uielement_calluifunc
 		rts
 
@@ -417,7 +431,54 @@ uipatternview_keyrelease
 
 ; ----------------------------------------------------------------------------------------------------
 
-plottest
+upv_insert_note
+
+		ldx uipatternview_startpos
+		lda upv_times97tablelo,x
+		sta zpptr2+0
+		lda upv_times97tablehi,x
+		sta zpptr2+1
+
+		clc
+		lda zpptr2+0
+		adc #<tvboxtxt0
+		sta zpptr2+0
+		lda zpptr2+1
+		adc #>tvboxtxt0
+		sta zpptr2+1
+
+		clc
+		lda zpptr2+0
+		adc uipatternview_cursorstart
+		sta zpptr2+0
+		lda zpptr2+1
+		adc #$00
+		sta zpptr2+1
+
+		ldx keyboard_pressedeventarg
+		lda upv_tonoteindex,x
+		tax
+		lda upv_times3table,x
+		tax
+
+		ldy #$02
+		lda upv_tunenote,x
+		sta (zpptr2),y
+		inx
+		iny
+		lda upv_tunenote,x
+		sta (zpptr2),y
+		inx
+		iny
+		lda upv_tunenote,x
+		sta (zpptr2),y
+
+		rts
+
+; ----------------------------------------------------------------------------------------------------
+
+upv_insert_alphanumeric
+
 		ldx keyboard_pressedeventarg
 		lda keyboard_toascii,x
 		jsr keyboard_asciiishex
@@ -506,8 +567,12 @@ uipatternview_setselectedindex
 		ror uimouse_uielement_xpos+0
 		ldx uimouse_uielement_xpos+0
 
+		lda upv_reversecolumninchannellookup,x
+		sta uipatternview_columninchannelindex
+
 		lda upv_reversecolumnlookup,x
 		sta uipatternview_columnindex
+		
 		jsr uipatternview_setvariablesfromindex
 
 		rts
@@ -897,5 +962,57 @@ upv_times97tablehi
 
 upv_effectcommandtocolour
 		.byte $04, $be, $be, $be, $be, $be, $be, $be, $be, $be, $be, $3d, $be, $3d, $be, $3d
+
+;         0        1        2         3       4         5       6        7
+; +---+--------+--------+--------+--------+--------+--------+--------+--------+
+; | 0 | INST   | RETURN | CURS → | F7     | F1     | F3     | F5     | CURS ↓ |
+; |   | DEL    |        |        |        |        |        |        |        |
+; +---+--------+--------+--------+--------+--------+--------+--------+--------+
+; | 1 | 3      | W      | A      | 4      | Z      | S      | E      | SHIFT  |
+; |   |        |        |        |        |        |        |        | left   |
+; +---+--------+--------+--------+--------+--------+--------+--------+--------+
+; | 2 | 5      | R      | D      | 6      | C      | F      | T      | X      |
+; |   |        |        |        |        |        |        |        |        |
+; +---+--------+--------+--------+--------+--------+--------+--------+--------+
+; | 3 | 7      | Y      | G      | 8      | B      | H      | U      | V      |
+; |   |        |        |        |        |        |        |        |        |
+; +---+--------+--------+--------+--------+--------+--------+--------+--------+
+; | 4 | 9      | I      | J      | 0      | M      | K      | O      | N      |
+; |   |        |        |        |        |        |        |        |        |
+; +---+--------+--------+--------+--------+--------+--------+--------+--------+
+; | 5 | +      | P      | L      | -      | .      | :      | @      | ,      |
+; |   |        |        |        |        |        |        |        |        |
+; +---+--------+--------+--------+--------+--------+--------+--------+--------+
+; | 6 | £      | *      | ;      | CLR    | SHIFT  | =      | ↑      | /      |
+; |   |        |        |        | HOME   | right  |        |        |        |
+; +---+--------+--------+--------+--------+--------+--------+--------+--------+
+; | 7 | 1      | ←      | CTRL   | 2      | SPC    | MEGA   | Q      | RUN    |
+; |   |        |        |        |        |        |        |        | STOP   |
+; +---+--------+--------+--------+--------+--------+--------+--------+--------+
+; | 8 | NO     | TAB    | ALT    | HELP   | F9     | F11    | F13    | ESC    |
+; |   | SCROLL |        |        |        |        |        |        |        |
+; +---+--------+--------+--------+--------+--------+--------+--------+--------+
+
+;          111 111111122222
+; 123456789012 345678901234
+; ZSXDCVGBHNJM Q2W3ER5T6Y7U
+
+;  11111
+;  34567
+;  ,l.:/
+
+upv_tonoteindex
+;              0   1   2   3   4   5   6   7
+		.byte  0,  0,  0,  0,  0,  0,  0,  0; 0
+		.byte 16, 15,  0,  0,  1,  2, 17,  0; 1
+		.byte 19, 18,  4, 21,  5,  0, 20,  3; 2
+		.byte 23, 22,  7,  0,  8,  9, 24,  6; 3
+		.byte  0,  0, 11,  0, 12,  0,  0, 10; 4
+		.byte  0,  0, 14,  0, 15, 16,  0, 13; 5
+		.byte  0,  0,  0,  0,  0,  0,  0, 17; 6
+		.byte  0,  0,  0, 14,  0,  0, 13,  0; 7
+		.byte  0,  0,  0,  0,  0,  0,  0,  0; 8
+
+		.byte  0,  0,  0,  0,  0,  0,  0,  0; 9
 
 ; ----------------------------------------------------------------------------------------------------

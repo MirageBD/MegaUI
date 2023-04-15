@@ -34,11 +34,6 @@ uitextbox_keypress_noncontrol
 		rts
 
 uitextbox_keypress_alphanumericpunctuation
-		lda #$20
-		DEBUG_COLOUR
-		lda #$00
-		DEBUG_COLOUR
-
 		jsr uitextbox_inserttext
 		jsr uitextbox_updatecursor
 		rts		
