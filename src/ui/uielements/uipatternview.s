@@ -71,7 +71,7 @@ uipatternview_update
 		lda cntPepPRow
 		sta uipatternview_patternrow
 
-		; jsr uipatternview_decodepattern
+		jsr uipatternview_decodepattern
 
 		lda peppitoPlaying
 		bne :+
@@ -93,6 +93,204 @@ uipatternview_update
 		jsr uielement_calluifunc
 
 		rts
+
+; ----------------------------------------------------------------------------------------------------
+
+uipatternview_encodepattern
+
+		lda uipatternview_patternptr+0
+		sta zpptrtmp+0
+		lda uipatternview_patternptr+1
+		sta zpptrtmp+1
+		lda uipatternview_patternptr+2
+		sta zpptrtmp+2
+		lda uipatternview_patternptr+3
+		sta zpptrtmp+3
+
+		lda #<tvboxtxt0
+		sta zpptr2+0
+		lda #>tvboxtxt0
+		sta zpptr2+1
+
+		lda #$00
+		sta upv_encoderow
+
+upvep_rowloop
+		lda #$00
+		sta upv_encodechannel
+
+upvep_channelloop
+
+		ldz #$00									; clear highest 4 bits of note
+		lda [zpptrtmp],z
+		and #%11110000
+		sta [zpptrtmp],z
+
+		ldy #$02
+		lda (zpptr2),y
+		sta upv_encodenotestring+0
+		iny
+		lda (zpptr2),y
+		sta upv_encodenotestring+1
+		iny
+		lda (zpptr2),y
+		sta upv_encodenotestring+2
+
+		ldy #$00									; look up note from string
+upvep2	lda upv_times3table,y
+		tax
+		lda upv_encodenotestring+0
+		cmp upv_tunenote+0,x
+		beq :+
+		iny
+		bra upvep2
+:		lda upv_encodenotestring+1
+		cmp upv_tunenote+1,x
+		beq :+
+		iny
+		bra upvep2
+:		lda upv_encodenotestring+2
+		cmp upv_tunenote+2,x
+		beq :+
+		iny
+		bra upvep2
+
+:		tya											; store note
+		asl
+		tay
+		ldz #$01
+		lda upv_tunefreq+0,y
+		sta [zpptrtmp],z
+		ldz #$00
+		lda upv_tunefreq+1,y
+		ora [zpptrtmp],z
+		sta [zpptrtmp],z
+
+		ldz #$00									; clear higher 4 bits of sample number
+		lda [zpptrtmp],z
+		and #%00001111
+		sta [zpptrtmp],z
+
+		ldy #$08									; get higher 4 bits of sample number
+		lda (zpptr2),y
+		tax
+		lda upv_chartohex,x
+		asl
+		asl
+		asl
+		asl
+		ldz #$00
+		ora [zpptrtmp],z
+		sta [zpptrtmp],z
+
+		ldz #$02									; clear lower 4 bits of sample number
+		lda [zpptrtmp],z
+		and #%00001111
+		sta [zpptrtmp],z
+
+		ldy #$09									; get lower 4 bits of sample number
+		lda (zpptr2),y
+		tax
+		lda upv_chartohex,x
+		asl
+		asl
+		asl
+		asl
+		ldz #$02
+		ora [zpptrtmp],z
+		sta [zpptrtmp],z
+
+		ldz #$02									; clear effect command
+		lda [zpptrtmp],z
+		and #%11110000
+		sta [zpptrtmp],z
+
+		ldy #$12									; get effect
+		lda (zpptr2),y
+		tax
+		lda upv_chartohex,x
+		ldz #$02
+		ora [zpptrtmp],z
+		sta [zpptrtmp],z
+
+		ldz #$03									; clear effect data
+		lda #$00
+		sta [zpptrtmp],z
+
+		ldy #$13									; get higher 4 bits of sample number
+		lda (zpptr2),y
+		tax
+		lda upv_chartohex,x
+		asl
+		asl
+		asl
+		asl
+		ldz #$03
+		ora [zpptrtmp],z
+		sta [zpptrtmp],z
+
+		ldy #$14									; get higher 4 bits of sample number
+		lda (zpptr2),y
+		tax
+		lda upv_chartohex,x
+		ldz #$03
+		ora [zpptrtmp],z
+		sta [zpptrtmp],z
+
+		clc											; add 4 to get to second channel
+		lda zpptrtmp+0
+		adc #$04
+		sta zpptrtmp+0
+		lda zpptrtmp+1
+		adc #$00
+		sta zpptrtmp+1
+		lda zpptrtmp+2
+		adc #$00
+		sta zpptrtmp+2
+		lda zpptrtmp+3
+		adc #$00
+		sta zpptrtmp+3
+
+		clc											; add 25 to get to second channel
+		lda zpptr2+0
+		adc #25
+		sta zpptr2+0
+		lda zpptr2+1
+		adc #0
+		sta zpptr2+1
+
+		inc upv_encodechannel
+		lda upv_encodechannel
+		cmp #$04
+		beq :+
+
+		jmp upvep_channelloop
+
+:		sec											; subtract 3 to skip trailing zero byte
+		lda zpptr2+0
+		sbc #03
+		sta zpptr2+0
+		lda zpptr2+1
+		sbc #0
+		sta zpptr2+1
+
+		inc upv_encoderow
+		lda upv_encoderow
+		cmp #64
+		beq :+
+
+		jmp upvep_rowloop
+
+:		jsr uipatternview_decodepattern
+		rts
+
+upv_encodechannel			.byte 0
+upv_encoderow				.byte 0
+upv_encodesample			.byte 0
+upv_encodenoteperiod		.word 0
+upv_encodeeffectcommand		.byte 0
+upv_encodeeffectdata		.byte 0
+upv_encodenotestring		.byte 0, 0, 0
 
 ; ----------------------------------------------------------------------------------------------------
 
@@ -417,14 +615,44 @@ uipatternview_keypress
 		rts
 
 :		lda uipatternview_columninchannelindex
-		bne :+
-		jsr upv_insert_note
-		jsr uielement_calluifunc
+		beq uipatternview_keyincolumn0
+		cmp #$01
+		beq uipatternview_keyincolumn1
+		cmp #$02
+		beq uipatternview_keyincolumn2
+		cmp #$03
+		beq uipatternview_keyincolumn3
+		cmp #$04
+		beq uipatternview_keyincolumn4
 		rts
 
-:		jsr upv_insert_alphanumeric
+uipatternview_keyincolumn0
+		jsr upv_insert_note
 		jsr uielement_calluifunc
+		jsr uipatternview_encodepattern
 		rts
+
+uipatternview_keyincolumn1		
+		jsr upv_insert_sample
+		jsr uielement_calluifunc
+		jsr uipatternview_encodepattern
+		rts
+
+uipatternview_keyincolumn2
+		rts
+
+uipatternview_keyincolumn3
+		jsr upv_insert_effect
+		jsr uipatternview_encodepattern
+		rts
+
+uipatternview_keyincolumn4
+		jsr upv_insert_effectdata
+		jsr uielement_calluifunc
+		jsr uipatternview_encodepattern
+		rts
+
+; ----------------------------------------------------------------------------------------------------
 
 uipatternview_keyrelease
 		rts
@@ -515,6 +743,84 @@ upv_insert_alphanumeric
 
 ; ----------------------------------------------------------------------------------------------------
 
+upv_prepareinsert
+
+		ldx keyboard_pressedeventarg				; LV TODO - much of this is the same as intert_note
+		lda keyboard_toascii,x
+		jsr keyboard_asciiishex
+		bcs :+
+		rts
+
+:		ldx uipatternview_startpos
+		lda upv_times97tablelo,x
+		sta zpptr2+0
+		lda upv_times97tablehi,x
+		sta zpptr2+1
+
+		clc
+		lda zpptr2+0
+		adc #<tvboxtxt0
+		sta zpptr2+0
+		lda zpptr2+1
+		adc #>tvboxtxt0
+		sta zpptr2+1
+
+		clc
+		lda zpptr2+0
+		adc uipatternview_cursorstart
+		sta zpptr2+0
+		lda zpptr2+1
+		adc #$00
+		sta zpptr2+1
+		rts
+
+; ----------------------------------------------------------------------------------------------------
+
+upv_insert_sample
+
+		jsr upv_prepareinsert
+
+		ldy #$03
+		lda (zpptr2),y
+		ldy #$02
+		sta (zpptr2),y
+
+		ldy #$03
+		ldx keyboard_pressedeventarg
+		lda keyboard_toascii,x
+		sta (zpptr2),y
+		rts
+
+; ----------------------------------------------------------------------------------------------------
+
+upv_insert_effect
+
+		jsr upv_prepareinsert
+
+		ldy #$02
+		ldx keyboard_pressedeventarg
+		lda keyboard_toascii,x
+		sta (zpptr2),y
+		rts
+
+; ----------------------------------------------------------------------------------------------------
+
+upv_insert_effectdata
+
+		jsr upv_prepareinsert
+
+		ldy #$01
+		lda (zpptr2),y
+		ldy #$00
+		sta (zpptr2),y
+
+		ldy #$01
+		ldx keyboard_pressedeventarg
+		lda keyboard_toascii,x
+		sta (zpptr2),y
+		rts
+
+; ----------------------------------------------------------------------------------------------------
 
 uipatternview_draw
 		;jsr uipatternview_drawbkgreleased
@@ -925,6 +1231,12 @@ uipatternview_drawmiddleline_end
 		rts
 
 ; ----------------------------------------------------------------------------------------------------
+
+upv_chartohex
+		.byte 0, 10, 11, 12, 13, 14, 15, 0, 0, 0, 0, 0, 0, 0, 0, 0
+		.byte 0,  0,  0,  0,  0,  0,  0, 0, 0, 0, 0, 0, 0, 0, 0, 0
+		.byte 0,  0,  0,  0,  0,  0,  0, 0, 0, 0, 0, 0, 0, 0, 0, 0
+		.byte 0,  1,  2,  3,  4,  5,  6, 7, 8, 9, 0, 0, 0, 0, 0, 0
 
 upv_fontcolour
 		.byte $f0
