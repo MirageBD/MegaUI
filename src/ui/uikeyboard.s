@@ -2,6 +2,9 @@
 
 uikeyboard_focuselement				.word 0
 
+uikeyboard_cursorxpos				.word 0
+uikeyboard_cursorypos				.word 0
+
 ; ----------------------------------------------------------------------------------------------------
 
 uikeyboard_init
@@ -10,6 +13,59 @@ uikeyboard_init
 		sta sprptrs+2
 		lda #>(kbsprites/64)
 		sta sprptrs+3
+		rts
+
+; ----------------------------------------------------------------------------------------------------
+
+uikeyboard_setcursorpos
+
+		clc
+		lda uikeyboard_cursorxpos+0
+		adc #$50
+		sta uikeyboard_cursorxpos+0
+		lda uikeyboard_cursorxpos+1
+		adc #$00
+		sta uikeyboard_cursorxpos+1
+
+		clc
+		lda uikeyboard_cursorypos+0
+		adc #$67
+		sta uikeyboard_cursorypos+0
+		lda uikeyboard_cursorypos+1
+		adc #$00
+		sta uikeyboard_cursorypos+1
+
+		lda uikeyboard_cursorxpos+0						; update sprite position
+		sta $d002
+		lda $d010
+		and #%11111101
+		sta $d010
+		lda uikeyboard_cursorxpos+1
+		and #$01
+		asl
+		ora $d010
+		sta $d010										; sprite horizontal position MSBs
+		lda $d05f
+		and #%11111101
+		sta $d05f
+		lda uikeyboard_cursorxpos+1
+		and #%00000010
+		ora $d05f
+		sta $d05f										; Sprite H640 X Super-MSBs
+
+		lda uikeyboard_cursorypos+0
+		sta $d003
+		lda $d077
+		and #%11111101
+		sta $d077
+		lda uikeyboard_cursorypos+1
+		and #$01
+		asl
+		ora $d077
+		sta $d077										; Sprite V400 Y position MSBs
+		lda #%00000000
+		sta $d078										; Sprite V400 Y position super MSBs
+
 		rts
 
 ; ----------------------------------------------------------------------------------------------------

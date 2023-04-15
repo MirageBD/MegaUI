@@ -29,18 +29,30 @@ uimouse_update_sprite
 
 		lda mouse_xpos_plusborder+0						; update sprite position
 		sta $d000
+		lda $d010
+		and #%11111110
+		sta $d010
 		lda mouse_xpos_plusborder+1
 		and #$01
+		ora $d010
 		sta $d010										; sprite horizontal position MSBs
+		lda $d05f
+		and #%11111110
+		sta $d05f
 		lda mouse_xpos_plusborder+1
 		and #$02
 		lsr
+		ora $d05f
 		sta $d05f										; Sprite H640 X Super-MSBs
 
 		lda mouse_ypos_plusborder+0
 		sta $d001
+		lda $d077
+		and #%11111110
+		sta $d077
 		lda mouse_ypos_plusborder+1
 		and #$01
+		ora $d077
 		sta $d077										; Sprite V400 Y position MSBs
 		lda #%00000000
 		sta $d078										; Sprite V400 Y position super MSBs

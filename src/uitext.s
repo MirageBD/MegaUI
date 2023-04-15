@@ -1,8 +1,8 @@
 .segment "TEXT"
 
-uitxt_button0		.byte "play", 0
-uitxt_button1		.byte "stop", 0
-uitxt_button2		.byte "pause", 0
+uitxt_button0		.byte "f1 play", 0
+uitxt_button1		.byte "f2 stop", 0
+uitxt_button2		.byte "f3 pause", 0
 
 uitxt_checkbox		.byte "checkbox", 0
 uitxt_radiobutton	.byte "radiobtn", 0
@@ -71,7 +71,7 @@ tvboxtxt
 		.byte 0
 .endrepeat
 
-uitxt_textbox1		.byte "12345678.123", 0
+uitxt_textbox1		.byte 0, "                "
 
 .align 256
 
@@ -99,19 +99,19 @@ fa1boxtxt			.word fa1boxtxt00
 
 .align 256			; leave enough room for fa1boxtxt to grow. 128 directory entries allowed
 
-fa1boxtxt00			.byte %00010000, $c0, ".",            0
-fa1boxtxt01			.byte %00010000, $c0, "..",           0
-fa1boxtxt02			.byte %00010000, $c0, "directory",    0
-fa1boxtxt03			.byte %00100000, $31, "xmas65.d81",   0
-fa1boxtxt04			.byte %00100000, $31, "megaui.d81",   0
-fa1boxtxt05			.byte %00100000, $31, "xmas65.d81",   0
-fa1boxtxt06			.byte %00100000, $3d, "alphavil.mod", 0
-fa1boxtxt07			.byte %00100000, $3d, "cyberno2.mod", 0
-fa1boxtxt08			.byte %00100000, $3d, "impact14.mod", 0
-fa1boxtxt09			.byte %00100000, $3d, "spankit.mod",  0
-fa1boxtxt10			.byte %00100000, $3d, "testlast.mod", 0
-fa1boxtxt11			.byte %00100000, $3d, "spiritmx.mod", 0
-fa1boxtxt12			.byte %00100000, $3d, "nuseup42.mod", 0
+fa1boxtxt00			.byte %00010000, $31, ".",            0
+fa1boxtxt01			.byte %00010000, $31, "..",           0
+fa1boxtxt02			.byte %00010000, $31, "mods",    0
+fa1boxtxt03			.byte %00100000, $0f, "xmas65.d81",   0
+fa1boxtxt04			.byte %00100000, $0f, "megaui.d81",   0
+fa1boxtxt05			.byte %00100000, $0f, "xmas65.d81",   0
+fa1boxtxt06			.byte %00100000, $0f, "alphavil.mod", 0
+fa1boxtxt07			.byte %00100000, $0f, "cyberno2.mod", 0
+fa1boxtxt08			.byte %00100000, $0f, "impact14.mod", 0
+fa1boxtxt09			.byte %00100000, $0f, "spankit.mod",  0
+fa1boxtxt10			.byte %00100000, $0f, "testlast.mod", 0
+fa1boxtxt11			.byte %00100000, $0f, "spiritmx.mod", 0
+fa1boxtxt12			.byte %00100000, $0f, "nuseup42.mod", 0
 fa1boxtxt13			.byte %00100000, $0d, "samples.bin",  0
 fa1boxtxt14			.byte %00100000, $0d, "glyphs.bin",   0
 fa1boxtxt15			.byte %00100000, $0d, "font.bin",     0

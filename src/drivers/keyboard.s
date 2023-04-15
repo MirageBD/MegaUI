@@ -74,6 +74,28 @@ keyboard_columnkeys					.byte $00, $00, $00, $00, $00, $00, $00, $00, $00
 ; |   | SCROLL |        |        |        |        |        |        |        |
 ; +---+--------+--------+--------+--------+--------+--------+--------+--------+
 
+.enum UIKEYBOARD_KEYTYPE
+		alpha		= 0
+		numeric		= 1
+		punctuation = 2
+		function	= 3
+		control		= 4
+.endenum
+
+keyboard_keytypes
+;              0   1   2   3   4   5   6   7
+		.byte  4,  4,  4,  3,  3,  3,  3,  4; 0
+		.byte  1,  0,  0,  1,  0,  0,  0,  4; 1
+		.byte  1,  0,  0,  1,  0,  0,  0,  0; 2
+		.byte  1,  0,  0,  1,  0,  0,  0,  0; 3
+		.byte  1,  0,  0,  1,  0,  0,  0,  0; 4
+		.byte  2,  0,  0,  2,  2,  2,  2,  2; 5
+		.byte  2,  2,  2,  4,  4,  2,  2,  2; 6
+		.byte  1,  2,  4,  1,  2,  4,  0,  4; 7
+		.byte  4,  4,  4,  4,  3,  3,  3,  4; 8
+
+		.byte  9,  9,  3,  9,  9,  9,  9,  3; 9
+
 keyboard_toascii
 ;              0   1   2   3   4   5   6   7
 		.byte  0,  0,  0,  0,  0,  0,  0,  0; 0
@@ -83,15 +105,17 @@ keyboard_toascii
 		.byte 57,  9, 10, 48, 13, 11, 15, 14; 4
 		.byte  0, 16, 12,  0,  0,  0,  0,  0; 5
 		.byte  0,  0,  0,  0,  0,  0,  0,  0; 6
-		.byte 49,  0,  0, 50,  0,  0, 17,  0; 7
+		.byte 49,  0,  0, 50, 32,  0, 17,  0; 7
 		.byte  0,  0,  0,  0,  0,  0,  0,  0; 8
+
+		.byte  0,  0,  0,  0,  0,  0,  0,  0; 9
 
 .define KEYBOARD_INSERTDEL		#0*8 + 0					; backspace in xemu
 .define KEYBOARD_RETURN			#0*8 + 1
 .define KEYBOARD_CURSORRIGHT	#0*8 + 2
 .define KEYBOARD_CURSORDOWN		#0*8 + 7
-.define KEYBOARD_CURSORLEFT		#$80 + 0*8+2
-.define KEYBOARD_CURSORUP		#$80 + 0*8+7
+.define KEYBOARD_CURSORLEFT		#$40 + 0*8+2
+.define KEYBOARD_CURSORUP		#$40 + 0*8+7
 .define KEYBOARD_KEY0			#4*8 + 3
 .define KEYBOARD_KEY1			#7*8 + 0
 .define KEYBOARD_KEY2			#7*8 + 3

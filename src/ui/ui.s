@@ -53,6 +53,34 @@ ui_init
 		and #%11001111									; clear bits 4 and 5 (BTPALSEL) so bitmap uses palette 0
 		sta $d070
 
+		lda $d070										; select mapped bank with the upper 2 bits of $d070
+		and #%00111111
+		ora #%01000000									; select palette 01
+		sta $d070
+
+		ldx #$00										; set sprite palette - each sprite has a 16 colour palette
+:		lda spritepal+0*$0100,x
+		sta $d100,x
+		sta $d110,x
+		lda spritepal+1*$0100,x
+		sta $d200,x
+		sta $d210,x
+		lda spritepal+2*$0100,x
+		sta $d300,x
+		sta $d310,x
+		inx
+		cpx #$10
+		bne :-
+
+		lda #$00										; set transparent colours
+		sta $d027
+		sta $d028
+
+		lda $d070
+		and #%11110011									; set sprite palette to 01
+		ora #%00000100
+		sta $d070
+
 		lda #<sprptrs									; tell VIC-IV where the sprite pointers are (SPRPTRADR)
 		sta $d06c
 		lda #>sprptrs
@@ -93,44 +121,19 @@ ui_init
 		lda #%00000000
 		sta $d078										; Sprite V400 Y position super MSBs
 
-		lda #$80										; sprite 1 x position
+		lda #$00										; sprite 1 x position
 		sta $d002
 		lda #%00000000
 		sta $d010										; sprite horizontal position MSBs
 		lda #%00000001
 		sta $d05f										; Sprite H640 X Super-MSBs
 
-		lda #$80										; sprite 1 y position
+		lda #$00										; sprite 1 y position
 		sta $d003
 		lda #%00000000
 		sta $d077										; Sprite V400 Y position MSBs
 		lda #%00000000
 		sta $d078										; Sprite V400 Y position super MSBs
-
-		lda $d070										; select mapped bank with the upper 2 bits of $d070
-		and #%00111111
-		ora #%01000000									; select palette 01
-		sta $d070
-
-		ldx #$00										; set sprite palette - each sprite has a 16 colour palette
-:		lda spritepal+0*$0100,x
-		sta $d100,x
-		lda spritepal+1*$0100,x
-		sta $d200,x
-		lda spritepal+2*$0100,x
-		sta $d300,x
-		inx
-		cpx #$10
-		bne :-
-
-		lda #$00										; set transparent colours
-		sta $d027
-		sta $d028
-
-		lda $d070
-		and #%11110011									; set sprite palette to 01
-		ora #%00000100
-		sta $d070
 
 		jsr uimouse_init
 		jsr uikeyboard_init
