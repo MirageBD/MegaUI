@@ -31,14 +31,14 @@ uilistbox_doubleclick
 uilistbox_keypress
 		lda keyboard_pressedeventarg
 
-		cmp KEYBOARD_CURSORDOWN
+		cmp #KEYBOARD_CURSORDOWN
 		bne :+
 		jsr uilistbox_increase_selection
 		jsr uilistbox_confine
 		jsr uielement_calluifunc
 		rts
 
-:		cmp KEYBOARD_CURSORUP
+:		cmp #KEYBOARD_CURSORUP
 		bne :+
 		jsr uilistbox_decrease_selection
 		jsr uilistbox_confine

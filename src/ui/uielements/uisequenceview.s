@@ -33,7 +33,13 @@ uisequenceview_move
 		rts
 
 uisequenceview_keypress
+		lda keyboard_pressedeventarg
+		cmp #KEYBOARD_INSERTDEL
+		bne :+
+		UICORE_CALLELEMENTFUNCTION tvlistbox, uipatternview_clearpattern
 		rts
+
+:		rts
 
 uisequenceview_keyrelease
 		rts

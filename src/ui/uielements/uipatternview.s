@@ -96,6 +96,37 @@ uipatternview_update
 
 ; ----------------------------------------------------------------------------------------------------
 
+uipatternview_clearpattern
+
+		lda uipatternview_patternptr+0
+		sta zpptrtmp+0
+		lda uipatternview_patternptr+1
+		sta zpptrtmp+1
+		lda uipatternview_patternptr+2
+		sta zpptrtmp+2
+		lda uipatternview_patternptr+3
+		sta zpptrtmp+3
+
+		ldx #$00
+
+:		ldz #$00									; clear highest 4 bits of note
+		lda #$00
+:		sta [zpptrtmp],z
+		inz
+		bne :-
+
+		clc
+		lda zpptrtmp+1
+		adc #$01
+		sta zpptrtmp+1
+
+		inx
+		cpx #16
+		bne :--
+
+		rts
+; ----------------------------------------------------------------------------------------------------
+
 uipatternview_encodepattern
 
 		lda uipatternview_patternptr+0
@@ -580,21 +611,21 @@ uipatternview_doubleclick
 uipatternview_keypress
 		lda keyboard_pressedeventarg
 
-		cmp KEYBOARD_CURSORDOWN
+		cmp #KEYBOARD_CURSORDOWN
 		bne :+
 		jsr uipatternview_increase_selection
 		jsr uipatternview_confinevertical
 		jsr uielement_calluifunc
 		rts
 
-:		cmp KEYBOARD_CURSORUP
+:		cmp #KEYBOARD_CURSORUP
 		bne :+
 		jsr uipatternview_decrease_selection
 		jsr uipatternview_confinevertical
 		jsr uielement_calluifunc
 		rts
 :		
-		cmp KEYBOARD_CURSORLEFT
+		cmp #KEYBOARD_CURSORLEFT
 		bne :+
 		dec uipatternview_columnindex
 		jsr uipatternview_setvariablesfromindex
@@ -604,7 +635,7 @@ uipatternview_keypress
 		jsr uielement_calluifunc
 		rts
 
-:		cmp KEYBOARD_CURSORRIGHT
+:		cmp #KEYBOARD_CURSORRIGHT
 		bne :+
 		inc uipatternview_columnindex
 		jsr uipatternview_setvariablesfromindex

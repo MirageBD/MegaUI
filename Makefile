@@ -159,7 +159,8 @@ endif
 
 else
 
-	cmd.exe /c $(XMEGA65) -mastervolume 50 -autoload -8 $(EXE_DIR)/disk.d81
+#	cmd.exe /c $(XMEGA65) -mastervolume 50 -autoload -8 $(EXE_DIR)/disk.d81
+	cmd.exe /c $(XMEGA65) -autoload -8 $(EXE_DIR)/disk.d81
 
 endif
 

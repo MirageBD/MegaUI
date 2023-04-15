@@ -1,8 +1,8 @@
 .segment "TEXT"
 
 uitxt_button0		.byte "f1 play", 0
-uitxt_button1		.byte "f2 stop", 0
-uitxt_button2		.byte "f3 pause", 0
+uitxt_button1		.byte "f3 stop", 0
+uitxt_button2		.byte "f5 pause", 0
 
 uitxt_checkbox		.byte "checkbox", 0
 uitxt_radiobutton	.byte "radiobtn", 0

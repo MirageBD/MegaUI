@@ -169,9 +169,9 @@ uilogo_data					.word $ffff,							((14*16+ 0) | (14*16+ 0)<<8)
 checkboxlabel_data			.word $ffff,							uitxt_checkbox
 radiobuttonlabel_data		.word $ffff,							uitxt_radiobutton
 
-ctextbutton1_data			.word ctextbutton1_functions,			uitxt_button0
-ctextbutton2_data			.word ctextbutton2_functions,			uitxt_button1
-ctextbutton3_data			.word ctextbutton3_functions,			uitxt_button2
+ctextbutton1_data			.word ctextbutton1_functions,			uitxt_button0, KEYBOARD_F1
+ctextbutton2_data			.word ctextbutton2_functions,			uitxt_button1, KEYBOARD_F3
+ctextbutton3_data			.word ctextbutton3_functions,			uitxt_button2, KEYBOARD_F5
 
 fa1scrollbar_data			.word fa1scrollbar_functions, 			0, 0, 20, fa1filebox			; start position, selection index, number of entries, ptr to list
 fa1filebox_data				.word fa1scrollbar_functions,			fa1scrollbar_data, fa1boxtxt

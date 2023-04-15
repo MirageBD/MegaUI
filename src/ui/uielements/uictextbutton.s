@@ -28,10 +28,22 @@ uictextbutton_move
 		rts
 
 uictextbutton_keypress
-		rts
+		jsr ui_getelementdataptr_1
+		ldy #$04							; pointer to shortcut key
+		lda (zpptr1),y
+		cmp keyboard_pressedeventarg
+		bne :+
+		jsr uictextbutton_press
+:		rts
 
 uictextbutton_keyrelease
-		rts
+		jsr ui_getelementdataptr_1
+		ldy #$04							; pointer to shortcut key
+		lda (zpptr1),y
+		cmp keyboard_pressedeventarg
+		bne :+
+		jsr uictextbutton_release
+:		rts
 
 uictextbutton_press
 		jsr uicbutton_draw_pressed

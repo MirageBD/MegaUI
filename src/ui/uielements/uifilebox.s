@@ -31,7 +31,7 @@ uifilebox_keypress
 		jsr uilistbox_keypress
 
 		lda keyboard_pressedeventarg
-		cmp KEYBOARD_RETURN											; LV TODO - what if this is already checked for in uilistbox?
+		cmp #KEYBOARD_RETURN											; LV TODO - what if this is already checked for in uilistbox?
 		bne uifilebox_keypress_end
 
 		jsr uifilebox_doubleclick

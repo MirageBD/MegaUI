@@ -110,23 +110,28 @@ keyboard_toascii
 
 		.byte  0,  0,  0,  0,  0,  0,  0,  0; 9
 
-.define KEYBOARD_INSERTDEL		#0*8 + 0					; backspace in xemu
-.define KEYBOARD_RETURN			#0*8 + 1
-.define KEYBOARD_CURSORRIGHT	#0*8 + 2
-.define KEYBOARD_CURSORDOWN		#0*8 + 7
-.define KEYBOARD_CURSORLEFT		#$40 + 0*8+2
-.define KEYBOARD_CURSORUP		#$40 + 0*8+7
-.define KEYBOARD_KEY0			#4*8 + 3
-.define KEYBOARD_KEY1			#7*8 + 0
-.define KEYBOARD_KEY2			#7*8 + 3
-.define KEYBOARD_KEY3			#1*8 + 0
-.define KEYBOARD_KEY4			#1*8 + 3
-.define KEYBOARD_KEY5			#2*8 + 0
-.define KEYBOARD_KEY6			#2*8 + 3
-.define KEYBOARD_KEY7			#3*8 + 0
-.define KEYBOARD_KEY8			#3*8 + 3
-.define KEYBOARD_KEY9			#4*8 + 0
-.define KEYBOARD_NOKEY			#255
+.define KEYBOARD_INSERTDEL		0*8 + 0					; backspace in xemu
+.define KEYBOARD_RETURN			0*8 + 1
+.define KEYBOARD_CURSORRIGHT	0*8 + 2
+.define KEYBOARD_CURSORDOWN		0*8 + 7
+.define KEYBOARD_CURSORLEFT		0*8 + 2 + 64
+.define KEYBOARD_CURSORUP		0*8 + 7 + 64 
+.define KEYBOARD_KEY0			4*8 + 3
+.define KEYBOARD_KEY1			7*8 + 0
+.define KEYBOARD_KEY2			7*8 + 3
+.define KEYBOARD_KEY3			1*8 + 0
+.define KEYBOARD_KEY4			1*8 + 3
+.define KEYBOARD_KEY5			2*8 + 0
+.define KEYBOARD_KEY6			2*8 + 3
+.define KEYBOARD_KEY7			3*8 + 0
+.define KEYBOARD_KEY8			3*8 + 3
+.define KEYBOARD_KEY9			4*8 + 0
+.define KEYBOARD_NOKEY			255
+
+.define KEYBOARD_F1				0*8 + 4
+.define KEYBOARD_F3				0*8 + 5
+.define KEYBOARD_F5				0*8 + 6
+
 
 ; ----------------------------------------------------------------------------------------------------
 
@@ -241,13 +246,13 @@ keyboard_testkeysloop
 		lda $d60f										; handle special cases for cursorleft and cursorup
 		and #%00000001
 		beq :+
-		lda KEYBOARD_CURSORLEFT
+		lda #KEYBOARD_CURSORLEFT
 		sta keyboard_pressed
 		bra :+
 :		lda $d60f
 		and #%00000010
 		beq :+
-		lda KEYBOARD_CURSORUP
+		lda #KEYBOARD_CURSORUP
 		sta keyboard_pressed
 		bra :+
 
