@@ -61,17 +61,11 @@ mouse_update
 		; 	Bit X: 0=Input (read only), 1=Output (read and write)
 
 
-		lda #$00										; set data direction to  0=input (read only) for all 8 data lines
+		lda #$e0										; set data direction to  0=input (read only) for all 8 data lines
 		sta $dc02
+
 		lda #$40
 		sta $dc00
-
-;		ldx #$66
-;:		nop
-;		nop
-;		nop
-;		dex
-;		bne :-
 
 		lda $d419										; read paddle port and store mouse pos
 		sta mouse_d419
@@ -101,9 +95,6 @@ mouse_update
 		adc mouse_ypos_plusborder+1
 		sta mouse_ypos_plusborder+1
 
-		lda #$ff
-		sta $dc02
-	
 		lda mouse_xpos+0								; store previous positions
 		sta mouse_prevxpos+0
 		lda mouse_xpos+1
@@ -186,7 +177,6 @@ mouse_event_doubleclicked
 		bra mouse_check_end
 
 mouse_event_pressed
-
 		lda mouse_held									; mouse is pressed, check if it was pressed before
 		beq :+
 		bra mouse_check_end								; mouse was pressed before, so leave mouse_pressed at 0 and continue
@@ -201,6 +191,9 @@ mouse_event_pressed
 
 mouse_check_end
 
+		lda #$ff										; enable keyboard again
+		sta $dc02
+	
 		rts
 
 ; -------------------------------------------		
