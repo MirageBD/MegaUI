@@ -35,6 +35,8 @@ mouse_doubleclicked			.byte $00
 mouse_released_timer		.byte $00
 mouse_doubleclickthreshold	.byte $10
 
+mouse_pressedtimer			.byte $00
+
 ; ----------------------------------------------------------------------------------------------------
 
 mouse_init
@@ -161,6 +163,7 @@ mouse_update
 		sta mouse_released
 		lda #$00
 		sta mouse_held
+		sta mouse_pressedtimer
 		lda mouse_released_timer						; read released timer
 		cmp mouse_doubleclickthreshold
 		beq mouse_event_startreleasedtimer				; it's the same as the theshold, so restart it
@@ -178,9 +181,15 @@ mouse_event_doubleclicked
 
 mouse_event_pressed
 		lda mouse_held									; mouse is pressed, check if it was pressed before
-		beq :+
-		bra mouse_check_end								; mouse was pressed before, so leave mouse_pressed at 0 and continue
-
+		beq :++
+		inc mouse_pressedtimer
+		lda mouse_pressedtimer
+		cmp #$12
+		bne :+
+		lda #$10
+		sta mouse_pressedtimer
+		bra :++
+:		bra mouse_check_end								; mouse was pressed before, so leave mouse_pressed at 0 and continue
 :		lda #$01										; mouse was not pressed before. record everything and send pressed event
 		sta mouse_pressed
 		sta mouse_held
