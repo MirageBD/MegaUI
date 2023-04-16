@@ -138,7 +138,6 @@ uifilebox_endaddentries
 		rts
 
 uifilebox_getstringptr
-		jsr ui_getelementdataptr_1						; get data ptr to zpptr1
 		ldy #$04										; put start of text list into zpptr2
 		jsr ui_getelementdata_2
 
@@ -295,7 +294,6 @@ uifilebox_drawlistreleased
 
 		jsr uidraw_set_draw_position
 
-		jsr ui_getelementdataptr_1						; get data ptr to zpptr1
 		ldy #$02										; put scrollbar1_data into zpptr2
 		jsr ui_getelementdata_2
 

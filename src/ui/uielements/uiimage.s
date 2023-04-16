@@ -34,11 +34,11 @@ uiimage_release
 uiimage_draw
 
 		jsr uidraw_set_draw_position
-		jsr ui_getelementdataptr_1
 
 		ldy #$02
-		lda (zpptr1),y
-		tay
+		jsr ui_getelementdata_2
+
+		ldy zpptr2+0
 
 :		ldx #$00
 		ldz #$00

@@ -114,16 +114,15 @@ uielement_calluifunc
 		lda zpptr0+1
 		sta rzpptr0+1
 
-		jsr ui_getelementdataptr_1
+		ldy #$00
+		jsr ui_getelementdata_2
 
-		ldy #$00								; put ptr to elements and functions in zpptr1
- 		lda (zpptr1),y							; LV TODO - check for ff first before populating everything?
-		sta uecuf1+1
+ 		lda zpptr2+0							; get ptr to elements and functions
+		sta uecuf1+1							; LV TODO - check for ff first before populating everything?
 		sta uecuf2+1
 		sta uecuf3+1
 		sta uecuf4+1
-		iny
-		lda (zpptr1),y
+		lda zpptr2+1
 		sta uecuf1+2
 		sta uecuf2+2
 		sta uecuf3+2

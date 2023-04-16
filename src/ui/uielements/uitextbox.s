@@ -67,7 +67,8 @@ uitextbox_press
 
 		jsr uimouse_calculate_pos_in_uielement
 
-		jsr ui_getelementdataptr_1
+		ldy #$04
+		jsr ui_getelementdata_2
 
 		clc
 		lda uimouse_uielement_xpos+0
@@ -105,7 +106,6 @@ uitextbox_release
 
 uitextbox_inserttext
 
-		jsr ui_getelementdataptr_1
         ldy #$02								; get pointer to text in zpptr2
 		jsr ui_getelementdata_2
 
@@ -145,7 +145,6 @@ uitextbox_inserttext
 
 uitextbox_deletetext
 
-		jsr ui_getelementdataptr_1
         ldy #$02								; get pointer to text in zpptr2
 		jsr ui_getelementdata_2
 
@@ -174,11 +173,10 @@ uitextbox_deletetext
 
 uitextbox_backspacetext
 
-		jsr ui_getelementdataptr_1
+		jsr uitextbox_decreasecursorxpos
+
         ldy #$02								; get pointer to text in zpptr2
 		jsr ui_getelementdata_2
-
-		jsr uitextbox_decreasecursorxpos
 
 		ldy #$04								; get pointer to cursor pos
 		lda (zpptr1),y
@@ -204,7 +202,10 @@ uitextbox_backspacetext
 ; ----------------------------------------------------------------------------------------------------
 
 uitextbox_increasecursorxpos
-		jsr ui_getelementdataptr_1
+
+		ldy #$04
+		jsr ui_getelementdata_2
+
 		ldy #$04								; get pointer to cursor pos
 		clc
 		lda (zpptr1),y
@@ -213,7 +214,10 @@ uitextbox_increasecursorxpos
 		rts
 
 uitextbox_decreasecursorxpos
-		jsr ui_getelementdataptr_1
+
+		ldy #$04
+		jsr ui_getelementdata_2
+		
 		ldy #$04								; get pointer to cursor pos
 		sec
 		lda (zpptr1),y
@@ -224,7 +228,6 @@ uitextbox_decreasecursorxpos
 ; ----------------------------------------------------------------------------------------------------
 
 uitextbox_confine
-		jsr ui_getelementdataptr_1
 		ldy #$02								; get pointer to text in zpptr2
 		jsr ui_getelementdata_2
 
@@ -282,7 +285,6 @@ uitextbox_drawreleased
 
 		jsr uidraw_set_draw_position
 
-		jsr ui_getelementdataptr_1
         ldy #$02
 		jsr ui_getelementdata_2
 
@@ -342,10 +344,10 @@ uitextbox_updatecursor
 		sbc #$00
 		sta uikeyboard_cursorxpos+1
 
-		jsr ui_getelementdataptr_1
-
 		ldy #$04
-		lda (zpptr1),y
+		jsr ui_getelementdata_2
+
+		lda zpptr2+0
 		asl
 		asl
 		asl

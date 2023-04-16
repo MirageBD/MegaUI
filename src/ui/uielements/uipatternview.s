@@ -11,13 +11,9 @@ uipatternview_cursorend					.byte 5
 uipatternview_patternptr				.dword 0
 uipatternview_patternrow				.byte 0
 
-cntPepSeqPStored						.byte 0
-cntPepPRowStored						.byte 0
-
 uipatternview_storedstartpos			.byte 0
 
 uipatternview_storepositions
-		jsr ui_getelementdataptr_1						; get data ptr to zpptr1
 		ldy #$02										; put scrollbar1_data into zpptr2
 		jsr ui_getelementdata_2
 
@@ -28,7 +24,6 @@ uipatternview_storepositions
 		rts
 
 uipatternview_restorepositions
-		jsr ui_getelementdataptr_1						; get data ptr to zpptr1
 		ldy #$02										; put scrollbar1_data into zpptr2
 		jsr ui_getelementdata_2
 
@@ -99,8 +94,7 @@ uipatternview_update
 		bne :+
 		rts
 
-:		jsr ui_getelementdataptr_1						; get data ptr to zpptr1
-		ldy #$02										; put scrollbar1_data into zpptr2
+:		ldy #$02										; put scrollbar1_data into zpptr2
 		jsr ui_getelementdata_2
 
 		ldy #$02										; store startpos
@@ -869,7 +863,6 @@ uipatternview_release
 uipatternview_setselectedindex
 		jsr uimouse_calculate_pos_in_uielement
 
-		jsr ui_getelementdataptr_1						; get data ptr to zpptr1
 		ldy #$02										; put scrollbar1_data in zpptr2
 		jsr ui_getelementdata_2
 
@@ -924,7 +917,6 @@ uipatternview_setvariablesfromindex
 ; ----------------------------------------------------------------------------------------------------
 
 uipatternview_increase_selection
-		jsr ui_getelementdataptr_1						; get data ptr to zpptr1
 		ldy #$02										; put scrollbar1_data in zpptr2
 		jsr ui_getelementdata_2
 
@@ -937,7 +929,6 @@ uipatternview_increase_selection
 		rts
 
 uipatternview_decrease_selection
-		jsr ui_getelementdataptr_1						; get data ptr to zpptr1
 		ldy #$02										; put scrollbar1_data in zpptr2
 		jsr ui_getelementdata_2
 
@@ -962,7 +953,6 @@ uipatternview_confinehorizontal
 :		rts
 
 uipatternview_confinevertical
-		jsr ui_getelementdataptr_1						; get data ptr to zpptr1
 		ldy #$02										; put scrollbar1_data in zpptr2
 		jsr ui_getelementdata_2
 
@@ -1045,7 +1035,6 @@ uipatternview_drawlistreleased
 
 		jsr uidraw_set_draw_position
 
-		jsr ui_getelementdataptr_1						; get data ptr to zpptr1
 		ldy #$02										; put scrollbar1_data into zpptr2
 		jsr ui_getelementdata_2
 

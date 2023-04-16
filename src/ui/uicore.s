@@ -183,15 +183,6 @@ ui_element_indiceshi
 ; ----------------------------------------------------------------------------------------------------
 
 ui_getelementdata_2
-		lda (zpptr1),y
-		sta zpptr2+0
-		iny
-		lda (zpptr1),y
-		sta zpptr2+1
-		rts
-
-ui_getelementdataptr_1
-
 		pha
 		phy
 		ldy #UIELEMENT::data+0
@@ -201,6 +192,13 @@ ui_getelementdataptr_1
         lda (zpptr0),y
 		sta zpptr1+1
 		ply
+
+		lda (zpptr1),y
+		sta zpptr2+0
+		iny
+		lda (zpptr1),y
+		sta zpptr2+1
+
 		pla
 		rts
 

@@ -32,7 +32,6 @@ uiradiobutton_draw
 
 		jsr uidraw_set_draw_position
 
-		jsr ui_getelementdataptr_1
 		ldy #$04							; pointer to group index goes to zpptr2
 		jsr ui_getelementdata_2
 
@@ -55,7 +54,6 @@ uiradiobutton_draw
 ; ----------------------------------------------------------------------------------------------------
 
 uiradiobutton_release
-		jsr ui_getelementdataptr_1
 		ldy #$04							; pointer to group index goes to zpptr2
 		jsr ui_getelementdata_2
 

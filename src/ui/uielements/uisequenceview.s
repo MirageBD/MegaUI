@@ -113,7 +113,6 @@ uisequenceview_drawbkgreleased
 uisequenceview_drawpucksreleased
 
 		jsr uidraw_set_draw_position
-		jsr ui_getelementdataptr_1
 
 		ldy #$00
 		ldz #$00

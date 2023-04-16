@@ -6,14 +6,14 @@ uichannelview_colour		.byte $00
 
 uichannelview_update
 
-		jsr ui_getelementdataptr_1
+		ldy #$06
+		jsr ui_getelementdata_2
 
-		ldy #$06										; decrease vu strength by 1
-		lda (zpptr1),y
+		ldx zpptr2+0										; decrease vu strength by 1
 		beq :+
-		tax
 		dex
 		txa
+		ldy #$06
 		sta (zpptr1),y
 
 :		rts
@@ -92,10 +92,10 @@ uichannelview_drawbarsreleased
 
 		jsr uidraw_set_draw_position
 
-		jsr ui_getelementdataptr_1
+		ldy #$04
+		jsr ui_getelementdata_2
 
-		ldy #$04							; get channel colour
-		lda (zpptr1),y
+		lda zpptr2+0
 		sta uichannelview_colour
 
 		ldx uidraw_width
@@ -157,10 +157,10 @@ prevd72as	.byte $00
 
 uichannelview_capturevu
 
-		jsr ui_getelementdataptr_1
+		ldy #$02
+		jsr ui_getelementdata_2
 
-		ldy #$02										; get channel number
-		lda (zpptr1),y
+		lda zpptr2+0									; get channel number
 		tax
 		asl
 		asl

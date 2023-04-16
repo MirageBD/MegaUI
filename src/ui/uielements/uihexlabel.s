@@ -33,7 +33,6 @@ uihexlabel_draw
 
 		jsr uidraw_set_draw_position
 
-		jsr ui_getelementdataptr_1
         ldy #$02
 		jsr ui_getelementdata_2
 

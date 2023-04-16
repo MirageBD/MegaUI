@@ -43,11 +43,11 @@ uicheckbox_draw
 
 		jsr uidraw_set_draw_position
 
-		jsr ui_getelementdataptr_1
+		ldy #$02
+		jsr ui_getelementdata_2
 
-		ldy #$02							; store off or on
-		lda (zpptr1),y
 		clc
+		lda zpptr2+0
 		adc #$04
 		tay
 
@@ -83,16 +83,18 @@ uicheckbox_doubleclick
 uicheckbox_release
 		;jsr uielement_release
 
-		jsr ui_getelementdataptr_1
+		ldy #$02
+		jsr ui_getelementdata_2
 
-		ldy #$02							; get off or on
-		lda (zpptr1),y
+		lda zpptr2+0						; get off or on
 		beq :+
 		lda #$00							; if on, store off/0
+		ldy #$02
 		sta (zpptr1),y
 		bra :++
 
 :		lda #$01							; if off, store on/1
+		ldy #$02
 		sta (zpptr1),y
 
 :		jsr uicheckbox_draw
