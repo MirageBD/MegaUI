@@ -40,19 +40,19 @@ uitextbox_keypress_alphanumericpunctuation
 
 uitextbox_keypress_control
 		txa
-		cmp KEYBOARD_CURSORRIGHT
+		cmp #KEYBOARD_CURSORRIGHT
 		bne :+
 		jsr uitextbox_increasecursorxpos
 		jsr uitextbox_updatecursor
 		rts
 
-:		cmp KEYBOARD_CURSORLEFT
+:		cmp #KEYBOARD_CURSORLEFT
 		bne :+
 		jsr uitextbox_decreasecursorxpos
 		jsr uitextbox_updatecursor
 		rts
 
-:		cmp KEYBOARD_INSERTDEL
+:		cmp #KEYBOARD_INSERTDEL
 		bne :+
 		jsr uitextbox_backspacetext
 		jsr uitextbox_updatecursor

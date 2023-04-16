@@ -609,7 +609,13 @@ uipatternview_doubleclick
 		rts
 
 uipatternview_keypress
-		lda keyboard_pressedeventarg
+		ldx keyboard_pressedeventarg
+		lda keyboard_keytypes,x
+		cmp #UIKEYBOARD_KEYTYPE::function
+		bne :+
+		rts
+
+:		txa		
 
 		cmp #KEYBOARD_CURSORDOWN
 		bne :+
@@ -690,7 +696,7 @@ uipatternview_keyrelease
 
 ; ----------------------------------------------------------------------------------------------------
 
-upv_insert_note
+upv_prepareinsert
 
 		ldx uipatternview_startpos
 		lda upv_times97tablelo,x
@@ -713,8 +719,27 @@ upv_insert_note
 		lda zpptr2+1
 		adc #$00
 		sta zpptr2+1
+		rts
 
-		ldx keyboard_pressedeventarg
+; ----------------------------------------------------------------------------------------------------
+
+upv_insert_note
+
+		jsr upv_prepareinsert
+
+		lda keyboard_pressedeventarg
+		cmp #KEYBOARD_INSERTDEL
+		bne :+
+		lda #$2e
+		ldy #$02
+		sta (zpptr2),y
+		iny
+		sta (zpptr2),y
+		iny
+		sta (zpptr2),y
+		rts
+
+:		ldx keyboard_pressedeventarg
 		lda upv_tonoteindex,x
 		tax
 		lda upv_times3table,x
@@ -736,82 +761,21 @@ upv_insert_note
 
 ; ----------------------------------------------------------------------------------------------------
 
-upv_insert_alphanumeric
-
-		ldx keyboard_pressedeventarg
-		lda keyboard_toascii,x
-		jsr keyboard_asciiishex
-		bcs :+
-		rts
-
-:		ldx uipatternview_startpos
-		lda upv_times97tablelo,x
-		sta zpptr2+0
-		lda upv_times97tablehi,x
-		sta zpptr2+1
-
-		clc
-		lda zpptr2+0
-		adc #<tvboxtxt0
-		sta zpptr2+0
-		lda zpptr2+1
-		adc #>tvboxtxt0
-		sta zpptr2+1
-
-		clc
-		lda zpptr2+0
-		adc uipatternview_cursorstart
-		sta zpptr2+0
-		lda zpptr2+1
-		adc #$00
-		sta zpptr2+1
-
-		ldy #$02
-		ldx keyboard_pressedeventarg
-		lda keyboard_toascii,x
-		sta (zpptr2),y
-		rts
-
-; ----------------------------------------------------------------------------------------------------
-
-upv_prepareinsert
-
-		ldx keyboard_pressedeventarg				; LV TODO - much of this is the same as intert_note
-		lda keyboard_toascii,x
-		jsr keyboard_asciiishex
-		bcs :+
-		rts
-
-:		ldx uipatternview_startpos
-		lda upv_times97tablelo,x
-		sta zpptr2+0
-		lda upv_times97tablehi,x
-		sta zpptr2+1
-
-		clc
-		lda zpptr2+0
-		adc #<tvboxtxt0
-		sta zpptr2+0
-		lda zpptr2+1
-		adc #>tvboxtxt0
-		sta zpptr2+1
-
-		clc
-		lda zpptr2+0
-		adc uipatternview_cursorstart
-		sta zpptr2+0
-		lda zpptr2+1
-		adc #$00
-		sta zpptr2+1
-		rts
-
-; ----------------------------------------------------------------------------------------------------
-
 upv_insert_sample
 
 		jsr upv_prepareinsert
 
-		ldy #$03
+		lda keyboard_pressedeventarg
+		cmp #KEYBOARD_INSERTDEL
+		bne :+
+		lda #$2e
+		ldy #$02
+		sta (zpptr2),y
+		iny
+		sta (zpptr2),y
+		rts
+
+:		ldy #$03
 		lda (zpptr2),y
 		ldy #$02
 		sta (zpptr2),y
@@ -828,7 +792,15 @@ upv_insert_effect
 
 		jsr upv_prepareinsert
 
+		lda keyboard_pressedeventarg
+		cmp #KEYBOARD_INSERTDEL
+		bne :+
 		ldy #$02
+		lda #$2e
+		sta (zpptr2),y
+		rts
+
+:		ldy #$02
 		ldx keyboard_pressedeventarg
 		lda keyboard_toascii,x
 		sta (zpptr2),y
@@ -840,7 +812,17 @@ upv_insert_effectdata
 
 		jsr upv_prepareinsert
 
-		ldy #$01
+		lda keyboard_pressedeventarg
+		cmp #KEYBOARD_INSERTDEL
+		bne :+
+		lda #$2e
+		ldy #$00
+		sta (zpptr2),y
+		iny
+		sta (zpptr2),y
+		rts
+
+:		ldy #$01
 		lda (zpptr2),y
 		ldy #$00
 		sta (zpptr2),y
