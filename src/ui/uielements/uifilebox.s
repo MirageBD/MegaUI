@@ -139,13 +139,8 @@ uifilebox_endaddentries
 
 uifilebox_getstringptr
 		jsr ui_getelementdataptr_1						; get data ptr to zpptr1
-
 		ldy #$04										; put start of text list into zpptr2
-		lda (zpptr1),y
-		sta zpptr2+0
-		iny
-		lda (zpptr1),y
-		sta zpptr2+1
+		jsr ui_getelementdata_2
 
 		ldy #$02										; get pointer to scrollbar data
 		lda (zpptr1),y
@@ -301,13 +296,8 @@ uifilebox_drawlistreleased
 		jsr uidraw_set_draw_position
 
 		jsr ui_getelementdataptr_1						; get data ptr to zpptr1
-
 		ldy #$02										; put scrollbar1_data into zpptr2
-		lda (zpptr1),y
-		sta zpptr2+0
-		iny
-		lda (zpptr1),y
-		sta zpptr2+1
+		jsr ui_getelementdata_2
 
 		ldy #$02										; store startpos
 		lda (zpptr2),y
@@ -318,11 +308,7 @@ uifilebox_drawlistreleased
 		sta uifilebox_selected_index
 
 		ldy #$04										; put listboxtxt into zpptr2
-		lda (zpptr1),y
-		sta zpptr2+0
-		iny
-		lda (zpptr1),y
-		sta zpptr2+1
+		jsr ui_getelementdata_2
 
 		clc
 		lda uifilebox_startpos

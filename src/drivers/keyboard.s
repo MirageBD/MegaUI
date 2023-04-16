@@ -9,6 +9,8 @@ keyboard_shouldsendreleaseevent		.byte $00
 keyboard_pressedeventarg			.byte $00
 keyboard_releasedeventarg			.byte $00
 
+keyboard_keypressedtimer			.byte $00
+
 keyboard_columnkeys					.byte $00, $00, $00, $00, $00, $00, $00, $00, $00
 
 ; ----------------------------------------------------------------------------------------------------
@@ -262,27 +264,39 @@ keyboard_testkeysloop
 
 keyboard_somethingpressed								; something is pressed
 		cmp keyboard_prevpressed
-		beq keyboard_endchecks							; same key pressed, don't do anything
-		lda #$01
+		bne :++											; same key pressed, increase timer
+		inc keyboard_keypressedtimer
+		lda keyboard_keypressedtimer
+		cmp #$12
+		bne :+
+		lda #$10
+		sta keyboard_keypressedtimer
+		bra :++
+:		bra keyboard_endchecks
+:		lda #$01
 		sta keyboard_shouldsendpressevent				; different key pressed, queue keypressed event
 		lda keyboard_pressed
 		sta keyboard_pressedeventarg
 		bra keyboard_endchecks
 
 keyboard_nothingpressed									; nothing is pressed
+		lda #$00
+		sta keyboard_keypressedtimer
 		lda keyboard_prevpressed
 		cmp #$ff										; and nothing was previously pressed, do nothing
-		beq keyboard_endchecks
-		lda keyboard_prevpressed
+		bne :+
+		bra keyboard_endchecks
+:		lda keyboard_prevpressed
 		sta keyboard_releasedeventarg
 		lda #$01										; something was pressed previously, queue keyreleased event
 		sta keyboard_shouldsendreleaseevent
 
 keyboard_endchecks
 
-keyboard_update_end
-
 		rts
+
+
+
 
 keyboard_set_keypressed
 		pha

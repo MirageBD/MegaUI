@@ -182,6 +182,14 @@ ui_element_indiceshi
 
 ; ----------------------------------------------------------------------------------------------------
 
+ui_getelementdata_2
+		lda (zpptr1),y
+		sta zpptr2+0
+		iny
+		lda (zpptr1),y
+		sta zpptr2+1
+		rts
+
 ui_getelementdataptr_1
 
 		pha
@@ -239,24 +247,6 @@ ui_bkgtextremap
 		.byte $10, $11, $12, $13, $14, $15, $16, $17, $18, $19, $1a, $3f, $3f, $3f, $3f, $3f ; [pqrstuvwxyz     ]
 		.byte $3f, $01, $02, $03, $04, $05, $06, $07, $08, $09, $0a, $0b, $0c, $0d, $0e, $0f ; [@abcdefghijklmno]
 		.byte $10, $11, $12, $13, $14, $15, $16, $17, $18, $19, $1a, $3f, $3f, $3f, $3f, $3f ; [pqrstuvwxyz     ]
-		.byte $3f, $3f, $3f, $3f, $3f, $3f, $3f, $3f, $3f, $3f, $3f, $3f, $3f, $3f, $3f, $3f
-		.byte $3f, $3f, $3f, $3f, $3f, $3f, $3f, $3f, $3f, $3f, $3f, $3f, $3f, $3f, $3f, $3f
-		.byte $3f, $3f, $3f, $3f, $3f, $3f, $3f, $3f, $3f, $3f, $3f, $3f, $3f, $3f, $3f, $3f
-		.byte $3f, $3f, $3f, $3f, $3f, $3f, $3f, $3f, $3f, $3f, $3f, $3f, $3f, $3f, $3f, $3f
-		.byte $3f, $3f, $3f, $3f, $3f, $3f, $3f, $3f, $3f, $3f, $3f, $3f, $3f, $3f, $3f, $3f
-		.byte $3f, $3f, $3f, $3f, $3f, $3f, $3f, $3f, $3f, $3f, $3f, $3f, $3f, $3f, $3f, $3f
-		.byte $3f, $3f, $3f, $3f, $3f, $3f, $3f, $3f, $3f, $3f, $3f, $3f, $3f, $3f, $3f, $3f
-		.byte $3f, $3f, $3f, $3f, $3f, $3f, $3f, $3f, $3f, $3f, $3f, $3f, $3f, $3f, $3f, $3f
-
-ui_colouredtextremap
-		.byte $00, $3f, $3f, $3f, $3f, $3f, $3f, $3f, $3f, $3f, $3f, $3f, $3f, $3f, $3f, $3f
-		.byte $3f, $3f, $3f, $3f, $3f, $3f, $3f, $3f, $3f, $3f, $3f, $3f, $3f, $3f, $3f, $3f
-		.byte $a0, $3f, $3f, $3f, $24, $3f, $3f, $3f, $3f, $3f, $3f, $3f, $3f, $2d, $2e, $3f ; [s             . ]
-		.byte $b0, $b1, $b2, $b3, $b4, $b5, $b6, $b7, $b8, $b9, $3f, $3f, $3f, $3f, $3f, $3f ; [0123456789      ]
-		.byte $3f, $81, $82, $83, $84, $85, $86, $87, $88, $89, $8a, $8b, $8c, $8d, $8e, $8f ; [@abcdefghijklmno]
-		.byte $90, $91, $92, $93, $94, $95, $96, $97, $98, $99, $9a, $3f, $3f, $3f, $3f, $3f ; [pqrstuvwxyz     ]
-		.byte $3f, $81, $82, $83, $84, $85, $86, $87, $88, $89, $8a, $8b, $8c, $8d, $8e, $8f ; [@abcdefghijklmno]
-		.byte $90, $91, $92, $93, $94, $95, $96, $97, $98, $99, $9a, $3f, $3f, $3f, $3f, $3f ; [pqrstuvwxyz     ]
 		.byte $3f, $3f, $3f, $3f, $3f, $3f, $3f, $3f, $3f, $3f, $3f, $3f, $3f, $3f, $3f, $3f
 		.byte $3f, $3f, $3f, $3f, $3f, $3f, $3f, $3f, $3f, $3f, $3f, $3f, $3f, $3f, $3f, $3f
 		.byte $3f, $3f, $3f, $3f, $3f, $3f, $3f, $3f, $3f, $3f, $3f, $3f, $3f, $3f, $3f, $3f

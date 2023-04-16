@@ -1,14 +1,42 @@
 ; ----------------------------------------------------------------------------------------------------
 
-uipatternview_startpos				.byte 0
-uipatternview_current_draw_pos		.byte 0
-uipatternview_middlepos				.byte 0
-uipatternview_rowpos				.byte 0
+uipatternview_startpos					.byte 0
+uipatternview_current_draw_pos			.byte 0
+uipatternview_middlepos					.byte 0
+uipatternview_rowpos					.byte 0
+uipatternview_columninchannelindex		.byte 0
+uipatternview_columnindex				.byte 0
+uipatternview_cursorstart				.byte 0
+uipatternview_cursorend					.byte 5
+uipatternview_patternptr				.dword 0
+uipatternview_patternrow				.byte 0
 
-uipatternview_columninchannelindex	.byte 0
-uipatternview_columnindex			.byte 0
-uipatternview_cursorstart			.byte 0
-uipatternview_cursorend				.byte 5
+cntPepSeqPStored						.byte 0
+cntPepPRowStored						.byte 0
+
+uipatternview_storedstartpos			.byte 0
+
+uipatternview_storepositions
+		jsr ui_getelementdataptr_1						; get data ptr to zpptr1
+		ldy #$02										; put scrollbar1_data into zpptr2
+		jsr ui_getelementdata_2
+
+		ldy #$02										; store startpos
+		lda (zpptr2),y
+		sta uipatternview_storedstartpos
+
+		rts
+
+uipatternview_restorepositions
+		jsr ui_getelementdataptr_1						; get data ptr to zpptr1
+		ldy #$02										; put scrollbar1_data into zpptr2
+		jsr ui_getelementdata_2
+
+		ldy #$02										; restore startpos
+		lda uipatternview_storedstartpos
+		sta (zpptr2),y
+
+		rts
 
 upv_columnstarts
 		.byte      0,      6,      11,      16,      19
@@ -46,14 +74,8 @@ upv_reversecolumnfoolookup
 
 ; ----------------------------------------------------------------------------------------------------
 
-uipatternview_patternptr			.dword 0
-uipatternview_patternrow			.byte 0
-
-; ----------------------------------------------------------------------------------------------------
-
 uipatternview_update
-		lda cntPepSeqP
-		taz
+		ldz cntPepSeqP
 		lda	[ptrPepMSeq],z
 		asl
 		asl
@@ -78,13 +100,8 @@ uipatternview_update
 		rts
 
 :		jsr ui_getelementdataptr_1						; get data ptr to zpptr1
-
 		ldy #$02										; put scrollbar1_data into zpptr2
-		lda (zpptr1),y
-		sta zpptr2+0
-		iny
-		lda (zpptr1),y
-		sta zpptr2+1
+		jsr ui_getelementdata_2
 
 		ldy #$02										; store startpos
 		lda uipatternview_patternrow
@@ -853,13 +870,8 @@ uipatternview_setselectedindex
 		jsr uimouse_calculate_pos_in_uielement
 
 		jsr ui_getelementdataptr_1						; get data ptr to zpptr1
-
 		ldy #$02										; put scrollbar1_data in zpptr2
-		lda (zpptr1),y
-		sta zpptr2+0
-		iny
-		lda (zpptr1),y
-		sta zpptr2+1
+		jsr ui_getelementdata_2
 
 		ldy #UIELEMENT::height
 		lda (zpptr0),y
@@ -913,13 +925,8 @@ uipatternview_setvariablesfromindex
 
 uipatternview_increase_selection
 		jsr ui_getelementdataptr_1						; get data ptr to zpptr1
-
 		ldy #$02										; put scrollbar1_data in zpptr2
-		lda (zpptr1),y
-		sta zpptr2+0
-		iny
-		lda (zpptr1),y
-		sta zpptr2+1
+		jsr ui_getelementdata_2
 
 		clc
 		ldy #$02										; get start index
@@ -931,13 +938,8 @@ uipatternview_increase_selection
 
 uipatternview_decrease_selection
 		jsr ui_getelementdataptr_1						; get data ptr to zpptr1
-
 		ldy #$02										; put scrollbar1_data in zpptr2
-		lda (zpptr1),y
-		sta zpptr2+0
-		iny
-		lda (zpptr1),y
-		sta zpptr2+1
+		jsr ui_getelementdata_2
 
 		sec
 		ldy #$02										; get start index
@@ -961,13 +963,8 @@ uipatternview_confinehorizontal
 
 uipatternview_confinevertical
 		jsr ui_getelementdataptr_1						; get data ptr to zpptr1
-
 		ldy #$02										; put scrollbar1_data in zpptr2
-		lda (zpptr1),y
-		sta zpptr2+0
-		iny
-		lda (zpptr1),y
-		sta zpptr2+1
+		jsr ui_getelementdata_2
 
 		ldy #$02										; get start index
 		lda (zpptr2),y
@@ -1049,13 +1046,8 @@ uipatternview_drawlistreleased
 		jsr uidraw_set_draw_position
 
 		jsr ui_getelementdataptr_1						; get data ptr to zpptr1
-
 		ldy #$02										; put scrollbar1_data into zpptr2
-		lda (zpptr1),y
-		sta zpptr2+0
-		iny
-		lda (zpptr1),y
-		sta zpptr2+1
+		jsr ui_getelementdata_2
 
 		lda uidraw_height								; $0f
 		lsr
@@ -1066,11 +1058,7 @@ uipatternview_drawlistreleased
 		sta uipatternview_startpos
 
 		ldy #$04										; put listboxtxt into zpptr2
-		lda (zpptr1),y
-		sta zpptr2+0
-		iny
-		lda (zpptr1),y
-		sta zpptr2+1
+		jsr ui_getelementdata_2
 
 		sec
 		lda uipatternview_startpos						; add startpos to listboxtxt pointer

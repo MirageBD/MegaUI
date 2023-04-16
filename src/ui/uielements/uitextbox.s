@@ -106,13 +106,8 @@ uitextbox_release
 uitextbox_inserttext
 
 		jsr ui_getelementdataptr_1
-
         ldy #$02								; get pointer to text in zpptr2
-		lda (zpptr1),y
-		sta zpptr2+0
-		iny
-		lda (zpptr1),y
-		sta zpptr2+1
+		jsr ui_getelementdata_2
 
 		ldy #$04								; get pointer to cursor pos
 		lda (zpptr1),y
@@ -151,13 +146,8 @@ uitextbox_inserttext
 uitextbox_deletetext
 
 		jsr ui_getelementdataptr_1
-
         ldy #$02								; get pointer to text in zpptr2
-		lda (zpptr1),y
-		sta zpptr2+0
-		iny
-		lda (zpptr1),y
-		sta zpptr2+1
+		jsr ui_getelementdata_2
 
 		ldy #$04								; get pointer to cursor pos
 		lda (zpptr1),y
@@ -185,13 +175,8 @@ uitextbox_deletetext
 uitextbox_backspacetext
 
 		jsr ui_getelementdataptr_1
-
         ldy #$02								; get pointer to text in zpptr2
-		lda (zpptr1),y
-		sta zpptr2+0
-		iny
-		lda (zpptr1),y
-		sta zpptr2+1
+		jsr ui_getelementdata_2
 
 		jsr uitextbox_decreasecursorxpos
 
@@ -240,13 +225,8 @@ uitextbox_decreasecursorxpos
 
 uitextbox_confine
 		jsr ui_getelementdataptr_1
-
 		ldy #$02								; get pointer to text in zpptr2
-		lda (zpptr1),y
-		sta zpptr2+0
-		iny
-		lda (zpptr1),y
-		sta zpptr2+1
+		jsr ui_getelementdata_2
 
 		ldy #$00
 :		lda (zpptr2),y
@@ -303,13 +283,8 @@ uitextbox_drawreleased
 		jsr uidraw_set_draw_position
 
 		jsr ui_getelementdataptr_1
-
         ldy #$02
-		lda (zpptr1),y
-		sta zpptr2+0
-		iny
-		lda (zpptr1),y
-		sta zpptr2+1
+		jsr ui_getelementdata_2
 
 		ldy #$00
 		ldz #$00

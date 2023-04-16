@@ -38,13 +38,8 @@ uilabel_draw
 		jsr uidraw_set_draw_position
 
 		jsr ui_getelementdataptr_1
-
         ldy #$02
-		lda (zpptr1),y
-		sta zpptr2+0
-		iny
-		lda (zpptr1),y
-		sta zpptr2+1
+		jsr ui_getelementdata_2
 
 		ldy #$00
 		ldz #$00

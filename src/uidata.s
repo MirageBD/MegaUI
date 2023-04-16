@@ -267,18 +267,18 @@ ctextbutton3_functions			.word ctextbutton3,						userfunc_pausemod
 ; ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 userfunc_playmod
-
+		UICORE_CALLELEMENTFUNCTION tvlistbox, uipatternview_storepositions
 		jsr peppitoInit
 		lda #$01
 		sta peppitoPlaying
 		rts
 
 userfunc_stopmod
-
 		jsr peppitoStop
 		jsr peppitoInit
 		lda #$00
 		sta peppitoPlaying
+		UICORE_CALLELEMENTFUNCTION tvlistbox, uipatternview_restorepositions
 		rts
 
 userfunc_pausemod

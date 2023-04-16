@@ -33,13 +33,8 @@ uiradiobutton_draw
 		jsr uidraw_set_draw_position
 
 		jsr ui_getelementdataptr_1
-
 		ldy #$04							; pointer to group index goes to zpptr2
-		lda (zpptr1),y
-		sta zpptr2+0
-		iny
-		lda (zpptr1),y
-		sta zpptr2+1
+		jsr ui_getelementdata_2
 
 		ldy #$00							; read group index
 		lda (zpptr2),y
@@ -61,13 +56,8 @@ uiradiobutton_draw
 
 uiradiobutton_release
 		jsr ui_getelementdataptr_1
-
 		ldy #$04							; pointer to group index goes to zpptr2
-		lda (zpptr1),y
-		sta zpptr2+0
-		iny
-		lda (zpptr1),y
-		sta zpptr2+1
+		jsr ui_getelementdata_2
 
 		ldy #$02							; read index
 		lda (zpptr1),y
