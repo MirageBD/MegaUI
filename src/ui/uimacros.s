@@ -30,3 +30,11 @@
 		UICORE_SELECT_ELEMENT element
 		jsr function
 .endmacro
+
+.macro UICORE_HIDEELEMENT element
+		lda #<element
+		sta uielement_ptr+0
+		lda #>element
+		sta uielement_ptr+1
+		jsr ui_setflags
+.endmacro

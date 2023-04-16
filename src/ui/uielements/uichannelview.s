@@ -187,7 +187,12 @@ uichannelview_capturevu
 		lda #$00
 		sta $13
 
-		ldz #$00
+		lda $12											; EEK!!! Ask Gardners about this!!!
+		cmp #$ff
+		bne :+
+		rts
+
+:		ldz #$00
 		lda [$10],z
 		tay
 		lda sampleremap,y

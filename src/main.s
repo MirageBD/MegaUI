@@ -9,10 +9,8 @@
 .define spritepal				$c800
 .define emptychar				$cf80	; size = 64
 
-.define uichars					$10000	; size = $4000
-.define glchars					$14000	; size = $2000
-.define mod_patterns			$20000	; size = $6000 - lots of 0, RLE pack?
-.define mod_samples				$30000	; size = $25000
+.define uichars					$10000	; $10000 - $14000     size = $4000
+.define glchars					$14000	; $14000 - $1d000     size = $9000
 
 .define moddata					$20000
 
@@ -168,6 +166,9 @@ entry_main
 
 		jsr mouse_init									; initialise drivers
 
+		;UICORE_HIDEELEMENT ui_sequenceview				; turn parts of the UI off as a test
+		;UICORE_HIDEELEMENT ui_patternview				; turn parts of the UI off as a test
+
 		jsr ui_init										; initialise UI
 		jsr ui_setup
 
@@ -193,6 +194,9 @@ entry_main
 		cli
 		
 loop
+
+		lda peppitoPlaying
+		beq loop
 
 		UICORE_CALLELEMENTFUNCTION chanview1, uichannelview_capturevu
 		UICORE_CALLELEMENTFUNCTION chanview2, uichannelview_capturevu
@@ -255,6 +259,7 @@ irq1
 		;lda #$08
 		;sta $d020
 		jsr ui_update
+		jsr ui_user_update
 		;lda #$00
 		;sta $d020
 

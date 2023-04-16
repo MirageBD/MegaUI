@@ -187,6 +187,21 @@ ui_setup
 		sta uielement_layoutypos
 		lda #$00
 		sta uielement_hoverwindowcounter
+
+		jsr ui_layout_windows
+
+		lda #<ui_root1								; get pointer to window x
+		sta uielement_ptr+0
+		sta uikeyboard_focuselement+0
+		lda #>ui_root1
+		sta uielement_ptr+1
+		sta uikeyboard_focuselement+1
+		lda #$00
+		sta uielement_layoutxpos
+		sta uielement_layoutypos
+		lda #$00
+		sta uielement_hoverwindowcounter
+
 		jsr ui_draw_windows
 
         rts
@@ -265,6 +280,149 @@ uistack_popparent
 
 ; ----------------------------------------------------------------------------------------------------
 
+ui_setflags
+
+		clc
+		lda uielement_ptr+0								; get pointer to element
+		adc ui_element_indiceslo
+		sta zpptr0+0
+		lda uielement_ptr+1
+		adc ui_element_indiceshi
+		sta zpptr0+1
+
+		ldy #UIELEMENT::flags
+		lda #$00
+		sta (zpptr0),y
+
+		ldy #UIELEMENT::children
+		iny												; add 1 - we want to check for $xx $ff, not $ff xx !!!
+		lda (zpptr0),y
+		cmp #$ff
+		bne :+
+		rts
+
+:		ldy #UIELEMENT::children
+		lda (zpptr0),y
+		sta uielement_ptr+0
+		iny
+		lda (zpptr0),y
+		sta uielement_ptr+1
+
+		jsr ui_setflags_recursive
+
+		rts
+
+ui_setflags_recursive
+
+		lda #$ff
+		sta uielement_counter
+
+ui_setflags_recursive_loop
+
+		inc uielement_counter
+		ldy uielement_counter
+
+		clc
+		lda uielement_ptr+0								; get pointer to ui element
+		adc ui_element_indiceslo,y
+		sta zpptr0+0
+		lda uielement_ptr+1
+		adc ui_element_indiceshi,y
+		sta zpptr0+1
+
+		ldy #UIELEMENT::type							; are we at the end of the list?
+		lda (zpptr0),y
+		cmp #UIELEMENTTYPE::null
+		bne :+
+		rts
+
+:		ldy #UIELEMENT::flags							; are we at the end of the list?
+		lda #$00
+		sta (zpptr0),y
+
+		ldy #UIELEMENT::children
+		iny												; add 1 - we want to check for $xx $ff, not $ff xx !!!
+		lda (zpptr0),y
+		cmp #$ff
+		bne :+
+		bra ui_setflags_recursive_loop
+
+:		lda zpptr0+0									; recursively handle children
+		sta uielement_parent_ptr+0
+		lda zpptr0+1
+		sta uielement_parent_ptr+1
+		jsr uistack_pushparent
+		ldy #UIELEMENT::children
+		lda (zpptr0),y
+		sta uielement_ptr+0
+		iny
+		lda (zpptr0),y
+		sta uielement_ptr+1
+		jsr ui_setflags_recursive
+		jsr uistack_popparent
+		bra ui_setflags_recursive_loop
+
+; ----------------------------------------------------------------------------------------------------
+
+ui_layout_windows
+
+		lda #$ff
+		sta uielement_counter
+
+ui_layout_window_loop
+		inc uielement_counter
+		ldy uielement_counter
+
+		clc
+		lda uielement_ptr+0								; get pointer to ui root
+		adc ui_element_indiceslo,y
+		sta zpptr0+0
+		lda uielement_ptr+1
+		adc ui_element_indiceshi,y
+		sta zpptr0+1
+
+		ldy #UIELEMENT::type							; are we at the end of the list?
+		lda (zpptr0),y
+		cmp #UIELEMENTTYPE::null
+		bne :+
+		rts
+
+:		SEND_EVENT layout
+
+		ldy #UIELEMENT::children
+		iny												; add 1 - we want to check for $xx $ff, not $ff xx !!!
+		lda (zpptr0),y
+		cmp #$ff
+		bne :+
+		bra ui_layout_window_loop
+
+:		lda zpptr0+0									; recursively handle children
+		sta uielement_parent_ptr+0
+		lda zpptr0+1
+		sta uielement_parent_ptr+1
+		jsr uistack_pushparent
+		clc
+		lda uielement_layoutxpos
+		ldy #UIELEMENT::xpos
+		adc (zpptr0),y
+		sta uielement_layoutxpos
+		clc
+		lda uielement_layoutypos
+		ldy #UIELEMENT::ypos
+		adc (zpptr0),y
+		sta uielement_layoutypos
+		ldy #UIELEMENT::children
+		lda (zpptr0),y
+		sta uielement_ptr+0
+		iny
+		lda (zpptr0),y
+		sta uielement_ptr+1
+		jsr ui_layout_windows
+		jsr uistack_popparent
+		bra ui_layout_window_loop
+
+; ----------------------------------------------------------------------------------------------------
+
 ui_draw_windows
 
 		lda #$ff
@@ -288,7 +446,13 @@ ui_draw_window_loop
 		bne :+
 		rts
 
-:		SEND_EVENT layout
+:		ldy #UIELEMENT::flags							; is the element visible?
+		lda (zpptr0),y
+		and #UIFLAGS::visible
+		bne :+
+		bra ui_draw_window_loop
+
+:		ldy #UIELEMENT::type
 		SEND_EVENT draw
 
 		ldy #UIELEMENT::children
@@ -303,7 +467,6 @@ ui_draw_window_loop
 		lda zpptr0+1
 		sta uielement_parent_ptr+1
 		jsr uistack_pushparent
-		jsr uihelper_store_minxy
 		ldy #UIELEMENT::children
 		lda (zpptr0),y
 		sta uielement_ptr+0
@@ -314,22 +477,6 @@ ui_draw_window_loop
 		jsr uistack_popparent
 		bra ui_draw_window_loop
 
-uihelper_store_minxy
-
-		clc
-		lda uielement_layoutxpos
-		ldy #UIELEMENT::xpos
-		adc (zpptr0),y
-		sta uielement_layoutxpos
-
-		clc
-		lda uielement_layoutypos
-		ldy #UIELEMENT::ypos
-		adc (zpptr0),y
-		sta uielement_layoutypos
-
-		rts
-
 ; ----------------------------------------------------------------------------------------------------
 
 ui_update
@@ -338,19 +485,32 @@ ui_update
 		jsr uimouse_update
 		jsr keyboard_update
 		jsr uikeyboard_update
+		rts
+
+ui_user_update
 
 		UICORE_CALLELEMENTFUNCTION hexlabel1, uihexlabel_draw			; LV TODO - add update timer and move this to manager of some kind
 		UICORE_CALLELEMENTFUNCTION hexlabel2, uihexlabel_draw
 
-		UICORE_CALLELEMENTFUNCTION tvlistbox, uipatternview_update
-		UICORE_CALLELEMENTFUNCTION sequenceview1, uisequenceview_update
-
 		;UICORE_CALLELEMENTFUNCTION ptrnidxlabel, uihexlabel_draw
 		;UICORE_CALLELEMENTFUNCTION ptrnptrlabel, uihexlabel_draw
 		;UICORE_CALLELEMENTFUNCTION ptrnrowlabel, uihexlabel_draw
+		
+		lda #<tvlistbox
+		sta zpptr1+0
+		lda #>tvlistbox
+		sta zpptr1+1
+		ldy #UIELEMENT::flags
+		lda (zpptr1),y
+		and #UIFLAGS::visible
+		bne :+
+		rts
 
-		UICORE_CALLELEMENTFUNCTION sequenceview1, uisequenceview_draw
+:		UICORE_CALLELEMENTFUNCTION tvlistbox, uipatternview_update
 		UICORE_CALLELEMENTFUNCTION tvlistbox, uipatternview_draw
+
+		UICORE_CALLELEMENTFUNCTION sequenceview1, uisequenceview_update
+		UICORE_CALLELEMENTFUNCTION sequenceview1, uisequenceview_draw
 
 		UICORE_CALLELEMENTFUNCTION chanview1, uichannelview_update
 		UICORE_CALLELEMENTFUNCTION chanview2, uichannelview_update

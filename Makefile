@@ -1,6 +1,6 @@
 # -----------------------------------------------------------------------------
 
-megabuild		= 0
+megabuild		= 1
 finalbuild		= 1
 attachdebugger	= 0
 
@@ -146,9 +146,9 @@ ifeq ($(megabuild), 1)
 	m65 -l COM3 -T 'list'
 	m65 -l COM3 -T 'list'
 	m65 -l COM3 -T 'mount "megaui.d81"'
-#	m65 -l COM3 -T 'load "$$"'
-#	m65 -l COM3 -T 'list'
-#	m65 -l COM3 -T 'list'
+	m65 -l COM3 -T 'load "$$"'
+	m65 -l COM3 -T 'list'
+	m65 -l COM3 -T 'list'
 	m65 -l COM3 -T 'load "boot"'
 	m65 -l COM3 -T 'list'
 	m65 -l COM3 -T 'run'
