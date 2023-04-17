@@ -4,6 +4,10 @@ uiimage_layout
 		jsr uielement_layout
 		rts
 
+uiimage_hide
+		jsr uielement_hide
+		rts
+
 uiimage_focus
 		rts
 

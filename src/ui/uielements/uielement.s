@@ -54,6 +54,42 @@ uielement_layout
 
     	rts
 
+uielement_hide
+
+		jsr uidraw_set_draw_position
+
+		ldy #UIELEMENT::width
+		lda (zpptr0),y
+		sta uidraw_width
+		ldy #UIELEMENT::height
+		lda (zpptr0),y
+		clc
+		adc #$01
+		sta uidraw_height
+
+		ldy uidraw_height
+:		ldx uidraw_width
+		ldz #$00
+:		lda #<(glchars/64)
+		sta [uidraw_scrptr],z
+		lda #$04
+		sta [uidraw_colptr],z
+		inz
+		lda #>(glchars/64)
+		sta [uidraw_scrptr],z
+		lda #$00
+		sta [uidraw_colptr],z
+		inz
+		dex
+		bne :-
+
+		jsr uidraw_increase_row
+
+		dey
+		bne :--
+
+		rts
+
 uielement_focus
 	    rts
 
@@ -82,6 +118,9 @@ uielement_press
 		lda (zpptr0),y
 		ora #UISTATE::pressed
 		sta (zpptr0),y
+
+		jsr uikeyboard_disablecursor
+
     	rts
 
 uielement_doubleclick

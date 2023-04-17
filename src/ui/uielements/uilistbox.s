@@ -10,6 +10,10 @@ uilistbox_layout
 		jsr uielement_layout
 		rts
 
+uilistbox_hide
+		jsr uielement_hide
+		rts
+
 uilistbox_focus
 		rts
 

@@ -4,6 +4,10 @@ uidebugelement_layout
 		jsr uielement_layout
     	rts
 
+uidebugelement_hide
+		jsr uielement_hide
+		rts
+
 uidebugelement_focus
 		jsr uielement_focus
 	    rts

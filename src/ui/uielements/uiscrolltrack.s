@@ -36,6 +36,10 @@ uiscrolltrack_layout
 		jsr uielement_layout
 		rts
 
+uiscrolltrack_hide
+		jsr uielement_hide
+		rts
+
 uiscrolltrack_focus
 		rts
 

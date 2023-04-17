@@ -12,6 +12,10 @@ uiroot_layout
 
     	rts
 
+uiroot_hide
+		jsr uielement_hide
+		rts
+
 uiroot_focus
 		jsr uielement_focus
 	    rts

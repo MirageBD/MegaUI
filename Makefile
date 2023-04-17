@@ -1,6 +1,6 @@
 # -----------------------------------------------------------------------------
 
-megabuild		= 1
+megabuild		= 0
 finalbuild		= 1
 attachdebugger	= 0
 
@@ -108,6 +108,8 @@ $(EXE_DIR)/boot.o:	$(SRC_DIR)/boot.s \
 					$(UIELT_SRC_DIR)/uipatternview.s \
 					$(UIELT_SRC_DIR)/uisequenceview.s \
 					$(UIELT_SRC_DIR)/uichannelview.s \
+					$(UIELT_SRC_DIR)/uitab.s \
+					$(UIELT_SRC_DIR)/uigroup.s \
 					Makefile Linkfile
 	$(AS) $(ASFLAGS) -o $@ $<
 

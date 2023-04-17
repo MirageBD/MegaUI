@@ -4,6 +4,10 @@ uinineslice_layout
 		jsr uielement_layout
     	rts
 
+uinineslice_hide
+		jsr uielement_hide
+		rts
+
 uinineslice_focus
 		jsr uielement_focus
 	    rts

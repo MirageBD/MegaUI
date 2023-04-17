@@ -169,6 +169,9 @@ entry_main
 		;UICORE_HIDEELEMENT ui_sequenceview				; turn parts of the UI off as a test
 		;UICORE_HIDEELEMENT ui_patternview				; turn parts of the UI off as a test
 
+		;UICORE_HIDEELEMENT ui_tab2
+		;UICORE_HIDEELEMENT ui_tab3
+
 		jsr ui_init										; initialise UI
 		jsr ui_setup
 

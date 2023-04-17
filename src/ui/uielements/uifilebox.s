@@ -11,6 +11,10 @@ uifilebox_layout
 		jsr uifilebox_opendir
 		rts
 
+uifilebox_hide
+		jsr uielement_hide
+		rts
+
 uifilebox_focus
 		jsr uilistbox_focus
 		rts

@@ -20,6 +20,10 @@ uisequenceview_layout
         jsr uielement_layout
     	rts
 
+uisequenceview_hide
+		jsr uielement_hide
+		rts
+
 uisequenceview_focus
 	    rts
 

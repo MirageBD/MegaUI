@@ -91,8 +91,11 @@ ui_init
 		lda #%10000000									; tell VIC-IV to expect two bytes per sprite pointer instead of one
 		tsb $d06e										; do this after setting sprite pointer address, because that uses $d06e as well
 
-		lda #%00000011									; enable sprite 0 (mouse cursor) and 1 (keyboard cursor)
+		lda #%00000000
 		sta $d015
+		jsr uimouse_enablecursor
+
+		lda #%11111111
 		sta $d057										; enable 64 pixel wide sprites. 16 pixels if in Full Colour Mode
 		sta $d06b										; enable Full Colour Mode (SPR16EN)
 		sta $d055										; sprite height enable (SPRHGTEN)
@@ -208,35 +211,32 @@ ui_setup
 
 ; ----------------------------------------------------------------------------------------------------
 
-uielement_ptr
-		.word 0
-uielement_parent_ptr
-		.word 0
+uielement_ptr						.word 0
+uielementlist_ptr					.word 0
+uielement_parent_ptr				.word 0
 
-uielement_counter
-		.byte 0
+uielementlist_counter				.byte 0
+uielement_counter					.byte 0
 
-uielement_hoverwindowcounter
-		.byte 0
+uielement_hoverwindowcounter		.byte 0
+uielement_prevhoverwindowcounter	.byte 0
 
-uielement_prevhoverwindowcounter		
-		.byte 0
+uielement_temp						.byte 0
 
-uielement_temp
-		.byte 0
+uielement_layoutxpos				.byte 0
+uielement_layoutypos				.byte 0
 
-uielement_layoutxpos
-		.byte 0
-uielement_layoutypos
-		.byte 0
+uistackptr							.byte 0
 
 uistack
 		.repeat 256
 			.byte 0
 		.endrepeat
 
-uistackptr
-		.byte $00
+ui_flagtoset						.byte $00
+ui_flagtoclear						.byte $00
+ui_currentflag						.byte $00
+ui_setflagindex						.byte $00
 
 uistack_pushparent
 		ldx uistackptr
@@ -280,6 +280,191 @@ uistack_popparent
 
 ; ----------------------------------------------------------------------------------------------------
 
+ui_setselectiveflags
+
+		ldy #UIELEMENT::children						; does the group have children?
+		iny												; add 1 - we want to check for $xx $ff, not $ff xx !!!
+		lda (zpptr0),y
+		cmp #$ff
+		bne :+
+		rts
+
+:		ldy #UIELEMENT::children						; get children/tabs of the tab group
+		lda (zpptr0),y
+		sta uielementlist_ptr+0
+		iny
+		lda (zpptr0),y
+		sta uielementlist_ptr+1
+
+
+
+		lda uielementlist_ptr+0							; prepare to call hide on first tab contents
+		sta zpptr0+0
+		lda uielementlist_ptr+1
+		sta zpptr0+1
+
+		ldy #UIELEMENT::data+0							; get pointer to the data
+        lda (zpptr0),y
+		sta zpptr1+0
+		ldy #UIELEMENT::data+1
+        lda (zpptr0),y
+		sta zpptr1+1
+		ldy #$04										; get pointer to the contents
+		lda (zpptr1),y
+		sta zpptr0+0
+		iny
+		lda (zpptr1),y
+		sta zpptr0+1
+
+		jsr uiwindow_hide
+
+
+
+
+		lda #$ff										; go through the three tabs, get their content and set the flags
+		sta uielementlist_counter
+
+tabflagloop
+		inc uielementlist_counter
+		ldy uielementlist_counter
+
+		clc
+		lda uielementlist_ptr+0								; get pointer to ui element
+		adc ui_element_indiceslo,y
+		sta zpptr0+0
+		lda uielementlist_ptr+1
+		adc ui_element_indiceshi,y
+		sta zpptr0+1
+
+		ldy #UIELEMENT::type							; are we at the end of the list?
+		lda (zpptr0),y
+		cmp #UIELEMENTTYPE::null
+		bne :+
+		jmp tabflagend
+
+:		lda uielementlist_counter						; should we set or clear flags
+		cmp ui_setflagindex
+		bne :+
+		lda ui_flagtoset
+		sta ui_currentflag
+		bra :++
+:		lda ui_flagtoclear
+		sta ui_currentflag
+:
+
+		ldy #UIELEMENT::data+0							; get pointer to the data
+        lda (zpptr0),y
+		sta zpptr1+0
+		ldy #UIELEMENT::data+1
+        lda (zpptr0),y
+		sta zpptr1+1
+		ldy #$04										; get pointer to the contents
+		lda (zpptr1),y
+		sta uielement_ptr+0
+		iny
+		lda (zpptr1),y
+		sta uielement_ptr+1
+
+		jsr ui_setselectiveflags_recursive
+
+		jmp tabflagloop
+
+tabflagend
+
+		lda #$ff										; go through the three tabs, get their content and set the flags
+		sta uielementlist_counter
+
+tabdrawloop
+		inc uielementlist_counter
+		ldy uielementlist_counter
+
+		clc
+		lda uielementlist_ptr+0							; get pointer to ui element
+		adc ui_element_indiceslo,y
+		sta zpptr0+0
+		lda uielementlist_ptr+1
+		adc ui_element_indiceshi,y
+		sta zpptr0+1
+
+		ldy #UIELEMENT::type							; are we at the end of the list?
+		lda (zpptr0),y
+		cmp #UIELEMENTTYPE::null
+		bne :+
+		jmp tabdrawend
+
+:		ldy #UIELEMENT::data+0							; get pointer to the data
+        lda (zpptr0),y
+		sta zpptr1+0
+		ldy #UIELEMENT::data+1
+        lda (zpptr0),y
+		sta zpptr1+1
+		ldy #$04										; get pointer to the contents
+		lda (zpptr1),y
+		sta uielement_ptr+0
+		iny
+		lda (zpptr1),y
+		sta uielement_ptr+1
+
+		jsr ui_draw_windows
+
+		jmp tabdrawloop
+
+tabdrawend
+
+		rts
+
+
+ui_setselectiveflags_recursive
+
+		lda #$ff
+		sta uielement_counter
+
+ui_setselectiveflags_recursive_loop
+
+		inc uielement_counter
+		ldy uielement_counter
+
+		clc
+		lda uielement_ptr+0								; get pointer to ui element
+		adc ui_element_indiceslo,y
+		sta zpptr0+0
+		lda uielement_ptr+1
+		adc ui_element_indiceshi,y
+		sta zpptr0+1
+
+		ldy #UIELEMENT::type							; are we at the end of the list?
+		lda (zpptr0),y
+		cmp #UIELEMENTTYPE::null
+		bne :+
+		rts
+
+:		ldy #UIELEMENT::flags
+		lda ui_currentflag
+		sta (zpptr0),y
+
+		ldy #UIELEMENT::children
+		iny												; add 1 - we want to check for $xx $ff, not $ff xx !!!
+		lda (zpptr0),y
+		cmp #$ff
+		bne :+
+		bra ui_setselectiveflags_recursive_loop
+
+:		lda zpptr0+0									; recursively handle children
+		sta uielement_parent_ptr+0
+		lda zpptr0+1
+		sta uielement_parent_ptr+1
+		jsr uistack_pushparent
+		ldy #UIELEMENT::children
+		lda (zpptr0),y
+		sta uielement_ptr+0
+		iny
+		lda (zpptr0),y
+		sta uielement_ptr+1
+		jsr ui_setselectiveflags_recursive
+		jsr uistack_popparent
+		jmp ui_setselectiveflags_recursive_loop
+
+
 ui_setflags
 
 		clc
@@ -291,7 +476,7 @@ ui_setflags
 		sta zpptr0+1
 
 		ldy #UIELEMENT::flags
-		lda #$00
+		lda ui_flagtoset
 		sta (zpptr0),y
 
 		ldy #UIELEMENT::children
@@ -309,7 +494,6 @@ ui_setflags
 		sta uielement_ptr+1
 
 		jsr ui_setflags_recursive
-
 		rts
 
 ui_setflags_recursive
@@ -337,7 +521,7 @@ ui_setflags_recursive_loop
 		rts
 
 :		ldy #UIELEMENT::flags							; are we at the end of the list?
-		lda #$00
+		lda ui_flagtoset
 		sta (zpptr0),y
 
 		ldy #UIELEMENT::children
@@ -479,12 +663,71 @@ ui_draw_window_loop
 
 ; ----------------------------------------------------------------------------------------------------
 
+ui_eventqueue_index		.byte 0
+
+ui_eventqueue_element	.word 0
+ui_eventqueue_function	.word 0
+
+ui_eventqueue
+.repeat 256
+		.byte 0
+.endrepeat
+
+ui_eventqueue_add
+		ldx ui_eventqueue_index
+		lda ui_eventqueue_element+0
+		sta ui_eventqueue+0,x
+		lda ui_eventqueue_element+1
+		sta ui_eventqueue+1,x
+		lda ui_eventqueue_function+0
+		sta ui_eventqueue+2,x
+		lda ui_eventqueue_function+1
+		sta ui_eventqueue+3,x
+		inx
+		inx
+		inx
+		inx
+		stx ui_eventqueue_index
+		rts
+
+ui_eventqueue_execute
+		lda ui_eventqueue_index
+		bne :+
+		rts
+
+:		ldx #$00
+:		lda ui_eventqueue+0,x
+		sta zpptr0+0
+		lda ui_eventqueue+1,x
+		sta zpptr0+1
+		lda ui_eventqueue+2,x
+		sta ueqe1+1
+		lda ui_eventqueue+3,x
+		sta ueqe1+2
+
+		phx
+ueqe1	jsr $babe
+		plx
+
+		inx
+		inx
+		inx
+		inx
+		cpx ui_eventqueue_index
+		bne :-
+		lda #$00
+		sta ui_eventqueue_index
+		rts
+
+; ----------------------------------------------------------------------------------------------------
+
 ui_update
 
 		jsr mouse_update
 		jsr uimouse_update
 		jsr keyboard_update
 		jsr uikeyboard_update
+		jsr ui_eventqueue_execute
 		rts
 
 ui_user_update

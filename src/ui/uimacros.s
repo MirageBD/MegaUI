@@ -36,5 +36,21 @@
 		sta uielement_ptr+0
 		lda #>element
 		sta uielement_ptr+1
+
+		lda #%00000001
+		sta ui_flagtoset
+
+		jsr ui_setflags
+.endmacro
+
+.macro UICORE_SHOWELEMENT element
+		lda #<element
+		sta uielement_ptr+0
+		lda #>element
+		sta uielement_ptr+1
+
+		lda #%00000011
+		sta ui_flagtoset
+
 		jsr ui_setflags
 .endmacro

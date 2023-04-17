@@ -4,6 +4,10 @@ uiradiobutton_layout
 		jsr uielement_layout
 		rts
 
+uiradiobutton_hide
+		jsr uielement_hide
+		rts
+
 uiradiobutton_focus
 		rts
 
@@ -61,8 +65,6 @@ uiradiobutton_release
 		lda (zpptr1),y
 		ldy #$00
 		sta (zpptr2),y						; put in group index
-
-		jsr uiradiobutton_draw
 
 		jsr uielement_calluifunc
 

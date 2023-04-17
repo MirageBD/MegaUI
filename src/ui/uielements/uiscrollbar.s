@@ -4,6 +4,10 @@ uiscrollbar_layout
         jsr uielement_layout
     	rts
 
+uiscrollbar_hide
+		jsr uielement_hide
+		rts
+
 uiscrollbar_focus
         jsr uielement_focus
 	    rts

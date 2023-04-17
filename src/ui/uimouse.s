@@ -25,6 +25,22 @@ uimouse_init
 
 ; ----------------------------------------------------------------------------------------------------
 
+uimouse_disablecursor
+
+		lda $d015
+		and #%11111110
+		sta $d015
+		rts
+
+uimouse_enablecursor
+
+		lda $d015
+		ora #%00000001
+		sta $d015
+		rts
+
+; ----------------------------------------------------------------------------------------------------
+
 uimouse_update_sprite
 
 		lda mouse_xpos_plusborder+0						; update sprite position
@@ -189,7 +205,7 @@ uimouse_handle_event_loop
 		lda (zpptr0),y
 		and #UIFLAGS::visible
 		bne :+
-		rts
+		bra uimouse_handle_event_loop
 
 :		ldy #UIELEMENT::type							; are we at the end of the list?
 		lda (zpptr0),y
@@ -392,6 +408,9 @@ uimouse_handle_press
 		sta uimouse_captured_element+0
 		lda zpptr0+1
 		sta uimouse_captured_element+1
+
+		jsr uikeyboard_disablecursor					; LV TODO - is this really the best place for this?
+
 		SEND_EVENT press
 
 		rts

@@ -5,6 +5,9 @@ uikeyboard_focuselement				.word 0
 uikeyboard_cursorxpos				.word 0
 uikeyboard_cursorypos				.word 0
 
+uikeyboard_cursorxpos_plusborder	.word 0
+uikeyboard_cursorypos_plusborder	.word 0
+
 ; ----------------------------------------------------------------------------------------------------
 
 uikeyboard_init
@@ -17,30 +20,46 @@ uikeyboard_init
 
 ; ----------------------------------------------------------------------------------------------------
 
+uikeyboard_disablecursor
+
+		lda $d015
+		and #%11111101
+		sta $d015
+		rts
+
+uikeyboard_enablecursor
+
+		lda $d015
+		ora #%00000010
+		sta $d015
+		rts
+
+; ----------------------------------------------------------------------------------------------------
+
 uikeyboard_setcursorpos
 
 		clc
 		lda uikeyboard_cursorxpos+0
 		adc #$50
-		sta uikeyboard_cursorxpos+0
+		sta uikeyboard_cursorxpos_plusborder+0
 		lda uikeyboard_cursorxpos+1
 		adc #$00
-		sta uikeyboard_cursorxpos+1
+		sta uikeyboard_cursorxpos_plusborder+1
 
 		clc
 		lda uikeyboard_cursorypos+0
 		adc #$67
-		sta uikeyboard_cursorypos+0
+		sta uikeyboard_cursorypos_plusborder+0
 		lda uikeyboard_cursorypos+1
 		adc #$00
-		sta uikeyboard_cursorypos+1
+		sta uikeyboard_cursorypos_plusborder+1
 
-		lda uikeyboard_cursorxpos+0						; update sprite position
+		lda uikeyboard_cursorxpos_plusborder+0						; update sprite position
 		sta $d002
 		lda $d010
 		and #%11111101
 		sta $d010
-		lda uikeyboard_cursorxpos+1
+		lda uikeyboard_cursorxpos_plusborder+1
 		and #$01
 		asl
 		ora $d010
@@ -48,17 +67,17 @@ uikeyboard_setcursorpos
 		lda $d05f
 		and #%11111101
 		sta $d05f
-		lda uikeyboard_cursorxpos+1
+		lda uikeyboard_cursorxpos_plusborder+1
 		and #%00000010
 		ora $d05f
 		sta $d05f										; Sprite H640 X Super-MSBs
 
-		lda uikeyboard_cursorypos+0
+		lda uikeyboard_cursorypos_plusborder+0
 		sta $d003
 		lda $d077
 		and #%11111101
 		sta $d077
-		lda uikeyboard_cursorypos+1
+		lda uikeyboard_cursorypos_plusborder+1
 		and #$01
 		asl
 		ora $d077
@@ -71,6 +90,8 @@ uikeyboard_setcursorpos
 ; ----------------------------------------------------------------------------------------------------
 
 uikeyboard_update
+
+		jsr uikeyboard_setcursorpos
 
         lda keyboard_shouldsendreleaseevent
         beq :+

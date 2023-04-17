@@ -55,6 +55,8 @@ q160						.dword 160
 		radiobutton
 		image
 		textbox
+		tab
+		group
 
 		patternview
 		sequenceview
@@ -162,6 +164,8 @@ ui_element_indiceshi
 			.byte <.ident(.sprintf("uiradiobutton_%s",	.string(eventtype))), >.ident(.sprintf("uiradiobutton_%s",	.string(eventtype)))
 			.byte <.ident(.sprintf("uiimage_%s",		.string(eventtype))), >.ident(.sprintf("uiimage_%s",		.string(eventtype)))
 			.byte <.ident(.sprintf("uitextbox_%s",		.string(eventtype))), >.ident(.sprintf("uitextbox_%s",		.string(eventtype)))
+			.byte <.ident(.sprintf("uitab_%s",			.string(eventtype))), >.ident(.sprintf("uitab_%s",			.string(eventtype)))
+			.byte <.ident(.sprintf("uigroup_%s",		.string(eventtype))), >.ident(.sprintf("uigroup_%s",		.string(eventtype)))
 
 			.byte <.ident(.sprintf("uipatternview_%s",	.string(eventtype))), >.ident(.sprintf("uipatternview_%s",	.string(eventtype)))
 			.byte <.ident(.sprintf("uisequenceview_%s",	.string(eventtype))), >.ident(.sprintf("uisequenceview_%s",	.string(eventtype)))
@@ -170,6 +174,7 @@ ui_element_indiceshi
 
 		IMPLEMENT_UIEVENT layout
 		IMPLEMENT_UIEVENT draw
+		IMPLEMENT_UIEVENT hide
 		IMPLEMENT_UIEVENT focus
 		IMPLEMENT_UIEVENT enter
 		IMPLEMENT_UIEVENT leave

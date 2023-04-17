@@ -9,6 +9,10 @@ uihexlabel_layout
         jsr uielement_layout
     	rts
 
+uihexlabel_hide
+		jsr uielement_hide
+		rts
+
 uihexlabel_focus
 	    rts
 

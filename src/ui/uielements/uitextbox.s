@@ -4,6 +4,10 @@ uitextbox_layout
         jsr uielement_layout
     	rts
 
+uitextbox_hide
+		jsr uielement_hide
+		rts
+
 uitextbox_focus
 	    rts
 
@@ -64,6 +68,8 @@ uitextbox_keyrelease
 		rts
 
 uitextbox_press
+
+		jsr uikeyboard_enablecursor
 
 		jsr uimouse_calculate_pos_in_uielement
 
@@ -358,8 +364,6 @@ uitextbox_updatecursor
 		lda uikeyboard_cursorxpos+1
 		adc #$00
 		sta uikeyboard_cursorxpos+1
-
-		jsr uikeyboard_setcursorpos
 
 		rts
 

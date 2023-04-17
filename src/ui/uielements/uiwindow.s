@@ -4,6 +4,10 @@ uiwindow_layout
 		jsr uielement_layout
 		rts
 
+uiwindow_hide
+		jsr uielement_hide
+		rts
+
 uiwindow_focus
 		jsr uielement_focus
 		rts

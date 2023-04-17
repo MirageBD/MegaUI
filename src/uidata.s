@@ -1,4 +1,3 @@
-
 ; ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ main windows
 
 root
@@ -16,13 +15,38 @@ windows
 		;UIELEMENT_ADD ptrnptrlabel,			hexlabel,			$ffff,					 4, 19,  2,  1,  0,		hexlabelptrnptr_data,		uidefaultflags
 		;UIELEMENT_ADD ptrnrowlabel,			hexlabel,			$ffff,					14, 19,  2,  1,  0,		hexlabelptrnrow_data,		uidefaultflags
 
-		UIELEMENT_ADD ui_textbox,				nineslice,			textboxelements,		 1, 18, 8+3+1+2,  3,  0,		$ffff,						uidefaultflags	
+		;UIELEMENT_ADD ui_textbox,				nineslice,			textboxelements,		 1, 18, 8+3+1+2,  3,  0,		$ffff,						uidefaultflags	
 
-		UIELEMENT_ADD ui_sequenceview,			nineslice,			sequenceviewelements,	 1, 21, 78,  4,  0,		$ffff,						uidefaultflags	
-		UIELEMENT_ADD ui_patternview,			nineslice,			patternviewelements,	 1, 25, 78, 22,  0,		$ffff,						uidefaultflags	
+		UIELEMENT_ADD ui_tabgroup,				group,				tabgroupchildren,		 1, 18,  78, 1,  0,		tabgroup1_data,				uidefaultflags	
+
+		UIELEMENT_ADD ui_tab1_window,			window,				tab1_contents,			 1, 21, 78, 25,  0,		$ffff,						uidefaultflags	
+		UIELEMENT_ADD ui_tab2_window,			window,				tab2_contents,			 1, 21, 78, 25,  0,		$ffff,						%00000001	
+		UIELEMENT_ADD ui_tab3_window,			window,				tab3_contents,			 1, 21, 78, 25,  0,		$ffff,						%00000001	
 
 		UIELEMENT_ADD ui_logo,					image,				$ffff,					68, 47, 11,  2,  0,		uilogo_data,				uidefaultflags
 
+		UIELEMENT_END
+
+; ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ child windows
+
+tabgroupchildren
+		UIELEMENT_ADD ui_tab1,					tab,				$ffff,					 1, 0,  8,  3,  0,		tab1_data,					uidefaultflags	
+		UIELEMENT_ADD ui_tab2,					tab,				$ffff,					 9, 0,  8,  3,  0,		tab2_data,					uidefaultflags
+		UIELEMENT_ADD ui_tab3,					tab,				$ffff,					17, 0,  8,  3,  0,		tab3_data,					uidefaultflags	
+		UIELEMENT_END
+
+; ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ child windows
+
+tab1_contents
+		UIELEMENT_ADD ui_sequenceview,			nineslice,			sequenceviewelements,	 0,  0, 78,  4,  0,		$ffff,						uidefaultflags	
+		UIELEMENT_ADD ui_patternview,			nineslice,			patternviewelements,	 0,  4, 78, 22,  0,		$ffff,						uidefaultflags	
+		UIELEMENT_END
+
+tab2_contents
+		UIELEMENT_ADD ui_textbox,				nineslice,			textboxelements,		 0,  0, 14,  3,  0,		$ffff,						%00000001
+		UIELEMENT_END
+
+tab3_contents
 		UIELEMENT_END
 
 ; ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ child windows
@@ -37,8 +61,6 @@ window2area
 		UIELEMENT_ADD debugelementla1,			debugelement,		listarea1,				 1,  1, 20, 16,  0,		$ffff,						uidefaultflags
 		UIELEMENT_ADD debugelementrba1,			debugelement,		radiobtnarea1,			22,  1, 15,  9,  0,		$ffff,						uidefaultflags
 		UIELEMENT_ADD debugelementmsa1,			debugelement,		mousedebugarea1,		22, 10, 15,  7,  0,		$ffff,						uidefaultflags
-		;UIELEMENT_ADD playbutton,				button,				$ffff,					 2,  2,  2,  2,  0,		playbutton_data,			uidefaultflags
-		;UIELEMENT_ADD debugelement2,			debugelement,		$ffff,					 1,  1, 37, 19,  0,		$ffff,						uidefaultflags
 		UIELEMENT_END
 
 ; ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ scrollbar elements
@@ -140,7 +162,7 @@ textboxelements
 		UIELEMENT_END
 
 sequenceviewelements
-		UIELEMENT_ADD sequenceview1,			sequenceview,		$ffff,					 1,  1,-1, -1,  0,		sequenceview_data,			uidefaultflags
+		UIELEMENT_ADD sequenceview1,			sequenceview,		$ffff,					 1,  1,-2, -1,  0,		sequenceview_data,			uidefaultflags
 		UIELEMENT_END
 
 ; ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ data
@@ -163,8 +185,9 @@ hexlabelptrnidx_data		.word $ffff,							uisequenceview_patternindex, 1
 hexlabelptrnptr_data		.word $ffff,							uipatternview_patternptr, 4
 hexlabelptrnrow_data		.word $ffff,							uipatternview_patternrow, 1
 
-uilogo_data					.word $ffff,							((14*16+ 0) | (14*16+ 0)<<8)
+tabgroup1_data				.word $ffff,							0								; group bitmask
 
+uilogo_data					.word $ffff,							((14*16+ 0) | (14*16+ 0)<<8)
 
 checkboxlabel_data			.word $ffff,							uitxt_checkbox
 radiobuttonlabel_data		.word $ffff,							uitxt_radiobutton
@@ -195,6 +218,10 @@ radiobuttongroupindex		.word 1
 radiobutton1_data			.word radiobutton_functions,			0, radiobuttongroupindex
 radiobutton2_data			.word radiobutton_functions,			1, radiobuttongroupindex
 radiobutton3_data			.word radiobutton_functions,			2, radiobuttongroupindex
+
+tab1_data					.word tab_functions,					0, ui_tab1_window
+tab2_data					.word tab_functions,					1, ui_tab2_window
+tab3_data					.word tab_functions,					2, ui_tab3_window
 
 playbutton_data				.word $ffff,							((8*16+0) | (8*16+4)<<8)
 
@@ -255,6 +282,11 @@ radiobutton_functions			.word radiobutton1,						uiradiobutton_draw
 								.word radiobutton3,						uiradiobutton_draw
 								.word $ffff
 
+tab_functions					.word ui_tab1,							uitab_draw
+								.word ui_tab2,							uitab_draw
+								.word ui_tab3,							uitab_draw
+								.word $ffff
+
 ctextbutton1_functions			.word ctextbutton1,						userfunc_playmod
 								.word $ffff
 
@@ -282,14 +314,7 @@ userfunc_stopmod
 		rts
 
 userfunc_pausemod
-
-		;lda #$c0
-		;DEBUG_COLOUR
-		;DEBUG_COLOUR
-		;DEBUG_COLOUR
-		;DEBUG_COLOUR
-		;lda #$00
-		;DEBUG_COLOUR
+		;UICORE_CALLELEMENTFUNCTION ui_tab1_window, uiwindow_hide
 		rts
 
 peppitoPlaying

@@ -4,6 +4,10 @@ uilabel_layout
         jsr uielement_layout
     	rts
 
+uilabel_hide
+		jsr uielement_hide
+		rts
+
 uilabel_focus
 	    rts
 
