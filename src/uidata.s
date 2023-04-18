@@ -17,7 +17,7 @@ windows
 
 		;UIELEMENT_ADD ui_textbox,				nineslice,			textboxelements,		 1, 18, 8+3+1+2,  3,  0,		$ffff,						uidefaultflags	
 
-		UIELEMENT_ADD ui_tabgroup,				group,				tabgroupchildren,		 1, 18,  78, 1,  0,		tabgroup1_data,				uidefaultflags	
+		UIELEMENT_ADD ui_tabgroup,				group,				tabgroupchildren,		 1, 18,  78, 2,  0,		tabgroup1_data,				uidefaultflags	
 
 		UIELEMENT_ADD ui_tab1_window,			window,				tab1_contents,			 1, 21, 78, 25,  0,		$ffff,						uidefaultflags	
 		UIELEMENT_ADD ui_tab2_window,			window,				tab2_contents,			 1, 21, 78, 25,  0,		$ffff,						%00000001	
@@ -30,9 +30,9 @@ windows
 ; ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ child windows
 
 tabgroupchildren
-		UIELEMENT_ADD ui_tab1,					tab,				$ffff,					 1, 0,  8,  3,  0,		tab1_data,					uidefaultflags	
-		UIELEMENT_ADD ui_tab2,					tab,				$ffff,					 9, 0,  8,  3,  0,		tab2_data,					uidefaultflags
-		UIELEMENT_ADD ui_tab3,					tab,				$ffff,					17, 0,  8,  3,  0,		tab3_data,					uidefaultflags	
+		UIELEMENT_ADD ui_tab1,					tab,				$ffff,					 1, 0,  8,  2,  0,		tab1_data,					uidefaultflags	
+		UIELEMENT_ADD ui_tab2,					tab,				$ffff,					 9, 0,  8,  2,  0,		tab2_data,					uidefaultflags
+		UIELEMENT_ADD ui_tab3,					tab,				$ffff,					17, 0,  8,  2,  0,		tab3_data,					uidefaultflags	
 		UIELEMENT_END
 
 ; ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ child windows

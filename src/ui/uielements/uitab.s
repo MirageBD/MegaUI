@@ -40,6 +40,22 @@ uitab_draw
 
 		jsr uidraw_set_draw_position
 
+		sec
+		ldy #UIELEMENT::width
+		lda (zpptr0),y
+		sbc #$02
+		sta uidraw_width
+		sec
+		ldy #UIELEMENT::height
+		lda (zpptr0),y
+		sbc #$02
+		sta uidraw_height
+
+		lda #3*16
+		tay
+
+		ldx uidraw_width
+
 		ldy #$02							; read index
 		jsr ui_getelementdata_2
 
@@ -63,16 +79,70 @@ uitab_draw
 		beq :+
 
 		ldz #$00							; uitab not selected
-		lda #3*16+12
-		sta [uidraw_scrptr],z
+		ldy #7*16+3
+		jsr uitab_drawtoprow
+		jsr uitab_drawmiddlerow
 		rts
 
 :		ldz #$00							; uitab selected
-		lda #3*16+13
-		sta [uidraw_scrptr],z
+		ldy #6*16+8
+		jsr uitab_drawtoprow
+		jsr uitab_drawmiddlerow
 		rts
 
 ; ----------------------------------------------------------------------------------------------------
+
+uitab_drawtoprow
+
+		clc
+		ldz #$00
+		tya
+		sta [uidraw_scrptr],z
+		inz
+		inz
+		adc #$01
+		phx
+:		sta [uidraw_scrptr],z
+		inz
+		inz
+		dex
+		bne :-
+		plx
+		adc #$01
+		sta [uidraw_scrptr],z
+
+		jsr uidraw_increase_row
+
+		tya
+		clc
+		adc #3
+		tay
+		rts
+
+uitab_drawmiddlerow
+
+:		ldz #$00						; draw center of nineslice
+		tya
+		sta [uidraw_scrptr],z
+		inz
+		inz
+		pha
+		phx
+:		lda #$00
+		sta [uidraw_colptr],z
+		inz
+		inz
+		dex
+		bne :-
+		plx
+		pla
+		adc #$01
+		sta [uidraw_scrptr],z
+		
+		rts
+
+; ----------------------------------------------------------------------------------------------------
+
 
 uitab_release
 		ldy #$02							; read index
@@ -97,15 +167,6 @@ uitab_release
 		sta (zpptr1),y						; put in group index
 
 		jsr uielement_calluifunc			; call draw on all the other tab labels in this tab group
-
-		;ldy #$04							; read pointer to contents
-		;jsr ui_getelementdata_2
-
-		;lda zpptr2+0
-		;sta zpptr0+0
-		;lda zpptr2+1
-		;sta zpptr0+1
-		;jsr uiwindow_hide					; call hide on the content element to clear contents of tab
 
 		lda zpptr3+0						; make parent the element to call
 		sta zpptr0+0

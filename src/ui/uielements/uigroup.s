@@ -47,7 +47,7 @@ uigroup_update
 		ldy #$02							; read index
 		jsr ui_getelementdata_2
 
-		lda zpptr2+0
+		lda zpptr2+0						; LV TODO - feed this into ui_sendqueue
 		sta ui_setflagindex
 		lda #%00000011
 		sta ui_flagtoset
@@ -63,10 +63,6 @@ uigroup_update
 		lda #>ui_setselectiveflags
 		sta ui_eventqueue_function+1
 		jsr ui_eventqueue_add
-
-		;jsr ui_setselectiveflags
-
-		; uielement_ptr = 0076C2 .tabgroupchildren
 
 		rts
 
