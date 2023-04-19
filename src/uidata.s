@@ -167,10 +167,10 @@ sequenceviewelements
 
 ; ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ data
 
-chanview1_data				.word $ffff,							0, $3d, $06				; channel, colour, vu strength
-chanview2_data				.word $ffff,							1, $31, $06
-chanview3_data				.word $ffff,							2, $7a, $06
-chanview4_data				.word $ffff,							3, $a0, $06
+chanview1_data				.word $ffff,							0, $3d, $00				; channel, colour, vu strength
+chanview2_data				.word $ffff,							1, $31, $00
+chanview3_data				.word $ffff,							2, $7a, $00
+chanview4_data				.word $ffff,							3, $a0, $00
 
 sequenceview_data			.word $ffff,							0
 

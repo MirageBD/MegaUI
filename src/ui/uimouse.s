@@ -201,17 +201,17 @@ uimouse_handle_event_loop
 		adc ui_element_indiceshi,y
 		sta zpptr0+1
 
-		ldy #UIELEMENT::flags							; is the element visible?
-		lda (zpptr0),y
-		and #UIFLAGS::visible
-		bne :+
-		bra uimouse_handle_event_loop
-
 :		ldy #UIELEMENT::type							; are we at the end of the list?
 		lda (zpptr0),y
 		cmp #UIELEMENTTYPE::null
 		bne :+											; nope. test if we're inside the rect or if this is the captured element.
 		rts
+
+:		ldy #UIELEMENT::flags							; is the element visible?
+		lda (zpptr0),y
+		and #UIFLAGS::visible
+		bne :+
+		bra uimouse_handle_event_loop
 
 :		jsr uimouse_test_minmax
 		bcs :+											; we are inside the rect, do the rest

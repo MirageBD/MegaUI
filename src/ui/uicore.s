@@ -203,6 +203,7 @@ ui_getelementdata_2
 		iny
 		lda (zpptr1),y
 		sta zpptr2+1
+		dey
 
 		pla
 		rts
