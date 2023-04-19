@@ -2,6 +2,14 @@
 
 uiwindow_layout
 		jsr uielement_layout
+
+		lda #$01								; LV TODO - should all elements be deflated by 1 by default?
+		sta uirect_xdeflate
+		lda #$01
+		sta uirect_ydeflate
+
+		jsr uirect_deflate
+
 		rts
 
 uiwindow_hide
@@ -13,26 +21,24 @@ uiwindow_focus
 		rts
 
 uiwindow_enter
-		jsr uielement_enter
 		rts
 
 uiwindow_leave
-		jsr uielement_leave
 		rts
 
 uiwindow_draw
-		jsr uielement_draw
+		;jsr uielement_draw
 		rts
 
 uiwindow_press
-		jsr uielement_draw
+		;jsr uielement_draw
 		rts
 
 uiwindow_doubleclick
 		rts
 
 uiwindow_release
-		jsr uielement_draw
+		;jsr uielement_draw
 		rts
 
 uiwindow_move

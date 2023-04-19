@@ -51,9 +51,6 @@ uitab_draw
 		sbc #$02
 		sta uidraw_height
 
-		lda #3*16
-		tay
-
 		ldx uidraw_width
 
 		ldy #$02							; read index
@@ -79,20 +76,93 @@ uitab_draw
 		beq :+
 
 		ldz #$00							; uitab not selected
-		ldy #7*16+3
-		jsr uitab_drawtoprow
-		jsr uitab_drawmiddlerow
+		ldy #7*16+0
+		jsr uitab_drawinactive
 		rts
 
 :		ldz #$00							; uitab selected
 		ldy #6*16+8
-		jsr uitab_drawtoprow
-		jsr uitab_drawmiddlerow
+		jsr uitab_drawactive
 		rts
 
 ; ----------------------------------------------------------------------------------------------------
 
-uitab_drawtoprow
+uitab_drawactive
+
+		clc
+		ldz #$00
+		tya
+		sta [uidraw_scrptr],z					; draw left glyph
+		inz
+		inz
+		adc #$01
+		phx
+:		sta [uidraw_scrptr],z					; draw middle glyph
+		inz
+		inz
+		dex
+		bne :-
+		plx
+		adc #$01
+		sta [uidraw_scrptr],z					; draw right glyph
+
+		jsr uidraw_increase_row
+
+		tya
+		clc
+		adc #3
+		tay
+
+:		ldz #$00
+		tya
+		sta [uidraw_scrptr],z					; draw left glyph
+		inz
+		inz
+		pha
+		phx
+:		lda #$04
+		sta [uidraw_colptr],z					; draw middle glyph - just colour
+		inz
+		inz
+		dex
+		bne :-
+		plx
+		pla
+		adc #$01
+		sta [uidraw_scrptr],z					; draw right glyph
+
+		jsr uidraw_increase_row
+
+		tya
+		;sec
+		;sbc #2
+		;tay
+
+:		ldz #$00
+		tya
+		sta [uidraw_scrptr],z					; draw left glyph
+		inz
+		inz
+		pha
+		phx
+:		lda #$00
+		sta [uidraw_scrptr],z					; draw middle glyph - just colour
+		lda #$04
+		sta [uidraw_colptr],z					; draw middle glyph - just colour
+		inz
+		inz
+		dex
+		bne :-
+		plx
+		pla
+		adc #$01
+		sta [uidraw_scrptr],z					; draw right glyph
+
+		rts
+
+; ----------------------------------------------------------------------------------------------------
+
+uitab_drawinactive
 
 		clc
 		ldz #$00
@@ -117,18 +187,15 @@ uitab_drawtoprow
 		clc
 		adc #3
 		tay
-		rts
 
-uitab_drawmiddlerow
-
-:		ldz #$00						; draw center of nineslice
+:		ldz #$00
 		tya
 		sta [uidraw_scrptr],z
 		inz
 		inz
 		pha
 		phx
-:		lda #$00
+:		lda #$03
 		sta [uidraw_colptr],z
 		inz
 		inz
@@ -139,10 +206,30 @@ uitab_drawmiddlerow
 		adc #$01
 		sta [uidraw_scrptr],z
 		
+		jsr uidraw_increase_row
+
+		tya
+		clc
+		adc #2
+
+		ldz #$00
+		sta [uidraw_scrptr],z
+		inz
+		inz
+		adc #$01
+		phx
+:		sta [uidraw_scrptr],z
+		inz
+		inz
+		dex
+		bne :-
+		plx
+		adc #$01
+		sta [uidraw_scrptr],z
+		
 		rts
 
 ; ----------------------------------------------------------------------------------------------------
-
 
 uitab_release
 		ldy #$02							; read index

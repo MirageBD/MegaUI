@@ -2,6 +2,14 @@
 
 uigroup_layout
 		jsr uielement_layout
+
+		lda #$01
+		sta uirect_xdeflate
+		lda #$01
+		sta uirect_ydeflate
+
+		jsr uirect_deflate
+
 		rts
 
 uigroup_hide
@@ -21,7 +29,34 @@ uigroup_leave
 		rts
 
 uigroup_draw
-		jsr uielement_draw
+
+		jsr uidraw_set_draw_position
+
+		sec
+		ldy #UIELEMENT::width
+		lda (zpptr0),y
+		;sbc #$02
+		sta uidraw_width
+		sec
+		ldy #UIELEMENT::height
+		lda (zpptr0),y
+		sbc #$02
+		sta uidraw_height
+
+		jsr uidraw_increase_row
+		jsr uidraw_increase_row
+
+		ldx uidraw_width
+
+		clc
+		ldz #$00
+		lda #7*16+8
+:		sta [uidraw_scrptr],z
+		inz
+		inz
+		dex
+		bne :-
+
 		rts
 
 uigroup_press
@@ -41,6 +76,10 @@ uigroup_keypress
 
 uigroup_keyrelease
 		rts		
+
+; ----------------------------------------------------------------------------------------------------
+
+; uigroup_update is called from children. I.E. uitab
 
 uigroup_update
 

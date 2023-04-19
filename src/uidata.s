@@ -8,8 +8,8 @@ root
 
 windows
 
-		UIELEMENT_ADD ui_windows1,				debugelement,		window1area,			 1,  0, 38, 18,  0,		$ffff,						uidefaultflags
-		UIELEMENT_ADD ui_windows2,				debugelement,		window2area,			40,  0, 39, 18, 20,		$ffff,						uidefaultflags
+		UIELEMENT_ADD ui_windows1,				window,				window1area,			 0,  0, 49, 18,  0,		$ffff,						uidefaultflags
+		UIELEMENT_ADD ui_windows2,				window,				window2area,			60,  0, 39, 18, 20,		$ffff,						uidefaultflags
 
 		;UIELEMENT_ADD ptrnidxlabel,			hexlabel,			$ffff,					 1, 19,  2,  1,  0,		hexlabelptrnidx_data,		uidefaultflags
 		;UIELEMENT_ADD ptrnptrlabel,			hexlabel,			$ffff,					 4, 19,  2,  1,  0,		hexlabelptrnptr_data,		uidefaultflags
@@ -17,7 +17,7 @@ windows
 
 		;UIELEMENT_ADD ui_textbox,				nineslice,			textboxelements,		 1, 18, 8+3+1+2,  3,  0,		$ffff,						uidefaultflags	
 
-		UIELEMENT_ADD ui_tabgroup,				group,				tabgroupchildren,		 1, 18,  78, 2,  0,		tabgroup1_data,				uidefaultflags	
+		UIELEMENT_ADD ui_tabgroup,				group,				tabgroupchildren,		 0, 17,  80, 3,  0,		tabgroup1_data,				uidefaultflags	
 
 		UIELEMENT_ADD ui_tab1_window,			window,				tab1_contents,			 1, 21, 78, 25,  0,		$ffff,						uidefaultflags	
 		UIELEMENT_ADD ui_tab2_window,			window,				tab2_contents,			 1, 21, 78, 25,  0,		$ffff,						%00000001	
@@ -30,9 +30,9 @@ windows
 ; ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ child windows
 
 tabgroupchildren
-		UIELEMENT_ADD ui_tab1,					tab,				$ffff,					 1, 0,  8,  2,  0,		tab1_data,					uidefaultflags	
-		UIELEMENT_ADD ui_tab2,					tab,				$ffff,					 9, 0,  8,  2,  0,		tab2_data,					uidefaultflags
-		UIELEMENT_ADD ui_tab3,					tab,				$ffff,					17, 0,  8,  2,  0,		tab3_data,					uidefaultflags	
+		UIELEMENT_ADD ui_tab1,					tab,				$ffff,					 1, 0,  8,  3,  0,		tab1_data,					uidefaultflags	
+		UIELEMENT_ADD ui_tab2,					tab,				$ffff,					 9, 0,  8,  3,  0,		tab2_data,					uidefaultflags
+		UIELEMENT_ADD ui_tab3,					tab,				$ffff,					17, 0,  8,  3,  0,		tab3_data,					uidefaultflags	
 		UIELEMENT_END
 
 ; ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ child windows
@@ -52,15 +52,15 @@ tab3_contents
 ; ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ child windows
 
 window1area
-		UIELEMENT_ADD debugelementfa1,			debugelement,		filearea1,				 1,  1, 20, 16,  0,		$ffff,						uidefaultflags
-		UIELEMENT_ADD debugelementcba1,			debugelement,		cbuttonarea1,			22,  1, 15,  9,  0,		$ffff,						uidefaultflags
-		UIELEMENT_ADD debugelementca1,			debugelement,		checkboxarea1,			22, 10, 15,  7,  0,		$ffff,						uidefaultflags
+		UIELEMENT_ADD debugelementfa1,			window,				filearea1,				 0,  0, 20, 16,  0,		$ffff,						uidefaultflags
+		UIELEMENT_ADD debugelementcba1,			window,				cbuttonarea1,			18,  0, 15,  9,  0,		$ffff,						uidefaultflags
+		UIELEMENT_ADD debugelementca1,			window,				checkboxarea1,			18,  9, 15,  7,  0,		$ffff,						uidefaultflags
+		UIELEMENT_ADD debugelementrba1,			window,				radiobtnarea1,			31,  0, 15,  9,  0,		$ffff,						uidefaultflags
+		UIELEMENT_ADD debugelementmsa1,			window,				mousedebugarea1,		31,  9, 15,  7,  0,		$ffff,						uidefaultflags
 		UIELEMENT_END
 
 window2area
-		UIELEMENT_ADD debugelementla1,			debugelement,		listarea1,				 1,  1, 20, 16,  0,		$ffff,						uidefaultflags
-		UIELEMENT_ADD debugelementrba1,			debugelement,		radiobtnarea1,			22,  1, 15,  9,  0,		$ffff,						uidefaultflags
-		UIELEMENT_ADD debugelementmsa1,			debugelement,		mousedebugarea1,		22, 10, 15,  7,  0,		$ffff,						uidefaultflags
+		UIELEMENT_ADD debugelementla1,			window,				listarea1,				 0,  0, 20, 16,  0,		$ffff,						uidefaultflags
 		UIELEMENT_END
 
 ; ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ scrollbar elements
