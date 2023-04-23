@@ -189,6 +189,31 @@ uilistbox_startaddentries
 
 		rts
 
+uilistbox_addentry
+
+		clc													; increase number of entries
+		ldy #$06
+		lda (zpptr3),y
+		adc #$01
+		sta (zpptr3),y
+
+		ldy #$00											; set list pointer to text
+		lda zpptrtmp+0
+		sta (zpptr2),y
+		iny
+		lda zpptrtmp+1
+		sta (zpptr2),y
+
+		clc													; add 2 to move to next list ptr entry
+		lda zpptr2+0
+		adc #$02
+		sta zpptr2+0
+		lda zpptr2+1
+		adc #$00
+		sta zpptr2+1
+
+		rts
+
 uilistbox_endaddentries
 		ldy #$00
 		lda #$ff

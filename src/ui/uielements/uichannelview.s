@@ -225,8 +225,10 @@ uichannelview_capturevu
 ucv_vucolours
 		.byte $e7, $99, $51, $2d, $39, $4b
 
+/*
 .align 256
 sampleremap
 .repeat 256, I
 	.byte ((128 + I) .MOD 256)
 .endrepeat		
+*/

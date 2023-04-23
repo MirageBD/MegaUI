@@ -9,7 +9,7 @@ root
 windows
 
 		UIELEMENT_ADD ui_windows1,				window,				window1area,			 0,  0, 49, 18,  0,		$ffff,						uidefaultflags
-		UIELEMENT_ADD ui_windows2,				window,				window2area,			60,  0, 39, 18, 20,		$ffff,						uidefaultflags
+		UIELEMENT_ADD ui_windows2,				window,				window2area,			44,  0, 30, 18, 20,		$ffff,						uidefaultflags
 
 		;UIELEMENT_ADD ptrnidxlabel,			hexlabel,			$ffff,					 1, 19,  2,  1,  0,		hexlabelptrnidx_data,		uidefaultflags
 		;UIELEMENT_ADD ptrnptrlabel,			hexlabel,			$ffff,					 4, 19,  2,  1,  0,		hexlabelptrnptr_data,		uidefaultflags
@@ -44,6 +44,7 @@ tab1_contents
 
 tab2_contents
 		UIELEMENT_ADD ui_textbox,				nineslice,			textboxelements,		 0,  0, 14,  3,  0,		$ffff,						%00000001
+		UIELEMENT_ADD ui_sampleview,			nineslice,			sampleviewelements,		33,  6, 34, 10,  0,		$ffff,						%00000001
 		UIELEMENT_END
 
 tab3_contents
@@ -60,7 +61,7 @@ window1area
 		UIELEMENT_END
 
 window2area
-		UIELEMENT_ADD debugelementla1,			window,				listarea1,				 0,  0, 20, 16,  0,		$ffff,						uidefaultflags
+		UIELEMENT_ADD debugelementla1,			window,				listarea1,				 0,  0, -1, 16,  0,		$ffff,						uidefaultflags
 		UIELEMENT_END
 
 ; ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ scrollbar elements
@@ -140,6 +141,10 @@ la1scrollbarelements
 
 ; ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ scrollbar elements
 
+sequenceviewelements
+		UIELEMENT_ADD sequenceview1,			sequenceview,		$ffff,					 1,  1,-2, -1,  0,		sequenceview_data,			uidefaultflags
+		UIELEMENT_END
+
 patternviewelements
 		UIELEMENT_ADD chanview1,				channelview,		$ffff,					 5,  2, 13,  2,  0,		chanview1_data,				uidefaultflags
 		UIELEMENT_ADD chanview2,				channelview,		$ffff,					22,  2, 13,  2,  0,		chanview2_data,				uidefaultflags
@@ -161,8 +166,8 @@ textboxelements
 		UIELEMENT_ADD textbox1,					textbox,			$ffff,					 1,  1,-1, -1,  0,		textbox1_data,				uidefaultflags
 		UIELEMENT_END
 
-sequenceviewelements
-		UIELEMENT_ADD sequenceview1,			sequenceview,		$ffff,					 1,  1,-2, -1,  0,		sequenceview_data,			uidefaultflags
+sampleviewelements
+		UIELEMENT_ADD sampleview1,				sampleview,			$ffff,					 1,  1,-1, -1,  0,		sampleview1_data,			uidefaultflags
 		UIELEMENT_END
 
 ; ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ data
@@ -225,6 +230,8 @@ tab3_data					.word tab_functions,					2, ui_tab3_window
 
 playbutton_data				.word $ffff,							((8*16+0) | (8*16+4)<<8)
 
+sampleview1_data			.word $ffff,							2
+
 ; ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ listeners
 
 fa1scrollbuttonup_functions		.word fa1scrollbartrack,				uiscrollbar_decrease
@@ -256,6 +263,7 @@ la1scrollbuttondown_functions	.word la1scrollbartrack,				uiscrollbar_increase
 
 la1scrollbar_functions			.word la1scrollbartrack,				uiscrolltrack_draw
 								.word la1listbox,						uilistbox_draw
+								;.word sampleview1,						uisampleview_draw
 								.word $ffff
 
 

@@ -11,6 +11,7 @@
 
 .define uichars					$10000	; $10000 - $14000     size = $4000
 .define glchars					$14000	; $14000 - $1d000     size = $9000
+.define samplesprites			$1d000	; $1d000 - $1d800
 
 .define moddata					$20000
 
@@ -149,8 +150,9 @@ entry_main
 		lda #$35
 		sta $01
 
-		lda #$00
+		lda #$02
 		sta $d020
+		lda #$f8
 		sta $d021
 
 		lda #<.loword(moddata)
@@ -174,6 +176,12 @@ entry_main
 
 		jsr ui_init										; initialise UI
 		jsr ui_setup
+
+		; fill listbox with samples
+		UICORE_CALLELEMENTFUNCTION la1listbox, uilistbox_startaddentries
+		jsr populate_samplelist
+		UICORE_CALLELEMENTFUNCTION la1listbox, uilistbox_endaddentries
+		UICORE_CALLELEMENTFUNCTION la1listbox, uilistbox_draw
 
 		lda #$7f										; disable CIA interrupts
 		sta $dc0d
@@ -201,50 +209,12 @@ loop
 		lda peppitoPlaying
 		beq loop
 
-		UICORE_CALLELEMENTFUNCTION chanview1, uichannelview_capturevu
-		UICORE_CALLELEMENTFUNCTION chanview2, uichannelview_capturevu
-		UICORE_CALLELEMENTFUNCTION chanview3, uichannelview_capturevu
-		UICORE_CALLELEMENTFUNCTION chanview4, uichannelview_capturevu
+		;UICORE_CALLELEMENTFUNCTION chanview1, uichannelview_capturevu
+		;UICORE_CALLELEMENTFUNCTION chanview2, uichannelview_capturevu
+		;UICORE_CALLELEMENTFUNCTION chanview3, uichannelview_capturevu
+		;UICORE_CALLELEMENTFUNCTION chanview4, uichannelview_capturevu
 
 		jmp loop
-
-		lda prevpos+0									; if none of the update registers have changed, don't show anything
-		cmp $d72a
-		bne showdebug
-		lda prevpos+1
-		cmp $d73a
-		bne showdebug
-		lda prevpos+2
-		cmp $d74a
-		bne showdebug
-		lda prevpos+3
-		cmp $d75a
-		bne showdebug
-		jmp loop
-
-showdebug
-		lda $d72a										; something has changed, show everything
-		sta $d020
-		sta prevpos+0
-		lda $d73a
-		sta $d020
-		sta prevpos+1
-		lda $d74a
-		sta $d020
-		sta prevpos+2
-		lda $d75a
-		sta $d020
-		sta prevpos+3
-
-		;lda #$06
-		;sta $d020
-		jmp loop
-
-prevpos
-		.byte $00
-		.byte $00
-		.byte $00
-		.byte $00
 
 ; ----------------------------------------------------------------------------------------------------
 
@@ -313,5 +283,62 @@ irq2
 		plp
 		asl $d019
 		rti
+
+; ----------------------------------------------------------------------------------------------------
+
+populate_samplelist
+
+		ldx #$01
+
+populate_samplelist_loop
+
+		UICORE_CALLELEMENTFUNCTION la1listbox, uilistbox_addentry
+
+		txa												; instrument index
+		asl
+		tay
+		lda idxPepIns0+0,y
+		sta zpptr0+0
+		lda idxPepIns0+1,y
+		sta zpptr0+1
+
+		ldy #00											; get pointer to header in zpptr1
+		lda (zpptr0),y
+		sta zpptrtmp2+0
+		iny
+		lda (zpptr0),y
+		sta zpptrtmp2+1
+		iny
+		lda (zpptr0),y
+		sta zpptrtmp2+2
+		iny
+		lda (zpptr0),y
+		sta zpptrtmp2+3
+
+		ldz #$00
+		ldy #$00
+:		lda [zpptrtmp2],z
+		sta (zpptrtmp),y
+		iny
+		inz
+		cpz #22
+		bne :-
+		lda #$00
+		sta (zpptrtmp),y
+		iny
+
+		clc													; add length of string to start populating the next line
+		tya
+		adc zpptrtmp+0
+		sta zpptrtmp+0
+		lda zpptrtmp+1
+		adc #$00
+		sta zpptrtmp+1
+
+		inx
+		cpx #18
+		bne populate_samplelist_loop
+
+		rts
 
 ; ----------------------------------------------------------------------------------------------------

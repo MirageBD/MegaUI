@@ -61,6 +61,7 @@ q160						.dword 160
 		patternview
 		sequenceview
 		channelview
+		sampleview
 .endenum
 
 .enum UIEVENTTYPE
@@ -170,6 +171,7 @@ ui_element_indiceshi
 			.byte <.ident(.sprintf("uipatternview_%s",	.string(eventtype))), >.ident(.sprintf("uipatternview_%s",	.string(eventtype)))
 			.byte <.ident(.sprintf("uisequenceview_%s",	.string(eventtype))), >.ident(.sprintf("uisequenceview_%s",	.string(eventtype)))
 			.byte <.ident(.sprintf("uichannelview_%s",	.string(eventtype))), >.ident(.sprintf("uichannelview_%s",	.string(eventtype)))
+			.byte <.ident(.sprintf("uisampleview_%s",	.string(eventtype))), >.ident(.sprintf("uisampleview_%s",	.string(eventtype)))
 .endmacro
 
 		IMPLEMENT_UIEVENT layout

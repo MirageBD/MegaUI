@@ -91,7 +91,7 @@ uifilebox_doubleclick
 		jsr uifilebox_getstringptr									; get filename/dir string
 
 		ldx #$00
-		ldy #$02														; skip attributes and file type
+		ldy #$02													; skip attributes and file type
 :		lda (zpptrtmp),y
 		beq :+
 		and #$7f
@@ -282,7 +282,7 @@ uifilebox_processdirentry
 		sta (zpptrtmp),y
 		iny
 
-		clc
+		clc													; add length of string to start populating the next line
 		tya
 		adc zpptrtmp+0
 		sta zpptrtmp+0

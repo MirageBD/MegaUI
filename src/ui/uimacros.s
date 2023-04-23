@@ -6,6 +6,7 @@
 .define zpptr2		        $8c
 .define zpptr3		        $8e
 .define zpptrtmp	        $90			; used for z indexing into higher ram, so 4 bytes
+.define zpptrtmp2	        $94			; used for z indexing into higher ram, so 4 bytes
 
 .macro DEBUG_COLOUR
 .scope

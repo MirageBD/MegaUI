@@ -96,14 +96,16 @@ ui_init
 		jsr uimouse_enablecursor
 
 		lda #%11111111
-		sta $d057										; enable 64 pixel wide sprites. 16 pixels if in Full Colour Mode
-		sta $d06b										; enable Full Colour Mode (SPR16EN)
-		sta $d055										; sprite height enable (SPRHGTEN)
 		sta $d076										; enable SPRENVV400 for this sprite
+		sta $d057										; enable 64 pixel wide sprites. 16 pixels if in Full Colour Mode
+		lda #%00000011
+		sta $d06b										; enable Full Colour Mode (SPR16EN)
+		lda #%11111100
+		sta $d055										; sprite height enable (SPRHGTEN)
 		lda #%00010000
 		tsb $d054										; enable SPR640 for all sprites
 
-		lda #16											; set sprite height to 16 pixels (SPRHGHT)
+		lda #64											; set sprite height to 64 pixels (SPRHGHT) for sprites that have SPRHGTEN enabled (sample sprites)
 		sta $d056
 
 		lda #%00000000									; disable stretch for both
@@ -316,7 +318,7 @@ ui_setselectiveflags
 		lda (zpptr1),y
 		sta zpptr0+1
 
-		jsr uiwindow_hide
+		jsr uiwindow_hide								; call hide on the first tab so the contents get cleared
 
 
 
@@ -329,7 +331,7 @@ tabflagloop
 		ldy uielementlist_counter
 
 		clc
-		lda uielementlist_ptr+0								; get pointer to ui element
+		lda uielementlist_ptr+0							; get pointer to ui element
 		adc ui_element_indiceslo,y
 		sta zpptr0+0
 		lda uielementlist_ptr+1

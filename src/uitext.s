@@ -11,13 +11,13 @@ uitxt_paddlex		.byte "$d419", 0
 uitxt_paddley		.byte "$d41a", 0
 
 la1boxtxt			.word la1boxtxt00
-					.word la1boxtxt01
-					.word la1boxtxt02
-					.word la1boxtxt03
-					.word la1boxtxt04
-					.word la1boxtxt05
-					.word la1boxtxt06
-					.word la1boxtxt07
+					.word la1boxtxt00
+					.word la1boxtxt00
+					.word la1boxtxt00
+					.word la1boxtxt00
+					.word la1boxtxt00
+					.word la1boxtxt00
+					.word la1boxtxt00
 					.word la1boxtxt08
 					.word la1boxtxt09
 					.word la1boxtxt10
@@ -31,25 +31,25 @@ la1boxtxt			.word la1boxtxt00
 					.word la1boxtxt18
 					.word $ffff
 
-la1boxtxt00			.byte "Lorem ipsum  ", 0
-la1boxtxt01			.byte "dolor sit    ", 0
-la1boxtxt02			.byte "amet, consec-", 0
-la1boxtxt03			.byte "tetur adipis-", 0
-la1boxtxt04			.byte "cing elit.   ", 0
-la1boxtxt05			.byte "Integer a    ", 0
-la1boxtxt06			.byte "ligula sed   ", 0
-la1boxtxt07			.byte "velit aliquet", 0
-la1boxtxt08			.byte "iaculis.     ", 0
-la1boxtxt09			.byte "Vestibulum et", 0
-la1boxtxt10			.byte "mauris tellus", 0
-la1boxtxt11			.byte "Aliquam com- ", 0
-la1boxtxt12			.byte "modo, neque  ", 0
-la1boxtxt13			.byte "et vulputate ", 0
-la1boxtxt14			.byte "viverra, quam", 0
-la1boxtxt15			.byte "mauris rhon- ", 0
-la1boxtxt16			.byte "cus ante, in ", 0
-la1boxtxt17			.byte "sagittis ante", 0
-la1boxtxt18			.byte "nibh ut mi.  ", 0
+la1boxtxt00			.byte "             ", 0
+la1boxtxt01			.byte "             ", 0
+la1boxtxt02			.byte "             ", 0
+la1boxtxt03			.byte "             ", 0
+la1boxtxt04			.byte "             ", 0
+la1boxtxt05			.byte "             ", 0
+la1boxtxt06			.byte "             ", 0
+la1boxtxt07			.byte "             ", 0
+la1boxtxt08			.byte "             ", 0
+la1boxtxt09			.byte "             ", 0
+la1boxtxt10			.byte "             ", 0
+la1boxtxt11			.byte "             ", 0
+la1boxtxt12			.byte "             ", 0
+la1boxtxt13			.byte "             ", 0
+la1boxtxt14			.byte "             ", 0
+la1boxtxt15			.byte "             ", 0
+la1boxtxt16			.byte "             ", 0
+la1boxtxt17			.byte "             ", 0
+la1boxtxt18			.byte "             ", 0
 
 tvboxtxt
 .repeat 64, I

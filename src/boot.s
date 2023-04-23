@@ -67,6 +67,7 @@ basicend	.byte 0
 .include "ui/uielements/uipatternview.s"
 .include "ui/uielements/uisequenceview.s"
 .include "ui/uielements/uichannelview.s"
+.include "ui/uielements/uisampleview.s"
 
 .include "uidata.s"
 .include "uitext.s"

@@ -110,6 +110,7 @@ $(EXE_DIR)/boot.o:	$(SRC_DIR)/boot.s \
 					$(UIELT_SRC_DIR)/uichannelview.s \
 					$(UIELT_SRC_DIR)/uitab.s \
 					$(UIELT_SRC_DIR)/uigroup.s \
+					$(UIELT_SRC_DIR)/uisampleview.s \
 					Makefile Linkfile
 	$(AS) $(ASFLAGS) -o $@ $<
 
