@@ -34,16 +34,18 @@ uipatternview_restorepositions
 		rts
 
 upv_columnstarts
-		.byte      0,      6,      11,      16,      19
-		.byte 25 + 0, 25 + 6, 25 + 11, 25 + 16, 25 + 19
-		.byte 50 + 0, 50 + 6, 50 + 11, 50 + 16, 50 + 19
-		.byte 75 + 0, 75 + 6, 75 + 11, 75 + 16, 75 + 19
+		; "xx... xx.. xx.. xx...    " 0
+		; "xx... xx.. xx...    " 0
+		.byte       0,       6,      11,      14
+		.byte 20 +  0, 20 +  6, 20 + 11, 20 + 14
+		.byte 40 +  0, 40 +  6, 40 + 11, 40 + 14
+		.byte 60 +  0, 60 +  6, 60 + 11, 60 + 14
 
 upv_columnends		
-		.byte      5,      10,      15,      18,      21
-		.byte 25 + 5, 25 + 10, 25 + 15, 25 + 18, 25 + 21
-		.byte 50 + 5, 50 + 10, 50 + 15, 50 + 18, 50 + 21
-		.byte 75 + 5, 75 + 10, 75 + 15, 75 + 18, 75 + 21
+		.byte       5,      10,      13,      16
+		.byte 20 +  5, 20 + 10, 20 + 13, 20 + 16
+		.byte 40 +  5, 40 + 10, 40 + 13, 40 + 16
+		.byte 60 +  5, 60 + 10, 60 + 13, 60 + 16
 
 upv_reversecolumnlookup
 
@@ -484,7 +486,7 @@ upvdp_channelloop
 
 :		iny
 
-		lda #$ff									; write volume colour code to list
+/*		lda #$ff									; write volume colour code to list
 		sta (zpptr2),y
 		iny
 		lda #$04
@@ -496,8 +498,8 @@ upvdp_channelloop
 		iny
 		sta (zpptr2),y
 		iny
-
 		iny
+*/
 
 		lda #$ff									; write effect command colour code to list
 		sta (zpptr2),y
@@ -540,7 +542,7 @@ upvdp_channelloop
 		sta (zpptr2),y
 		iny
 
-:		clc											; add 4 to get to second channel
+:		clc											; add 4 to get to next channel
 		lda zpptrtmp+0
 		adc #$04
 		sta zpptrtmp+0
@@ -554,9 +556,9 @@ upvdp_channelloop
 		adc #$00
 		sta zpptrtmp+3
 
-		clc											; add 25 to get to second channel
+		clc											; add 20 to get to next channel on screen
 		lda zpptr2+0
-		adc #25
+		adc #20
 		sta zpptr2+0
 		lda zpptr2+1
 		adc #0
