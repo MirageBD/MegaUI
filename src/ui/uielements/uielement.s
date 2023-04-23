@@ -202,3 +202,60 @@ uielement_calluifunc_end
 		rts
 
 ; ----------------------------------------------------------------------------------------------------
+
+uielement_calluserfunc
+
+		lda zpptr0+0
+		sta rzpptr0+0
+		lda zpptr0+1
+		sta rzpptr0+1
+
+		ldy #$02
+		jsr ui_getelementdata_2
+
+ 		lda zpptr2+0							; get ptr to elements and functions
+		sta uecusf1+1							; LV TODO - check for ff first before populating everything?
+		sta uecusf2+1
+		sta uecusf3+1
+		sta uecusf4+1
+		lda zpptr2+1
+		sta uecusf1+2
+		sta uecusf2+2
+		sta uecusf3+2
+		sta uecusf4+2
+		cmp #$ff								; early out if element/function ptr is null
+		beq uielement_calluserfunc_end
+
+		ldy #$00								; read ui element to act upon and put in zpptr0
+uecusf1	lda $babe,y
+		sta zpptr0+0
+		iny
+uecusf2	lda $babe,y
+		sta zpptr0+1
+		cmp #$ff								; back out if element is null
+		beq uielement_calluserfunc_end
+
+		iny										; read function to call
+uecusf3	lda $babe,y
+		sta uecusf5+1
+		iny
+uecusf4	lda $babe,y
+		sta uecusf5+2
+		iny
+
+		phy
+uecusf5	jsr $babe								; execute function
+		ply
+
+		bra uecusf1
+
+uielement_calluserfunc_end
+
+		lda rzpptr0+0
+		sta zpptr0+0
+		lda rzpptr0+1
+		sta zpptr0+1
+
+		rts
+
+; ----------------------------------------------------------------------------------------------------

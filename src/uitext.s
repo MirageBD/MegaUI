@@ -10,46 +10,17 @@ uitxt_radiobutton	.byte "radiobtn", 0
 uitxt_paddlex		.byte "$d419", 0
 uitxt_paddley		.byte "$d41a", 0
 
-la1boxtxt			.word la1boxtxt00
-					.word la1boxtxt00
-					.word la1boxtxt00
-					.word la1boxtxt00
-					.word la1boxtxt00
-					.word la1boxtxt00
-					.word la1boxtxt00
-					.word la1boxtxt00
-					.word la1boxtxt08
-					.word la1boxtxt09
-					.word la1boxtxt10
-					.word la1boxtxt11
-					.word la1boxtxt12
-					.word la1boxtxt13
-					.word la1boxtxt14
-					.word la1boxtxt15
-					.word la1boxtxt16
-					.word la1boxtxt17
-					.word la1boxtxt18
+la1boxtxt
+.repeat 32, I
+					.word .ident(.sprintf("la1boxtxt%s", .string(I)))
+.endrepeat
 					.word $ffff
 
-la1boxtxt00			.byte "             ", 0
-la1boxtxt01			.byte "             ", 0
-la1boxtxt02			.byte "             ", 0
-la1boxtxt03			.byte "             ", 0
-la1boxtxt04			.byte "             ", 0
-la1boxtxt05			.byte "             ", 0
-la1boxtxt06			.byte "             ", 0
-la1boxtxt07			.byte "             ", 0
-la1boxtxt08			.byte "             ", 0
-la1boxtxt09			.byte "             ", 0
-la1boxtxt10			.byte "             ", 0
-la1boxtxt11			.byte "             ", 0
-la1boxtxt12			.byte "             ", 0
-la1boxtxt13			.byte "             ", 0
-la1boxtxt14			.byte "             ", 0
-la1boxtxt15			.byte "             ", 0
-la1boxtxt16			.byte "             ", 0
-la1boxtxt17			.byte "             ", 0
-la1boxtxt18			.byte "             ", 0
+.repeat 32,I
+	.ident(.sprintf("la1boxtxt%s", .string(I)))
+		.byte "                      ", 0
+.endrepeat
+
 
 tvboxtxt
 .repeat 64, I

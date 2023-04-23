@@ -117,26 +117,14 @@ mousedebugarea1
 
 filearea1elements
 		UIELEMENT_ADD fa1filebox,				filebox,			$ffff,					 1,  1, -5, -2,  0,		fa1filebox_data,			uidefaultflags
-		UIELEMENT_ADD fa1scrollbar,				scrollbar,			fa1scrollbarelements,	-3,  1,  2, -2,  0,		fa1scrollbar_data,			uidefaultflags
-		UIELEMENT_END
-
-fa1scrollbarelements
-		UIELEMENT_ADD fa1scrollbarbuttonup,		button,				$ffff,					 0,  0,  2,  2,  0,		fa1scrollbuttonup_data,		uidefaultflags
-		UIELEMENT_ADD fa1scrollbarbuttondown,	button,				$ffff,					 0, -2,  2,  2,  0,		fa1scrollbuttondown_data,	uidefaultflags
-		UIELEMENT_ADD fa1scrollbartrack,		scrolltrack,		$ffff,					 0,  2,  2,  8,  0,		fa1scrollbar_data,			uidefaultflags
+		UIELEMENT_ADD fa1scrollbartrack,		scrolltrack,		$ffff,					-3,  1,  2, -2,  0,		fa1scrollbar_data,			uidefaultflags
 		UIELEMENT_END
 
 ; ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ data
 
 listarea1elements
 		UIELEMENT_ADD la1listbox,				listbox,			$ffff,					 1,  1, -5, -2,  0,		la1listbox_data,			uidefaultflags
-		UIELEMENT_ADD la1scrollbar,				scrollbar,			la1scrollbarelements,	-3,  1,  2, -2,  0,		la1scrollbar_data,			uidefaultflags
-		UIELEMENT_END
-
-la1scrollbarelements
-		UIELEMENT_ADD la1scrollbarbutton1,		button,				$ffff,					 0,  0,  2,  2,  0,		la1scrollbuttonup_data,		uidefaultflags
-		UIELEMENT_ADD la1scrollbarbutton2,		button,				$ffff,					 0, -2,  2,  2,  0,		la1scrollbuttondown_data,	uidefaultflags
-		UIELEMENT_ADD la1scrollbartrack,		scrolltrack,		$ffff,					 0,  2,  2, -4,  0,		la1scrollbar_data,			uidefaultflags
+		UIELEMENT_ADD la1scrollbartrack,		scrolltrack,		$ffff,					-3,  1,  2, -2,  0,		la1scrollbar_data,			uidefaultflags
 		UIELEMENT_END
 
 ; ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ scrollbar elements
@@ -151,13 +139,7 @@ patternviewelements
 		UIELEMENT_ADD chanview3,				channelview,		$ffff,					39,  2, 13,  2,  0,		chanview3_data,				uidefaultflags
 		UIELEMENT_ADD chanview4,				channelview,		$ffff,					56,  2, 13,  2,  0,		chanview4_data,				uidefaultflags
 		UIELEMENT_ADD tvlistbox,				patternview,		$ffff,					 5,  5,-14, -7,  0,		tvlistbox_data,				uidefaultflags
-		UIELEMENT_ADD tvscrollbar,				scrollbar,			tvscrollbarelements,	-4,  5,  2, -7,  0,		tvscrollbar_data,			uidefaultflags
-		UIELEMENT_END
-
-tvscrollbarelements
-		UIELEMENT_ADD tvscrollbarbutton1,		button,				$ffff,					 0,  0,  2,  2,  0,		tvscrollbuttonup_data,		uidefaultflags
-		UIELEMENT_ADD tvscrollbarbutton2,		button,				$ffff,					 0, -2,  2,  2,  0,		tvscrollbuttondown_data,	uidefaultflags
-		UIELEMENT_ADD tvscrollbartrack,			scrolltrack,		$ffff,					 0,  2,  2, -4,  0,		tvscrollbar_data,			uidefaultflags
+		UIELEMENT_ADD tvscrollbartrack,			scrolltrack,		$ffff,					-3,  5,  2, -7,  0,		tvscrollbar_data,			uidefaultflags
 		UIELEMENT_END
 
 ; ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ data
@@ -172,118 +154,73 @@ sampleviewelements
 
 ; ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ data
 
-chanview1_data				.word $ffff,							0, $3d, $00				; channel, colour, vu strength
-chanview2_data				.word $ffff,							1, $31, $00
-chanview3_data				.word $ffff,							2, $7a, $00
-chanview4_data				.word $ffff,							3, $a0, $00
+chanview1_data				.word $ffff,														0, $3d, $00				; channel, colour, vu strength
+chanview2_data				.word $ffff,														1, $31, $00
+chanview3_data				.word $ffff,														2, $7a, $00
+chanview4_data				.word $ffff,														3, $a0, $00
 
-sequenceview_data			.word $ffff,							0
+sequenceview_data			.word $ffff,														0
 
-textbox1_data				.word $ffff,							uitxt_textbox1, 0, 0	; ptr to text, cursor position, end position
+textbox1_data				.word $ffff,														uitxt_textbox1, 0, 0	; ptr to text, cursor position, end position
 
-paddlexlabel_data			.word $ffff,							uitxt_paddlex
-hexlabel1_data				.word $ffff,							mouse_d419, 1
-paddleylabel_data			.word $ffff,							uitxt_paddley
-hexlabel2_data				.word $ffff,							mouse_d41a, 1
+paddlexlabel_data			.word $ffff,														uitxt_paddlex
+hexlabel1_data				.word $ffff,														mouse_d419, 1
+paddleylabel_data			.word $ffff,														uitxt_paddley
+hexlabel2_data				.word $ffff,														mouse_d41a, 1
 
-hexlabelptrnidx_data		.word $ffff,							uisequenceview_patternindex, 1
-hexlabelptrnptr_data		.word $ffff,							uipatternview_patternptr, 4
-hexlabelptrnrow_data		.word $ffff,							uipatternview_patternrow, 1
+hexlabelptrnidx_data		.word $ffff,														uisequenceview_patternindex, 1
+hexlabelptrnptr_data		.word $ffff,														uipatternview_patternptr, 4
+hexlabelptrnrow_data		.word $ffff,														uipatternview_patternrow, 1
 
-tabgroup1_data				.word $ffff,							0								; group bitmask
+tabgroup1_data				.word $ffff,														0								; group bitmask
 
-uilogo_data					.word $ffff,							((14*16+ 0) | (14*16+ 0)<<8)
+uilogo_data					.word $ffff,														((14*16+ 0) | (14*16+ 0)<<8)
 
-checkboxlabel_data			.word $ffff,							uitxt_checkbox
-radiobuttonlabel_data		.word $ffff,							uitxt_radiobutton
+checkboxlabel_data			.word $ffff,														uitxt_checkbox
+radiobuttonlabel_data		.word $ffff,														uitxt_radiobutton
 
-ctextbutton1_data			.word ctextbutton1_functions,			uitxt_button0, KEYBOARD_F1
-ctextbutton2_data			.word ctextbutton2_functions,			uitxt_button1, KEYBOARD_F3
-ctextbutton3_data			.word ctextbutton3_functions,			uitxt_button2, KEYBOARD_F5
+ctextbutton1_data			.word ctextbutton1_functions,										uitxt_button0, KEYBOARD_F1
+ctextbutton2_data			.word ctextbutton2_functions,										uitxt_button1, KEYBOARD_F3
+ctextbutton3_data			.word ctextbutton3_functions,										uitxt_button2, KEYBOARD_F5
 
-fa1scrollbar_data			.word fa1scrollbar_functions, 			0, 0, 20, fa1filebox			; start position, selection index, number of entries, ptr to list
-fa1filebox_data				.word fa1scrollbar_functions,			fa1scrollbar_data, fa1boxtxt
-fa1scrollbuttonup_data		.word fa1scrollbuttonup_functions,		((4*16+ 0) | (4*16+ 4)<<8)
-fa1scrollbuttondown_data	.word fa1scrollbuttondown_functions,	((4*16+ 8) | (4*16+12)<<8)
+fa1scrollbar_data			.word fa1scrollbar_functions, 										0, 0, 20, fa1filebox			; start position, selection index, number of entries, ptr to list
+fa1filebox_data				.word fa1scrollbar_functions,			filebox1_functions,			fa1scrollbar_data, fa1boxtxt
 
-la1scrollbar_data			.word la1scrollbar_functions, 			0, 0, 19, la1listbox			; start position, selection index, number of entries, ptr to list
-la1listbox_data				.word la1scrollbar_functions,			la1scrollbar_data, la1boxtxt
-la1scrollbuttonup_data		.word la1scrollbuttonup_functions,		((4*16+ 0) | (4*16+ 4)<<8)
-la1scrollbuttondown_data	.word la1scrollbuttondown_functions,	((4*16+ 8) | (4*16+12)<<8)
+la1scrollbar_data			.word la1scrollbar_functions, 										0, 0, 19, la1listbox			; start position, selection index, number of entries, ptr to list
+la1listbox_data				.word la1scrollbar_functions,			listbox1_functions,			la1scrollbar_data, la1boxtxt
 
-tvscrollbar_data			.word tvscrollbar_functions, 			0, 1, 64+2*7, tvlistbox			; start position, selection index, number of entries, ptr to list
-tvlistbox_data				.word tvscrollbar_functions,			tvscrollbar_data, tvboxtxt
-tvscrollbuttonup_data		.word tvscrollbuttonup_functions,		((4*16+ 0) | (4*16+ 4)<<8)
-tvscrollbuttondown_data		.word tvscrollbuttondown_functions,		((4*16+ 8) | (4*16+12)<<8)
+tvscrollbar_data			.word tvscrollbar_functions, 										0, 1, 64+2*7, tvlistbox			; start position, selection index, number of entries, ptr to list
+tvlistbox_data				.word tvscrollbar_functions,										tvscrollbar_data, tvboxtxt
 
-checkbox1_data				.word $ffff,							1, ((3*16+ 8) | (3*16+10)<<8)
-checkbox2_data				.word $ffff,							0, ((3*16+ 8) | (3*16+10)<<8)
+checkbox1_data				.word $ffff,														1, ((3*16+ 8) | (3*16+10)<<8)
+checkbox2_data				.word $ffff,														0, ((3*16+ 8) | (3*16+10)<<8)
 
 radiobuttongroupindex		.word 1
-radiobutton1_data			.word radiobutton_functions,			0, radiobuttongroupindex
-radiobutton2_data			.word radiobutton_functions,			1, radiobuttongroupindex
-radiobutton3_data			.word radiobutton_functions,			2, radiobuttongroupindex
+radiobutton1_data			.word radiobutton_functions,										0, radiobuttongroupindex
+radiobutton2_data			.word radiobutton_functions,										1, radiobuttongroupindex
+radiobutton3_data			.word radiobutton_functions,										2, radiobuttongroupindex
 
-tab1_data					.word tab_functions,					0, ui_tab1_window
-tab2_data					.word tab_functions,					1, ui_tab2_window
-tab3_data					.word tab_functions,					2, ui_tab3_window
+tab1_data					.word tab_functions,												0, ui_tab1_window
+tab2_data					.word tab_functions,												1, ui_tab2_window
+tab3_data					.word tab_functions,												2, ui_tab3_window
 
-playbutton_data				.word $ffff,							((8*16+0) | (8*16+4)<<8)
+playbutton_data				.word $ffff,														((8*16+0) | (8*16+4)<<8)
 
-sampleview1_data			.word $ffff,							2
+sampleview1_data			.word $ffff,														2
 
 ; ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ listeners
-
-fa1scrollbuttonup_functions		.word fa1scrollbartrack,				uiscrollbar_decrease
-								.word fa1scrollbartrack,				uiscrolltrack_draw
-								.word fa1filebox,						uifilebox_draw
-								.word $ffff
-
-fa1scrollbuttondown_functions	.word fa1scrollbartrack,				uiscrollbar_increase
-								.word fa1scrollbartrack,				uiscrolltrack_draw
-								.word fa1filebox,						uifilebox_draw
-								.word $ffff
 
 fa1scrollbar_functions			.word fa1scrollbartrack,				uiscrolltrack_draw
 								.word fa1filebox,						uifilebox_draw
 								.word $ffff
 
-
-
-
-la1scrollbuttonup_functions		.word la1scrollbartrack,				uiscrollbar_decrease
-								.word la1scrollbartrack,				uiscrolltrack_draw
-								.word la1listbox,						uilistbox_draw
-								.word $ffff
-
-la1scrollbuttondown_functions	.word la1scrollbartrack,				uiscrollbar_increase
-								.word la1scrollbartrack,				uiscrolltrack_draw
-								.word la1listbox,						uilistbox_draw
-								.word $ffff
-
 la1scrollbar_functions			.word la1scrollbartrack,				uiscrolltrack_draw
 								.word la1listbox,						uilistbox_draw
-								;.word sampleview1,						uisampleview_draw
-								.word $ffff
-
-
-
-tvscrollbuttonup_functions		.word tvscrollbartrack,					uiscrollbar_decrease
-								.word tvscrollbartrack,					uiscrolltrack_draw
-								.word tvlistbox,						uipatternview_draw
-								.word $ffff
-
-tvscrollbuttondown_functions	.word tvscrollbartrack,					uiscrollbar_increase
-								.word tvscrollbartrack,					uiscrolltrack_draw
-								.word tvlistbox,						uipatternview_draw
 								.word $ffff
 
 tvscrollbar_functions			.word tvscrollbartrack,					uiscrolltrack_draw
 								.word tvlistbox,						uipatternview_draw
 								.word $ffff
-
-
-
 
 radiobutton_functions			.word radiobutton1,						uiradiobutton_draw
 								.word radiobutton2,						uiradiobutton_draw
@@ -302,6 +239,12 @@ ctextbutton2_functions			.word ctextbutton2,						userfunc_stopmod
 								.word $ffff
 
 ctextbutton3_functions			.word ctextbutton3,						userfunc_pausemod
+								.word $ffff
+
+listbox1_functions				.word la1listbox,						userfunc_populatesample
+								.word $ffff
+
+filebox1_functions				.word fa1filebox,						userfunc_openfile
 								.word $ffff
 
 ; ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -323,6 +266,33 @@ userfunc_stopmod
 
 userfunc_pausemod
 		;UICORE_CALLELEMENTFUNCTION ui_tab1_window, uiwindow_hide
+		rts
+
+userfunc_populatesample
+
+		lda #<la1scrollbar_data
+		sta zpptr1+0
+		lda #>la1scrollbar_data
+		sta zpptr1+1
+
+		ldy #$04
+		lda (zpptr1),y
+		tax
+
+		lda #<sampleview1_data
+		sta zpptr1+0
+		lda #>sampleview1_data
+		sta zpptr1+1
+
+		txa
+		ldy #$02
+		sta (zpptr1),y
+
+		UICORE_CALLELEMENTFUNCTION sampleview1, uisampleview_draw
+
+		rts
+
+userfunc_openfile
 		rts
 
 peppitoPlaying

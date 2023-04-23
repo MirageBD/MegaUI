@@ -298,7 +298,7 @@ uifilebox_drawlistreleased
 
 		jsr uidraw_set_draw_position
 
-		ldy #$02										; put scrollbar1_data into zpptr2
+		ldy #$04										; put scrollbar1_data into zpptr2
 		jsr ui_getelementdata_2
 
 		ldy #$02										; store startpos
@@ -309,7 +309,7 @@ uifilebox_drawlistreleased
 		lda (zpptr2),y
 		sta uifilebox_selected_index
 
-		ldy #$04										; put listboxtxt into zpptr2
+		ldy #$06										; put listboxtxt into zpptr2
 		jsr ui_getelementdata_2
 
 		clc

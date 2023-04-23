@@ -76,12 +76,12 @@ uitab_draw
 		beq :+
 
 		ldz #$00							; uitab not selected
-		ldy #7*16+0
+		ldy #5*16+5
 		jsr uitab_drawinactive
 		rts
 
 :		ldz #$00							; uitab selected
-		ldy #6*16+8
+		ldy #5*16+0
 		jsr uitab_drawactive
 		rts
 
@@ -121,33 +121,6 @@ uitab_drawactive
 		pha
 		phx
 :		lda #$04
-		sta [uidraw_colptr],z					; draw middle glyph - just colour
-		inz
-		inz
-		dex
-		bne :-
-		plx
-		pla
-		adc #$01
-		sta [uidraw_scrptr],z					; draw right glyph
-
-		jsr uidraw_increase_row
-
-		tya
-		;sec
-		;sbc #2
-		;tay
-
-:		ldz #$00
-		tya
-		sta [uidraw_scrptr],z					; draw left glyph
-		inz
-		inz
-		pha
-		phx
-:		lda #$00
-		sta [uidraw_scrptr],z					; draw middle glyph - just colour
-		lda #$04
 		sta [uidraw_colptr],z					; draw middle glyph - just colour
 		inz
 		inz
@@ -203,27 +176,6 @@ uitab_drawinactive
 		bne :-
 		plx
 		pla
-		adc #$01
-		sta [uidraw_scrptr],z
-		
-		jsr uidraw_increase_row
-
-		tya
-		clc
-		adc #2
-
-		ldz #$00
-		sta [uidraw_scrptr],z
-		inz
-		inz
-		adc #$01
-		phx
-:		sta [uidraw_scrptr],z
-		inz
-		inz
-		dex
-		bne :-
-		plx
 		adc #$01
 		sta [uidraw_scrptr],z
 		

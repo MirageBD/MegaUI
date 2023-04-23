@@ -30,6 +30,7 @@ uilistbox_press
 		rts
 
 uilistbox_doubleclick
+		jsr uielement_calluserfunc
 		rts
 
 uilistbox_keypress
@@ -68,7 +69,7 @@ uilistbox_release
 uilistbox_setselectedindex
 		jsr uimouse_calculate_pos_in_uielement
 
-		ldy #$02										; put scrollbar1_data in zpptr2
+		ldy #$04										; put scrollbar1_data in zpptr2
 		jsr ui_getelementdata_2
 
 		lda uimouse_uielement_ypos+0					; set selected index + added start address
@@ -86,7 +87,7 @@ uilistbox_setselectedindex
 ; ----------------------------------------------------------------------------------------------------
 
 uilistbox_increase_selection
-		ldy #$02										; put scrollbar1_data in zpptr2
+		ldy #$04										; put scrollbar1_data in zpptr2
 		jsr ui_getelementdata_2
 
 		clc
@@ -98,7 +99,7 @@ uilistbox_increase_selection
 		rts
 
 uilistbox_decrease_selection
-		ldy #$02										; put scrollbar1_data in zpptr2
+		ldy #$04										; put scrollbar1_data in zpptr2
 		jsr ui_getelementdata_2
 
 		sec
@@ -110,7 +111,7 @@ uilistbox_decrease_selection
 		rts
 
 uilistbox_confine
-		ldy #$02										; put scrollbar1_data in zpptr2
+		ldy #$04										; put scrollbar1_data in zpptr2
 		jsr ui_getelementdata_2
 
 		ldy #$04										; get selection index
@@ -125,7 +126,7 @@ uilistbox_confine
 		lda (zpptr2),y
 		sec
 		sbc #$01
-		ldy #$04										 ; get selection
+		ldy #$04										; get selection
 		sta (zpptr2),y
 		rts
 
@@ -161,7 +162,7 @@ uilistbox_confine
 
 uilistbox_startaddentries
 
-		ldy #$02
+		ldy #$04
 		jsr ui_getelementdata_2
 
 		lda zpptr2+0
@@ -177,7 +178,7 @@ uilistbox_startaddentries
 		ldy #$06
 		sta (zpptr3),y									; set number of entries to 0
 
-		ldy #$04										; put start of text list into zpptr2
+		ldy #$06										; put start of text list into zpptr2
 		jsr ui_getelementdata_2
 
 		ldy #$00										; put pointer to actual text entry in zpptrtmp
@@ -226,10 +227,10 @@ uilistbox_endaddentries
 
 uilistbox_getstringptr
 
-		ldy #$04										; put start of text list into zpptr2
+		ldy #$06										; put start of text list into zpptr2
 		jsr ui_getelementdata_2
 
-		ldy #$02										; get pointer to scrollbar data
+		ldy #$04										; get pointer to scrollbar data
 		lda (zpptr1),y
 		sta zpptrtmp+0
 		iny
@@ -290,7 +291,7 @@ uilistbox_drawlistreleased
 
 		jsr uidraw_set_draw_position
 
-		ldy #$02										; put scrollbar1_data into zpptr2
+		ldy #$04										; put scrollbar1_data into zpptr2
 		jsr ui_getelementdata_2
 
 		ldy #$02										; store startpos
@@ -301,7 +302,7 @@ uilistbox_drawlistreleased
 		lda (zpptr2),y
 		sta uilistbox_selected_index
 
-		ldy #$04										; put listboxtxt into zpptr2
+		ldy #$06										; put listboxtxt into zpptr2
 		jsr ui_getelementdata_2
 
 		clc

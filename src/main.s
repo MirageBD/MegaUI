@@ -152,7 +152,7 @@ entry_main
 
 		lda #$02
 		sta $d020
-		lda #$f8
+		lda #$00
 		sta $d021
 
 		lda #<.loword(moddata)
@@ -327,7 +327,7 @@ populate_samplelist_loop
 		sta (zpptrtmp),y
 		iny
 
-		clc													; add length of string to start populating the next line
+		clc												; add length of string to start populating the next line
 		tya
 		adc zpptrtmp+0
 		sta zpptrtmp+0
@@ -336,7 +336,7 @@ populate_samplelist_loop
 		sta zpptrtmp+1
 
 		inx
-		cpx #18
+		cpx #32
 		bne populate_samplelist_loop
 
 		rts

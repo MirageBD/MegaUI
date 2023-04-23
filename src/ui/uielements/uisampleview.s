@@ -186,7 +186,12 @@ uisampleview_clearsample
 
 uisampleview_plotsample
 
-		lda uisampleview_sampleindex					; instrument index
+		ldy #$00										; dummy to get zpptr1 data
+		jsr ui_getelementdata_2
+
+		ldy #$02
+		lda (zpptr1),y									; get sample index
+
 		asl
 		tax
 		lda idxPepIns0+0,x
