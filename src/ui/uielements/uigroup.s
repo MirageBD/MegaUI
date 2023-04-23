@@ -3,9 +3,9 @@
 uigroup_layout
 		jsr uielement_layout
 
-		lda #$01
+		lda #$02
 		sta uirect_xdeflate
-		lda #$01
+		lda #$02
 		sta uirect_ydeflate
 
 		jsr uirect_deflate
@@ -35,27 +35,28 @@ uigroup_draw
 		sec
 		ldy #UIELEMENT::width
 		lda (zpptr0),y
-		;sbc #$02
 		sta uidraw_width
-		sec
 		ldy #UIELEMENT::height
-		lda (zpptr0),y
-		sbc #$02
 		sta uidraw_height
 
-		jsr uidraw_increase_row
-		jsr uidraw_increase_row
+		lda #$02
+		sta uidraw_height
 
-		ldx uidraw_width
+:		ldx uidraw_width
 
-		clc
 		ldz #$00
-		lda #7*16+8
-:		sta [uidraw_scrptr],z
+		lda #2
+:		sta [uidraw_colptr],z
 		inz
 		inz
 		dex
 		bne :-
+
+		jsr uidraw_increase_row
+
+		dec uidraw_height
+		lda uidraw_height
+		bne :--
 
 		rts
 

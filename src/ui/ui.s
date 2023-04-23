@@ -734,8 +734,8 @@ ui_update
 
 ui_user_update
 
-		UICORE_CALLELEMENTFUNCTION hexlabel1, uihexlabel_draw			; LV TODO - add update timer and move this to manager of some kind
-		UICORE_CALLELEMENTFUNCTION hexlabel2, uihexlabel_draw
+		;UICORE_CALLELEMENTFUNCTION hexlabel1, uihexlabel_draw			; LV TODO - add update timer and move this to manager of some kind
+		;UICORE_CALLELEMENTFUNCTION hexlabel2, uihexlabel_draw
 
 		;UICORE_CALLELEMENTFUNCTION ptrnidxlabel, uihexlabel_draw
 		;UICORE_CALLELEMENTFUNCTION ptrnptrlabel, uihexlabel_draw
