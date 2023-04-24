@@ -5,7 +5,7 @@ uitextbox_layout
     	rts
 
 uitextbox_hide
-		jsr uielement_hide
+		;jsr uielement_hide
 		rts
 
 uitextbox_focus

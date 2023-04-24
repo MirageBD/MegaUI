@@ -10,7 +10,7 @@ uihexlabel_layout
     	rts
 
 uihexlabel_hide
-		jsr uielement_hide
+		;jsr uielement_hide
 		rts
 
 uihexlabel_focus

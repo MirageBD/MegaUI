@@ -589,7 +589,7 @@ uipatternview_layout
 		rts
 
 uipatternview_hide
-		jsr uielement_hide
+		;jsr uielement_hide
 		rts
 
 uipatternview_focus

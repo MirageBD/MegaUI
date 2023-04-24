@@ -5,7 +5,7 @@ uinineslice_layout
     	rts
 
 uinineslice_hide
-		jsr uielement_hide
+		;jsr uielement_hide
 		rts
 
 uinineslice_focus

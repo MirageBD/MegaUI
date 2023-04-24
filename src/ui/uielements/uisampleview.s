@@ -67,7 +67,7 @@ uisampleview_layout
     	rts
 
 uisampleview_hide
-		jsr uielement_hide
+		;jsr uielement_hide
 
 		lda $d015
 		and #%11000011

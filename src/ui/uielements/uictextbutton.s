@@ -14,7 +14,7 @@ uictextbutton_layout
 		rts
 
 uictextbutton_hide
-		jsr uielement_hide
+		;jsr uielement_hide
 		rts
 
 uictextbutton_focus

@@ -5,7 +5,7 @@ uiimage_layout
 		rts
 
 uiimage_hide
-		jsr uielement_hide
+		;jsr uielement_hide
 		rts
 
 uiimage_focus

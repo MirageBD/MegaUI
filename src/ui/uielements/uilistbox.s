@@ -11,7 +11,7 @@ uilistbox_layout
 		rts
 
 uilistbox_hide
-		jsr uielement_hide
+		;jsr uielement_hide
 		rts
 
 uilistbox_focus

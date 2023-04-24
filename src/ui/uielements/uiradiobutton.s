@@ -5,7 +5,7 @@ uiradiobutton_layout
 		rts
 
 uiradiobutton_hide
-		jsr uielement_hide
+		;jsr uielement_hide
 		rts
 
 uiradiobutton_focus

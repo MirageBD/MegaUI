@@ -12,7 +12,7 @@ uifilebox_layout
 		rts
 
 uifilebox_hide
-		jsr uielement_hide
+		;jsr uielement_hide
 		rts
 
 uifilebox_focus

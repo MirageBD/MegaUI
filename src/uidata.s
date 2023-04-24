@@ -108,8 +108,8 @@ tab2_contents
 ; ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ child windows
 
 filearea1elements
-		UIELEMENT_ADD fa1filebox,				filebox,			$ffff,					 3,  2, -7, -4,  0,		fa1filebox_data,			uidefaultflags
-		UIELEMENT_ADD fa1scrollbartrack,		scrolltrack,		$ffff,					-3,  2,  2, -4,  0,		fa1scrollbar_data,			uidefaultflags
+		UIELEMENT_ADD fa1filebox,				filebox,			$ffff,					 3,  2, -7, -3,  0,		fa1filebox_data,			uidefaultflags
+		UIELEMENT_ADD fa1scrollbartrack,		scrolltrack,		$ffff,					-3,  2,  2, -3,  0,		fa1scrollbar_data,			uidefaultflags
 		UIELEMENT_END
 
 ; ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ data

@@ -25,7 +25,7 @@ uichannelview_layout
     	rts
 
 uichannelview_hide
-		jsr uielement_hide
+		;jsr uielement_hide
 		rts
 
 uichannelview_focus

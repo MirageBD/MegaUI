@@ -5,7 +5,7 @@ uidebugelement_layout
     	rts
 
 uidebugelement_hide
-		jsr uielement_hide
+		;jsr uielement_hide
 		rts
 
 uidebugelement_focus

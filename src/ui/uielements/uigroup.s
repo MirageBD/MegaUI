@@ -13,7 +13,7 @@ uigroup_layout
 		rts
 
 uigroup_hide
-		jsr uielement_hide
+		;jsr uielement_hide
 		rts
 
 uigroup_focus

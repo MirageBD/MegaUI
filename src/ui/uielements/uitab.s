@@ -5,7 +5,7 @@ uitab_layout
 		rts
 
 uitab_hide
-		jsr uielement_hide
+		;jsr uielement_hide
 		rts
 
 uitab_focus
