@@ -444,7 +444,11 @@ ui_setselectiveflags_recursive_loop
 		lda ui_currentflag
 		sta (zpptr0),y
 
-		ldy #UIELEMENT::children
+		cmp #%00000001									; CALL HIDE - CURRENTLY THIS IS ONLY REALLY USEFUL FOR ELEMENTS THAT NEED TO HIDE SPRITES, LIKE SAMPLEVIEW
+		bne :+
+		SEND_EVENT hide
+
+:		ldy #UIELEMENT::children
 		iny												; add 1 - we want to check for $xx $ff, not $ff xx !!!
 		lda (zpptr0),y
 		cmp #$ff

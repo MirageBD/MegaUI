@@ -80,14 +80,12 @@ uigroup_keyrelease
 
 ; ----------------------------------------------------------------------------------------------------
 
-; uigroup_update is called from children. I.E. uitab
-
-uigroup_update
+uigroup_update								; uigroup_update is called from children. I.E. uitab
 
 		ldy #$02							; read index
 		jsr ui_getelementdata_2
 
-		lda zpptr2+0						; LV TODO - feed this into ui_sendqueue
+		lda zpptr2+0
 		sta ui_setflagindex
 		lda #%00000011
 		sta ui_flagtoset

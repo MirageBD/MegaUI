@@ -52,7 +52,13 @@ uilistbox_keypress
 :		rts
 
 uilistbox_keyrelease
-		rts
+		lda keyboard_pressedeventarg
+
+		cmp #KEYBOARD_RETURN
+		bne :+
+		jsr uielement_calluserfunc
+
+:		rts
 
 ; ----------------------------------------------------------------------------------------------------
 

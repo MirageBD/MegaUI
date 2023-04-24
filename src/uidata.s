@@ -264,25 +264,22 @@ userfunc_stopmod
 		rts
 
 userfunc_pausemod
-		;UICORE_CALLELEMENTFUNCTION ui_tab1_window, uiwindow_hide
 		rts
 
 userfunc_populatesample
 
-		lda #<la1scrollbar_data
-		sta zpptr1+0
-		lda #>la1scrollbar_data
-		sta zpptr1+1
+		ldy #$02													; if not already selected, select the sample tab
+		lda tabgroup1_data,y
+		cmp #$01
+		beq :+
+		UICORE_CALLELEMENTFUNCTION ui_tab2, uitab_release
 
-		ldy #$04
+:		UICORE_SELECT_ELEMENT_1 la1scrollbar_data
+		ldy #$04													; get selected index
 		lda (zpptr1),y
 		tax
 
-		lda #<sampleview1_data
-		sta zpptr1+0
-		lda #>sampleview1_data
-		sta zpptr1+1
-
+		UICORE_SELECT_ELEMENT_1 sampleview1_data					; feed selected index into sampleview element
 		txa
 		ldy #$02
 		sta (zpptr1),y

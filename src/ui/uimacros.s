@@ -20,15 +20,22 @@
 .endscope
 .endmacro
 
-.macro UICORE_SELECT_ELEMENT element
+.macro UICORE_SELECT_ELEMENT_0 element
 		lda #<element
 		sta zpptr0+0
 		lda #>element
 		sta zpptr0+1
 .endmacro
 
+.macro UICORE_SELECT_ELEMENT_1 element
+		lda #<element
+		sta zpptr1+0
+		lda #>element
+		sta zpptr1+1
+.endmacro
+
 .macro UICORE_CALLELEMENTFUNCTION element, function
-		UICORE_SELECT_ELEMENT element
+		UICORE_SELECT_ELEMENT_0 element
 		jsr function
 .endmacro
 

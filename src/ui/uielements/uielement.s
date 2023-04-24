@@ -54,8 +54,8 @@ uielement_layout
 
     	rts
 
-uielement_hide
-
+uielement_hide															; LV TODO - come up with a better way. At the moment every element is calling this which is not always necessary
+																		; I.E. tabgroups can just hide themselves instead of clearing themselves.
 		jsr uidraw_set_draw_position
 
 		ldy #UIELEMENT::width
