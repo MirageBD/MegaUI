@@ -107,19 +107,19 @@ uisampleview_draw
 		ora #%00111100
 		sta $d077										; Sprite V400 Y position MSBs
 
-		lda #$48										; sprite y positions
+		lda #$58										; sprite y positions
 		sta $d000+2*2+1
 		sta $d000+3*2+1
 		sta $d000+4*2+1
 		sta $d000+5*2+1
 
-		lda #$68+0*64									; sprite x positions
+		lda #$60+0*64									; sprite x positions
 		sta $d000+2*2+0
-		lda #$68+1*64									; sprite x positions
+		lda #$60+1*64									; sprite x positions
 		sta $d000+3*2+0
-		lda #$68+2*64									; sprite x positions
+		lda #$60+2*64									; sprite x positions
 		sta $d000+4*2+0
-		lda #$68+3*64									; sprite x positions
+		lda #$60+3*64									; sprite x positions
 		sta $d000+5*2+0
 		
 		lda #$03

@@ -89,8 +89,8 @@ filetab3_contents
 ; ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ child windows
 
 tabgroupchildren
-		UIELEMENT_ADD ui_tab1,					tab,				$ffff,					 1, 0,  8,  3,  0,		tab1_data,					uidefaultflags	
-		UIELEMENT_ADD ui_tab2,					tab,				$ffff,					 9, 0,  8,  3,  0,		tab2_data,					uidefaultflags
+		UIELEMENT_ADD ui_tab1,					tab,				$ffff,					 1, 0,  8,  2,  0,		tab1_data,					uidefaultflags	
+		UIELEMENT_ADD ui_tab2,					tab,				$ffff,					 9, 0,  8,  2,  0,		tab2_data,					uidefaultflags
 		UIELEMENT_END
 
 ; ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ child windows
@@ -108,15 +108,15 @@ tab2_contents
 ; ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ child windows
 
 filearea1elements
-		UIELEMENT_ADD fa1filebox,				filebox,			$ffff,					 1,  1, -5, -2,  0,		fa1filebox_data,			uidefaultflags
-		UIELEMENT_ADD fa1scrollbartrack,		scrolltrack,		$ffff,					-3,  1,  2, -2,  0,		fa1scrollbar_data,			uidefaultflags
+		UIELEMENT_ADD fa1filebox,				filebox,			$ffff,					 3,  2, -7, -4,  0,		fa1filebox_data,			uidefaultflags
+		UIELEMENT_ADD fa1scrollbartrack,		scrolltrack,		$ffff,					-3,  2,  2, -4,  0,		fa1scrollbar_data,			uidefaultflags
 		UIELEMENT_END
 
 ; ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ data
 
 listarea1elements
-		UIELEMENT_ADD la1listbox,				listbox,			$ffff,					 1,  1, -5, -2,  0,		la1listbox_data,			uidefaultflags
-		UIELEMENT_ADD la1scrollbartrack,		scrolltrack,		$ffff,					-3,  1,  2, -2,  0,		la1scrollbar_data,			uidefaultflags
+		UIELEMENT_ADD la1listbox,				listbox,			$ffff,					 3,  2, -7, -4,  0,		la1listbox_data,			uidefaultflags
+		UIELEMENT_ADD la1scrollbartrack,		scrolltrack,		$ffff,					-3,  2,  2, -4,  0,		la1scrollbar_data,			uidefaultflags
 		UIELEMENT_END
 
 ; ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ scrollbar elements

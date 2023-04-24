@@ -104,7 +104,7 @@ uiscrolltrack_press
 		lda (zpptr2),y
 		sta uiscrolltrack_listheight+2
 
-		ldy #UIELEMENT::height					; track height: 8-1=7
+		ldy #UIELEMENT::height
 		lda (zpptr0),y
 		sec
 		sbc #$01
@@ -114,29 +114,22 @@ uiscrolltrack_press
 		lda (zpptrtmp),y						; list entries: 30
 		sta uiscrolltrack_numentries+2
 
-		MATH_SUB uiscrolltrack_numentries,	uiscrolltrack_height,		uiscrolltrack_numerator ; $17
-		MATH_MUL uiscrolltrack_startpos,	uiscrolltrack_numerator,	uiscrolltrack_numerator
+		MATH_SUB uiscrolltrack_numentries,	uiscrolltrack_listheight,	uiscrolltrack_numerator
+		MATH_DIV uiscrolltrack_startpos,	uiscrolltrack_height,		uiscrolltrack_denominator
+		MATH_MUL uiscrolltrack_denominator,	uiscrolltrack_numerator,	uiscrolltrack_denominator
 
-		clc
-		lda uiscrolltrack_height+2
-		adc #$01
-		sta uiscrolltrack_height+2
-
-		MATH_DIV uiscrolltrack_numerator, uiscrolltrack_height, uiscrolltrack_denominator
-
-		clc
-		ror uiscrolltrack_denominator+3
+		lsr uiscrolltrack_denominator+3
 		ror uiscrolltrack_denominator+2
-		clc
-		ror uiscrolltrack_denominator+3
+		lsr uiscrolltrack_denominator+3
 		ror uiscrolltrack_denominator+2
-		clc
-		ror uiscrolltrack_denominator+3
+		lsr uiscrolltrack_denominator+3
 		ror uiscrolltrack_denominator+2
 
 		lda uiscrolltrack_denominator+2
 
-		jsr uiscrollbar_setposition
+		ldy #$02
+		sta (zpptrtmp),y
+
 		jsr uielement_calluifunc
 
 		rts
@@ -255,7 +248,6 @@ uiscrolltrack_draw_released_puck
 		MATH_SUB uiscrolltrack_numentries,	uiscrolltrack_listheight,	uiscrolltrack_numerator		; 20-12=8
 		MATH_DIV uiscrolltrack_startpos,	uiscrolltrack_numerator,	uiscrolltrack_denominator	; 0/5, 1/5
 		MATH_MUL uiscrolltrack_denominator,	uiscrolltrack_height,		uiscrolltrack_denominator	; 5* 0/5, 5*1/5 = 1
-		;MATH_ROUND uiscrolltrack_denominator, uiscrolltrack_denominator
 
 		ldx uiscrolltrack_denominator+2
 
