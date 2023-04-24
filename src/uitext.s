@@ -31,12 +31,9 @@ tvboxtxt
 .repeat 64,I
 	.ident(.sprintf("tvboxtxt%s", .string(I)))
 
-		.byte $ff, $0f, "... ", $ff, $0f, ".. ", $ff, $0f, "..."
-		.byte "    "
-		.byte $ff, $0f, "... ", $ff, $0f, ".. ", $ff, $0f, "..."
-		.byte "    "
-		.byte $ff, $0f, "... ", $ff, $0f, ".. ", $ff, $0f, "..."
-		.byte "    "
+		.byte $ff, $0f, "... ", $ff, $0f, ".. ", $ff, $0f, "...", "  "
+		.byte $ff, $0f, "... ", $ff, $0f, ".. ", $ff, $0f, "...", "  "
+		.byte $ff, $0f, "... ", $ff, $0f, ".. ", $ff, $0f, "...", "  "
 		.byte $ff, $0f, "... ", $ff, $0f, ".. ", $ff, $0f, "..."
 
 		.byte 0

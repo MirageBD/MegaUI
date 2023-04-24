@@ -34,40 +34,39 @@ uipatternview_restorepositions
 		rts
 
 upv_columnstarts
-		; "xx... xx.. xx.. xx...    " 0
 		; "xx... xx.. xx...    " 0
 		.byte       0,       6,      11,      14
-		.byte 20 +  0, 20 +  6, 20 + 11, 20 + 14
-		.byte 40 +  0, 40 +  6, 40 + 11, 40 + 14
-		.byte 60 +  0, 60 +  6, 60 + 11, 60 + 14
+		.byte 18 +  0, 18 +  6, 18 + 11, 18 + 14
+		.byte 36 +  0, 36 +  6, 36 + 11, 36 + 14
+		.byte 54 +  0, 54 +  6, 54 + 11, 54 + 14
 
 upv_columnends		
 		.byte       5,      10,      13,      16
-		.byte 20 +  5, 20 + 10, 20 + 13, 20 + 16
-		.byte 40 +  5, 40 + 10, 40 + 13, 40 + 16
-		.byte 60 +  5, 60 + 10, 60 + 13, 60 + 16
+		.byte 18 +  5, 18 + 10, 18 + 13, 18 + 16
+		.byte 36 +  5, 36 + 10, 36 + 13, 36 + 16
+		.byte 54 +  5, 54 + 10, 54 + 13, 54 + 16
 
 upv_reversecolumnlookup
 
-		; "... .. .. ...    "    4*17-4 = 64 wide    4*13+3*4 = 64 wide
-		.byte    0,    0,    0,    1,    1,    1,    2,    2,    2,    3,    3,    4,    4,    4,    4,    4,    4
-		.byte  5+0,  5+0,  5+0,  5+1,  5+1,  5+1,  5+2,  5+2,  5+2,  5+3,  5+3,  5+4,  5+4,  5+4,  5+4,  5+4,  5+4
-		.byte 10+0, 10+0, 10+0, 10+1, 10+1, 10+1, 10+2, 10+2, 10+2, 10+3, 10+3, 10+4, 10+4, 10+4, 10+4, 10+4, 10+4
-		.byte 15+0, 15+0, 15+0, 15+1, 15+1, 15+1, 15+2, 15+2, 15+2, 15+3, 15+3, 15+4, 15+4
+		; "... .. ...  " 0
+		.byte    0,    0,    0,    1,    1,    1,    2,    2,    3,    3,    3,    3
+		.byte  4+0,  4+0,  4+0,  4+1,  4+1,  4+1,  4+2,  4+2,  4+3,  4+3,  4+3,  4+3
+		.byte  8+0,  8+0,  8+0,  8+1,  8+1,  8+1,  8+2,  8+2,  8+3,  8+3,  8+3,  8+3
+		.byte 12+0, 12+0, 12+0, 12+1, 12+1, 12+1, 12+2, 12+2, 12+3, 12+3, 12+3, 12+3
 
 upv_reversecolumninchannellookup
 
-		; "... .. .. ...    "    4*17-4 = 64 wide    4*13+3*4 = 64 wide
-		.byte    0,    0,    0,    1,    1,    1,    2,    2,    2,    3,    3,    4,    4,    4,    4,    4,    4
-		.byte    0,    0,    0,    1,    1,    1,    2,    2,    2,    3,    3,    4,    4,    4,    4,    4,    4
-		.byte    0,    0,    0,    1,    1,    1,    2,    2,    2,    3,    3,    4,    4,    4,    4,    4,    4
-		.byte    0,    0,    0,    1,    1,    1,    2,    2,    2,    3,    3,    4,    4,    4,    4,    4,    4
+		; "... .. ...  " 0
+		.byte    0,    0,    0,    1,    1,    1,    2,    2,    3,    3,    3,    3
+		.byte    0,    0,    0,    1,    1,    1,    2,    2,    3,    3,    3,    3
+		.byte    0,    0,    0,    1,    1,    1,    2,    2,    3,    3,    3,    3
+		.byte    0,    0,    0,    1,    1,    1,    2,    2,    3,    3,    3,    3
 
 upv_reversecolumnfoolookup
-		.byte    0, 1, 2, 3, 4
-		.byte    0, 1, 2, 3, 4
-		.byte    0, 1, 2, 3, 4
-		.byte    0, 1, 2, 3, 4
+		.byte    0, 1, 2, 3
+		.byte    0, 1, 2, 3
+		.byte    0, 1, 2, 3
+		.byte    0, 1, 2, 3
 
 ; ----------------------------------------------------------------------------------------------------
 
@@ -249,7 +248,9 @@ upvep2	lda upv_times3table,y
 		and #%11110000
 		sta [zpptrtmp],z
 
-		ldy #$12									; get effect
+		; "xx... xx.. xx...    " 0
+
+		ldy #$0d									; get effect
 		lda (zpptr2),y
 		tax
 		lda upv_chartohex,x
@@ -261,7 +262,7 @@ upvep2	lda upv_times3table,y
 		lda #$00
 		sta [zpptrtmp],z
 
-		ldy #$13									; get higher 4 bits of sample number
+		ldy #$0e									; get higher 4 bits of sample number
 		lda (zpptr2),y
 		tax
 		lda upv_chartohex,x
@@ -273,7 +274,7 @@ upvep2	lda upv_times3table,y
 		ora [zpptrtmp],z
 		sta [zpptrtmp],z
 
-		ldy #$14									; get higher 4 bits of sample number
+		ldy #$0f									; get higher 4 bits of sample number
 		lda (zpptr2),y
 		tax
 		lda upv_chartohex,x
@@ -295,9 +296,9 @@ upvep2	lda upv_times3table,y
 		adc #$00
 		sta zpptrtmp+3
 
-		clc											; add 25 to get to second channel
+		clc											; add 18 to get to second channel
 		lda zpptr2+0
-		adc #25
+		adc #18
 		sta zpptr2+0
 		lda zpptr2+1
 		adc #0
@@ -310,9 +311,9 @@ upvep2	lda upv_times3table,y
 
 		jmp upvep_channelloop
 
-:		sec											; subtract 3 to skip trailing zero byte
+:		sec											; subtract 1 (2 spaces-1) to skip trailing zero byte
 		lda zpptr2+0
-		sbc #03
+		sbc #01
 		sta zpptr2+0
 		lda zpptr2+1
 		sbc #0
@@ -486,21 +487,6 @@ upvdp_channelloop
 
 :		iny
 
-/*		lda #$ff									; write volume colour code to list
-		sta (zpptr2),y
-		iny
-		lda #$04
-		sta (zpptr2),y
-		iny
-
-		lda #$2d									; write volume to list
-		sta (zpptr2),y
-		iny
-		sta (zpptr2),y
-		iny
-		iny
-*/
-
 		lda #$ff									; write effect command colour code to list
 		sta (zpptr2),y
 		iny
@@ -556,9 +542,9 @@ upvdp_channelloop
 		adc #$00
 		sta zpptrtmp+3
 
-		clc											; add 20 to get to next channel on screen
+		clc											; add 18 to get to next channel on screen
 		lda zpptr2+0
-		adc #20
+		adc #18
 		sta zpptr2+0
 		lda zpptr2+1
 		adc #0
@@ -571,9 +557,9 @@ upvdp_channelloop
 
 		jmp upvdp_channelloop
 
-:		sec											; subtract 3 to skip trailing zero byte
+:		sec											; subtract 1 (2 spaces-1) to skip trailing zero byte
 		lda zpptr2+0
-		sbc #03
+		sbc #01
 		sta zpptr2+0
 		lda zpptr2+1
 		sbc #0
@@ -676,8 +662,6 @@ uipatternview_keypress
 		beq uipatternview_keyincolumn2
 		cmp #$03
 		beq uipatternview_keyincolumn3
-		cmp #$04
-		beq uipatternview_keyincolumn4
 		rts
 
 uipatternview_keyincolumn0
@@ -693,14 +677,11 @@ uipatternview_keyincolumn1
 		rts
 
 uipatternview_keyincolumn2
-		rts
-
-uipatternview_keyincolumn3
 		jsr upv_insert_effect
 		jsr uipatternview_encodepattern
 		rts
 
-uipatternview_keyincolumn4
+uipatternview_keyincolumn3
 		jsr upv_insert_effectdata
 		jsr uielement_calluifunc
 		jsr uipatternview_encodepattern
@@ -716,9 +697,9 @@ uipatternview_keyrelease
 upv_prepareinsert
 
 		ldx uipatternview_startpos
-		lda upv_times97tablelo,x
+		lda upv_times71tablelo,x
 		sta zpptr2+0
-		lda upv_times97tablehi,x
+		lda upv_times71tablehi,x
 		sta zpptr2+1
 
 		clc
@@ -1258,14 +1239,14 @@ upv_times3table
 		.byte I*3
 .endrepeat
 
-upv_times97tablelo
+upv_times71tablelo ; 4*16 + 3*2 + 1      4*pattern, 3*2 spaces separating, 1 null terminator
 .repeat 64, I
-		.byte <(I*97)
+		.byte <(I*71)
 .endrepeat
 
-upv_times97tablehi
+upv_times71tablehi
 .repeat 64, I
-		.byte >(I*97)
+		.byte >(I*71)
 .endrepeat
 
 upv_effectcommandtocolour
