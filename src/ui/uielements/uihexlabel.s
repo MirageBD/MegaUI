@@ -40,7 +40,7 @@ uihexlabel_draw
 		ldy #$02
 		jsr ui_getelementdata_2
 
-        ldy #$04
+		ldy #$04
 		lda (zpptr1),y
 		sta uihexlabel_numberofbytes
 

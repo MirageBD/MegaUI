@@ -201,11 +201,11 @@ lbllength_data				.word $ffff,														uitxt_length
 lblrepeat_data				.word $ffff,														uitxt_repeat
 lblrepeatlen_data			.word $ffff,														uitxt_repeatlen
 
-nbfinetune_data				.word $ffff,														$0000, $0000, $babe, 1		; address, number of bytes
-nbvolume_data				.word $ffff,														$0000, $0000, $babe, 1		; address, number of bytes
-nblength_data				.word $ffff,														$0000, $0000, $babe, 2		; address, number of bytes
-nbrepeat_data				.word $ffff,														$0000, $0000, $babe, 2		; address, number of bytes
-nbrepeatlen_data			.word $ffff,														$0000, $0000, $babe, 2		; address, number of bytes
+nbfinetune_data				.word $ffff,														$0000, $babe, 1					; address, number of bytes
+nbvolume_data				.word $ffff,														$0000, $babe, 1					; address, number of bytes
+nblength_data				.word $ffff,														$0000, $babe, 2					; address, number of bytes
+nbrepeat_data				.word $ffff,														$0000, $babe, 2					; address, number of bytes
+nbrepeatlen_data			.word $ffff,														$0000, $babe, 2					; address, number of bytes
 
 fa1scrollbar_data			.word fa1scrollbar_functions, 										0, 0, 20, fa1filebox			; start position, selection index, number of entries, ptr to list
 fa1filebox_data				.word fa1scrollbar_functions,			filebox1_functions,			fa1scrollbar_data, fa1boxtxt
@@ -325,21 +325,38 @@ userfunc_populatesample
 		ldy #4
 		lda (zpptrtmp),y
 		sta nbvolume_data+2
+		clc
+		lda zpptrtmp+0
+		adc #4
+		sta nbvolume_data+4
+		lda zpptrtmp+1
+		adc #0
+		sta nbvolume_data+5
 
 		ldy #5
 		lda (zpptrtmp),y
 		sta nbfinetune_data+2
+		clc
+		lda zpptrtmp+0
+		adc #5
+		sta nbfinetune_data+4
+		lda zpptrtmp+1
+		adc #0
+		sta nbfinetune_data+5
 
 		ldy #6
 		lda (zpptrtmp),y
 		sta nblength_data+2
-		ldy #$04
-		sta (zpptr1),y
 		ldy #7
 		lda (zpptrtmp),y
 		sta nblength_data+3
-		ldy #$05
-		sta (zpptr1),y
+		clc
+		lda zpptrtmp+0
+		adc #6
+		sta nblength_data+4
+		lda zpptrtmp+1
+		adc #0
+		sta nblength_data+5
 
 		ldy #8
 		lda (zpptrtmp),y
@@ -347,6 +364,13 @@ userfunc_populatesample
 		ldy #9
 		lda (zpptrtmp),y
 		sta nbrepeat_data+3
+		clc
+		lda zpptrtmp+0
+		adc #8
+		sta nbrepeat_data+4
+		lda zpptrtmp+1
+		adc #0
+		sta nbrepeat_data+5
 
 		ldy #10
 		lda (zpptrtmp),y
@@ -354,6 +378,13 @@ userfunc_populatesample
 		ldy #11
 		lda (zpptrtmp),y
 		sta nbrepeatlen_data+3
+		clc
+		lda zpptrtmp+0
+		adc #10
+		sta nbrepeatlen_data+4
+		lda zpptrtmp+1
+		adc #0
+		sta nbrepeatlen_data+5
 
 		ldy #12											; sample address in instrument
 		lda (zpptrtmp),y

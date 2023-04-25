@@ -95,6 +95,7 @@ $(EXE_DIR)/boot.o:	$(SRC_DIR)/boot.s \
 					$(UIELT_SRC_DIR)/uibutton.s \
 					$(UIELT_SRC_DIR)/uicbutton.s \
 					$(UIELT_SRC_DIR)/uictextbutton.s \
+					$(UIELT_SRC_DIR)/uicnumericbutton.s \
 					$(UIELT_SRC_DIR)/uiscrolltrack.s \
 					$(UIELT_SRC_DIR)/uilabel.s \
 					$(UIELT_SRC_DIR)/uinineslice.s \
