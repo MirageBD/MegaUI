@@ -23,6 +23,8 @@ window0area
 		UIELEMENT_ADD ctextbutton2,				ctextbutton,		$ffff,					12,  0, 12,  3,  0,		ctextbutton2_data,			uidefaultflags
 		UIELEMENT_ADD ctextbutton3,				ctextbutton,		$ffff,					24,  0, 12,  3,  0,		ctextbutton3_data,			uidefaultflags
 
+		UIELEMENT_ADD cnumericbutton1,			cnumericbutton,		$ffff,					40,  0,  9,  3,  0,		cnumericbutton1_data,		uidefaultflags
+
 		;UIELEMENT_ADD paddlexlabel,			label,				$ffff,					60,  1,  8,  1,  0,		paddlexlabel_data,			uidefaultflags
 		;UIELEMENT_ADD paddleylabel,			label,				$ffff,					70,  1,  8,  1,  0,		paddleylabel_data,			uidefaultflags
 		;UIELEMENT_ADD hexlabel1,				hexlabel,			$ffff,					74,  1,  2,  1,  0,		hexlabel1_data,				uidefaultflags
@@ -101,8 +103,22 @@ tab1_contents
 		UIELEMENT_END
 
 tab2_contents
-		UIELEMENT_ADD ui_textbox,				nineslice,			textboxelements,		 1,  0, 14,  3,  0,		$ffff,						%00000001
-		UIELEMENT_ADD ui_sampleview,			nineslice,			sampleviewelements,		33,  6, 34, 10,  0,		$ffff,						%00000001
+		UIELEMENT_ADD ui_textbox,				nineslice,			textboxelements,		 7,  2, 22,  3,  0,		$ffff,						%00000001
+
+		UIELEMENT_ADD lblfinetune,				label,				$ffff,					12,  6,  9,  1,  0,		lblfinetune_data,			%00000001
+		UIELEMENT_ADD lblvolume,				label,				$ffff,					14,  8,  9,  1,  0,		lblvolume_data,				%00000001
+		UIELEMENT_ADD lbllength,				label,				$ffff,					14, 10,  9,  1,  0,		lbllength_data,				%00000001
+		UIELEMENT_ADD lblrepeat,				label,				$ffff,					14, 12,  9,  1,  0,		lblrepeat_data,				%00000001
+		UIELEMENT_ADD lblrepeatlen,				label,				$ffff,					11, 14,  9,  1,  0,		lblrepeatlen_data,			%00000001
+
+		UIELEMENT_ADD nbfinetune,				cnumericbutton,		$ffff,					20,  5,  9,  3,  0,		nbfinetune_data,			%00000001
+		UIELEMENT_ADD nbvolume,					cnumericbutton,		$ffff,					20,  7,  9,  3,  0,		nbvolume_data,				%00000001
+		UIELEMENT_ADD nblength,					cnumericbutton,		$ffff,					20,  9,  9,  3,  0,		nblength_data,				%00000001
+		UIELEMENT_ADD nbrepeat,					cnumericbutton,		$ffff,					20, 11,  9,  3,  0,		nbrepeat_data,				%00000001
+		UIELEMENT_ADD nbrepeatlen,				cnumericbutton,		$ffff,					20, 13,  9,  3,  0,		nbrepeatlen_data,			%00000001
+
+		UIELEMENT_ADD ui_sampleview,			nineslice,			sampleviewelements,		33,  5, 34, 11,  0,		$ffff,						%00000001
+
 		UIELEMENT_END
 
 ; ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ child windows
@@ -177,6 +193,20 @@ ctextbutton1_data			.word ctextbutton1_functions,										uitxt_button0, KEYBOA
 ctextbutton2_data			.word ctextbutton2_functions,										uitxt_button1, KEYBOARD_F3
 ctextbutton3_data			.word ctextbutton3_functions,										uitxt_button2, KEYBOARD_F5
 
+cnumericbutton1_data		.word $ffff,														$1234, $0000, $babe, 2		; value, address, number of bytes
+
+lblfinetune_data			.word $ffff,														uitxt_finetune
+lblvolume_data				.word $ffff,														uitxt_volume
+lbllength_data				.word $ffff,														uitxt_length
+lblrepeat_data				.word $ffff,														uitxt_repeat
+lblrepeatlen_data			.word $ffff,														uitxt_repeatlen
+
+nbfinetune_data				.word $ffff,														$0000, $0000, $babe, 1		; address, number of bytes
+nbvolume_data				.word $ffff,														$0000, $0000, $babe, 1		; address, number of bytes
+nblength_data				.word $ffff,														$0000, $0000, $babe, 2		; address, number of bytes
+nbrepeat_data				.word $ffff,														$0000, $0000, $babe, 2		; address, number of bytes
+nbrepeatlen_data			.word $ffff,														$0000, $0000, $babe, 2		; address, number of bytes
+
 fa1scrollbar_data			.word fa1scrollbar_functions, 										0, 0, 20, fa1filebox			; start position, selection index, number of entries, ptr to list
 fa1filebox_data				.word fa1scrollbar_functions,			filebox1_functions,			fa1scrollbar_data, fa1boxtxt
 
@@ -201,7 +231,7 @@ filetab3_data				.word filetab_functions,											2, ui_filetab3_window
 tab1_data					.word tab_functions,												0, ui_tab1_window
 tab2_data					.word tab_functions,												1, ui_tab2_window
 
-sampleview1_data			.word $ffff,														2
+sampleview1_data			.word $ffff,														2, 0							; sample index, sample length
 
 ; ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ listeners
 
@@ -278,13 +308,73 @@ userfunc_populatesample
 		ldy #$04													; get selected index
 		lda (zpptr1),y
 		tax
+		inx															; skip 1 because sample 0 doesn't exist
 
 		UICORE_SELECT_ELEMENT_1 sampleview1_data					; feed selected index into sampleview element
 		txa
 		ldy #$02
 		sta (zpptr1),y
 
+		asl
+		tax
+		lda idxPepIns0+0,x
+		sta zpptrtmp+0
+		lda idxPepIns0+1,x
+		sta zpptrtmp+1
+
+		ldy #4
+		lda (zpptrtmp),y
+		sta nbvolume_data+2
+
+		ldy #5
+		lda (zpptrtmp),y
+		sta nbfinetune_data+2
+
+		ldy #6
+		lda (zpptrtmp),y
+		sta nblength_data+2
+		ldy #$04
+		sta (zpptr1),y
+		ldy #7
+		lda (zpptrtmp),y
+		sta nblength_data+3
+		ldy #$05
+		sta (zpptr1),y
+
+		ldy #8
+		lda (zpptrtmp),y
+		sta nbrepeat_data+2
+		ldy #9
+		lda (zpptrtmp),y
+		sta nbrepeat_data+3
+
+		ldy #10
+		lda (zpptrtmp),y
+		sta nbrepeatlen_data+2
+		ldy #11
+		lda (zpptrtmp),y
+		sta nbrepeatlen_data+3
+
+		ldy #12											; sample address in instrument
+		lda (zpptrtmp),y
+		sta zpptrtmp2+0
+		ldy #13
+		lda (zpptrtmp),y
+		sta zpptrtmp2+1
+		ldy #14
+		lda (zpptrtmp),y
+		sta zpptrtmp2+2
+		ldy #15
+		lda (zpptrtmp),y
+		sta zpptrtmp2+3
+
 		UICORE_CALLELEMENTFUNCTION sampleview1, uisampleview_draw
+
+		UICORE_CALLELEMENTFUNCTION nbfinetune, uicnumericbutton_draw
+		UICORE_CALLELEMENTFUNCTION nbvolume, uicnumericbutton_draw
+		UICORE_CALLELEMENTFUNCTION nblength, uicnumericbutton_draw
+		UICORE_CALLELEMENTFUNCTION nbrepeat, uicnumericbutton_draw
+		UICORE_CALLELEMENTFUNCTION nbrepeatlen, uicnumericbutton_draw
 
 		rts
 

@@ -4,6 +4,12 @@ uitxt_button0		.byte "f1 play", 0
 uitxt_button1		.byte "f3 stop", 0
 uitxt_button2		.byte "f5 pause", 0
 
+uitxt_finetune		.byte "finetune", 0
+uitxt_volume		.byte "volume", 0
+uitxt_length		.byte "length", 0
+uitxt_repeat		.byte "repeat", 0
+uitxt_repeatlen		.byte "repeatlen", 0
+
 uitxt_checkbox		.byte "checkbox", 0
 uitxt_radiobutton	.byte "radiobtn", 0
 

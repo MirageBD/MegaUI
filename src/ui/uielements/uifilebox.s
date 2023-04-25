@@ -103,7 +103,6 @@ uifilebox_doubleclick
 
 		ldy #$00													; get attribute and check if it's a directory
 		lda (zpptrtmp),y
-		sta $cf00
 		and #%00010000
 		cmp #%00010000
 		bne :+

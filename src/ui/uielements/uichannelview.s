@@ -104,7 +104,7 @@ uichannelview_drawbarsreleased
 
 		ldx uidraw_width
 		ldz #$00
-:		lda #$3e
+:		lda #9*16+8
 		sta [uidraw_scrptr],z
 		lda uichannelview_colour
 		sta [uidraw_colptr],z
@@ -122,7 +122,7 @@ uichannelview_drawbarsreleased
 
 		ldy #$00
 		ldz #10
-:		lda #$3e
+:		lda #9*16+8
 		sta [uidraw_scrptr],z
 		lda ucv_vucolours,y
 		sta [uidraw_colptr],z
@@ -138,7 +138,7 @@ uichannelview_drawbarsreleased
 
 		ldy #$00
 		ldz #14
-:		lda #$3e
+:		lda #9*16+8
 		sta [uidraw_scrptr],z
 		lda ucv_vucolours,y
 		sta [uidraw_colptr],z

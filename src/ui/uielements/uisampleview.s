@@ -132,7 +132,18 @@ uisampleview_draw
 		sta $d027+5
 		
 		jsr uisampleview_clearsample
-		jsr uisampleview_plotsample
+
+		ldy #$00										; dummy to get zpptr1 data
+		jsr ui_getelementdata_2
+		ldy #$05
+		lda (zpptr1),y									; skip drawing if sample length == 0
+		bne :+
+		ldy #$04
+		lda (zpptr1),y
+		bne :+
+		rts
+
+:		jsr uisampleview_plotsample
 		jsr uisampleview_xorfill
 
 		rts

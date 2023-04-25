@@ -45,6 +45,7 @@ q160						.dword 160
 		button
 		cbutton
 		ctextbutton
+		cnumericbutton
 		scrolltrack
 		label
 		nineslice
@@ -146,25 +147,26 @@ ui_element_indiceshi
 
 		.ident(.sprintf("uieventptrs_%s", .string(eventtype)))
 			.byte $00, $00
-			.byte <.ident(.sprintf("uielement_%s",		.string(eventtype))), >.ident(.sprintf("uielement_%s",		.string(eventtype)))
-			.byte <.ident(.sprintf("uiroot_%s",			.string(eventtype))), >.ident(.sprintf("uiroot_%s",			.string(eventtype)))
-			.byte <.ident(.sprintf("uidebugelement_%s",	.string(eventtype))), >.ident(.sprintf("uidebugelement_%s",	.string(eventtype)))
-			.byte <.ident(.sprintf("uihexlabel_%s",		.string(eventtype))), >.ident(.sprintf("uihexlabel_%s",		.string(eventtype)))
-			.byte <.ident(.sprintf("uiwindow_%s",		.string(eventtype))), >.ident(.sprintf("uiwindow_%s",		.string(eventtype)))
-			.byte <.ident(.sprintf("uibutton_%s",		.string(eventtype))), >.ident(.sprintf("uibutton_%s",		.string(eventtype)))
-			.byte <.ident(.sprintf("uicbutton_%s",		.string(eventtype))), >.ident(.sprintf("uicbutton_%s",		.string(eventtype)))
-			.byte <.ident(.sprintf("uictextbutton_%s",	.string(eventtype))), >.ident(.sprintf("uictextbutton_%s",	.string(eventtype)))
-			.byte <.ident(.sprintf("uiscrolltrack_%s",	.string(eventtype))), >.ident(.sprintf("uiscrolltrack_%s",	.string(eventtype)))
-			.byte <.ident(.sprintf("uilabel_%s",		.string(eventtype))), >.ident(.sprintf("uilabel_%s",		.string(eventtype)))
-			.byte <.ident(.sprintf("uinineslice_%s",	.string(eventtype))), >.ident(.sprintf("uinineslice_%s",	.string(eventtype)))
-			.byte <.ident(.sprintf("uilistbox_%s",		.string(eventtype))), >.ident(.sprintf("uilistbox_%s",		.string(eventtype)))
-			.byte <.ident(.sprintf("uifilebox_%s",		.string(eventtype))), >.ident(.sprintf("uifilebox_%s",		.string(eventtype)))
-			.byte <.ident(.sprintf("uicheckbox_%s",		.string(eventtype))), >.ident(.sprintf("uicheckbox_%s",		.string(eventtype)))
-			.byte <.ident(.sprintf("uiradiobutton_%s",	.string(eventtype))), >.ident(.sprintf("uiradiobutton_%s",	.string(eventtype)))
-			.byte <.ident(.sprintf("uiimage_%s",		.string(eventtype))), >.ident(.sprintf("uiimage_%s",		.string(eventtype)))
-			.byte <.ident(.sprintf("uitextbox_%s",		.string(eventtype))), >.ident(.sprintf("uitextbox_%s",		.string(eventtype)))
-			.byte <.ident(.sprintf("uitab_%s",			.string(eventtype))), >.ident(.sprintf("uitab_%s",			.string(eventtype)))
-			.byte <.ident(.sprintf("uigroup_%s",		.string(eventtype))), >.ident(.sprintf("uigroup_%s",		.string(eventtype)))
+			.byte <.ident(.sprintf("uielement_%s",			.string(eventtype))), >.ident(.sprintf("uielement_%s",			.string(eventtype)))
+			.byte <.ident(.sprintf("uiroot_%s",				.string(eventtype))), >.ident(.sprintf("uiroot_%s",				.string(eventtype)))
+			.byte <.ident(.sprintf("uidebugelement_%s",		.string(eventtype))), >.ident(.sprintf("uidebugelement_%s",		.string(eventtype)))
+			.byte <.ident(.sprintf("uihexlabel_%s",			.string(eventtype))), >.ident(.sprintf("uihexlabel_%s",			.string(eventtype)))
+			.byte <.ident(.sprintf("uiwindow_%s",			.string(eventtype))), >.ident(.sprintf("uiwindow_%s",			.string(eventtype)))
+			.byte <.ident(.sprintf("uibutton_%s",			.string(eventtype))), >.ident(.sprintf("uibutton_%s",			.string(eventtype)))
+			.byte <.ident(.sprintf("uicbutton_%s",			.string(eventtype))), >.ident(.sprintf("uicbutton_%s",			.string(eventtype)))
+			.byte <.ident(.sprintf("uictextbutton_%s",		.string(eventtype))), >.ident(.sprintf("uictextbutton_%s",		.string(eventtype)))
+			.byte <.ident(.sprintf("uicnumericbutton_%s",	.string(eventtype))), >.ident(.sprintf("uicnumericbutton_%s",	.string(eventtype)))
+			.byte <.ident(.sprintf("uiscrolltrack_%s",		.string(eventtype))), >.ident(.sprintf("uiscrolltrack_%s",		.string(eventtype)))
+			.byte <.ident(.sprintf("uilabel_%s",			.string(eventtype))), >.ident(.sprintf("uilabel_%s",			.string(eventtype)))
+			.byte <.ident(.sprintf("uinineslice_%s",		.string(eventtype))), >.ident(.sprintf("uinineslice_%s",		.string(eventtype)))
+			.byte <.ident(.sprintf("uilistbox_%s",			.string(eventtype))), >.ident(.sprintf("uilistbox_%s",			.string(eventtype)))
+			.byte <.ident(.sprintf("uifilebox_%s",			.string(eventtype))), >.ident(.sprintf("uifilebox_%s",			.string(eventtype)))
+			.byte <.ident(.sprintf("uicheckbox_%s",			.string(eventtype))), >.ident(.sprintf("uicheckbox_%s",			.string(eventtype)))
+			.byte <.ident(.sprintf("uiradiobutton_%s",		.string(eventtype))), >.ident(.sprintf("uiradiobutton_%s",		.string(eventtype)))
+			.byte <.ident(.sprintf("uiimage_%s",			.string(eventtype))), >.ident(.sprintf("uiimage_%s",			.string(eventtype)))
+			.byte <.ident(.sprintf("uitextbox_%s",			.string(eventtype))), >.ident(.sprintf("uitextbox_%s",			.string(eventtype)))
+			.byte <.ident(.sprintf("uitab_%s",				.string(eventtype))), >.ident(.sprintf("uitab_%s",				.string(eventtype)))
+			.byte <.ident(.sprintf("uigroup_%s",			.string(eventtype))), >.ident(.sprintf("uigroup_%s",			.string(eventtype)))
 
 			.byte <.ident(.sprintf("uipatternview_%s",	.string(eventtype))), >.ident(.sprintf("uipatternview_%s",	.string(eventtype)))
 			.byte <.ident(.sprintf("uisequenceview_%s",	.string(eventtype))), >.ident(.sprintf("uisequenceview_%s",	.string(eventtype)))
