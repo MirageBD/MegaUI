@@ -3,6 +3,10 @@
 uicnumericbutton_numberofbytes
 		.byte 0
 
+lda mouse_longpressedtimer
+uicnumericbutton_valuetoaddsubtract
+		.byte 0
+
 ; ----------------------------------------------------------------------------------------------------
 
 uicnumericbutton_layout
@@ -42,9 +46,30 @@ uicnumericbutton_keyrelease
 		rts
 
 uicnumericbutton_press
+		lda #$01
+		sta uicnumericbutton_valuetoaddsubtract
+
+		jsr uimouse_calculate_pos_in_uielement
+
+		lda uimouse_uielement_xpos+0
+
+		cmp #11
+		bpl :+
+		jsr uicnumericbutton_decrease
+		jsr uicnumericbutton_redraw
 		rts
 
-uicnumericbutton_release
+:		cmp #20
+		bpl :+
+		jsr uicnumericbutton_increase
+		jsr uicnumericbutton_redraw
+		rts
+
+:		rts
+
+uicnumericbutton_longpress
+		lda mouse_longpressedtimer
+		sta uicnumericbutton_valuetoaddsubtract
 
 		jsr uimouse_calculate_pos_in_uielement
 
@@ -64,6 +89,9 @@ uicnumericbutton_release
 
 :	   	rts
 
+uicnumericbutton_release
+		rts
+
 uicnumericbutton_doubleclick
 		rts
 
@@ -76,7 +104,7 @@ uicnumericbutton_increase
 		clc
 		ldy #$02
 		lda (zpptr1),y
-		adc #$01
+		adc uicnumericbutton_valuetoaddsubtract
 		sta (zpptr1),y
 		iny
 		lda (zpptr1),y
@@ -94,7 +122,7 @@ uicnumericbutton_decrease
 		sec
 		ldy #$02
 		lda (zpptr1),y
-		sbc #$01
+		sbc uicnumericbutton_valuetoaddsubtract
 		sta (zpptr1),y
 		iny
 		lda (zpptr1),y

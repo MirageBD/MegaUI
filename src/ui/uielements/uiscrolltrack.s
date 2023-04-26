@@ -46,6 +46,9 @@ uiscrolltrack_focus
 uiscrolltrack_enter
 		rts
 
+uiscrolltrack_longpress
+		rts
+
 uiscrolltrack_leave
 		jsr uielement_leave
 		rts

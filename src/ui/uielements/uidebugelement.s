@@ -35,6 +35,9 @@ uidebugelement_draw
 uidebugelement_press
     	rts
 
+uidebugelement_longpress
+		rts
+
 uidebugelement_doubleclick
 		rts
 

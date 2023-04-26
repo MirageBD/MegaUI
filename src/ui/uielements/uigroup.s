@@ -63,6 +63,9 @@ uigroup_draw
 uigroup_press
 		rts
 
+uigroup_longpress
+		rts
+
 uigroup_doubleclick
 		rts
 

@@ -29,6 +29,9 @@ uiimage_keyrelease
 uiimage_press
 		rts
 
+uiimage_longpress
+		rts
+
 uiimage_doubleclick
 		rts
 

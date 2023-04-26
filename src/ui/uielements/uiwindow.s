@@ -34,6 +34,9 @@ uiwindow_press
 		;jsr uielement_draw
 		rts
 
+uiwindow_longpress
+		rts
+
 uiwindow_doubleclick
 		rts
 

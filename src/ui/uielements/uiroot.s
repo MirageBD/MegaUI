@@ -35,6 +35,9 @@ uiroot_press
 		;jsr uielement_press
     	rts
 
+uiroot_longpress
+		rts
+
 uiroot_doubleclick
 		jsr uielement_doubleclick
 		rts

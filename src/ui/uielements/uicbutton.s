@@ -132,6 +132,9 @@ uicbutton_press
 		jsr uicbutton_draw_pressed
 		rts
 
+uicbutton_longpress
+		rts
+
 ; ----------------------------------------------------------------------------------------------------
 
 uicbutton_doubleclick

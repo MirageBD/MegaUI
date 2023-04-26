@@ -102,6 +102,9 @@ uitextbox_press
 
     	rts
 
+uitextbox_longpress
+		rts
+
 uitextbox_doubleclick
 		rts
 

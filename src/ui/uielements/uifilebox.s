@@ -87,6 +87,9 @@ uifilebox_press
 		jsr uilistbox_press
 		rts
 
+uifilebox_longpress
+		rts
+
 uifilebox_doubleclick
 		jsr uifilebox_getstringptr									; get filename/dir string
 

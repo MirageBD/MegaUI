@@ -607,6 +607,9 @@ uipatternview_move
 uipatternview_press
 		rts
 
+uipatternview_longpress
+		rts
+
 uipatternview_doubleclick
 		jsr uipatternview_release
 		rts

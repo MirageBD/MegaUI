@@ -148,8 +148,11 @@ uisampleview_draw
 		rts
 
 uisampleview_press
-		jsr uisampleview_draw
+		;jsr uisampleview_draw
     	rts
+
+uisampleview_longpress
+		rts
 
 uisampleview_doubleclick
 		rts

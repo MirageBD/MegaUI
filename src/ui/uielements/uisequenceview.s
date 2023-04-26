@@ -51,6 +51,9 @@ uisequenceview_keyrelease
 uisequenceview_press
     	rts
 
+uisequenceview_longpress
+		rts
+
 uisequenceview_doubleclick
 		rts
 

@@ -55,6 +55,9 @@ uictextbutton_press
 		jsr uicbutton_draw_pressed
 		rts
 
+uictextbutton_longpress
+		rts
+
 uictextbutton_doubleclick
 		jsr uicbutton_draw_released
 		rts

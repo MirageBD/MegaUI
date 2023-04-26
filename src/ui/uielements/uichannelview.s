@@ -49,6 +49,9 @@ uichannelview_keyrelease
 uichannelview_press
     	rts
 
+uichannelview_longpress
+		rts
+
 uichannelview_doubleclick
 		rts
 

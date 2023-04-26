@@ -29,6 +29,9 @@ uitab_keyrelease
 uitab_press
 		rts
 
+uitab_longpress
+		rts
+
 uitab_doubleclick
 		rts
 

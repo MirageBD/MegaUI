@@ -29,6 +29,9 @@ uilistbox_move
 uilistbox_press
 		rts
 
+uilistbox_longpress
+		rts
+
 uilistbox_doubleclick
 		jsr uielement_calluserfunc
 		rts

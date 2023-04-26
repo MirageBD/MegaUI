@@ -297,9 +297,16 @@ uimhe_notmoved
 		bra uimhe_handle_children						; if double clicked then skip press/release tests
 
 uimh_notdoubleclicked
+		lda mouse_longpressed
+		beq uimh_notlongpressed
+		jsr uimouse_handle_longpress
+		bra uimhe_handle_children
+
+uimh_notlongpressed
 		lda mouse_pressed								; handle PRESS
 		beq uimhe_notpressed
 		jsr uimouse_handle_press
+		bra uimhe_handle_children
 
 uimhe_notpressed
 		lda mouse_released
@@ -412,6 +419,23 @@ uimouse_handle_press
 		jsr uikeyboard_disablecursor					; LV TODO - is this really the best place for this?
 
 		SEND_EVENT press
+
+		rts
+
+; ----------------------------------------------------------------------------------------------------
+
+uimouse_handle_longpress
+
+		jsr uimouse_checkflags
+		bne :+
+		rts
+
+:		lda zpptr0+0
+		sta uimouse_captured_element+0
+		lda zpptr0+1
+		sta uimouse_captured_element+1
+
+		SEND_EVENT longpress
 
 		rts
 

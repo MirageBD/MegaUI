@@ -123,6 +123,9 @@ uielement_press
 
     	rts
 
+uielement_longpress
+		rts
+
 uielement_doubleclick
 		rts
 

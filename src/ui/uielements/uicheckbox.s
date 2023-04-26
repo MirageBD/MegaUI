@@ -79,6 +79,9 @@ uicheckbox_press
 		;jsr uielement_press
 		rts
 
+uicheckbox_longpress
+		rts
+
 ; ----------------------------------------------------------------------------------------------------
 
 uicheckbox_doubleclick

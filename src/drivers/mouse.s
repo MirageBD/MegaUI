@@ -29,6 +29,7 @@ mouse_ypos_pressed			.word $0080
 
 mouse_pressed				.byte $00			; this will be 1 for every frame that the button is pressed, not just 1 frame
 mouse_held					.byte $00
+mouse_longpressed			.byte $00
 mouse_released				.byte $00			; this will only be 1 in the frame in which the button was released
 mouse_doubleclicked			.byte $00
 
@@ -36,6 +37,7 @@ mouse_released_timer		.byte $00
 mouse_doubleclickthreshold	.byte $10
 
 mouse_pressedtimer			.byte $00
+mouse_longpressedtimer		.byte $00
 
 ; ----------------------------------------------------------------------------------------------------
 
@@ -163,7 +165,9 @@ mouse_update
 		sta mouse_released
 		lda #$00
 		sta mouse_held
+		sta mouse_longpressed
 		sta mouse_pressedtimer
+		sta mouse_longpressedtimer
 		lda mouse_released_timer						; read released timer
 		cmp mouse_doubleclickthreshold
 		beq mouse_event_startreleasedtimer				; it's the same as the theshold, so restart it
@@ -188,6 +192,9 @@ mouse_event_pressed
 		bne :+
 		lda #$10
 		sta mouse_pressedtimer
+		inc mouse_longpressedtimer
+		lda #$01
+		sta mouse_longpressed
 		bra :++
 :		bra mouse_check_end								; mouse was pressed before, so leave mouse_pressed at 0 and continue
 :		lda #$01										; mouse was not pressed before. record everything and send pressed event

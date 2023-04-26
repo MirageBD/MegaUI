@@ -29,6 +29,9 @@ uilabel_keyrelease
 uilabel_press
     	rts
 
+uilabel_longpress
+		rts
+
 uilabel_doubleclick
 		rts
 

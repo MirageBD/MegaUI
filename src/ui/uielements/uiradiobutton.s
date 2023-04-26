@@ -29,6 +29,9 @@ uiradiobutton_keyrelease
 uiradiobutton_press
 		rts
 
+uiradiobutton_longpress
+		rts
+
 uiradiobutton_doubleclick
 		rts
 

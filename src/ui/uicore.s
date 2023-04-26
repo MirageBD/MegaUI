@@ -181,6 +181,7 @@ ui_element_indiceshi
 		IMPLEMENT_UIEVENT enter
 		IMPLEMENT_UIEVENT leave
 		IMPLEMENT_UIEVENT press
+		IMPLEMENT_UIEVENT longpress
 		IMPLEMENT_UIEVENT release
 		IMPLEMENT_UIEVENT doubleclick
 		IMPLEMENT_UIEVENT move

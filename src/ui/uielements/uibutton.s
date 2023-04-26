@@ -45,6 +45,9 @@ uibutton_press
 
 		rts
 
+uibutton_longpress
+		rts
+
 ; ----------------------------------------------------------------------------------------------------
 
 uibutton_doubleclick

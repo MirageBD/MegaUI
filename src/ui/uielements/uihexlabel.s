@@ -79,6 +79,9 @@ uihexlabel_draw
 uihexlabel_press
     	rts
 
+uihexlabel_longpress
+		rts
+
 uihexlabel_doubleclick
 		rts
 
