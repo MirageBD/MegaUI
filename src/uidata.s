@@ -71,9 +71,9 @@ window4area
 ; ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ scrollbar elements
 
 filetabgroupchildren
-		UIELEMENT_ADD ui_filetab1,				tab,				$ffff,					 1, 0,  8,  3,  0,		filetab1_data,				uidefaultflags	
-		UIELEMENT_ADD ui_filetab2,				tab,				$ffff,					 9, 0,  8,  3,  0,		filetab2_data,				uidefaultflags
-		UIELEMENT_ADD ui_filetab3,				tab,				$ffff,					17, 0,  8,  3,  0,		filetab3_data,				uidefaultflags
+		UIELEMENT_ADD ui_filetab1,				tab,				$ffff,					 1, 0,  7,  3,  0,		filetab1_data,				uidefaultflags	
+		UIELEMENT_ADD ui_filetab2,				tab,				$ffff,					 8, 0, 13,  3,  0,		filetab2_data,				uidefaultflags
+		UIELEMENT_ADD ui_filetab3,				tab,				$ffff,					21, 0,  9,  3,  0,		filetab3_data,				uidefaultflags
 		UIELEMENT_END
 
 ; ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ child windows
@@ -91,8 +91,8 @@ filetab3_contents
 ; ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ child windows
 
 tabgroupchildren
-		UIELEMENT_ADD ui_tab1,					tab,				$ffff,					 1, 0,  8,  2,  0,		tab1_data,					uidefaultflags	
-		UIELEMENT_ADD ui_tab2,					tab,				$ffff,					 9, 0,  8,  2,  0,		tab2_data,					uidefaultflags
+		UIELEMENT_ADD ui_tab1,					tab,				$ffff,					 1, 0,  6,  2,  0,		tab1_data,					uidefaultflags	
+		UIELEMENT_ADD ui_tab2,					tab,				$ffff,					 7, 0,  8,  2,  0,		tab2_data,					uidefaultflags
 		UIELEMENT_END
 
 ; ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ child windows
@@ -201,11 +201,11 @@ lbllength_data				.word $ffff,														uitxt_length
 lblrepeat_data				.word $ffff,														uitxt_repeat
 lblrepeatlen_data			.word $ffff,														uitxt_repeatlen
 
-nbfinetune_data				.word $ffff,														$0000, $babe, 1					; address, number of bytes
-nbvolume_data				.word $ffff,														$0000, $babe, 1					; address, number of bytes
-nblength_data				.word $ffff,														$0000, $babe, 2					; address, number of bytes
-nbrepeat_data				.word $ffff,														$0000, $babe, 2					; address, number of bytes
-nbrepeatlen_data			.word $ffff,														$0000, $babe, 2					; address, number of bytes
+nbfinetune_data				.word $ffff,														$0000, $babe, 1, 0, 0, 255, 0		; value, address, number of bytes, hexadecimal or not, min value, max value, signed offset
+nbvolume_data				.word $ffff,														$0000, $babe, 1, 0, 0, 255, 0
+nblength_data				.word $ffff,														$0000, $babe, 2, 0, 0, 65535, 0
+nbrepeat_data				.word $ffff,														$0000, $babe, 2, 0, 0, 65535, 0
+nbrepeatlen_data			.word $ffff,														$0000, $babe, 2, 0, 0, 65535, 0
 
 fa1scrollbar_data			.word fa1scrollbar_functions, 										0, 0, 20, fa1filebox			; start position, selection index, number of entries, ptr to list
 fa1filebox_data				.word fa1scrollbar_functions,			filebox1_functions,			fa1scrollbar_data, fa1boxtxt
@@ -224,12 +224,12 @@ checkbox2_data				.word $ffff,														0, ((3*16+ 8) | (3*16+10)<<8)
 ;radiobutton2_data			.word radiobutton_functions,										1, radiobuttongroupindex
 ;radiobutton3_data			.word radiobutton_functions,										2, radiobuttongroupindex
 
-filetab1_data				.word filetab_functions,											0, ui_filetab1_window
-filetab2_data				.word filetab_functions,											1, ui_filetab2_window
-filetab3_data				.word filetab_functions,											2, ui_filetab3_window
+filetab1_data				.word filetab_functions,											0, ui_filetab1_window, uitxt_songs
+filetab2_data				.word filetab_functions,											1, ui_filetab2_window, uitxt_instruments
+filetab3_data				.word filetab_functions,											2, ui_filetab3_window, uitxt_samples
 
-tab1_data					.word tab_functions,												0, ui_tab1_window
-tab2_data					.word tab_functions,												1, ui_tab2_window
+tab1_data					.word tab_functions,												0, ui_tab1_window, uitxt_edit
+tab2_data					.word tab_functions,												1, ui_tab2_window, uitxt_sample
 
 sampleview1_data			.word $ffff,														2, 0							; sample index, sample length
 
@@ -347,9 +347,13 @@ userfunc_populatesample
 		ldy #6
 		lda (zpptrtmp),y
 		sta nblength_data+2
+		ldy #$04
+		sta (zpptr1),y
 		ldy #7
 		lda (zpptrtmp),y
 		sta nblength_data+3
+		ldy #$05
+		sta (zpptr1),y
 		clc
 		lda zpptrtmp+0
 		adc #6

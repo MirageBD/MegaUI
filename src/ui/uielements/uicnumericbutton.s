@@ -222,9 +222,7 @@ uicnumericbutton_redraw
 		dey
 		bpl :-
 
-		lda #$00
-		sta uidraw_xposoffset
-		sta uidraw_yposoffset
+		jsr uidraw_resetoffsets
 
 		rts
 

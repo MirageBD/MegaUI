@@ -91,8 +91,6 @@ uisampleview_draw
 		ora #%00111100
 		sta $d015
 
-
-
 		lda $d010
 		and #%11000011
 		ora #%00011100
@@ -143,7 +141,8 @@ uisampleview_draw
 		bne :+
 		rts
 
-:		jsr uisampleview_plotsample
+:
+		jsr uisampleview_plotsample
 		jsr uisampleview_xorfill
 
 		rts
@@ -259,7 +258,6 @@ uisampleview_plotsample_loop
 		tay
 		lda sampbits,y
 		sta sampbit
-
 
 
 

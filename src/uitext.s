@@ -10,6 +10,12 @@ uitxt_length		.byte "length", 0
 uitxt_repeat		.byte "repeat", 0
 uitxt_repeatlen		.byte "repeatlen", 0
 
+uitxt_songs			.byte "songs", 0
+uitxt_instruments	.byte "instruments", 0
+uitxt_samples		.byte "samples", 0
+uitxt_edit			.byte "edit", 0
+uitxt_sample		.byte "sample", 0
+
 uitxt_checkbox		.byte "checkbox", 0
 uitxt_radiobutton	.byte "radiobtn", 0
 

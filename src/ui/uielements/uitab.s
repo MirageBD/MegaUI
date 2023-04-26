@@ -127,6 +127,8 @@ uitab_drawactive
 		adc #$01
 		sta [uidraw_scrptr],z					; draw right glyph
 
+		jsr uitab_drawlabel
+
 		rts
 
 ; ----------------------------------------------------------------------------------------------------
@@ -174,7 +176,40 @@ uitab_drawinactive
 		pla
 		adc #$01
 		sta [uidraw_scrptr],z
-		
+
+		jsr uitab_drawlabel
+
+		rts
+
+; ----------------------------------------------------------------------------------------------------
+
+uitab_drawlabel
+
+		lda #$01
+		sta uidraw_xposoffset
+		lda #$01
+		sta uidraw_yposoffset
+
+		jsr uidraw_set_draw_position
+
+		ldy #$06
+		jsr ui_getelementdata_2
+
+		ldy #$00
+		ldz #$00
+:		lda (zpptr2),y
+		beq :+
+		tax
+		lda ui_bkgtextremap,x
+		sta [uidraw_scrptr],z
+		inz
+		lda #$04
+		sta [uidraw_scrptr],z
+		inz
+		iny
+ 		bra :-
+:
+		jsr uidraw_resetoffsets
 		rts
 
 ; ----------------------------------------------------------------------------------------------------

@@ -88,10 +88,7 @@ uictextbutton_draw
 		iny
  		bra :-
 
-:		lda #$00
-		sta uidraw_xposoffset
-		sta uidraw_yposoffset
-
+:		jsr uidraw_resetoffsets
 		rts
 
 uictextbutton_release
