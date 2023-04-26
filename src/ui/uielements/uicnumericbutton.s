@@ -156,15 +156,16 @@ uicnumericbutton_storevalue
 		clc
 		lda zpptr1+0
 		adc #$01
-		sta zpptr1+1
-		lda zpptr1+0
+		sta zpptr1+0
+		lda zpptr1+1
 		adc #$00
 		sta zpptr1+1
 
+		clc
 		lda zpptr2+0
 		adc #$01
-		sta zpptr2+1
-		lda zpptr2+0
+		sta zpptr2+0
+		lda zpptr2+1
 		adc #$00
 		sta zpptr2+1
 
