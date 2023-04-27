@@ -43,6 +43,7 @@ q160						.dword 160
 		hexlabel
 		window
 		button
+		glyphbutton
 		cbutton
 		ctextbutton
 		cnumericbutton
@@ -153,6 +154,7 @@ ui_element_indiceshi
 			.byte <.ident(.sprintf("uihexlabel_%s",			.string(eventtype))), >.ident(.sprintf("uihexlabel_%s",			.string(eventtype)))
 			.byte <.ident(.sprintf("uiwindow_%s",			.string(eventtype))), >.ident(.sprintf("uiwindow_%s",			.string(eventtype)))
 			.byte <.ident(.sprintf("uibutton_%s",			.string(eventtype))), >.ident(.sprintf("uibutton_%s",			.string(eventtype)))
+			.byte <.ident(.sprintf("uiglyphbutton_%s",		.string(eventtype))), >.ident(.sprintf("uiglyphbutton_%s",		.string(eventtype)))
 			.byte <.ident(.sprintf("uicbutton_%s",			.string(eventtype))), >.ident(.sprintf("uicbutton_%s",			.string(eventtype)))
 			.byte <.ident(.sprintf("uictextbutton_%s",		.string(eventtype))), >.ident(.sprintf("uictextbutton_%s",		.string(eventtype)))
 			.byte <.ident(.sprintf("uicnumericbutton_%s",	.string(eventtype))), >.ident(.sprintf("uicnumericbutton_%s",	.string(eventtype)))

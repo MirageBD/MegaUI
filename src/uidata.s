@@ -19,9 +19,14 @@ windows
 
 window0area
 
-		UIELEMENT_ADD ctextbutton1,				ctextbutton,		$ffff,					 0,  0, 12,  3,  0,		ctextbutton1_data,			uidefaultflags
-		UIELEMENT_ADD ctextbutton2,				ctextbutton,		$ffff,					12,  0, 12,  3,  0,		ctextbutton2_data,			uidefaultflags
-		UIELEMENT_ADD ctextbutton3,				ctextbutton,		$ffff,					24,  0, 12,  3,  0,		ctextbutton3_data,			uidefaultflags
+		UIELEMENT_ADD playbutton,				glyphbutton,		$ffff,					 1,  0,  3,  3,  0,		playbutton_data,			uidefaultflags
+		UIELEMENT_ADD playpatternbutton,		glyphbutton,		$ffff,					 4,  0,  3,  3,  0,		playpatternbutton_data,		uidefaultflags
+		UIELEMENT_ADD stopbutton,				glyphbutton,		$ffff,					 7,  0,  3,  3,  0,		stopbutton_data,			uidefaultflags
+		UIELEMENT_ADD recordbutton,				glyphbutton,		$ffff,					10,  0,  3,  3,  0,		recordbutton_data,			uidefaultflags
+
+		;UIELEMENT_ADD ctextbutton1,			ctextbutton,		$ffff,					 4,  0, 12,  3,  0,		ctextbutton1_data,			uidefaultflags
+		;UIELEMENT_ADD ctextbutton2,			ctextbutton,		$ffff,					16,  0, 12,  3,  0,		ctextbutton2_data,			uidefaultflags
+		;UIELEMENT_ADD ctextbutton3,			ctextbutton,		$ffff,					28,  0, 12,  3,  0,		ctextbutton3_data,			uidefaultflags
 
 		UIELEMENT_ADD cnumericbutton1,			cnumericbutton,		$ffff,					40,  0,  9,  3,  0,		cnumericbutton1_data,		uidefaultflags
 
@@ -189,9 +194,10 @@ uilogo_data					.word $ffff,														((14*16+ 0) | (14*16+ 0)<<8)
 checkboxlabel_data			.word $ffff,														uitxt_checkbox
 radiobuttonlabel_data		.word $ffff,														uitxt_radiobutton
 
-ctextbutton1_data			.word ctextbutton1_functions,										uitxt_button0, KEYBOARD_F1
-ctextbutton2_data			.word ctextbutton2_functions,										uitxt_button1, KEYBOARD_F3
-ctextbutton3_data			.word ctextbutton3_functions,										uitxt_button2, KEYBOARD_F5
+playbutton_data				.word playbutton_functions,											uitxt_button0, KEYBOARD_F1
+playpatternbutton_data		.word playpatternbutton_functions,									uitxt_button1, KEYBOARD_F3
+stopbutton_data				.word stopbutton_functions,											uitxt_button1, KEYBOARD_F5
+recordbutton_data			.word recordbutton_functions,										uitxt_button2, KEYBOARD_F7
 
 cnumericbutton1_data		.word $ffff,														$1234, $0000, $babe, 2		; value, address, number of bytes
 
@@ -261,13 +267,16 @@ filetab_functions				.word ui_filetab1,						uitab_draw
 								.word ui_filetab3,						uitab_draw
 								.word $ffff
 
-ctextbutton1_functions			.word ctextbutton1,						userfunc_playmod
+playbutton_functions			.word playbutton,						userfunc_playmod
 								.word $ffff
 
-ctextbutton2_functions			.word ctextbutton2,						userfunc_stopmod
+playpatternbutton_functions		.word playpatternbutton,				userfunc_playmod
 								.word $ffff
 
-ctextbutton3_functions			.word ctextbutton3,						userfunc_pausemod
+stopbutton_functions			.word stopbutton,						userfunc_stopmod
+								.word $ffff
+
+recordbutton_functions			.word recordbutton,						userfunc_recordmod
 								.word $ffff
 
 listbox1_functions				.word la1listbox,						userfunc_populatesample
@@ -293,7 +302,7 @@ userfunc_stopmod
 		UICORE_CALLELEMENTFUNCTION tvlistbox, uipatternview_restorepositions
 		rts
 
-userfunc_pausemod
+userfunc_recordmod
 		rts
 
 userfunc_populatesample

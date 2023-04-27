@@ -4,8 +4,6 @@ uisampleviewtmp0			.dword 0
 
 stored_zpptrtmp				.word 0
 
-prevpixelheight				.byte 0
-
 sampbit						.byte 0
 
 sampbits					.byte %10000000
@@ -31,8 +29,39 @@ columntospritehi			.byte $d0, $d0, $d0, $d0, $d0, $d0, $d0, $d0
 							.byte $d6, $d6, $d6, $d6, $d6, $d6, $d6, $d6
 
 .align 256
-sampleremap					.repeat 256, I
-								.byte ((128 - I) .MOD 256)
+sampleremap					
+							;.repeat 256, I
+							;	.byte (<(-I)) >> 2
+							;.endrepeat
+
+							.byte $01
+
+							.byte $3e, $3e, $3e, $3e, $3e, $3e, $3e, $3e, $3d, $3d, $3d, $3d, $3c, $3c, $3c, $3c
+							.byte $3b, $3b, $3b, $3b, $3a, $3a, $3a, $3a, $39, $39, $39, $39, $38, $38, $38, $38
+							.byte $37, $37, $37, $37, $36, $36, $36, $36, $35, $35, $35, $35, $34, $34, $34, $34
+							.byte $33, $33, $33, $33, $32, $32, $32, $32, $31, $31, $31, $31, $30, $30, $30, $30
+
+							.byte $2f, $2f, $2f, $2f, $2e, $2e, $2e, $2e, $2d, $2d, $2d, $2d, $2c, $2c, $2c, $2c
+							.byte $2b, $2b, $2b, $2b, $2a, $2a, $2a, $2a, $29, $29, $29, $29, $28, $28, $28, $28
+							.byte $27, $27, $27, $27, $26, $26, $26, $26, $25, $25, $25, $25, $24, $24, $24, $24
+							.byte $23, $23, $23, $23, $22, $22, $22, $22, $21, $21, $21, $21, $20, $20, $20, $20
+
+							.byte $1f, $1f, $1f, $1f, $1e, $1e, $1e, $1e, $1d, $1d, $1d, $1d, $1c, $1c, $1c, $1c
+							.byte $1b, $1b, $1b, $1b, $1a, $1a, $1a, $1a, $19, $19, $19, $19, $18, $18, $18, $18
+							.byte $17, $17, $17, $17, $16, $16, $16, $16, $15, $15, $15, $15, $14, $14, $14, $14
+							.byte $13, $13, $13, $13, $12, $12, $12, $12, $11, $11, $11, $11, $10, $10, $10, $10
+
+							.byte $0f, $0f, $0f, $0f, $0e, $0e, $0e, $0e, $0d, $0d, $0d, $0d, $0c, $0c, $0c, $0c
+							.byte $0b, $0b, $0b, $0b, $0a, $0a, $0a, $0a, $09, $09, $09, $09, $08, $08, $08, $08
+							.byte $07, $07, $07, $07, $06, $06, $06, $06, $05, $05, $05, $05, $04, $04, $04, $04
+							.byte $03, $03, $03, $03, $02, $02, $02, $02, $01, $01, $01, $01, $01, $01, $01
+
+samplebuffermin				.repeat 256, I
+								.byte 0
+							.endrepeat
+
+samplebuffermax				.repeat 256, I
+								.byte 0
 							.endrepeat
 
 uisampleview_sampleindex	.byte 2; 2
@@ -105,7 +134,7 @@ uisampleview_draw
 		ora #%00111100
 		sta $d077										; Sprite V400 Y position MSBs
 
-		lda #$58										; sprite y positions
+		lda #$50										; sprite y positions
 		sta $d000+2*2+1
 		sta $d000+3*2+1
 		sta $d000+4*2+1
@@ -140,8 +169,8 @@ uisampleview_draw
 		lda (zpptr1),y
 		bne :+
 		rts
-
 :
+		jsr uisampleview_rendersample
 		jsr uisampleview_plotsample
 		jsr uisampleview_xorfill
 
@@ -197,6 +226,115 @@ uisampleview_clearsample
 
 ; ----------------------------------------------------------------------------------------------------
 
+uisampleview_minvalue	.byte $00
+uisampleview_maxvalue	.byte $00
+
+uisampleview_step		.word $00
+
+uisampleview_rendersample
+
+		ldy #$00										; dummy to get zpptr1 data
+		jsr ui_getelementdata_2
+
+		ldy #$02
+		lda (zpptr1),y									; get sample index
+
+		asl
+		tax
+		lda idxPepIns0+0,x
+		sta zpptrtmp+0
+		lda idxPepIns0+1,x
+		sta zpptrtmp+1
+
+		ldy #6
+		lda (zpptrtmp),y
+		sta uisampleview_step+0
+		ldy #7
+		lda (zpptrtmp),y
+		sta uisampleview_step+1
+
+		lsr uisampleview_step+1
+		ror uisampleview_step+0
+		lsr uisampleview_step+1
+		ror uisampleview_step+0
+		lsr uisampleview_step+1
+		ror uisampleview_step+0
+		lsr uisampleview_step+1
+		ror uisampleview_step+0
+		lsr uisampleview_step+1
+		ror uisampleview_step+0
+		lsr uisampleview_step+1
+		ror uisampleview_step+0
+		lsr uisampleview_step+1
+		ror uisampleview_step+0
+		lsr uisampleview_step+1
+		ror uisampleview_step+0
+
+		ldy #12											; sample address in instrument
+		lda (zpptrtmp),y
+		sta zpptrtmp2+0
+		iny
+		lda (zpptrtmp),y
+		sta zpptrtmp2+1
+		iny
+		lda (zpptrtmp),y
+		sta zpptrtmp2+2
+		iny
+		lda (zpptrtmp),y
+		sta zpptrtmp2+3
+
+		; sample address = zpptrtmp2
+
+		ldx #$00
+
+uisampleview_rendersample_loop
+
+		lda #255
+		sta uisampleview_minvalue
+		lda #0
+		sta uisampleview_maxvalue
+
+		ldz #$00
+:		lda [zpptrtmp2],z
+		clc
+		adc #129
+		cmp uisampleview_minvalue				; carry 0 : A < minvalue
+		bcs :+
+		sta uisampleview_minvalue
+:		cmp uisampleview_maxvalue
+		bcc :+									; carry 0 : A < maxvalue
+		sta uisampleview_maxvalue
+:		inz
+		cpz uisampleview_step+0
+		bne :---
+
+		lda uisampleview_minvalue
+		sta samplebuffermin,x
+		lda uisampleview_maxvalue
+		sta samplebuffermax,x
+
+		clc
+		lda zpptrtmp2+0
+		adc uisampleview_step+0
+		sta zpptrtmp2+0
+		lda zpptrtmp2+1
+		adc #$00
+		sta zpptrtmp2+1
+		lda zpptrtmp2+2
+		adc #$00
+		sta zpptrtmp2+2
+		lda zpptrtmp2+3
+		adc #$00
+		sta zpptrtmp2+3
+
+		inx
+		bne uisampleview_rendersample_loop
+
+		rts
+
+; ----------------------------------------------------------------------------------------------------
+
+
 uisampleview_plotsample
 
 		ldy #$00										; dummy to get zpptr1 data
@@ -235,9 +373,6 @@ uisampleview_plotsample
 		lda #>.hiword(samplesprites)
 		sta zpptrtmp+3
 
-		lda #$20										; set first pixel in the middle vertically
-		sta prevpixelheight
-
 		ldz #$00
 		ldx #$00
 
@@ -264,7 +399,10 @@ uisampleview_plotsample_loop
 
 
 
-		ldy prevpixelheight								; get height of pixel
+		lda samplebuffermin,x							; get sample min value
+		tay
+		lda sampleremap,y
+		tay
 		lda times8tablelo,y
 		clc
 		adc zpptrtmp+0
@@ -285,18 +423,16 @@ uisampleview_plotsample_loop
 		lda stored_zpptrtmp+1
 		sta zpptrtmp+1
 
-		lda [zpptrtmp2],z								; get sample data and bring into 0-64 range
+
+
+
+
+		lda samplebuffermax,x							; get sample data and bring into 0-64 range
 		tay
 		lda sampleremap,y
-		lsr
-		lsr
-		cmp prevpixelheight
-		bne :+
-		clc
-		adc #$01
-:		tay
-		sty prevpixelheight
-
+		sec
+		sbc #$01
+		tay
 		lda times8tablelo,y								; get height of pixel
 		clc
 		adc zpptrtmp+0
@@ -311,19 +447,8 @@ uisampleview_plotsample_loop
 		sta [zpptrtmp],z
 
 
-		clc
-		lda zpptrtmp2+0
-		adc #$0e
-		sta zpptrtmp2+0
-		lda zpptrtmp2+1
-		adc #$00
-		sta zpptrtmp2+1
-		lda zpptrtmp2+2
-		adc #$00
-		sta zpptrtmp2+2
-		lda zpptrtmp2+3
-		adc #$00
-		sta zpptrtmp2+3
+
+
 
 		inx
 		beq :+

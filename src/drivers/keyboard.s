@@ -133,6 +133,8 @@ keyboard_toascii
 .define KEYBOARD_F1				0*8 + 4
 .define KEYBOARD_F3				0*8 + 5
 .define KEYBOARD_F5				0*8 + 6
+.define KEYBOARD_F7				0*8 + 3
+
 
 
 ; ----------------------------------------------------------------------------------------------------

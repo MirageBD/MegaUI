@@ -49,6 +49,7 @@ basicend	.byte 0
 .include "ui/uielements/uihexlabel.s"
 .include "ui/uielements/uiwindow.s"
 .include "ui/uielements/uibutton.s"
+.include "ui/uielements/uiglyphbutton.s"
 .include "ui/uielements/uicbutton.s"
 .include "ui/uielements/uictextbutton.s"
 .include "ui/uielements/uicnumericbutton.s"
