@@ -31,10 +31,8 @@ columntospritehi			.byte $d0, $d0, $d0, $d0, $d0, $d0, $d0, $d0
 .align 256
 sampleremap					
 							;.repeat 256, I
-							;	.byte (<(-I)) >> 2
+							;	.byte (<(-1-I)) >> 2
 							;.endrepeat
-
-							.byte $01
 
 							.byte $3e, $3e, $3e, $3e, $3e, $3e, $3e, $3e, $3d, $3d, $3d, $3d, $3c, $3c, $3c, $3c
 							.byte $3b, $3b, $3b, $3b, $3a, $3a, $3a, $3a, $39, $39, $39, $39, $38, $38, $38, $38
@@ -54,7 +52,7 @@ sampleremap
 							.byte $0f, $0f, $0f, $0f, $0e, $0e, $0e, $0e, $0d, $0d, $0d, $0d, $0c, $0c, $0c, $0c
 							.byte $0b, $0b, $0b, $0b, $0a, $0a, $0a, $0a, $09, $09, $09, $09, $08, $08, $08, $08
 							.byte $07, $07, $07, $07, $06, $06, $06, $06, $05, $05, $05, $05, $04, $04, $04, $04
-							.byte $03, $03, $03, $03, $02, $02, $02, $02, $01, $01, $01, $01, $01, $01, $01
+							.byte $03, $03, $03, $03, $02, $02, $02, $02, $01, $01, $01, $01, $01, $01, $01, $01
 
 samplebuffermin				.repeat 256, I
 								.byte 0
@@ -297,7 +295,7 @@ uisampleview_rendersample_loop
 		ldz #$00
 :		lda [zpptrtmp2],z
 		clc
-		adc #129
+		adc #128
 		cmp uisampleview_minvalue				; carry 0 : A < minvalue
 		bcs :+
 		sta uisampleview_minvalue
