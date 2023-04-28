@@ -32,7 +32,9 @@ columntospritehi			.byte $d0, $d0, $d0, $d0, $d0, $d0, $d0, $d0
 uisampleview_samplength		.byte $00, $00, $00, $00
 uisampleview_sampviewlength	.byte $00, $00, $00, $00
 uisampleview_samprendstep	.byte $00, $00, $00, $00
-uisampleview_samppoint		.byte $00, $00, $00, $00
+uisampleview_sp				.byte $00, $00, $00, $00
+uisampleview_ep				.byte $00, $00, $00, $00
+uisampleview_newsamplength	.byte $00, $00, $00, $00
 
 
 .align 256
@@ -70,6 +72,9 @@ samplebuffermax				.repeat 256, I
 							.endrepeat
 
 uisampleview_sampleindex	.byte 2; 2
+
+uisampleview_startpos		.byte 0, 0, 128, 0		; 0-255
+uisampleview_endpos			.byte 0, 0, 255, 0		; 0-255
 
 ; ----------------------------------------------------------------------------------------------------
 
@@ -251,51 +256,8 @@ uisampleview_rendersample
 		lda idxPepIns0+1,x
 		sta zpptrtmp+1
 
-		lda #$00
-		sta uisampleview_samplength+0
-		sta uisampleview_samplength+1
-		sta uisampleview_samplength+2
-		sta uisampleview_samplength+3
-		sta uisampleview_sampviewlength+0
-		sta uisampleview_sampviewlength+1
-		sta uisampleview_sampviewlength+2
-		sta uisampleview_sampviewlength+3
-		sta uisampleview_samppoint+0
-		sta uisampleview_samppoint+1
-		sta uisampleview_samppoint+2
-		sta uisampleview_samppoint+3
-
-		ldy #6											; get sample length
-		lda (zpptrtmp),y
-		sta uisampleview_samplength+2
-		ldy #7
-		lda (zpptrtmp),y
-		sta uisampleview_samplength+3
-
-		lda #$01										; store 256 in viewlength
-		sta uisampleview_sampviewlength+3
-
-		MATH_DIV uisampleview_samplength, uisampleview_sampviewlength, uisampleview_samprendstep
-
-
-		;lda #$00										; test sample step of 0.25
-		;sta uisampleview_samprendstep+0
-		;sta uisampleview_samprendstep+2
-		;sta uisampleview_samprendstep+3
-		;lda #$40
-		;sta uisampleview_samprendstep+1
-
-		lda #$00										; test sample step of 1.00
-		sta uisampleview_samprendstep+0
-		sta uisampleview_samprendstep+1
-		sta uisampleview_samprendstep+3
-		lda #$01
-		sta uisampleview_samprendstep+2
-
-
-
-
-		ldy #12											; sample address in instrument
+		; samplestart								3c 7c 02 00 (zpptrtmp2)
+		ldy #12
 		lda (zpptrtmp),y
 		sta zpptrtmp2+0
 		iny
@@ -308,7 +270,59 @@ uisampleview_rendersample
 		lda (zpptrtmp),y
 		sta zpptrtmp2+3
 
-		; sample address = zpptrtmp2
+		; samplelength								00 00 3e 0e
+		lda #$00
+		sta uisampleview_samplength+0
+		sta uisampleview_samplength+1
+		ldy #6
+		lda (zpptrtmp),y
+		sta uisampleview_samplength+2
+		ldy #7
+		lda (zpptrtmp),y
+		sta uisampleview_samplength+3
+
+		; tracklength								00 00 00 01
+		sta uisampleview_sampviewlength+0
+		sta uisampleview_sampviewlength+1
+		sta uisampleview_sampviewlength+2
+		lda #$01
+		sta uisampleview_sampviewlength+3
+
+		; rendstep = samplelength / tracklength		00 00 3e 0e / 00 00 00 01 = 00 3e 0e 00
+		MATH_DIV uisampleview_samplength, uisampleview_sampviewlength, uisampleview_samprendstep
+
+		; sp = startpos * rendstep = sp				00 00 08 00 * 00 3e 0e 00 = 00 f0 71 00
+		; from now on, sp is used as the new start addresss
+		MATH_MUL uisampleview_startpos, uisampleview_samprendstep, uisampleview_sp
+
+		; ep = endpos * rendstep = ep				00 00 00 01 * 00 3e 0e 00 = 00 00 3e 0e
+		MATH_MUL uisampleview_endpos, uisampleview_samprendstep, uisampleview_ep
+
+		; newlength = ep - sp						00 00 3e 0e - 00 f0 71 00 = 00 10 cc 0d
+		MATH_SUB uisampleview_ep, uisampleview_sp, uisampleview_newsamplength
+
+		; newrendstep = newlength / 256				00 10 cc 0d / 00 00 00 01 = 10 cc 0d 00
+		MATH_DIV uisampleview_newsamplength, uisampleview_sampviewlength, uisampleview_samprendstep
+
+
+
+
+		;lda #$00										; test sample step of 0.25
+		;sta uisampleview_samprendstep+0
+		;sta uisampleview_samprendstep+2
+		;sta uisampleview_samprendstep+3
+		;lda #$40
+		;sta uisampleview_samprendstep+1
+
+		;lda #$00										; test sample step of 1.00
+		;sta uisampleview_samprendstep+0
+		;sta uisampleview_samprendstep+1
+		;sta uisampleview_samprendstep+3
+		;lda #$01
+		;sta uisampleview_samprendstep+2
+
+
+
 
 		ldx #$00
 
@@ -339,26 +353,26 @@ uisampleview_rendersample_loop
 		sta samplebuffermax,x
 
 		phx
-		MATH_ADD uisampleview_samppoint, uisampleview_samprendstep, uisampleview_sampviewlength
+		MATH_ADD uisampleview_sp, uisampleview_samprendstep, uisampleview_sampviewlength
 		plx
 
 		lda uisampleview_sampviewlength+0				; BAH ! Do I really have to do this? why can't I just MATH_ADD to the same address?
-		sta uisampleview_samppoint+0
+		sta uisampleview_sp+0
 		lda uisampleview_sampviewlength+1
-		sta uisampleview_samppoint+1
+		sta uisampleview_sp+1
 		lda uisampleview_sampviewlength+2
-		sta uisampleview_samppoint+2
+		sta uisampleview_sp+2
 		lda uisampleview_sampviewlength+3
-		sta uisampleview_samppoint+3
+		sta uisampleview_sp+3
 
 		clc
 		ldy #12											; sample address in instrument
 		lda (zpptrtmp),y
-		adc uisampleview_samppoint+2
+		adc uisampleview_sp+2
 		sta zpptrtmp2+0
 		iny
 		lda (zpptrtmp),y
-		adc uisampleview_samppoint+3
+		adc uisampleview_sp+3
 		sta zpptrtmp2+1
 		iny
 		lda (zpptrtmp),y
