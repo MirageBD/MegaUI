@@ -163,6 +163,7 @@ textboxelements
 
 sampleviewelements
 		UIELEMENT_ADD sampleview1,				sampleview,			$ffff,					 1,  1,-1, -1,  0,		sampleview1_data,			uidefaultflags
+		UIELEMENT_ADD samplescaletrack,			scaletrack,			$ffff,					 1,  9,-1,  1,  0,		samplescaletrack_data,		uidefaultflags
 		UIELEMENT_END
 
 ; ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ data
@@ -238,6 +239,8 @@ tab1_data					.word tab_functions,												0, ui_tab1_window, uitxt_edit
 tab2_data					.word tab_functions,												1, ui_tab2_window, uitxt_sample
 
 sampleview1_data			.word $ffff,														2, 0							; sample index, sample length
+
+samplescaletrack_data		.word $ffff, 														0, 255, sampleview1_data		; start position, end position, ptr to sampleview
 
 ; ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ listeners
 
