@@ -188,7 +188,7 @@ uicnumericbutton_redraw
 
 		jsr uidraw_set_draw_position
 
-        ldy #$02
+		ldy #$02
 		jsr ui_getelementdata_2
 
 		ldz #$00

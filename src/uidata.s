@@ -194,10 +194,10 @@ uilogo_data					.word $ffff,														((14*16+ 0) | (14*16+ 0)<<8)
 checkboxlabel_data			.word $ffff,														uitxt_checkbox
 radiobuttonlabel_data		.word $ffff,														uitxt_radiobutton
 
-playbutton_data				.word playbutton_functions,											uitxt_button0, KEYBOARD_F1
-playpatternbutton_data		.word playpatternbutton_functions,									uitxt_button1, KEYBOARD_F3
-stopbutton_data				.word stopbutton_functions,											uitxt_button1, KEYBOARD_F5
-recordbutton_data			.word recordbutton_functions,										uitxt_button2, KEYBOARD_F7
+playbutton_data				.word playbutton_functions,											9*16+0, KEYBOARD_F1
+playpatternbutton_data		.word playpatternbutton_functions,									9*16+2, KEYBOARD_F3
+stopbutton_data				.word stopbutton_functions,											9*16+4, KEYBOARD_F5
+recordbutton_data			.word recordbutton_functions,										9*16+6, KEYBOARD_F7
 
 cnumericbutton1_data		.word $ffff,														$1234, $0000, $babe, 2		; value, address, number of bytes
 
@@ -289,14 +289,15 @@ filebox1_functions				.word fa1filebox,						userfunc_openfile
 
 userfunc_playmod
 		UICORE_CALLELEMENTFUNCTION tvlistbox, uipatternview_storepositions
-		jsr peppitoInit
+		jsr peppitoReset
+		;jsr peppitoInit
 		lda #$01
 		sta peppitoPlaying
 		rts
 
 userfunc_stopmod
 		jsr peppitoStop
-		jsr peppitoInit
+		;jsr peppitoInit
 		lda #$00
 		sta peppitoPlaying
 		UICORE_CALLELEMENTFUNCTION tvlistbox, uipatternview_restorepositions

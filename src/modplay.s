@@ -503,6 +503,29 @@ peppitoNOP:
 
 ;-----------------------------------------------------------
 
+peppitoReset:
+		LDA	#$00
+		STA	valPepPBrk
+		STA	valPepNRow
+
+		STA	cntPepSeqP
+
+		LDA	#$01
+		STA	cntPepTick
+		
+		LDA	#$06
+		STA	valPepSped
+
+		LDA	#$00
+		STA	valPepMaxP
+
+		LDA	#$FF
+		STA	cntPepPtnL
+		STA	valPepPLCh
+
+		rts
+
+
 peppitoInit:
 ;-----------------------------------------------------------
 ;@halt:

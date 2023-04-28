@@ -1,8 +1,8 @@
 ; ----------------------------------------------------------------------------------------------------
 
-uisampleviewtmp0			.dword 0
-
 stored_zpptrtmp				.word 0
+
+zoomfactor					.word 1
 
 sampbit						.byte 0
 
@@ -27,6 +27,13 @@ columntospritehi			.byte $d0, $d0, $d0, $d0, $d0, $d0, $d0, $d0
 							.byte $d2, $d2, $d2, $d2, $d2, $d2, $d2, $d2
 							.byte $d4, $d4, $d4, $d4, $d4, $d4, $d4, $d4
 							.byte $d6, $d6, $d6, $d6, $d6, $d6, $d6, $d6
+
+; Q registers for math
+uisampleview_samplength		.byte $00, $00, $00, $00
+uisampleview_sampviewlength	.byte $00, $00, $00, $00
+uisampleview_samprendstep	.byte $00, $00, $00, $00
+uisampleview_samppoint		.byte $00, $00, $00, $00
+
 
 .align 256
 sampleremap					
@@ -244,29 +251,49 @@ uisampleview_rendersample
 		lda idxPepIns0+1,x
 		sta zpptrtmp+1
 
-		ldy #6
+		lda #$00
+		sta uisampleview_samplength+0
+		sta uisampleview_samplength+1
+		sta uisampleview_samplength+2
+		sta uisampleview_samplength+3
+		sta uisampleview_sampviewlength+0
+		sta uisampleview_sampviewlength+1
+		sta uisampleview_sampviewlength+2
+		sta uisampleview_sampviewlength+3
+		sta uisampleview_samppoint+0
+		sta uisampleview_samppoint+1
+		sta uisampleview_samppoint+2
+		sta uisampleview_samppoint+3
+
+		ldy #6											; get sample length
 		lda (zpptrtmp),y
-		sta uisampleview_step+0
+		sta uisampleview_samplength+2
 		ldy #7
 		lda (zpptrtmp),y
-		sta uisampleview_step+1
+		sta uisampleview_samplength+3
 
-		lsr uisampleview_step+1
-		ror uisampleview_step+0
-		lsr uisampleview_step+1
-		ror uisampleview_step+0
-		lsr uisampleview_step+1
-		ror uisampleview_step+0
-		lsr uisampleview_step+1
-		ror uisampleview_step+0
-		lsr uisampleview_step+1
-		ror uisampleview_step+0
-		lsr uisampleview_step+1
-		ror uisampleview_step+0
-		lsr uisampleview_step+1
-		ror uisampleview_step+0
-		lsr uisampleview_step+1
-		ror uisampleview_step+0
+		lda #$01										; store 256 in viewlength
+		sta uisampleview_sampviewlength+3
+
+		MATH_DIV uisampleview_samplength, uisampleview_sampviewlength, uisampleview_samprendstep
+
+
+		;lda #$00										; test sample step of 0.25
+		;sta uisampleview_samprendstep+0
+		;sta uisampleview_samprendstep+2
+		;sta uisampleview_samprendstep+3
+		;lda #$40
+		;sta uisampleview_samprendstep+1
+
+		lda #$00										; test sample step of 1.00
+		sta uisampleview_samprendstep+0
+		sta uisampleview_samprendstep+1
+		sta uisampleview_samprendstep+3
+		lda #$01
+		sta uisampleview_samprendstep+2
+
+
+
 
 		ldy #12											; sample address in instrument
 		lda (zpptrtmp),y
@@ -296,39 +323,57 @@ uisampleview_rendersample_loop
 :		lda [zpptrtmp2],z
 		clc
 		adc #128
-		cmp uisampleview_minvalue				; carry 0 : A < minvalue
+		cmp uisampleview_minvalue						; carry 0 : A < minvalue
 		bcs :+
 		sta uisampleview_minvalue
 :		cmp uisampleview_maxvalue
-		bcc :+									; carry 0 : A < maxvalue
+		bcc :+											; carry 0 : A < maxvalue
 		sta uisampleview_maxvalue
 :		inz
-		cpz uisampleview_step+0
-		bne :---
+		cpz uisampleview_samprendstep+2
+		bmi :---
 
 		lda uisampleview_minvalue
 		sta samplebuffermin,x
 		lda uisampleview_maxvalue
 		sta samplebuffermax,x
 
+		phx
+		MATH_ADD uisampleview_samppoint, uisampleview_samprendstep, uisampleview_sampviewlength
+		plx
+
+		lda uisampleview_sampviewlength+0				; BAH ! Do I really have to do this? why can't I just MATH_ADD to the same address?
+		sta uisampleview_samppoint+0
+		lda uisampleview_sampviewlength+1
+		sta uisampleview_samppoint+1
+		lda uisampleview_sampviewlength+2
+		sta uisampleview_samppoint+2
+		lda uisampleview_sampviewlength+3
+		sta uisampleview_samppoint+3
+
 		clc
-		lda zpptrtmp2+0
-		adc uisampleview_step+0
+		ldy #12											; sample address in instrument
+		lda (zpptrtmp),y
+		adc uisampleview_samppoint+2
 		sta zpptrtmp2+0
-		lda zpptrtmp2+1
-		adc #$00
+		iny
+		lda (zpptrtmp),y
+		adc uisampleview_samppoint+3
 		sta zpptrtmp2+1
-		lda zpptrtmp2+2
+		iny
+		lda (zpptrtmp),y
 		adc #$00
 		sta zpptrtmp2+2
-		lda zpptrtmp2+3
+		iny
+		lda (zpptrtmp),y
 		adc #$00
 		sta zpptrtmp2+3
 
 		inx
-		bne uisampleview_rendersample_loop
+		beq :+
+		jmp uisampleview_rendersample_loop
 
-		rts
+:		rts
 
 ; ----------------------------------------------------------------------------------------------------
 

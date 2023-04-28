@@ -28,6 +28,23 @@ uiglyphbutton_draw
 		lda #3
 		sta uiglyphbutton_colour
 		jsr uiglyphbutton_drawreleased
+
+		lda #$01
+		sta uidraw_xposoffset
+		lda #$01
+		sta uidraw_yposoffset
+
+		jsr uidraw_set_draw_position
+
+		ldy #$02
+		jsr ui_getelementdata_2
+
+		lda zpptr2+0
+		ldz #$00
+		sta [uidraw_scrptr],z
+
+		jsr uidraw_resetoffsets
+
     	rts
 
 uiglyphbutton_press
@@ -57,10 +74,24 @@ uiglyphbutton_move
 		rts
 
 uiglyphbutton_keypress
-		rts
+		ldy #$04
+		jsr ui_getelementdata_2
+
+		lda zpptr2+0						; pointer to shortcut key
+		cmp keyboard_pressedeventarg
+		bne :+
+		jsr uiglyphbutton_press
+:		rts
 
 uiglyphbutton_keyrelease
-		rts
+		ldy #$04
+		jsr ui_getelementdata_2
+
+		lda zpptr2+0						; pointer to shortcut key
+		cmp keyboard_pressedeventarg
+		bne :+
+		jsr uiglyphbutton_release
+:		rts
 		
 ; ----------------------------------------------------------------------------------------------------
 

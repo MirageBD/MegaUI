@@ -259,21 +259,26 @@ uikeyboard_handle_press
 		ldy #UIELEMENT::type
 		lda (zpptr0),y
 		cmp #UIELEMENTTYPE::ctextbutton
-		bne :+
+		beq :+
+		cmp #UIELEMENTTYPE::glyphbutton
+		beq :+
+		rts
 
-		SEND_EVENT keypress
+:		SEND_EVENT keypress
 
-:		rts
+		rts
 
 uikeyboard_handle_release
 
 		ldy #UIELEMENT::type
 		lda (zpptr0),y
 		cmp #UIELEMENTTYPE::ctextbutton
-		bne :+
+		beq :+
+		cmp #UIELEMENTTYPE::glyphbutton
+		beq :+
+		rts
 
-		SEND_EVENT keyrelease
-
-:		rts
+:		SEND_EVENT keyrelease
+		rts
 
 ; ----------------------------------------------------------------------------------------------------
