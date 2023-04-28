@@ -238,9 +238,9 @@ filetab3_data				.word filetab_functions,											2, ui_filetab3_window, uitxt
 tab1_data					.word tab_functions,												0, ui_tab1_window, uitxt_edit
 tab2_data					.word tab_functions,												1, ui_tab2_window, uitxt_sample
 
-sampleview1_data			.word $ffff,														2, 0							; sample index, sample length
+sampleview1_data			.word $ffff,														2, 0, 0, 255					; sample index, sample length
 
-samplescaletrack_data		.word $ffff, 														0, 255, sampleview1_data		; start position, end position, ptr to sampleview
+samplescaletrack_data		.word scaletrack_functions,											sampleview1_data				; start position, end position, ptr to sampleview
 
 ; ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ listeners
 
@@ -268,6 +268,10 @@ tab_functions					.word ui_tab1,							uitab_draw
 filetab_functions				.word ui_filetab1,						uitab_draw
 								.word ui_filetab2,						uitab_draw
 								.word ui_filetab3,						uitab_draw
+								.word $ffff
+
+scaletrack_functions			.word samplescaletrack,					uiscaletrack_draw
+								.word sampleview1,						uisampleview_draw
 								.word $ffff
 
 playbutton_functions			.word playbutton,						userfunc_playmod

@@ -11,7 +11,9 @@
 
 .define uichars					$10000	; $10000 - $14000     size = $4000
 .define glchars					$14000	; $14000 - $1d000     size = $9000
-.define samplesprites			$1d000	; $1d000 - $1d800
+.define samplespritesbuf		$1d000	; $1d000 - $1d800
+.define samplesprites			$1d800	; $1d000 - $1d800
+
 
 .define moddata					$20000
 

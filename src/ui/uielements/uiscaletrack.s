@@ -1,28 +1,12 @@
 ; ----------------------------------------------------------------------------------------------------
 
-; Q registers for offset calculations
-
 uiscaletrack_startpos			.byte $00, $00, $00, $00
-uiscaletrack_numentries			.byte $00, $00, $00, $00
-uiscaletrack_height				.byte $00, $00, $00, $00
-uiscaletrack_listheight			.byte $00, $00, $00, $00
-
-uiscaletrack_numerator			.byte $00, $00, $00, $00
-uiscaletrack_denominator		.byte $00, $00, $00, $00
 
 ; ----------------------------------------------------------------------------------------------------
 
 uiscaletrack_resetqvalues
 
 		lda #$00
-		sta uiscaletrack_numentries+0
-		sta uiscaletrack_numentries+1
-		sta uiscaletrack_numentries+2
-		sta uiscaletrack_numentries+3
-		sta uiscaletrack_height+0
-		sta uiscaletrack_height+1
-		sta uiscaletrack_height+2
-		sta uiscaletrack_height+3
 		sta uiscaletrack_startpos+0
 		sta uiscaletrack_startpos+1
 		sta uiscaletrack_startpos+2
@@ -86,52 +70,27 @@ uiscaletrack_press
 		jsr uiscaletrack_resetqvalues
 		jsr ui_getelementdataptr_tmp
 
-		lda uimouse_uielement_ypos+1			; check position within track, set position
+		lda uimouse_uielement_xpos+1			; check position within track, set position
 		cmp #$ff
 		bne :+
 		rts
 
-:		lda uimouse_uielement_ypos+0			; for now, put position in track in uiscaletrack_startpos
+:		lda uimouse_uielement_xpos+0			; for now, put position in track in uiscaletrack_startpos
 		sta uiscaletrack_startpos+2
-		lda uimouse_uielement_ypos+1
+		lda uimouse_uielement_xpos+1
 		sta uiscaletrack_startpos+3
 
-		ldy #$08								; get pointer to element that holds the list in zpptr2
+		ldy #$02								; get pointer to element that holds the list in zpptr2
 		lda (zpptrtmp),y
 		sta zpptr2+0
 		iny
 		lda (zpptrtmp),y
 		sta zpptr2+1
 
-		ldy #UIELEMENT::height					; list height: 12
-		lda (zpptr2),y
-		sta uiscaletrack_listheight+2
-
-		ldy #UIELEMENT::height
-		lda (zpptr0),y
-		sec
-		sbc #$01
-		sta uiscaletrack_height+2
-
+		; set start pos
 		ldy #$06
-		lda (zpptrtmp),y						; list entries: 30
-		sta uiscaletrack_numentries+2
-
-		MATH_SUB uiscaletrack_numentries,	uiscaletrack_listheight,	uiscaletrack_numerator
-		MATH_DIV uiscaletrack_startpos,		uiscaletrack_height,		uiscaletrack_denominator
-		MATH_MUL uiscaletrack_denominator,	uiscaletrack_numerator,		uiscaletrack_denominator
-
-		lsr uiscaletrack_denominator+3
-		ror uiscaletrack_denominator+2
-		lsr uiscaletrack_denominator+3
-		ror uiscaletrack_denominator+2
-		lsr uiscaletrack_denominator+3
-		ror uiscaletrack_denominator+2
-
-		lda uiscaletrack_denominator+2
-
-		ldy #$02
-		sta (zpptrtmp),y
+		lda uiscaletrack_startpos+2
+		sta (zpptr2),y
 
 		jsr uielement_calluifunc
 
@@ -183,11 +142,22 @@ uiscaletrack_draw_released_puck
 
 		jsr ui_getelementdataptr_tmp
 
-		ldy #$02
+		ldy #$02								; get pointer to element that holds the list in zpptr2
 		lda (zpptrtmp),y
-		sta uiscaletrack_startpos+2
+		sta zpptr2+0
+		iny
+		lda (zpptrtmp),y
+		sta zpptr2+1
 
-		ldz #$00
+		ldy #$06								; get start pos
+		lda (zpptr2),y
+		lsr
+		lsr
+		lsr
+		
+		asl ; mul by 2 to get screenptr offset
+
+		taz
 		lda #5*16+14
 		sta [uidraw_scrptr],z
 		inz

@@ -426,6 +426,7 @@ uimouse_handle_press
 
 uimouse_handle_longpress
 
+/*
 		jsr uimouse_checkflags
 		bne :+
 		rts
@@ -436,7 +437,7 @@ uimouse_handle_longpress
 		sta uimouse_captured_element+1
 
 		SEND_EVENT longpress
-
+*/
 		rts
 
 ; ----------------------------------------------------------------------------------------------------

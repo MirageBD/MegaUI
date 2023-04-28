@@ -183,6 +183,7 @@ uisampleview_draw
 		jsr uisampleview_rendersample
 		jsr uisampleview_plotsample
 		jsr uisampleview_xorfill
+		jsr uisampleview_copytosprites
 
 		rts
 
@@ -212,13 +213,13 @@ uisampleview_keyrelease
 
 uisampleview_clearsample
 
-		lda #<.loword(samplesprites)
+		lda #<.loword(samplespritesbuf)
 		sta zpptrtmp+0
-		lda #>.loword(samplesprites)
+		lda #>.loword(samplespritesbuf)
 		sta zpptrtmp+1
-		lda #<.hiword(samplesprites)					; set up pointer to $00 1d 00 00
+		lda #<.hiword(samplespritesbuf)					; set up pointer to $00 1d 00 00
 		sta zpptrtmp+2
-		lda #>.hiword(samplesprites)
+		lda #>.hiword(samplespritesbuf)
 		sta zpptrtmp+3
 
 		ldx #$00										; clear sprites - use DMA for this!
@@ -228,6 +229,41 @@ uisampleview_clearsample
 		inz
 		bne :-
 		inc zpptrtmp+1
+		inx
+		cpx #$08
+		bne :-
+
+		rts
+
+uisampleview_copytosprites
+
+		lda #<.loword(samplespritesbuf)
+		sta zpptrtmp+0
+		lda #>.loword(samplespritesbuf)
+		sta zpptrtmp+1
+		lda #<.hiword(samplespritesbuf)					; set up pointer to $00 1d 00 00
+		sta zpptrtmp+2
+		lda #>.hiword(samplespritesbuf)
+		sta zpptrtmp+3
+
+		lda #<.loword(samplesprites)
+		sta zpptrtmp2+0
+		lda #>.loword(samplesprites)
+		sta zpptrtmp2+1
+		lda #<.hiword(samplesprites)					; set up pointer to $00 1d 00 00
+		sta zpptrtmp2+2
+		lda #>.hiword(samplesprites)
+		sta zpptrtmp2+3
+
+		ldx #$00										; copy buffer - use DMA for this!
+		lda #$00
+		ldz #$00
+:		lda [zpptrtmp],z
+		sta [zpptrtmp2],z
+		inz
+		bne :-
+		inc zpptrtmp+1
+		inc zpptrtmp2+1
 		inx
 		cpx #$08
 		bne :-
@@ -256,7 +292,15 @@ uisampleview_rendersample
 		lda idxPepIns0+1,x
 		sta zpptrtmp+1
 
-		; samplestart								3c 7c 02 00 (zpptrtmp2)
+		ldy #$06
+		lda (zpptr1),y									; get start pos
+		sta uisampleview_startpos+2
+
+		ldy #$08
+		lda (zpptr1),y									; get end pos
+		sta uisampleview_endpos+2
+
+		; samplestart									3c 7c 02 00 (zpptrtmp2)
 		ldy #12
 		lda (zpptrtmp),y
 		sta zpptrtmp2+0
@@ -270,7 +314,7 @@ uisampleview_rendersample
 		lda (zpptrtmp),y
 		sta zpptrtmp2+3
 
-		; samplelength								00 00 3e 0e
+		; samplelength									00 00 3e 0e
 		lda #$00
 		sta uisampleview_samplength+0
 		sta uisampleview_samplength+1
@@ -281,47 +325,24 @@ uisampleview_rendersample
 		lda (zpptrtmp),y
 		sta uisampleview_samplength+3
 
-		; tracklength								00 00 00 01
+		; tracklength									00 00 00 01
 		sta uisampleview_sampviewlength+0
 		sta uisampleview_sampviewlength+1
 		sta uisampleview_sampviewlength+2
 		lda #$01
 		sta uisampleview_sampviewlength+3
 
-		; rendstep = samplelength / tracklength		00 00 3e 0e / 00 00 00 01 = 00 3e 0e 00
+		; rendstep = samplelength / tracklength			00 00 3e 0e / 00 00 00 01 = 00 3e 0e 00
 		MATH_DIV uisampleview_samplength, uisampleview_sampviewlength, uisampleview_samprendstep
-
-		; sp = startpos * rendstep = sp				00 00 08 00 * 00 3e 0e 00 = 00 f0 71 00
+		; sp = startpos * rendstep = sp					00 00 08 00 * 00 3e 0e 00 = 00 f0 71 00
 		; from now on, sp is used as the new start addresss
 		MATH_MUL uisampleview_startpos, uisampleview_samprendstep, uisampleview_sp
-
-		; ep = endpos * rendstep = ep				00 00 00 01 * 00 3e 0e 00 = 00 00 3e 0e
+		; ep = endpos * rendstep = ep					00 00 00 01 * 00 3e 0e 00 = 00 00 3e 0e
 		MATH_MUL uisampleview_endpos, uisampleview_samprendstep, uisampleview_ep
-
-		; newlength = ep - sp						00 00 3e 0e - 00 f0 71 00 = 00 10 cc 0d
+		; newlength = ep - sp							00 00 3e 0e - 00 f0 71 00 = 00 10 cc 0d
 		MATH_SUB uisampleview_ep, uisampleview_sp, uisampleview_newsamplength
-
-		; newrendstep = newlength / 256				00 10 cc 0d / 00 00 00 01 = 10 cc 0d 00
+		; newrendstep = newlength / 256					00 10 cc 0d / 00 00 00 01 = 10 cc 0d 00
 		MATH_DIV uisampleview_newsamplength, uisampleview_sampviewlength, uisampleview_samprendstep
-
-
-
-
-		;lda #$00										; test sample step of 0.25
-		;sta uisampleview_samprendstep+0
-		;sta uisampleview_samprendstep+2
-		;sta uisampleview_samprendstep+3
-		;lda #$40
-		;sta uisampleview_samprendstep+1
-
-		;lda #$00										; test sample step of 1.00
-		;sta uisampleview_samprendstep+0
-		;sta uisampleview_samprendstep+1
-		;sta uisampleview_samprendstep+3
-		;lda #$01
-		;sta uisampleview_samprendstep+2
-
-
 
 
 		ldx #$00
@@ -421,13 +442,13 @@ uisampleview_plotsample
 		sta zpptrtmp2+3
 
 
-		lda #<.loword(samplesprites)					; $00
+		lda #<.loword(samplespritesbuf)					; $00
 		sta zpptrtmp+0
-		lda #>.loword(samplesprites)					; $d0
+		lda #>.loword(samplespritesbuf)					; $d0
 		sta zpptrtmp+1
-		lda #<.hiword(samplesprites)					; set up pointer to $00 1d 00 00
+		lda #<.hiword(samplespritesbuf)					; set up pointer to $00 1d 00 00
 		sta zpptrtmp+2
-		lda #>.hiword(samplesprites)
+		lda #>.hiword(samplespritesbuf)
 		sta zpptrtmp+3
 
 		ldz #$00
@@ -517,13 +538,13 @@ uisampleview_plotsample_loop
 
 uisampleview_xorfill
 
-		lda #<.loword(samplesprites)					; $00
+		lda #<.loword(samplespritesbuf)					; $00
 		sta zpptrtmp+0
-		lda #>.loword(samplesprites)					; $d0
+		lda #>.loword(samplespritesbuf)					; $d0
 		sta zpptrtmp+1
-		lda #<.hiword(samplesprites)					; set up pointer to $00 1d 00 00
+		lda #<.hiword(samplespritesbuf)					; set up pointer to $00 1d 00 00
 		sta zpptrtmp+2
-		lda #>.hiword(samplesprites)
+		lda #>.hiword(samplespritesbuf)
 		sta zpptrtmp+3
 
 		clc
