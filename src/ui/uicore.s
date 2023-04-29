@@ -48,6 +48,7 @@ q160						.dword 160
 		ctextbutton
 		cnumericbutton
 		scrolltrack
+		slider
 		label
 		nineslice
 		listbox
@@ -160,6 +161,7 @@ ui_element_indiceshi
 			.byte <.ident(.sprintf("uictextbutton_%s",		.string(eventtype))), >.ident(.sprintf("uictextbutton_%s",		.string(eventtype)))
 			.byte <.ident(.sprintf("uicnumericbutton_%s",	.string(eventtype))), >.ident(.sprintf("uicnumericbutton_%s",	.string(eventtype)))
 			.byte <.ident(.sprintf("uiscrolltrack_%s",		.string(eventtype))), >.ident(.sprintf("uiscrolltrack_%s",		.string(eventtype)))
+			.byte <.ident(.sprintf("uislider_%s",			.string(eventtype))), >.ident(.sprintf("uislider_%s",			.string(eventtype)))
 			.byte <.ident(.sprintf("uilabel_%s",			.string(eventtype))), >.ident(.sprintf("uilabel_%s",			.string(eventtype)))
 			.byte <.ident(.sprintf("uinineslice_%s",		.string(eventtype))), >.ident(.sprintf("uinineslice_%s",		.string(eventtype)))
 			.byte <.ident(.sprintf("uilistbox_%s",			.string(eventtype))), >.ident(.sprintf("uilistbox_%s",			.string(eventtype)))

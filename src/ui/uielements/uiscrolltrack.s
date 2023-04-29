@@ -91,7 +91,7 @@ uiscrolltrack_press
 		bne :+
 		rts
 
-:		lda uimouse_uielement_ypos+0			; for now, put position in track in uiscrolltrack_startpos
+:		lda uimouse_uielement_ypos+0			; temporarily put position in track in uiscrolltrack_startpos
 		sta uiscrolltrack_startpos+2
 		lda uimouse_uielement_ypos+1
 		sta uiscrolltrack_startpos+3

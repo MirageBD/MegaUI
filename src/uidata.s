@@ -24,6 +24,8 @@ window0area
 		UIELEMENT_ADD stopbutton,				glyphbutton,		$ffff,					 7,  0,  3,  3,  0,		stopbutton_data,			uidefaultflags
 		UIELEMENT_ADD recordbutton,				glyphbutton,		$ffff,					10,  0,  3,  3,  0,		recordbutton_data,			uidefaultflags
 
+		UIELEMENT_ADD volumeslider,				slider,				$ffff,					14,  1, 16,  1,  0,		volumeslider_data,			uidefaultflags
+
 		;UIELEMENT_ADD ctextbutton1,			ctextbutton,		$ffff,					 4,  0, 12,  3,  0,		ctextbutton1_data,			uidefaultflags
 		;UIELEMENT_ADD ctextbutton2,			ctextbutton,		$ffff,					16,  0, 12,  3,  0,		ctextbutton2_data,			uidefaultflags
 		;UIELEMENT_ADD ctextbutton3,			ctextbutton,		$ffff,					28,  0, 12,  3,  0,		ctextbutton3_data,			uidefaultflags
@@ -199,6 +201,8 @@ playbutton_data				.word playbutton_functions,											9*16+0, KEYBOARD_F1
 playpatternbutton_data		.word playpatternbutton_functions,									9*16+2, KEYBOARD_F3
 stopbutton_data				.word stopbutton_functions,											9*16+4, KEYBOARD_F5
 recordbutton_data			.word recordbutton_functions,										9*16+6, KEYBOARD_F7
+
+volumeslider_data			.word $ffff,														8
 
 cnumericbutton1_data		.word $ffff,														$1234, $0000, $babe, 2		; value, address, number of bytes
 

@@ -54,6 +54,7 @@ basicend	.byte 0
 .include "ui/uielements/uictextbutton.s"
 .include "ui/uielements/uicnumericbutton.s"
 .include "ui/uielements/uiscrolltrack.s"
+.include "ui/uielements/uislider.s"
 .include "ui/uielements/uilabel.s"
 .include "ui/uielements/uinineslice.s"
 .include "ui/uielements/uilistbox.s"
