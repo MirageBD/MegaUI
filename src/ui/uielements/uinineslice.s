@@ -98,8 +98,8 @@ uinineslice_drawreleased
 		inz
 		pha
 		phx
-:		lda #$00
-		sta [uidraw_colptr],z
+:		lda #$80						; #$80 is a tile that shows the background colour, not colour ram
+		sta [uidraw_scrptr],z
 		inz
 		inz
 		dex

@@ -1,6 +1,8 @@
 ; ----------------------------------------------------------------------------------------------------
 
-uiscaletrack_offset_diff	.byte 0
+uiscaletrack_offset_diff	.word 0
+
+; ----------------------------------------------------------------------------------------------------
 
 uiscaletrack_storedsp		.byte 0
 uiscaletrack_storedep		.byte 0
@@ -210,9 +212,14 @@ uiscaletrack_setoffset
 		lda uimouse_uielement_xpos+0
 		sbc uimouse_uielement_xpos_pressed+0
 		sta uiscaletrack_offset_diff+0
+		lda uimouse_uielement_xpos+1
+		sbc #$00 ; uimouse_uielement_xpos_pressed+1
+		sta uiscaletrack_offset_diff+1
 
-		lda uiscaletrack_offset_diff
-		bmi sct_offsetnegative
+
+		lda uiscaletrack_offset_diff+1
+		cmp #$ff
+		beq sct_offsetnegative
 
 		ldy #$06							; offset is positive - check if endpoint is above 255 or not
 		clc

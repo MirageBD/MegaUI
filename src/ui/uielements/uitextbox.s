@@ -281,7 +281,7 @@ uitextbox_drawbkgreleased
 		ldz #$00
 :		lda #$20
 		sta [uidraw_scrptr],z
-		lda #$00										; mid gray background
+		lda #$10										; black background
 		sta [uidraw_colptr],z
 		inz
 		inz

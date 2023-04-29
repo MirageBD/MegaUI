@@ -432,18 +432,17 @@ uimouse_handle_press
 
 uimouse_handle_longpress
 
-/*
 		jsr uimouse_checkflags
 		bne :+
 		rts
 
-:		lda zpptr0+0
-		sta uimouse_captured_element+0
-		lda zpptr0+1
-		sta uimouse_captured_element+1
+:;		lda zpptr0+0
+;		sta uimouse_captured_element+0
+;		lda zpptr0+1
+;		sta uimouse_captured_element+1
 
 		SEND_EVENT longpress
-*/
+
 		rts
 
 ; ----------------------------------------------------------------------------------------------------

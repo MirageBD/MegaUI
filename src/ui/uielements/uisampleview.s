@@ -130,6 +130,11 @@ uisampleview_draw
 		ora #%00111100
 		sta $d015
 
+		lda $d01b
+		and #%11000011
+		ora #%00111100
+		sta $d01b
+
 		lda $d010
 		and #%11000011
 		ora #%00011100
@@ -150,13 +155,13 @@ uisampleview_draw
 		sta $d000+4*2+1
 		sta $d000+5*2+1
 
-		lda #$60+0*64									; sprite x positions
+		lda #$5f+0*64									; sprite x positions
 		sta $d000+2*2+0
-		lda #$60+1*64									; sprite x positions
+		lda #$5f+1*64									; sprite x positions
 		sta $d000+3*2+0
-		lda #$60+2*64									; sprite x positions
+		lda #$5f+2*64									; sprite x positions
 		sta $d000+4*2+0
-		lda #$60+3*64									; sprite x positions
+		lda #$5f+3*64									; sprite x positions
 		sta $d000+5*2+0
 		
 		lda #$03
@@ -180,6 +185,7 @@ uisampleview_draw
 		bne :+
 		rts
 :
+		jsr uisampleview_drawbackground
 		jsr uisampleview_rendersample
 		jsr uisampleview_plotsample
 		jsr uisampleview_xorfill
@@ -584,3 +590,35 @@ uisampleview_xorfill
 
 ; ----------------------------------------------------------------------------------------------------
 
+uisampleview_drawbackground
+
+		jsr uidraw_set_draw_position
+
+		sec
+		ldy #UIELEMENT::width
+		lda (zpptr0),y
+		sbc #$02
+		sta uidraw_width
+		sec
+		ldy #UIELEMENT::height
+		lda (zpptr0),y
+		sbc #$02
+		sta uidraw_height
+
+		jsr uidraw_increase_row
+		jsr uidraw_increase_row
+		jsr uidraw_increase_row
+
+		ldx uidraw_width
+
+		ldz #$00						; draw center of nineslice
+		lda #9*16+9
+:		sta [uidraw_scrptr],z
+		inz
+		inz
+		dex
+		bpl :-
+
+		rts
+
+; ----------------------------------------------------------------------------------------------------

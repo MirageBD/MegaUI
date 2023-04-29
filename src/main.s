@@ -154,7 +154,7 @@ entry_main
 
 		lda #$02
 		sta $d020
-		lda #$00
+		lda #$10
 		sta $d021
 
 		lda #<.loword(moddata)
