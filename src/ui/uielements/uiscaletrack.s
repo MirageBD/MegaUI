@@ -1,23 +1,9 @@
 ; ----------------------------------------------------------------------------------------------------
 
-uiscaletrack_startpos			.byte $00, $00, $00, $00
-uiscaletrack_endpos				.byte $00, $00, $00, $00
+uiscaletrack_offset_diff	.byte 0
 
-; ----------------------------------------------------------------------------------------------------
-
-uiscaletrack_resetqvalues
-
-		lda #$00
-		sta uiscaletrack_startpos+0
-		sta uiscaletrack_startpos+1
-		sta uiscaletrack_startpos+2
-		sta uiscaletrack_startpos+3
-		sta uiscaletrack_endpos+0
-		sta uiscaletrack_endpos+1
-		sta uiscaletrack_endpos+2
-		sta uiscaletrack_endpos+3
-
-		rts
+uiscaletrack_storedsp		.byte 0
+uiscaletrack_storedep		.byte 0
 
 ; ----------------------------------------------------------------------------------------------------
 
@@ -45,7 +31,7 @@ uiscaletrack_leave
 uiscaletrack_move
 		lda mouse_held
 		beq :+
-		jsr uiscaletrack_press
+		jsr uiscaletrack_pressed_2
 :		rts
 
 uiscaletrack_keypress
@@ -72,15 +58,27 @@ uiscaletrack_draw
 
 uiscaletrack_press
 
-		;lda #$e0
-		;DEBUG_COLOUR
-		;lda #$00
-		;DEBUG_COLOUR
+		jsr uimouse_calculate_pospressed_in_uielement	; record first pressed position
+
+		jsr ui_getelementdataptr_tmp
+		ldy #$02								; get pointer to sampleview
+		lda (zpptrtmp),y
+		sta zpptr2+0
+		iny
+		lda (zpptrtmp),y
+		sta zpptr2+1
+
+		ldy #$06
+		lda (zpptr2),y
+		sta uiscaletrack_storedsp
+		ldy #$08
+		lda (zpptr2),y
+		sta uiscaletrack_storedep
+
+uiscaletrack_pressed_2
 
 		jsr uimouse_calculate_pos_in_uielement
-		jsr uimouse_calculate_pospressed_in_uielement
 
-		jsr uiscaletrack_resetqvalues
 		jsr ui_getelementdataptr_tmp
 
 		lda uimouse_uielement_xpos+1			; check position within track, set position
@@ -130,6 +128,7 @@ insiderightofstartpuck							; no. are we on the left side of the right side of 
 :		cmp fooep1								; are we on the left side of the left side of the end puck?
 		bcs insiderightofendpuck
 
+		jsr uiscaletrack_setoffset
 		rts										; yes, return. this should scroll eventually
 
 insiderightofendpuck							; no. are we on the left side of the right side of the end puck?
@@ -195,6 +194,55 @@ foosp2	.byte 0
 
 fooep1	.byte 0
 fooep2	.byte 0
+
+uiscaletrack_setoffset
+
+		sec
+		lda uimouse_uielement_xpos+0
+		sbc uimouse_uielement_xpos_pressed+0
+		sta uiscaletrack_offset_diff+0
+
+		lda uiscaletrack_offset_diff
+		bmi sct_offsetnegative
+
+		ldy #$06							; offset is positive - check if endpoint is above 255 or not
+		clc
+		lda uiscaletrack_storedep
+		adc uiscaletrack_offset_diff
+		bcc :+
+		rts
+
+:		sta (zpptr2),y						; not above 255 - safe to set sp and ep
+
+		ldy #$08
+		sta (zpptr2),y
+		ldy #$06
+		clc
+		lda uiscaletrack_storedsp
+		adc uiscaletrack_offset_diff
+		sta (zpptr2),y
+		bra uiscaletrack_setoffset_end
+
+sct_offsetnegative
+		ldy #$06							; offset is negative - check if startpoint is below 0 or not
+		clc
+		lda uiscaletrack_storedsp
+		adc uiscaletrack_offset_diff
+		bcs :+
+		rts
+:
+		sta (zpptr2),y						; not below 0 - safe to set sp and ep
+		ldy #$08
+		clc
+		lda uiscaletrack_storedep
+		adc uiscaletrack_offset_diff
+		sta (zpptr2),y
+
+uiscaletrack_setoffset_end
+
+		jsr uielement_calluifunc
+
+		rts
 
 ; ----------------------------------------------------------------------------------------------------
 
@@ -272,6 +320,7 @@ uiscaletrack_draw_released_puck
 		and #%11111000
 		ldy #$06								; get start pos
 		sbc (zpptr2),y
+		and #%11111000
 		lsr
 		lsr
 		lsr
@@ -280,7 +329,7 @@ uiscaletrack_draw_released_puck
 		sbc #$02
 		tax
 
-		lda #5*16+14
+		lda #5*16+14							; draw section inbetween pucks
 :		sta [uidraw_scrptr],z
 		inz
 		inz

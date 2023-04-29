@@ -238,9 +238,9 @@ filetab3_data				.word filetab_functions,											2, ui_filetab3_window, uitxt
 tab1_data					.word tab_functions,												0, ui_tab1_window, uitxt_edit
 tab2_data					.word tab_functions,												1, ui_tab2_window, uitxt_sample
 
-sampleview1_data			.word $ffff,														2, 0, 0, 255					; sample index, sample length
+sampleview1_data			.word $ffff,														2, 0, 0, 255					; sample index, sample length, startpos, endpos
 
-samplescaletrack_data		.word scaletrack_functions,											sampleview1_data				; start position, end position, ptr to sampleview
+samplescaletrack_data		.word scaletrack_functions,											sampleview1_data				; ptr to sampleview
 
 ; ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ listeners
 
@@ -330,7 +330,7 @@ userfunc_populatesample
 		UICORE_SELECT_ELEMENT_1 sampleview1_data					; feed selected index into sampleview element
 		txa
 		ldy #$02
-		sta (zpptr1),y
+		sta (zpptr1),y	
 
 		asl
 		tax
@@ -338,6 +338,13 @@ userfunc_populatesample
 		sta zpptrtmp+0
 		lda idxPepIns0+1,x
 		sta zpptrtmp+1
+
+		lda #$00													; set start and end pos 0, 255
+		ldy #$06
+		sta (zpptr1),y
+		lda #$ff
+		ldy #$08
+		sta (zpptr1),y
 
 		ldy #4
 		lda (zpptrtmp),y
@@ -407,20 +414,8 @@ userfunc_populatesample
 		adc #0
 		sta nbrepeatlen_data+5
 
-		ldy #12											; sample address in instrument
-		lda (zpptrtmp),y
-		sta zpptrtmp2+0
-		ldy #13
-		lda (zpptrtmp),y
-		sta zpptrtmp2+1
-		ldy #14
-		lda (zpptrtmp),y
-		sta zpptrtmp2+2
-		ldy #15
-		lda (zpptrtmp),y
-		sta zpptrtmp2+3
-
 		UICORE_CALLELEMENTFUNCTION sampleview1, uisampleview_draw
+		UICORE_CALLELEMENTFUNCTION samplescaletrack, uiscaletrack_draw
 
 		UICORE_CALLELEMENTFUNCTION nbfinetune, uicnumericbutton_draw
 		UICORE_CALLELEMENTFUNCTION nbvolume, uicnumericbutton_draw

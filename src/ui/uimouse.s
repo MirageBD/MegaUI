@@ -294,6 +294,7 @@ uimhe_handle_captured
 
 uimhe_mouse_moved
 		jsr uimouse_handle_move							; handle MOVE
+		rts
 
 uimhe_notmoved
 		lda mouse_doubleclicked

@@ -303,15 +303,19 @@ uisampleview_rendersample
 		; samplestart									3c 7c 02 00 (zpptrtmp2)
 		ldy #12
 		lda (zpptrtmp),y
+		adc uisampleview_sp+2
 		sta zpptrtmp2+0
 		iny
 		lda (zpptrtmp),y
+		adc uisampleview_sp+3
 		sta zpptrtmp2+1
 		iny
 		lda (zpptrtmp),y
+		adc #$00
 		sta zpptrtmp2+2
 		iny
 		lda (zpptrtmp),y
+		adc #$00
 		sta zpptrtmp2+3
 
 		; samplelength									00 00 3e 0e
