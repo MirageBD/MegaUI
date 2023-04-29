@@ -1,5 +1,10 @@
-uimouse_uielement_xpos		.word $0080
-uimouse_uielement_ypos		.word $0080
+uimouse_uielement_xpos			.word $0080
+uimouse_uielement_ypos			.word $0080
+
+uimouse_uielement_xpos_pressed	.word $0080
+uimouse_uielement_ypos_pressed	.word $0080
+
+; ----------------------------------------------------------------------------------------------------
 
 uimouse_hoverwindows
 		.repeat 256
@@ -470,6 +475,31 @@ uimouse_calculate_pos_in_uielement
 		ldy #UIELEMENT::ymin+1
 		sbc (zpptr0),y
 		sta uimouse_uielement_ypos+1
+
+		rts
+
+; ----------------------------------------------------------------------------------------------------
+
+uimouse_calculate_pospressed_in_uielement
+
+		sec
+		lda mouse_xpos_pressed+0
+		ldy #UIELEMENT::xmin+0
+		sbc (zpptr0),y
+		sta uimouse_uielement_xpos_pressed+0
+		lda mouse_xpos_pressed+1
+		ldy #UIELEMENT::xmin+1
+		sbc (zpptr0),y
+		sta uimouse_uielement_xpos_pressed+1
+		sec
+		lda mouse_ypos_pressed+0
+		ldy #UIELEMENT::ymin+0
+		sbc (zpptr0),y
+		sta uimouse_uielement_ypos_pressed+0
+		lda mouse_ypos_pressed+1
+		ldy #UIELEMENT::ymin+1
+		sbc (zpptr0),y
+		sta uimouse_uielement_ypos_pressed+1
 
 		rts
 

@@ -71,7 +71,15 @@ uiscaletrack_draw
 ; ----------------------------------------------------------------------------------------------------
 
 uiscaletrack_press
+
+		;lda #$e0
+		;DEBUG_COLOUR
+		;lda #$00
+		;DEBUG_COLOUR
+
 		jsr uimouse_calculate_pos_in_uielement
+		jsr uimouse_calculate_pospressed_in_uielement
+
 		jsr uiscaletrack_resetqvalues
 		jsr ui_getelementdataptr_tmp
 
@@ -79,23 +87,21 @@ uiscaletrack_press
 		beq :+
 		rts
 
-:
-
-		ldy #$02								; get pointer to sampleview
+:		ldy #$02								; get pointer to sampleview
 		lda (zpptrtmp),y
 		sta zpptr2+0
 		iny
 		lda (zpptrtmp),y
 		sta zpptr2+1
 
-		ldy #$06
+		ldy #$06								; get start position
 		lda (zpptr2),y
 		sta foosp1
 		clc
 		adc #24
 		sta foosp2
 
-		ldy #$08
+		ldy #$08								; get end position
 		lda (zpptr2),y
 		sec
 		sbc #8
@@ -123,6 +129,7 @@ insiderightofstartpuck							; no. are we on the left side of the right side of 
 
 :		cmp fooep1								; are we on the left side of the left side of the end puck?
 		bcs insiderightofendpuck
+
 		rts										; yes, return. this should scroll eventually
 
 insiderightofendpuck							; no. are we on the left side of the right side of the end puck?
