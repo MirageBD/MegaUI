@@ -5,6 +5,8 @@ uiscaletrack_offset_diff	.byte 0
 uiscaletrack_storedsp		.byte 0
 uiscaletrack_storedep		.byte 0
 
+uiscaletrack_scrolling		.byte 0
+
 ; ----------------------------------------------------------------------------------------------------
 
 uiscaletrack_layout
@@ -44,6 +46,8 @@ uiscaletrack_doubleclick
 		rts
 
 uiscaletrack_release
+		lda #$00
+		sta uiscaletrack_scrolling
 		jsr uielement_release
 	   	rts
 
@@ -110,7 +114,9 @@ uiscaletrack_pressed_2
 		lda #$ff
 :		sta fooep2
 
-		; If the C flag is 0, then A (unsigned) < NUM (unsigned)
+		lda uiscaletrack_scrolling
+		bne uiscaletrack_handlescroll
+
 		lda uimouse_uielement_xpos+0
 		clc
 		adc #$08
@@ -128,6 +134,9 @@ insiderightofstartpuck							; no. are we on the left side of the right side of 
 :		cmp fooep1								; are we on the left side of the left side of the end puck?
 		bcs insiderightofendpuck
 
+uiscaletrack_handlescroll
+		lda #$01
+		sta uiscaletrack_scrolling
 		jsr uiscaletrack_setoffset
 		rts										; yes, return. this should scroll eventually
 
