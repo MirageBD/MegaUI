@@ -7,6 +7,8 @@ lda mouse_longpressedtimer
 uicnumericbutton_valuetoaddsubtract
 		.byte 0
 
+uicnumericbutton_temp	.word 0
+
 ; ----------------------------------------------------------------------------------------------------
 
 uicnumericbutton_layout
@@ -119,14 +121,29 @@ uicnumericbutton_decrease
 		ldy #$02
 		jsr ui_getelementdata_2
 
-		sec
-		ldy #$02
+		ldy #$02											; test if decrease will pass below low value
 		lda (zpptr1),y
+		sec
 		sbc uicnumericbutton_valuetoaddsubtract
-		sta (zpptr1),y
+		sta uicnumericbutton_temp+0
 		iny
 		lda (zpptr1),y
 		sbc #$00
+		sta uicnumericbutton_temp+1
+		bcs :+
+
+		ldy #$02
+		lda #$00
+		sta (zpptr1),y
+		iny
+		sta (zpptr1),y
+		rts
+
+:		ldy #$02
+		lda uicnumericbutton_temp+0
+		sta (zpptr1),y
+		iny
+		lda uicnumericbutton_temp+1
 		sta (zpptr1),y
 
 		jsr uicnumericbutton_storevalue
