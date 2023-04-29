@@ -300,24 +300,6 @@ uisampleview_rendersample
 		lda (zpptr1),y									; get end pos
 		sta uisampleview_endpos+2
 
-		; samplestart									3c 7c 02 00 (zpptrtmp2)
-		ldy #12
-		lda (zpptrtmp),y
-		adc uisampleview_sp+2
-		sta zpptrtmp2+0
-		iny
-		lda (zpptrtmp),y
-		adc uisampleview_sp+3
-		sta zpptrtmp2+1
-		iny
-		lda (zpptrtmp),y
-		adc #$00
-		sta zpptrtmp2+2
-		iny
-		lda (zpptrtmp),y
-		adc #$00
-		sta zpptrtmp2+3
-
 		; samplelength									00 00 3e 0e
 		lda #$00
 		sta uisampleview_samplength+0
@@ -347,6 +329,24 @@ uisampleview_rendersample
 		MATH_SUB uisampleview_ep, uisampleview_sp, uisampleview_newsamplength
 		; newrendstep = newlength / 256					00 10 cc 0d / 00 00 00 01 = 10 cc 0d 00
 		MATH_DIV uisampleview_newsamplength, uisampleview_sampviewlength, uisampleview_samprendstep
+
+		; samplestart									3c 7c 02 00 (zpptrtmp2)
+		ldy #12
+		lda (zpptrtmp),y
+		adc uisampleview_sp+2
+		sta zpptrtmp2+0
+		iny
+		lda (zpptrtmp),y
+		adc uisampleview_sp+3
+		sta zpptrtmp2+1
+		iny
+		lda (zpptrtmp),y
+		adc #$00
+		sta zpptrtmp2+2
+		iny
+		lda (zpptrtmp),y
+		adc #$00
+		sta zpptrtmp2+3
 
 
 		ldx #$00
