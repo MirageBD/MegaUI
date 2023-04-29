@@ -1,6 +1,7 @@
 ; ----------------------------------------------------------------------------------------------------
 
 uiscaletrack_startpos			.byte $00, $00, $00, $00
+uiscaletrack_endpos				.byte $00, $00, $00, $00
 
 ; ----------------------------------------------------------------------------------------------------
 
@@ -11,6 +12,10 @@ uiscaletrack_resetqvalues
 		sta uiscaletrack_startpos+1
 		sta uiscaletrack_startpos+2
 		sta uiscaletrack_startpos+3
+		sta uiscaletrack_endpos+0
+		sta uiscaletrack_endpos+1
+		sta uiscaletrack_endpos+2
+		sta uiscaletrack_endpos+3
 
 		rts
 
@@ -71,30 +76,118 @@ uiscaletrack_press
 		jsr ui_getelementdataptr_tmp
 
 		lda uimouse_uielement_xpos+1			; check position within track, set position
-		cmp #$ff
-		bne :+
+		beq :+
 		rts
 
-:		lda uimouse_uielement_xpos+0			; for now, put position in track in uiscaletrack_startpos
-		sta uiscaletrack_startpos+2
-		lda uimouse_uielement_xpos+1
-		sta uiscaletrack_startpos+3
+:
 
-		ldy #$02								; get pointer to element that holds the list in zpptr2
+		ldy #$02								; get pointer to sampleview
 		lda (zpptrtmp),y
 		sta zpptr2+0
 		iny
 		lda (zpptrtmp),y
 		sta zpptr2+1
 
-		; set start pos
 		ldy #$06
-		lda uiscaletrack_startpos+2
+		lda (zpptr2),y
+		sta foosp1
+		clc
+		adc #24
+		sta foosp2
+
+		ldy #$08
+		lda (zpptr2),y
+		sec
+		sbc #8
+		sta fooep1
+		clc
+		adc #24
+		bcc :+
+		lda #$ff
+:		sta fooep2
+
+		; If the C flag is 0, then A (unsigned) < NUM (unsigned)
+		lda uimouse_uielement_xpos+0
+		clc
+		adc #$08
+		bcc :+
+		lda #$ff
+:		cmp foosp1								; are we on the left side of the left side of the start puck?
+		bcs insiderightofstartpuck
+		rts										; yes, return
+
+insiderightofstartpuck							; no. are we on the left side of the right side of the start puck?
+		cmp foosp2
+		bcs :+
+		jmp setstartpos							; yes. set start pos
+
+:		cmp fooep1								; are we on the left side of the left side of the end puck?
+		bcs insiderightofendpuck
+		rts										; yes, return. this should scroll eventually
+
+insiderightofendpuck							; no. are we on the left side of the right side of the end puck?
+		cmp fooep2
+		bcs :+
+		jmp setendpos							; yes. set end pos
+
+:		rts
+
+setstartpos
+		lda uimouse_uielement_xpos+0
+		clc
+		adc #32
+		bcc :+
+		rts
+
+:		ldy #$08								; smaller than end point?
+		cmp (zpptr2),y
+		bcc :+
+		rts
+
+:		lda uimouse_uielement_xpos+0
+		sec
+		sbc #04
+		bcs :+
+		lda #$00
+
+:		ldy #$06
 		sta (zpptr2),y
 
 		jsr uielement_calluifunc
 
 		rts
+
+setendpos
+		lda uimouse_uielement_xpos+0
+		sec
+		sbc #32
+		bcs :+
+		rts
+
+:		ldy #$06								; bigger than start point?
+		cmp (zpptr2),y
+		bcs :+
+		rts
+
+:		lda uimouse_uielement_xpos+0
+		clc
+		adc #$04
+		bcc :+
+		lda #$ff
+
+:		ldy #$08
+		sta (zpptr2),y
+
+		jsr uielement_calluifunc
+
+		rts
+
+
+foosp1	.byte 0
+foosp2	.byte 0
+
+fooep1	.byte 0
+fooep2	.byte 0
 
 ; ----------------------------------------------------------------------------------------------------
 
@@ -158,11 +251,40 @@ uiscaletrack_draw_released_puck
 		asl ; mul by 2 to get screenptr offset
 
 		taz
-		lda #5*16+14
+		lda #4*16+6
 		sta [uidraw_scrptr],z
 		inz
 		inz
-		lda #5*16+15
+		lda #4*16+7
+		sta [uidraw_scrptr],z
+		inz
+		inz
+
+		ldy #$08								; get end pos
+		lda (zpptr2),y
+		and #%11111000
+		ldy #$06								; get start pos
+		sbc (zpptr2),y
+		lsr
+		lsr
+		lsr
+		
+		sec
+		sbc #$02
+		tax
+
+		lda #5*16+14
+:		sta [uidraw_scrptr],z
+		inz
+		inz
+		dex
+		bne :-
+
+		lda #4*16+6
+		sta [uidraw_scrptr],z
+		inz
+		inz
+		lda #4*16+7
 		sta [uidraw_scrptr],z
 
 		rts
