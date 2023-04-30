@@ -71,7 +71,8 @@ window3area
 		UIELEMENT_END
 
 window4area
-		UIELEMENT_ADD ui_logogroup,				group,				$ffff,					 0,  0, 80,  2,  0,		$ffff,						uidefaultflags	
+		UIELEMENT_ADD ui_logogroup,				group,				$ffff,					 0,  0, 80,  2,  0,		$ffff,						uidefaultflags
+		UIELEMENT_ADD lblstatus,				label,				$ffff,					 0,  1, 40,  1,  0,		lblstatus_data,				uidefaultflags
 		UIELEMENT_ADD ui_logo,					image,				$ffff,					69,  0, 11,  2,  0,		uilogo_data,				uidefaultflags
 		UIELEMENT_END
 
@@ -206,6 +207,8 @@ recordbutton_data			.word recordbutton_functions,										9*16+6, KEYBOARD_F7
 volumeslider_data			.word $ffff,														8
 
 cnumericbutton1_data		.word $ffff,														$1234, $0000, $babe, 2		; value, address, number of bytes
+
+lblstatus_data				.word $ffff,														uitxt_status
 
 lblfinetune_data			.word $ffff,														uitxt_finetune
 lblvolume_data				.word $ffff,														uitxt_volume

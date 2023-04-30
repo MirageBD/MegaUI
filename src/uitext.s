@@ -16,6 +16,8 @@ uitxt_samples		.byte "samples", 0
 uitxt_edit			.byte "edit", 0
 uitxt_sample		.byte "sample", 0
 
+uitxt_status		.byte "status", $3a, " all right", 0
+
 uitxt_checkbox		.byte "checkbox", 0
 uitxt_radiobutton	.byte "radiobtn", 0
 
