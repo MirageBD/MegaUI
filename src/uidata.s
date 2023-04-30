@@ -66,8 +66,8 @@ window2area
 
 window3area
 		UIELEMENT_ADD ui_tabgroup,				group,				tabgroupchildren,		 0,  0,  80, 2,  0,		tabgroup1_data,				uidefaultflags	
-		UIELEMENT_ADD ui_tab1_window,			window,				tab1_contents,			 0,  2, 80, 24,  0,		$ffff,						uidefaultflags	
-		UIELEMENT_ADD ui_tab2_window,			window,				tab2_contents,			 0,  2, 80, 24,  0,		$ffff,						%00000001	
+		UIELEMENT_ADD ui_tab1_window,			window,				tab1_contents,			 0,  2, 80, 23,  0,		$ffff,						uidefaultflags	
+		UIELEMENT_ADD ui_tab2_window,			window,				tab2_contents,			 0,  2, 80, 23,  0,		$ffff,						%00000001	
 		UIELEMENT_END
 
 window4area
@@ -126,7 +126,7 @@ tab2_contents
 		UIELEMENT_ADD nbrepeatlen,				cnumericbutton,		$ffff,					20, 13,  9,  3,  0,		nbrepeatlen_data,			%00000001
 
 		UIELEMENT_ADD ui_sampleview,			nineslice,			sampleviewelements,		33,  5, 34, 11,  0,		$ffff,						%00000001
-		UIELEMENT_ADD ui_piano,					piano,				$ffff,					36, 17, 34,  5,  0,		$ffff,						%00000001
+		UIELEMENT_ADD ui_piano,					piano,				$ffff,					36, 17, 34,  5,  0,		piano_data,					%00000001
 
 		UIELEMENT_END
 
@@ -246,9 +246,10 @@ filetab3_data				.word filetab_functions,											2, ui_filetab3_window, uitxt
 tab1_data					.word tab_functions,												0, ui_tab1_window, uitxt_edit
 tab2_data					.word tab_functions,												1, ui_tab2_window, uitxt_sample
 
-sampleview1_data			.word $ffff,														2, 0, 0, 255					; sample index, sample length, startpos, endpos
-
+sampleview1_data			.word $ffff,														2, 0, 255						; sample index, startpos, endpos
 samplescaletrack_data		.word scaletrack_functions,											sampleview1_data				; ptr to sampleview
+
+piano_data					.word $ffff,														2								; sample index
 
 ; ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ listeners
 
@@ -335,29 +336,34 @@ userfunc_populatesample
 		tax
 		inx															; skip 1 because sample 0 doesn't exist
 
-		UICORE_SELECT_ELEMENT_1 sampleview1_data					; feed selected index into sampleview element
-		txa
+		UICORE_SELECT_ELEMENT_1 sampleview1_data
+		txa															; feed selected index into sampleview element
+		ldy #$02
+		sta (zpptr1),y	
+
+		lda #$00													; set start and end pos 0, 255
+		ldy #$04
+		sta (zpptr1),y
+		lda #$ff
+		ldy #$06
+		sta (zpptr1),y
+
+		UICORE_SELECT_ELEMENT_1 piano_data
+		txa															; feed selected index into piano element
 		ldy #$02
 		sta (zpptr1),y	
 
 		asl
 		tax
-		lda idxPepIns0+0,x
+		lda idxPepIns0+0,x											; put pointer to instrument struct in zpptrtmp
 		sta zpptrtmp+0
 		lda idxPepIns0+1,x
 		sta zpptrtmp+1
 
-		lda #$00													; set start and end pos 0, 255
-		ldy #$06
-		sta (zpptr1),y
-		lda #$ff
-		ldy #$08
-		sta (zpptr1),y
-
-		ldy #4
+		ldy #4														; feed volume into volume button
 		lda (zpptrtmp),y
 		sta nbvolume_data+2
-		clc
+		clc															; feed address to original volume location into volume button
 		lda zpptrtmp+0
 		adc #4
 		sta nbvolume_data+4
@@ -379,13 +385,9 @@ userfunc_populatesample
 		ldy #6
 		lda (zpptrtmp),y
 		sta nblength_data+2
-		ldy #$04
-		sta (zpptr1),y
 		ldy #7
 		lda (zpptrtmp),y
 		sta nblength_data+3
-		ldy #$05
-		sta (zpptr1),y
 		clc
 		lda zpptrtmp+0
 		adc #6
@@ -421,6 +423,8 @@ userfunc_populatesample
 		lda zpptrtmp+1
 		adc #0
 		sta nbrepeatlen_data+5
+
+
 
 		UICORE_CALLELEMENTFUNCTION sampleview1, uisampleview_draw
 		UICORE_CALLELEMENTFUNCTION samplescaletrack, uiscaletrack_draw

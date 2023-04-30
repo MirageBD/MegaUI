@@ -40,6 +40,19 @@ uipiano_release
 		jsr uielement_release
 	   	rts
 
+uipiano_press
+		jsr uimouse_calculate_pos_in_uielement
+		jsr ui_getelementdataptr_tmp
+
+		lda uimouse_uielement_xpos+1
+		cmp #$ff
+		bne :+
+		rts
+
+:		jsr uipiano_draw
+
+		rts
+
 ; ----------------------------------------------------------------------------------------------------
 
 uipiano_draw
@@ -128,29 +141,14 @@ uipiano_draw_bottomrow
 
 ; ----------------------------------------------------------------------------------------------------
 
-uipiano_press
-		jsr uimouse_calculate_pos_in_uielement
-		jsr ui_getelementdataptr_tmp
-
-		lda uimouse_uielement_xpos+1
-		cmp #$ff
-		bne :+
-		rts
-
-:		jsr uipiano_draw
-
-		rts
-
-; ----------------------------------------------------------------------------------------------------
-
 keyindices
 		.repeat 4, I
 			.byte I*14+1, I*14+2, I*14+3, I*14+4, I*14+5, I*14+7, I*14+8, I*14+9, I*14+10, I*14+11, I*14+12, I*14+13
 		.endrepeat
 keys
 		.byte 0, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1 ; 1 = 1 or 2
-		.byte 0, 2, 1, 1, 1, 2, 0, 1, 1, 2, 1, 1, 1, 1 ; 1 = 1 or 2
-		.byte 0, 1, 2, 1, 2, 1, 0, 1, 2, 1, 1, 1, 1, 1 ; 1 = 1 or 2
+		.byte 0, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1 ; 1 = 1 or 2
+		.byte 0, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1 ; 1 = 1 or 2
 		.byte 0, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1 ; 1 = 1 or 2
 
 		;.byte %000101, %000110, %001001, %001010									;      $05, $06,      $09, $0a

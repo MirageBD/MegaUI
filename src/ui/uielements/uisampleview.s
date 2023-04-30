@@ -149,7 +149,7 @@ uisampleview_draw
 		ora #%00111100
 		sta $d077										; Sprite V400 Y position MSBs
 
-		lda #$50										; sprite y positions
+		lda #$58										; sprite y positions
 		sta $d000+2*2+1
 		sta $d000+3*2+1
 		sta $d000+4*2+1
@@ -177,12 +177,23 @@ uisampleview_draw
 
 		ldy #$00										; dummy to get zpptr1 data
 		jsr ui_getelementdata_2
-		ldy #$05
-		lda (zpptr1),y									; skip drawing if sample length == 0
-		bne :+
-		ldy #$04
+		ldy #$02										; get sample index
 		lda (zpptr1),y
+
+		asl
+		tax
+		lda idxPepIns0+0,x
+		sta zpptrtmp2+0
+		lda idxPepIns0+1,x
+		sta zpptrtmp2+1
+
+		ldy #6											; skip drawing if sample length == 0
+		lda (zpptrtmp2),y
 		bne :+
+		ldy #7
+		lda (zpptrtmp2),y
+		bne :+
+		jsr uisampleview_copytosprites
 		rts
 :
 		jsr uisampleview_drawbackground
@@ -298,15 +309,15 @@ uisampleview_rendersample
 		lda idxPepIns0+1,x
 		sta zpptrtmp+1
 
-		ldy #$06
+		ldy #$04
 		lda (zpptr1),y									; get start pos
 		sta uisampleview_startpos+2
 
-		ldy #$08
+		ldy #$06
 		lda (zpptr1),y									; get end pos
 		sta uisampleview_endpos+2
 
-		; samplelength									00 00 3e 0e
+		; samplelength									; 00 00 3e 0e
 		lda #$00
 		sta uisampleview_samplength+0
 		sta uisampleview_samplength+1
@@ -317,26 +328,26 @@ uisampleview_rendersample
 		lda (zpptrtmp),y
 		sta uisampleview_samplength+3
 
-		; tracklength									00 00 00 01
+		; tracklength									; 00 00 00 01
 		sta uisampleview_sampviewlength+0
 		sta uisampleview_sampviewlength+1
 		sta uisampleview_sampviewlength+2
 		lda #$01
 		sta uisampleview_sampviewlength+3
 
-		; rendstep = samplelength / tracklength			00 00 3e 0e / 00 00 00 01 = 00 3e 0e 00
+		; rendstep = samplelength / tracklength			; 00 00 3e 0e / 00 00 00 01 = 00 3e 0e 00
 		MATH_DIV uisampleview_samplength, uisampleview_sampviewlength, uisampleview_samprendstep
-		; sp = startpos * rendstep = sp					00 00 08 00 * 00 3e 0e 00 = 00 f0 71 00
+		; sp = startpos * rendstep = sp					; 00 00 08 00 * 00 3e 0e 00 = 00 f0 71 00
 		; from now on, sp is used as the new start addresss
 		MATH_MUL uisampleview_startpos, uisampleview_samprendstep, uisampleview_sp
-		; ep = endpos * rendstep = ep					00 00 00 01 * 00 3e 0e 00 = 00 00 3e 0e
+		; ep = endpos * rendstep = ep					; 00 00 00 01 * 00 3e 0e 00 = 00 00 3e 0e
 		MATH_MUL uisampleview_endpos, uisampleview_samprendstep, uisampleview_ep
-		; newlength = ep - sp							00 00 3e 0e - 00 f0 71 00 = 00 10 cc 0d
+		; newlength = ep - sp							; 00 00 3e 0e - 00 f0 71 00 = 00 10 cc 0d
 		MATH_SUB uisampleview_ep, uisampleview_sp, uisampleview_newsamplength
-		; newrendstep = newlength / 256					00 10 cc 0d / 00 00 00 01 = 10 cc 0d 00
+		; newrendstep = newlength / 256					; 00 10 cc 0d / 00 00 00 01 = 10 cc 0d 00
 		MATH_DIV uisampleview_newsamplength, uisampleview_sampviewlength, uisampleview_samprendstep
 
-		; samplestart									3c 7c 02 00 (zpptrtmp2)
+		; samplestart									; 3c 7c 02 00 (zpptrtmp2)
 		ldy #12
 		lda (zpptrtmp),y
 		adc uisampleview_sp+2
@@ -611,7 +622,7 @@ uisampleview_drawbackground
 
 		ldx uidraw_width
 
-		ldz #$00						; draw center of nineslice
+		ldz #$00
 		lda #9*16+9
 :		sta [uidraw_scrptr],z
 		inz

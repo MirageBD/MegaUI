@@ -67,17 +67,17 @@ uiscaletrack_press
 		jsr uimouse_calculate_pospressed_in_uielement	; record first pressed position
 
 		jsr ui_getelementdataptr_tmp
-		ldy #$02								; get pointer to sampleview
+		ldy #$02										; get pointer to sampleview
 		lda (zpptrtmp),y
 		sta zpptr2+0
 		iny
 		lda (zpptrtmp),y
 		sta zpptr2+1
 
-		ldy #$06
+		ldy #$04
 		lda (zpptr2),y
 		sta uiscaletrack_storedsp
-		ldy #$08
+		ldy #$06
 		lda (zpptr2),y
 		sta uiscaletrack_storedep
 
@@ -98,14 +98,14 @@ uiscaletrack_pressed_2
 		lda (zpptrtmp),y
 		sta zpptr2+1
 
-		ldy #$06								; get start position
+		ldy #$04								; get start position
 		lda (zpptr2),y
 		sta foosp1
 		clc
 		adc #24
 		sta foosp2
 
-		ldy #$08								; get end position
+		ldy #$06								; get end position
 		lda (zpptr2),y
 		sec
 		sbc #8
@@ -156,7 +156,7 @@ setstartpos
 		bcc :+
 		rts
 
-:		ldy #$08								; smaller than end point?
+:		ldy #$06								; smaller than end point?
 		cmp (zpptr2),y
 		bcc :+
 		rts
@@ -167,7 +167,7 @@ setstartpos
 		bcs :+
 		lda #$00
 
-:		ldy #$06
+:		ldy #$04
 		sta (zpptr2),y
 
 		jsr uielement_calluifunc
@@ -181,7 +181,7 @@ setendpos
 		bcs :+
 		rts
 
-:		ldy #$06								; bigger than start point?
+:		ldy #$04								; bigger than start point?
 		cmp (zpptr2),y
 		bcs :+
 		rts
@@ -192,7 +192,7 @@ setendpos
 		bcc :+
 		lda #$ff
 
-:		ldy #$08
+:		ldy #$06
 		sta (zpptr2),y
 
 		jsr uielement_calluifunc
@@ -213,7 +213,7 @@ uiscaletrack_setoffset
 		sbc uimouse_uielement_xpos_pressed+0
 		sta uiscaletrack_offset_diff+0
 		lda uimouse_uielement_xpos+1
-		sbc #$00 ; uimouse_uielement_xpos_pressed+1
+		sbc #$00 							; uimouse_uielement_xpos_pressed+1
 		sta uiscaletrack_offset_diff+1
 
 
@@ -221,7 +221,7 @@ uiscaletrack_setoffset
 		cmp #$ff
 		beq sct_offsetnegative
 
-		ldy #$06							; offset is positive - check if endpoint is above 255 or not
+		ldy #$04							; offset is positive - check if endpoint is above 255 or not
 		clc
 		lda uiscaletrack_storedep
 		adc uiscaletrack_offset_diff
@@ -230,9 +230,9 @@ uiscaletrack_setoffset
 
 :		sta (zpptr2),y						; not above 255 - safe to set sp and ep
 
-		ldy #$08
-		sta (zpptr2),y
 		ldy #$06
+		sta (zpptr2),y
+		ldy #$04
 		clc
 		lda uiscaletrack_storedsp
 		adc uiscaletrack_offset_diff
@@ -240,7 +240,7 @@ uiscaletrack_setoffset
 		bra uiscaletrack_setoffset_end
 
 sct_offsetnegative
-		ldy #$06							; offset is negative - check if startpoint is below 0 or not
+		ldy #$04							; offset is negative - check if startpoint is below 0 or not
 		clc
 		lda uiscaletrack_storedsp
 		adc uiscaletrack_offset_diff
@@ -248,7 +248,7 @@ sct_offsetnegative
 		rts
 :
 		sta (zpptr2),y						; not below 0 - safe to set sp and ep
-		ldy #$08
+		ldy #$06
 		clc
 		lda uiscaletrack_storedep
 		adc uiscaletrack_offset_diff
@@ -313,7 +313,7 @@ uiscaletrack_draw_released_puck
 		lda (zpptrtmp),y
 		sta zpptr2+1
 
-		ldy #$06								; get start pos
+		ldy #$04								; get start pos
 		lda (zpptr2),y
 		lsr
 		lsr
@@ -331,10 +331,10 @@ uiscaletrack_draw_released_puck
 		inz
 		inz
 
-		ldy #$08								; get end pos
+		ldy #$06								; get end pos
 		lda (zpptr2),y
 		and #%11111000
-		ldy #$06								; get start pos
+		ldy #$04								; get start pos
 		sbc (zpptr2),y
 		and #%11111000
 		lsr
