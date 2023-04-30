@@ -6,7 +6,7 @@ audiodma_channel    .byte $00
 
 audiodma_playsample
 
-		lda mpChannel
+		lda audiodma_channel
 		asl
 		asl
 		asl
@@ -47,10 +47,10 @@ audiodma_volume
 		lda #%10000010									; play DMA (CHXEN)  with loop enabled (CHXLOOP), 8 bit samples (CHXSBITS) (11=16, 10=8, 01=upper nybl, 00=lower nybl)
 		sta $d720,x										; D720      CHXEN CHXLOOP CHXSGN CHXSINE CHXSTP – CHXSBITS
 
-		inc mpChannel
-		lda mpChannel
+		inc audiodma_channel
+		lda audiodma_channel
 		and #$03
-		sta mpChannel
+		sta audiodma_channel
 
 		rts
 
