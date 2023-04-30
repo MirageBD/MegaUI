@@ -9,9 +9,9 @@ root
 windows
 
 		UIELEMENT_ADD ui_windows0,				window,				window0area,			 0,  0, 80,  3,  0,		$ffff,						uidefaultflags
-		UIELEMENT_ADD ui_windows1,				window,				window1area,			 0,  3, 49, 18,  0,		$ffff,						uidefaultflags
-		UIELEMENT_ADD ui_windows2,				window,				window2area,			41,  4, 40, 18, 20,		$ffff,						uidefaultflags
-		UIELEMENT_ADD ui_windows3,				window,				window3area,			 0, 21, 80, 25, 20,		$ffff,						uidefaultflags
+		UIELEMENT_ADD ui_windows1,				window,				window1area,			 0,  3, 49, 19,  0,		$ffff,						uidefaultflags
+		UIELEMENT_ADD ui_windows2,				window,				window2area,			41,  4, 40, 19, 20,		$ffff,						uidefaultflags
+		UIELEMENT_ADD ui_windows3,				window,				window3area,			 0, 22, 80, 23, 20,		$ffff,						uidefaultflags
 		UIELEMENT_ADD ui_windows4,				window,				window4area,			 0, 48, 80,  2,  0,		$ffff,						uidefaultflags
 		UIELEMENT_END
 
@@ -42,9 +42,9 @@ window0area
 window1area
 
 		UIELEMENT_ADD ui_filetabgroup,			group,				filetabgroupchildren,	 0,  0, 80,  2,  0,		filetabgroup1_data,			uidefaultflags	
-		UIELEMENT_ADD ui_filetab1_window,		window,				filetab1_contents,		 0,  2, 40, 15,  0,		$ffff,						uidefaultflags	
-		UIELEMENT_ADD ui_filetab2_window,		window,				filetab2_contents,		 0,  2, 40, 15,  0,		$ffff,						%00000001	
-		UIELEMENT_ADD ui_filetab3_window,		window,				filetab3_contents,		 0,  2, 40, 15,  0,		$ffff,						%00000001	
+		UIELEMENT_ADD ui_filetab1_window,		window,				filetab1_contents,		 0,  2, 40, 16,  0,		$ffff,						uidefaultflags	
+		UIELEMENT_ADD ui_filetab2_window,		window,				filetab2_contents,		 0,  2, 40, 16,  0,		$ffff,						%00000001	
+		UIELEMENT_ADD ui_filetab3_window,		window,				filetab3_contents,		 0,  2, 40, 16,  0,		$ffff,						%00000001	
 
 		;UIELEMENT_ADD checkboxlabel1,			label,				$ffff,					20,  9,  8,  1,  0,		checkboxlabel_data,			uidefaultflags
 		;UIELEMENT_ADD checkboxlabel2,			label,				$ffff,					20, 11,  8,  1,  0,		checkboxlabel_data,			uidefaultflags
@@ -87,7 +87,7 @@ filetabgroupchildren
 ; ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ child windows
 
 filetab1_contents
-		UIELEMENT_ADD fa1nineslice,				nineslice,			filearea1elements,		 1,  0, 38, 16,  0,		$ffff,						uidefaultflags
+		UIELEMENT_ADD fa1nineslice,				nineslice,			filearea1elements,		 1,  0, 38, 17,  0,		$ffff,						uidefaultflags
 		UIELEMENT_END
 
 filetab2_contents
@@ -133,8 +133,8 @@ tab2_contents
 ; ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ child windows
 
 filearea1elements
-		UIELEMENT_ADD fa1filebox,				filebox,			$ffff,					 3,  2, -7, -3,  0,		fa1filebox_data,			uidefaultflags
-		UIELEMENT_ADD fa1scrollbartrack,		scrolltrack,		$ffff,					-3,  2,  2, -3,  0,		fa1scrollbar_data,			uidefaultflags
+		UIELEMENT_ADD fa1filebox,				filebox,			$ffff,					 3,  2, -7, -4,  0,		fa1filebox_data,			uidefaultflags
+		UIELEMENT_ADD fa1scrollbartrack,		scrolltrack,		$ffff,					-3,  2,  2, -4,  0,		fa1scrollbar_data,			uidefaultflags
 		UIELEMENT_END
 
 ; ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ data
