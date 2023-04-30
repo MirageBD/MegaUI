@@ -114,6 +114,7 @@ $(EXE_DIR)/boot.o:	$(SRC_DIR)/boot.s \
 					$(UIELT_SRC_DIR)/uigroup.s \
 					$(UIELT_SRC_DIR)/uisampleview.s \
 					$(UIELT_SRC_DIR)/uiscaletrack.s \
+					$(UIELT_SRC_DIR)/uipiano.s \
 					Makefile Linkfile
 	$(AS) $(ASFLAGS) -o $@ $<
 

@@ -71,6 +71,7 @@ basicend	.byte 0
 .include "ui/uielements/uichannelview.s"
 .include "ui/uielements/uisampleview.s"
 .include "ui/uielements/uiscaletrack.s"
+.include "ui/uielements/uipiano.s"
 
 
 .include "uidata.s"

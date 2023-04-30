@@ -112,7 +112,7 @@ uitab_drawactive
 		adc #3
 		tay
 
-:		ldz #$00
+		ldz #$00
 		tya
 		sta [uidraw_scrptr],z					; draw left glyph
 		inz
@@ -162,7 +162,7 @@ uitab_drawinactive
 		adc #3
 		tay
 
-:		ldz #$00
+		ldz #$00
 		tya
 		sta [uidraw_scrptr],z
 		inz

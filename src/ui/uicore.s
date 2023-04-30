@@ -65,6 +65,7 @@ q160						.dword 160
 		channelview
 		sampleview
 		scaletrack
+		piano
 .endenum
 
 .enum UIEVENTTYPE
@@ -178,6 +179,7 @@ ui_element_indiceshi
 			.byte <.ident(.sprintf("uichannelview_%s",		.string(eventtype))), >.ident(.sprintf("uichannelview_%s",		.string(eventtype)))
 			.byte <.ident(.sprintf("uisampleview_%s",		.string(eventtype))), >.ident(.sprintf("uisampleview_%s",		.string(eventtype)))
 			.byte <.ident(.sprintf("uiscaletrack_%s",		.string(eventtype))), >.ident(.sprintf("uiscaletrack_%s",		.string(eventtype)))
+			.byte <.ident(.sprintf("uipiano_%s",			.string(eventtype))), >.ident(.sprintf("uipiano_%s",			.string(eventtype)))
 .endmacro
 
 		IMPLEMENT_UIEVENT layout
