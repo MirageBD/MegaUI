@@ -14,20 +14,20 @@ audiodma_playsample
 		tax
 
 audiodma_samplestart1
-		lda #<.loword($20000+36568+22084)
+		lda #<.loword($babe)
 		sta $d72a,x										; CHXCURADDRL
 audiodma_samplestart2
-		lda #>.loword($20000+36568+22084)
+		lda #>.loword($babe)
 		sta $d72b,x										; CHXCURADDRC
 audiodma_samplestart3
-		lda #<.hiword($20000+36568+22084)
+		lda #<.hiword($babe)
 		sta $d72c,x										; CHXCURADDRM
 
 audiodma_sampleend1
-		lda #<($20000+36568+22084+28956)
+		lda #<($babe)
 		sta $d727,x										; CHXTADDRL
 audiodma_sampleend2
-		lda #<($20000+36568+22084+28956)
+		lda #<($babe)
 		sta $d728,x										; CHXTADDRM
 
 		lda audiodma_freql,y
