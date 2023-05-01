@@ -125,6 +125,8 @@ tab2_contents
 		UIELEMENT_ADD nbrepeat,					cnumericbutton,		$ffff,					20, 11,  9,  3,  0,		nbrepeat_data,				%00000001
 		UIELEMENT_ADD nbrepeatlen,				cnumericbutton,		$ffff,					20, 13,  9,  3,  0,		nbrepeatlen_data,			%00000001
 
+		UIELEMENT_ADD sampledivider,			divider,			$ffff,					30,  2,  1, 20,  0,		$ffff,						%00000001
+
 		UIELEMENT_ADD ui_sampleview,			nineslice,			sampleviewelements,		33,  5, 34, 11,  0,		$ffff,						%00000001
 		UIELEMENT_ADD ui_piano,					piano,				$ffff,					36, 17, 34,  5,  0,		piano_data,					%00000001
 

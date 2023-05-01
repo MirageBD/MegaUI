@@ -66,6 +66,7 @@ basicend	.byte 0
 .include "ui/uielements/uitextbox.s"
 .include "ui/uielements/uitab.s"
 .include "ui/uielements/uigroup.s"
+.include "ui/uielements/uidivider.s"
 
 .include "ui/uielements/uipatternview.s"
 .include "ui/uielements/uisequenceview.s"

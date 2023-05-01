@@ -59,6 +59,7 @@ q160						.dword 160
 		textbox
 		tab
 		group
+		divider
 
 		patternview
 		sequenceview
@@ -173,6 +174,7 @@ ui_element_indiceshi
 			.byte <.ident(.sprintf("uitextbox_%s",			.string(eventtype))), >.ident(.sprintf("uitextbox_%s",			.string(eventtype)))
 			.byte <.ident(.sprintf("uitab_%s",				.string(eventtype))), >.ident(.sprintf("uitab_%s",				.string(eventtype)))
 			.byte <.ident(.sprintf("uigroup_%s",			.string(eventtype))), >.ident(.sprintf("uigroup_%s",			.string(eventtype)))
+			.byte <.ident(.sprintf("uidivider_%s",			.string(eventtype))), >.ident(.sprintf("uidivider_%s",			.string(eventtype)))
 
 			.byte <.ident(.sprintf("uipatternview_%s",		.string(eventtype))), >.ident(.sprintf("uipatternview_%s",		.string(eventtype)))
 			.byte <.ident(.sprintf("uisequenceview_%s",		.string(eventtype))), >.ident(.sprintf("uisequenceview_%s",		.string(eventtype)))
@@ -181,6 +183,8 @@ ui_element_indiceshi
 			.byte <.ident(.sprintf("uiscaletrack_%s",		.string(eventtype))), >.ident(.sprintf("uiscaletrack_%s",		.string(eventtype)))
 			.byte <.ident(.sprintf("uipiano_%s",			.string(eventtype))), >.ident(.sprintf("uipiano_%s",			.string(eventtype)))
 .endmacro
+
+
 
 		IMPLEMENT_UIEVENT layout
 		IMPLEMENT_UIEVENT draw
