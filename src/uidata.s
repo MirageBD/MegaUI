@@ -11,7 +11,7 @@ windows
 		UIELEMENT_ADD ui_windows0,				window,				window0area,			 0,  0, 80,  3,  0,		$ffff,						uidefaultflags
 		UIELEMENT_ADD ui_windows1,				window,				window1area,			 0,  3, 49, 19,  0,		$ffff,						uidefaultflags
 		UIELEMENT_ADD ui_windows2,				window,				window2area,			41,  4, 40, 19, 20,		$ffff,						uidefaultflags
-		UIELEMENT_ADD ui_windows3,				window,				window3area,			 0, 22, 80, 23, 20,		$ffff,						uidefaultflags
+		UIELEMENT_ADD ui_windows3,				window,				window3area,			 0, 22, 80, 25, 20,		$ffff,						uidefaultflags
 		UIELEMENT_ADD ui_windows4,				window,				window4area,			 0, 48, 80,  2,  0,		$ffff,						uidefaultflags
 		UIELEMENT_END
 
@@ -438,7 +438,47 @@ userfunc_populatesample
 		rts
 
 userfunc_openfile
-		rts
+		jsr uifilebox_getstringptr									; get filename/dir string
+
+		ldx #$00
+		ldy #$02													; skip attributes and file type
+:		lda (zpptrtmp),y
+		beq :+
+		and #$7f
+		sta sdc_transferbuffer,x
+		iny
+		inx
+		bra :-
+
+:		ldy #$00													; get attribute and check if it's a directory
+		lda (zpptrtmp),y
+		and #%00010000
+		cmp #%00010000
+		bne :+
+
+		jsr sdc_chdir
+		jsr uifilebox_opendir
+		jsr uifilebox_draw
+		bra :++
+
+:		jsr sdc_openfile
+
+		lda #<.loword(moddata)
+		sta adrPepMODL+0
+		lda #>.loword(moddata)
+		sta adrPepMODL+1
+		lda #<.hiword(moddata)
+		sta adrPepMODH+0
+		lda #>.hiword(moddata)
+		sta adrPepMODH+1
+		jsr peppitoInit
+
+		UICORE_CALLELEMENTFUNCTION la1listbox, uilistbox_startaddentries
+		jsr populate_samplelist
+		UICORE_CALLELEMENTFUNCTION la1listbox, uilistbox_endaddentries
+		UICORE_CALLELEMENTFUNCTION la1listbox, uilistbox_draw
+
+:		rts
 
 peppitoPlaying
 		.byte $00

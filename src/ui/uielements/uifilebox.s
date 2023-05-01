@@ -51,10 +51,10 @@ uifilebox_opendir
 
 		; turn off disk access when running in xemu
 
-.if megabuild = 1
-.else
-		rts
-.endif		
+;.if megabuild = 1
+;.else
+;		rts
+;.endif		
 		
 		jsr uifilebox_startaddentries
 
@@ -91,42 +91,8 @@ uifilebox_longpress
 		rts
 
 uifilebox_doubleclick
-		jsr uifilebox_getstringptr									; get filename/dir string
-
-		ldx #$00
-		ldy #$02													; skip attributes and file type
-:		lda (zpptrtmp),y
-		beq :+
-		and #$7f
-		sta sdc_transferbuffer,x
-		iny
-		inx
-		bra :-
-:		sta sdc_transferbuffer,x
-
-		ldy #$00													; get attribute and check if it's a directory
-		lda (zpptrtmp),y
-		and #%00010000
-		cmp #%00010000
-		bne :+
-
-		jsr sdc_chdir
-		jsr uifilebox_opendir
-		jsr uifilebox_draw
-		bra :++
-
-:		jsr sdc_openfile
-		lda #<.loword(moddata)
-		sta adrPepMODL+0
-		lda #>.loword(moddata)
-		sta adrPepMODL+1
-		lda #<.hiword(moddata)
-		sta adrPepMODH+0
-		lda #>.hiword(moddata)
-		sta adrPepMODH+1
-		jsr peppitoInit
-
-:		rts
+		jsr uielement_calluserfunc
+		rts
 
 uifilebox_release
 		jsr uilistbox_setselectedindex
@@ -144,10 +110,10 @@ uifilebox_endaddentries
 		rts
 
 uifilebox_getstringptr
-		ldy #$04										; put start of text list into zpptr2
+		ldy #$06										; put start of text list into zpptr2
 		jsr ui_getelementdata_2
 
-		ldy #$02										; get pointer to scrollbar data
+		ldy #$04										; get pointer to scrollbar data
 		lda (zpptr1),y
 		sta zpptrtmp+0
 		iny

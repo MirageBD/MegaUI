@@ -41,6 +41,7 @@ uipiano_release
 	   	rts
 
 uipiano_press
+
 		jsr uimouse_calculate_pos_in_uielement
 		jsr ui_getelementdataptr_tmp
 
@@ -82,7 +83,24 @@ uipiano_press
 		adc (zpptrtmp2),y
 		sta audiodma_sampleend2+1
 
-		ldy #$00										; y=0 = play C-3 note
+		; figure out which note to play
+		lda uimouse_uielement_xpos+0
+		and #%00000111
+		tax
+		lda uimouse_uielement_xpos+0
+		lsr
+		and #%11111100
+		clc
+		adc uipiano_positioninkey,x
+		tax
+		lda uimouse_uielement_ypos+0
+		cmp #24
+		bpl :+
+		lda uipiano_toprow,x
+		bra :++
+:		lda uipiano_bottomrow,x
+:		tay												; y=0 = play C-3 note
+
 		jsr audiodma_playsample
 
 		jsr uipiano_draw
@@ -176,6 +194,48 @@ uipiano_draw_bottomrow
 		rts
 
 ; ----------------------------------------------------------------------------------------------------
+
+/*
+		lda uimouse_uielement_xpos+0
+		lsr
+		tax
+		lda uimouse_uielement_xpos+0
+		and #%00000111
+		clc
+		adc uipiano_positioninkey,x
+		tax
+		lda uipiano_bottomrow,x
+*/
+
+		; x = (xpos & 7)
+		; x = uipiano_positioninkey,x		->    x = 0, 1, 2
+		; x = uipiano_toprow,x				->    x = 001, 123, 344,556, 567, 8910, 101111
+		; y = (xpos << 1)
+
+uipiano_positioninkey
+		.byte 0, 0, 0, 1, 1, 2, 2, 2
+
+uipiano_toprow
+		.repeat 4, I
+			.byte (I*12)+ 0, (I*12)+ 0, (I*12)+ 1, 0
+			.byte (I*12)+ 1, (I*12)+ 2, (I*12)+ 3, 0
+			.byte (I*12)+ 3, (I*12)+ 4, (I*12)+ 4, 0
+			.byte (I*12)+ 5, (I*12)+ 5, (I*12)+ 6, 0
+			.byte (I*12)+ 6, (I*12)+ 7, (I*12)+ 8, 0
+			.byte (I*12)+ 8, (I*12)+ 9, (I*12)+10, 0
+			.byte (I*12)+10, (I*12)+11, (I*12)+11, 0
+		.endrepeat
+
+uipiano_bottomrow
+		.repeat 4, I
+			.byte (I*12)+ 0, (I*12)+ 0, (I*12)+ 0, 0
+			.byte (I*12)+ 2, (I*12)+ 2, (I*12)+ 2, 0
+			.byte (I*12)+ 4, (I*12)+ 4, (I*12)+ 4, 0
+			.byte (I*12)+ 5, (I*12)+ 5, (I*12)+ 5, 0
+			.byte (I*12)+ 7, (I*12)+ 7, (I*12)+ 7, 0
+			.byte (I*12)+ 9, (I*12)+ 9, (I*12)+ 9, 0
+			.byte (I*12)+11, (I*12)+11, (I*12)+11, 0
+		.endrepeat
 
 uipiano_keyindices
 		.repeat 4, I
