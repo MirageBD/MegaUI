@@ -34,13 +34,30 @@ uipiano_keyrelease
 		rts
 
 uipiano_doubleclick
+		jsr uipiano_resetkeystounpressed
+		jsr uipiano_draw
 		rts
 
 uipiano_release
 		jsr uielement_release
+
+		jsr uipiano_resetkeystounpressed
+		jsr uipiano_draw
+
 	   	rts
 
+uipiano_resetkeystounpressed
+		ldx #$00
+:		lda uipiano_keysreset,x
+		sta uipiano_keys,X
+		inx
+		cpx #4*14
+		bne :-
+		rts
+
 uipiano_press
+
+		jsr uipiano_resetkeystounpressed
 
 		jsr uimouse_calculate_pos_in_uielement
 		jsr ui_getelementdataptr_tmp
@@ -100,6 +117,11 @@ uipiano_press
 		bra :++
 :		lda uipiano_bottomrow,x
 :		tay												; y=0 = play C-3 note
+
+		lda uipiano_notetokey,y
+		tax
+		lda #$02
+		sta uipiano_keys,x
 
 		jsr audiodma_playsample
 
@@ -237,11 +259,18 @@ uipiano_bottomrow
 			.byte (I*12)+11, (I*12)+11, (I*12)+11, 0
 		.endrepeat
 
-uipiano_keyindices
+uipiano_notetokey
 		.repeat 4, I
-			.byte I*14+1, I*14+2, I*14+3, I*14+4, I*14+5, I*14+7, I*14+8, I*14+9, I*14+10, I*14+11, I*14+12, I*14+13
+			.byte (I*14)+1, (I*14)+2, (I*14)+3, (I*14)+4, (I*14)+5, (I*14)+7, (I*14)+8, (I*14)+9, (I*14)+10 , (I*14)+11, (I*14)+12, (I*14)+13
 		.endrepeat
+
 uipiano_keys
+		.byte 0, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1 ; 1 = 1 or 2
+		.byte 0, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1 ; 1 = 1 or 2
+		.byte 0, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1 ; 1 = 1 or 2
+		.byte 0, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1 ; 1 = 1 or 2
+
+uipiano_keysreset
 		.byte 0, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1 ; 1 = 1 or 2
 		.byte 0, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1 ; 1 = 1 or 2
 		.byte 0, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1 ; 1 = 1 or 2

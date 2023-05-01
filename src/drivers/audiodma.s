@@ -96,6 +96,19 @@ audiodma_freql
 .byte <($2fc8)
 .byte <($329f)
 
+.byte <($1ad1)
+.byte <($1c69)
+.byte <($1e1a)
+.byte <($1fe4)
+.byte <($21c9)
+.byte <($23cc)
+.byte <($25ed)
+.byte <($282e)
+.byte <($2a92)
+.byte <($2d1a)
+.byte <($2fc8)
+.byte <($329f)
+
 audiodma_freqm
 .byte >($1ad1)
 .byte >($1c69)
@@ -136,7 +149,21 @@ audiodma_freqm
 .byte >($2fc8)
 .byte >($329f)
 
+.byte >($1ad1)
+.byte >($1c69)
+.byte >($1e1a)
+.byte >($1fe4)
+.byte >($21c9)
+.byte >($23cc)
+.byte >($25ed)
+.byte >($282e)
+.byte >($2a92)
+.byte >($2d1a)
+.byte >($2fc8)
+.byte >($329f)
+
 audiodma_freqh
+.byte $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00
 .byte $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00
 .byte $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00
 .byte $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00
