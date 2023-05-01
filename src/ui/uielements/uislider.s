@@ -4,19 +4,6 @@ uislider_layout
 		jsr uielement_layout
 		rts
 
-uislider_hide
-		;jsr uielement_hide
-		rts
-
-uislider_focus
-		rts
-
-uislider_enter
-		rts
-
-uislider_longpress
-		rts
-
 uislider_leave
 		jsr uielement_leave
 		rts
@@ -27,18 +14,18 @@ uislider_move
 		jsr uislider_press
 :		rts
 
-uislider_keypress
-		rts
-
-uislider_keyrelease
-		rts
-
-uislider_doubleclick
-		rts
-
 uislider_release
 		jsr uielement_release
 	   	rts
+
+uislider_focus
+uislider_enter
+uislider_longpress
+uislider_keypress
+uislider_keyrelease
+uislider_doubleclick
+uislider_hide
+		rts
 
 ; ----------------------------------------------------------------------------------------------------
 
@@ -77,10 +64,29 @@ uislider_draw_released
 
 		jsr uidraw_set_draw_position
 
+		jsr ui_getelementdataptr_tmp
+
 		ldx uidraw_width
 
 		ldz #$00						; draw background slider
 		lda #3*16+10
+:		sta [uidraw_scrptr],z
+		inz
+		inz
+		dex
+		bne :-
+
+		ldy #$02
+		lda (zpptrtmp),y
+		lsr
+		lsr
+		lsr
+		lsr
+		tax
+		inx
+
+		ldz #$00						; draw bit that's filled now
+		lda #3*16+12
 :		sta [uidraw_scrptr],z
 		inz
 		inz
@@ -108,8 +114,6 @@ uislider_draw_released_puck
 
 		lda #3*16+9
 		sta [uidraw_scrptr],z
-		inz
-		inz
 
 		rts
 
