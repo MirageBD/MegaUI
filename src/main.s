@@ -208,7 +208,7 @@ entry_main
 		
 loop
 
-		lda peppitoPlaying
+		lda valPepPlaying
 		beq loop
 
 		;UICORE_CALLELEMENTFUNCTION chanview1, uichannelview_capturevu
@@ -227,7 +227,7 @@ irq1
 		phy
 		phz
 
-		lda peppitoPlaying
+		lda valPepPlaying
 		beq :+
 		jsr peppitoPlay
 :

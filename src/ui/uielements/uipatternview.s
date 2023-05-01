@@ -91,7 +91,7 @@ uipatternview_update
 
 		jsr uipatternview_decodepattern
 
-		lda peppitoPlaying
+		lda valPepPlaying
 		bne :+
 		rts
 

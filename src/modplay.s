@@ -171,6 +171,11 @@ VAL_FAC_M65RATERTH	=	$0001
 
 	.assert	.sizeof(PEP_CHNDATA) < 256, error, "Channel data too large!"
 
+valPepPlaying
+	.byte	$00
+
+valPepGlobalVolume
+	.byte	$00
 
 adrPepMODL:
 	.word	$0000
@@ -2715,28 +2720,28 @@ peppitoChanNoteOn:
 ;	Sample end
 		LDY	#PEP_INSDATA::valSLen
 		CLC
-		LDA	(ptrPepTmpA), Y
+		LDA	(ptrPepTmpA),Y
 		ADC	valPepTmp3
-		STA	$D727, X
+		STA	$D727,X
 		INY
 		LDA	(ptrPepTmpA), Y
 		ADC	valPepTmp3 + 1
-		STA	$D728, X
+		STA	$D728,X
 
 ;	Enable DMA channel no loop
 		LDA	#%10000010
-		STA	$D720, X
+		STA	$D720,X
 
 
 @finish:
 ;	Volume
 		LDY	#PEP_CHNDATA::valVol
 		LDA	(ptrPepChan), Y
-		STA	$D729, X
+		STA	$D729,X
 
 		LDA	#$00
 		LDX	valPepChan
-		STA	$D71C, X
+		STA	$D71C,X
 
 		; force all other channels off
 		;lda #$00

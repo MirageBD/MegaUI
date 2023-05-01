@@ -318,14 +318,14 @@ userfunc_playmod
 		jsr peppitoReset
 		;jsr peppitoInit
 		lda #$01
-		sta peppitoPlaying
+		sta valPepPlaying
 		rts
 
 userfunc_stopmod
 		jsr peppitoStop
 		;jsr peppitoInit
 		lda #$00
-		sta peppitoPlaying
+		sta valPepPlaying
 		UICORE_CALLELEMENTFUNCTION tvlistbox, uipatternview_restorepositions
 		rts
 
@@ -489,8 +489,5 @@ userfunc_openfile
 		UICORE_CALLELEMENTFUNCTION la1listbox, uilistbox_draw
 
 :		rts
-
-peppitoPlaying
-		.byte $00
 
 ; ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
