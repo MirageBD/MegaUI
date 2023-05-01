@@ -214,7 +214,7 @@ playpatternbutton_data		.word playpatternbutton_functions,									9*16+2, KEYBO
 stopbutton_data				.word stopbutton_functions,											9*16+4, KEYBOARD_F5
 recordbutton_data			.word recordbutton_functions,										9*16+6, KEYBOARD_F7
 
-volumeslider_data			.word $ffff,														8
+volumeslider_data			.word volumeslider_functions,										255
 
 cnumericbutton1_data		.word $ffff,														$1234, $0000, $babe, 2		; value, address, number of bytes
 
@@ -311,6 +311,10 @@ listbox1_functions				.word la1listbox,						userfunc_populatesample
 filebox1_functions				.word fa1filebox,						userfunc_openfile
 								.word $ffff
 
+volumeslider_functions			.word volumeslider,						userfunc_setvolume
+								.word $ffff
+
+
 ; ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 userfunc_playmod
@@ -332,13 +336,33 @@ userfunc_stopmod
 userfunc_recordmod
 		rts
 
-userfunc_populatesample
+userfunc_resetsampleindex
+		lda #$01
+		sta (zpptr1),y
+		rts
 
-		ldy #$02													; if not already selected, select the sample tab
+userfunc_setvolume
+		ldy #$02
+		lda volumeslider_data,y
+		sta valPepGlobalVolume
+		STA	$D729+0*16
+		STA	$D729+1*16
+		STA	$D729+2*16
+		STA	$D729+3*16
+		rts
+
+userfunc_selectsampletab
+
+		ldy #$02
 		lda tabgroup1_data,y
 		cmp #$01
 		beq :+
 		UICORE_CALLELEMENTFUNCTION ui_tab2, uitab_release
+		rts
+
+userfunc_populatesample
+
+		jsr userfunc_selectsampletab								; if not already selected, select the sample tab
 
 :		UICORE_SELECT_ELEMENT_1 la1scrollbar_data
 		ldy #$04													; get selected index

@@ -174,8 +174,8 @@ VAL_FAC_M65RATERTH	=	$0001
 valPepPlaying
 	.byte	$00
 
-valPepGlobalVolume
-	.byte	$00
+valPepGlobalVolume					; D729
+	.byte	$ff
 
 adrPepMODL:
 	.word	$0000
@@ -2276,11 +2276,12 @@ peppitoChanUpdVol:
 
 		LDY	#PEP_CHNDATA::valVol
 		LDA	(ptrPepChan), Y
-		STA	$D729, X
+		AND valPepGlobalVolume
+		STA	$D729,X
 
 		LDA	#$00
 		LDX	valPepChan
-		STA	$D71C, X
+		STA	$D71C,X
 
 		;force all other channels off
 		;lda #$00
@@ -2737,6 +2738,7 @@ peppitoChanNoteOn:
 ;	Volume
 		LDY	#PEP_CHNDATA::valVol
 		LDA	(ptrPepChan), Y
+		AND valPepGlobalVolume
 		STA	$D729,X
 
 		LDA	#$00

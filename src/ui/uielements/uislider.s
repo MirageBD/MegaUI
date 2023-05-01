@@ -53,8 +53,8 @@ uislider_press
 :		ldy #$02
 		sta (zpptrtmp),y
 
+		jsr uielement_calluifunc
 		jsr uislider_draw
-		;jsr uielement_calluifunc
 
 		rts
 
