@@ -24,13 +24,17 @@ window0area
 		UIELEMENT_ADD stopbutton,				glyphbutton,		$ffff,					 7,  0,  3,  3,  0,		stopbutton_data,			uidefaultflags
 		UIELEMENT_ADD recordbutton,				glyphbutton,		$ffff,					10,  0,  3,  3,  0,		recordbutton_data,			uidefaultflags
 
-		UIELEMENT_ADD volumeslider,				slider,				$ffff,					14,  1, 16,  1,  0,		volumeslider_data,			uidefaultflags
+		UIELEMENT_ADD topdivider1,				divider,			$ffff,					14,  0,  1,  3,  0,		$ffff,						uidefaultflags
+
+		UIELEMENT_ADD volumeslider,				slider,				$ffff,					16,  1, 16,  1,  0,		volumeslider_data,			uidefaultflags
+
+		UIELEMENT_ADD topdivider2,				divider,			$ffff,					33,  0,  1,  3,  0,		$ffff,						uidefaultflags
 
 		;UIELEMENT_ADD ctextbutton1,			ctextbutton,		$ffff,					 4,  0, 12,  3,  0,		ctextbutton1_data,			uidefaultflags
 		;UIELEMENT_ADD ctextbutton2,			ctextbutton,		$ffff,					16,  0, 12,  3,  0,		ctextbutton2_data,			uidefaultflags
 		;UIELEMENT_ADD ctextbutton3,			ctextbutton,		$ffff,					28,  0, 12,  3,  0,		ctextbutton3_data,			uidefaultflags
 
-		UIELEMENT_ADD cnumericbutton1,			cnumericbutton,		$ffff,					40,  0,  9,  3,  0,		cnumericbutton1_data,		uidefaultflags
+		;UIELEMENT_ADD cnumericbutton1,			cnumericbutton,		$ffff,					40,  0,  9,  3,  0,		cnumericbutton1_data,		uidefaultflags
 
 		;UIELEMENT_ADD paddlexlabel,			label,				$ffff,					60,  1,  8,  1,  0,		paddlexlabel_data,			uidefaultflags
 		;UIELEMENT_ADD paddleylabel,			label,				$ffff,					70,  1,  8,  1,  0,		paddleylabel_data,			uidefaultflags
@@ -106,8 +110,12 @@ tabgroupchildren
 ; ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ child windows
 
 tab1_contents
-		;UIELEMENT_ADD ui_sequenceview,			nineslice,			sequenceviewelements,	 0,  0, 78,  4,  0,		$ffff,						uidefaultflags	
+		UIELEMENT_ADD ui_sequenceview,			nineslice,			sequenceviewelements,	 1,  0, 10, 24,  0,		$ffff,						uidefaultflags	
 		UIELEMENT_ADD ui_patternview,			nineslice,			patternviewelements,	12,  0, 54, 24,  0,		$ffff,						uidefaultflags	
+		UIELEMENT_ADD ui_scopeview1,			nineslice,			$ffff,					67,  0, 12,  6,  0,		$ffff,						uidefaultflags	
+		UIELEMENT_ADD ui_scopeview2,			nineslice,			$ffff,					67,  6, 12,  6,  0,		$ffff,						uidefaultflags	
+		UIELEMENT_ADD ui_scopeview3,			nineslice,			$ffff,					67, 12, 12,  6,  0,		$ffff,						uidefaultflags	
+		UIELEMENT_ADD ui_scopeview4,			nineslice,			$ffff,					67, 18, 12,  6,  0,		$ffff,						uidefaultflags	
 		UIELEMENT_END
 
 tab2_contents
@@ -149,7 +157,7 @@ listarea1elements
 ; ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ scrollbar elements
 
 sequenceviewelements
-		UIELEMENT_ADD sequenceview1,			sequenceview,		$ffff,					 1,  1,-2, -1,  0,		sequenceview_data,			uidefaultflags
+		;UIELEMENT_ADD sequenceview1,			sequenceview,		$ffff,					 1,  1,-2, -1,  0,		sequenceview_data,			uidefaultflags
 		UIELEMENT_END
 
 patternviewelements

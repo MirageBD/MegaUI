@@ -18,14 +18,14 @@ mouse_d41a					.byte $00
 mouse_paddlex				.byte $00
 mouse_paddley				.byte $00
 
-mouse_xpos_plusborder		.word $0080
-mouse_xpos					.word $0080
-mouse_prevxpos				.word $0080
-mouse_xpos_pressed			.word $0080
-mouse_ypos_plusborder		.word $0080
-mouse_ypos					.word $0080
-mouse_prevypos				.word $0080
-mouse_ypos_pressed			.word $0080
+mouse_xpos_plusborder		.word $0000
+mouse_xpos					.word $0000
+mouse_prevxpos				.word $0000
+mouse_xpos_pressed			.word $0000
+mouse_ypos_plusborder		.word $0000
+mouse_ypos					.word $0000
+mouse_prevypos				.word $0000
+mouse_ypos_pressed			.word $0000
 
 mouse_pressed				.byte $00			; this will be 1 for every frame that the button is pressed, not just 1 frame
 mouse_held					.byte $00

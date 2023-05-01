@@ -29,14 +29,27 @@ uidivider_draw
 
 		jsr uidraw_set_draw_position
 
-		ldx uidraw_height
+		sec
+		lda uidraw_height
+		sbc #$02
+		tax
 
 		ldz #$00
-:		lda #3*16+14
+		lda #7*16+2
+		sta [uidraw_scrptr],z
+		jsr uidraw_increase_row
+
+		ldz #$00
+:		lda #7*16+3
 		sta [uidraw_scrptr],z
 		jsr uidraw_increase_row
 		dex
 		bne :-
+
+		ldz #$00
+		lda #7*16+4
+		sta [uidraw_scrptr],z
+		jsr uidraw_increase_row
 
 		rts
 

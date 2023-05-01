@@ -113,33 +113,6 @@ ui_init
 		sta $d017
 		sta $d01d
 
-		lda #$80										; sprite 0 x position
-		sta $d000
-		lda #%00000000
-		sta $d010										; sprite horizontal position MSBs
-		lda #%00000001
-		sta $d05f										; Sprite H640 X Super-MSBs
-
-		lda #$80										; sprite 0 y position
-		sta $d001
-		lda #%00000000
-		sta $d077										; Sprite V400 Y position MSBs
-		lda #%00000000
-		sta $d078										; Sprite V400 Y position super MSBs
-
-		lda #$00										; sprite 1 x position
-		sta $d002
-		lda #%00000000
-		sta $d010										; sprite horizontal position MSBs
-		lda #%00000001
-		sta $d05f										; Sprite H640 X Super-MSBs
-
-		lda #$00										; sprite 1 y position
-		sta $d003
-		lda #%00000000
-		sta $d077										; Sprite V400 Y position MSBs
-		lda #%00000000
-		sta $d078										; Sprite V400 Y position super MSBs
 
 		jsr uimouse_init
 		jsr uikeyboard_init
