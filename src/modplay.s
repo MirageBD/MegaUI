@@ -2276,7 +2276,7 @@ peppitoChanUpdVol:
 
 		LDY	#PEP_CHNDATA::valVol
 		LDA	(ptrPepChan), Y
-		AND valPepGlobalVolume
+		;AND valPepGlobalVolume
 		STA	$D729,X
 
 		LDA	#$00
@@ -2738,7 +2738,7 @@ peppitoChanNoteOn:
 ;	Volume
 		LDY	#PEP_CHNDATA::valVol
 		LDA	(ptrPepChan), Y
-		AND valPepGlobalVolume
+		;AND valPepGlobalVolume
 		STA	$D729,X
 
 		LDA	#$00

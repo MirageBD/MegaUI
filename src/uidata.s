@@ -345,10 +345,10 @@ userfunc_setvolume
 		ldy #$02
 		lda volumeslider_data,y
 		sta valPepGlobalVolume
-		STA	$D729+0*16
-		STA	$D729+1*16
-		STA	$D729+2*16
-		STA	$D729+3*16
+		;STA	$D729+0*16
+		;STA	$D729+1*16
+		;STA	$D729+2*16
+		;STA	$D729+3*16
 		rts
 
 userfunc_selectsampletab

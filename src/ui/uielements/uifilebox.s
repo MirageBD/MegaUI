@@ -49,13 +49,6 @@ uifilebox_keyrelease
 
 uifilebox_opendir
 
-		; turn off disk access when running in xemu
-
-;.if megabuild = 1
-;.else
-;		rts
-;.endif		
-		
 		jsr uifilebox_startaddentries
 
 		; handle directories first
