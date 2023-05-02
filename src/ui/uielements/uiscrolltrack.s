@@ -133,9 +133,40 @@ uiscrolltrack_press
 		ldy #$02
 		sta (zpptrtmp),y
 
+		jsr uiscrolltrack_confine
+
 		jsr uielement_calluifunc
 
 		rts
+
+; ----------------------------------------------------------------------------------------------------
+
+uiscrolltrack_confine
+
+		ldy #$02										; get start pos
+		lda (zpptrtmp),y
+		bpl :+
+		lda #$00										; smaller than 0, set to 0
+		sta (zpptrtmp),y
+		rts
+
+:		ldy #$06										; get number of entries
+		lda (zpptrtmp),y
+		ldy #UIELEMENT::height							; subtract height
+		sec
+		sbc (zpptr0),y
+		;sec
+		;sbc #$01 ; 									; LV TODO - subtracting 2 here for scrollbar buttons. Is that really right?
+		bpl :+											; smaller than 0 ? i.e. entries fit into box without scrolling
+		lda #$00
+		sta (zpptrtmp),y								; set scrolpos to 0
+
+:		ldy #$02
+		cmp (zpptrtmp),y								; compare with startpos
+		bpl :+											; if bigger than ok
+		sta (zpptrtmp),y
+
+:		rts
 
 ; ----------------------------------------------------------------------------------------------------
 
