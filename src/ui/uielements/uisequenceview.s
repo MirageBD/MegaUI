@@ -207,9 +207,6 @@ uisequenceview_drawlistreleased_loop								; start drawing the list
 		ldy #$00
 		lda (zpptr2),y
 		sta zpptrtmp+0
-		iny
-		lda (zpptr2),y
-		sta zpptrtmp+1
 
 		lda uisequenceview_current_draw_pos
 		bpl :+

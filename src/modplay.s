@@ -234,6 +234,11 @@ adrPepPtn0:
 	.dword	$00000000
 	.endrepeat
 
+idxPepPtn0:
+	.repeat	128
+	.byte	0
+	.endrepeat
+
 recPepIns0:
 	.repeat	32
 	.res	.sizeOf(PEP_INSDATA)
@@ -660,10 +665,12 @@ peppitoInit:
 		__PEP_SET_MODF_OFFS ptrPepMSeq, $03B8
 
 @cont3:
+		ldx #$00
 		LDZ	#$00
 @loop0:
 		NOP
 		LDA	(ptrPepMSeq), Z
+		sta idxPepPtn0,x
 
 		CMP	valPepMaxP
 		BCC	@next0
@@ -671,6 +678,7 @@ peppitoInit:
 		STA	valPepMaxP
 
 @next0:
+		inx
 		INZ
 		CPZ	#$80
 		BNE	@loop0

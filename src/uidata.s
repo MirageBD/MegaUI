@@ -189,7 +189,7 @@ chanview3_data				.word $ffff,														2, $b7, $00
 chanview4_data				.word $ffff,														3, $b7, $00
 
 svscrollbar_data			.word svscrollbar_functions, 										0, 1, 128+2*7+1, sequenceview1	; start position, selection index, number of entries, ptr to list
-sequenceview_data			.word svscrollbar_functions,										svscrollbar_data, sequencedata
+sequenceview_data			.word svscrollbar_functions,										svscrollbar_data, idxPepPtn0
 
 textbox1_data				.word $ffff,														uitxt_textbox1, 0, 0			; ptr to text, cursor position, end position
 
@@ -515,28 +515,17 @@ userfunc_openfile
 		sta adrPepMODH+1
 		jsr peppitoInit
 
+		ldy #$04
+		lda #<idxPepPtn0
+		sta sequenceview_data+0,y
+		lda #>idxPepPtn0
+		sta sequenceview_data+1,y
+
 		UICORE_CALLELEMENTFUNCTION la1listbox, uilistbox_startaddentries
 		jsr populate_samplelist
 		UICORE_CALLELEMENTFUNCTION la1listbox, uilistbox_endaddentries
 		UICORE_CALLELEMENTFUNCTION la1listbox, uilistbox_draw
 
 :		rts
-
-; ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-
-sequencedata
-		.byte 10, 20, 30, 40, 5, 4, 3, 2, 1, 6
-		.byte 10, 20, 30, 40, 5, 4, 3, 2, 1, 7
-		.byte 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
-		.byte 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
-		.byte 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
-		.byte 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
-		.byte 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
-		.byte 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
-		.byte 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
-		.byte 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
-		.byte 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
-		.byte 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
-		.byte 0, 0, 0, 0, 0, 0, 0, 0, $ff
 
 ; ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
