@@ -653,7 +653,7 @@ peppitoInit:
 		CMP	#$10
 		BNE	@ins321
 
-		__PEP_SET_MODF_OFFS ptrPepModF, $01D8
+		__PEP_SET_MODF_OFFS ptrPepMSeq, $01D8
 		JMP	@cont3
 
 @ins321:
