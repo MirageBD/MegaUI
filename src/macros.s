@@ -2,6 +2,7 @@
 .define SAFE_COLOR_RAM COLOR_RAM+2048
 .define SAFE_COLOR_RAM_PLUS_ONE COLOR_RAM+2048+1
 
+.define COLOR_RAM_FREESPACE COLOR_RAM+2048+8192
 
 .macro QSTORE32 num, address
 		lda #<.loword(num)

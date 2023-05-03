@@ -172,7 +172,11 @@ uifilebox_processdirentry
 		ldy #$06
 		lda (zpptr3),y
 		adc #$01
-		sta (zpptr3),y
+		cmp #125
+		bne :+
+		rts
+
+:		sta (zpptr3),y
 
 		ldy #$00											; set list pointer to text
 		lda zpptrtmp+0
