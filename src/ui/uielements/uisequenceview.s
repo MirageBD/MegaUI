@@ -17,6 +17,19 @@ uisequenceview_update
 		lda valPepSLen
 		sta uisequenceview_numpatterns
 
+		lda valPepPlaying
+		bne :+
+		rts
+
+:		ldy #$02										; put scrollbar1_data into zpptr2
+		jsr ui_getelementdata_2
+
+		ldy #$02										; store startpos
+		lda uisequenceview_patternindex
+		sta (zpptr2),y
+
+		jsr uielement_calluifunc
+
 		rts
 
 ; ----------------------------------------------------------------------------------------------------
@@ -107,6 +120,8 @@ uisequenceview_drawbkgreleased
 :		lda #$20
 		sta [uidraw_scrptr],z
 		inz
+		lda #$00
+		sta [uidraw_colptr],z
 		inz
 		dex
 		bne :-
@@ -237,28 +252,19 @@ uisequenceview_drawnonmiddleline
 		tax
 		lda hextodec,x
 		sta [uidraw_scrptr],z
+		lda #$10
+		sta [uidraw_colptr],z
 		inz
 		lda #$04
 		sta [uidraw_scrptr],z
+		lda #$00
+		sta [uidraw_colptr],z
 		inz
 
 		lda uisequenceview_current_draw_pos
 		and #$0f
 		tax
 		lda hextodec,x
-		sta [uidraw_scrptr],z
-		inz
-		lda #$04
-		sta [uidraw_scrptr],z
-		inz
-
-		lda #$20
-		sta [uidraw_scrptr],z
-		inz
-		inz
-
-		ldx #$02
-:		lda zpptrtmp+0
 		sta [uidraw_scrptr],z
 		lda #$10
 		sta [uidraw_colptr],z
@@ -268,8 +274,54 @@ uisequenceview_drawnonmiddleline
 		lda #$00
 		sta [uidraw_colptr],z
 		inz
-		dex
-		bne :-
+
+		lda #$20
+		sta [uidraw_scrptr],z
+		lda #$10
+		sta [uidraw_colptr],z
+		inz
+		inz
+
+		lda zpptrtmp+0
+		bne :+
+		jmp uisequenceview_drawnonmiddleline_emptyspace
+
+:		lsr
+		lsr
+		lsr
+		lsr
+		tax
+		lda hextodec,x
+		sta [uidraw_scrptr],z
+		lda #$10
+		sta [uidraw_colptr],z
+		inz
+		lda #$04
+		sta [uidraw_scrptr],z
+		lda #$00
+		sta [uidraw_colptr],z
+		inz
+
+		lda zpptrtmp+0
+		and #$0f
+		tax
+		lda hextodec,x
+		sta [uidraw_scrptr],z
+		lda #$10
+		sta [uidraw_colptr],z
+		inz
+		lda #$04
+		sta [uidraw_scrptr],z
+		lda #$00
+		sta [uidraw_colptr],z
+		inz
+
+		lda #$20
+		sta [uidraw_scrptr],z
+		lda #$10
+		sta [uidraw_colptr],z
+		;inz
+		;inz
 
 		rts
 
@@ -307,11 +359,21 @@ uisequenceview_drawmiddleline
 
 		lda #$20
 		sta [uidraw_scrptr],z
+		lda #$08
+		sta [uidraw_colptr],z
 		inz
 		inz
 
-		ldx #$02
-:		lda zpptrtmp+0
+		lda zpptrtmp+0
+		bne :+
+		jmp uisequenceview_drawmiddleline_emptyspace
+
+:		lsr
+		lsr
+		lsr
+		lsr
+		tax
+		lda hextodec,x
 		sta [uidraw_scrptr],z
 		lda #$08
 		sta [uidraw_colptr],z
@@ -321,8 +383,67 @@ uisequenceview_drawmiddleline
 		lda #$00
 		sta [uidraw_colptr],z
 		inz
-		dex
-		bne :-
+
+		lda zpptrtmp+0
+		and #$0f
+		tax
+		lda hextodec,x
+		sta [uidraw_scrptr],z
+		lda #$08
+		sta [uidraw_colptr],z
+		inz
+		lda #$04
+		sta [uidraw_scrptr],z
+		lda #$00
+		sta [uidraw_colptr],z
+		inz
+
+		lda #$20
+		sta [uidraw_scrptr],z
+		lda #$10
+		sta [uidraw_colptr],z
+		;inz
+		;inz
+
+		rts
+
+; ----------------------------------------------------------------------------------------------------
+
+uisequenceview_drawnonmiddleline_emptyspace
+
+		lda #$20
+		sta [uidraw_scrptr],z
+		lda #$10
+		sta [uidraw_colptr],z
+		inz
+		inz
+
+		lda #$20
+		sta [uidraw_scrptr],z
+		lda #$10
+		sta [uidraw_colptr],z
+		inz
+		inz
+
+		rts
+
+; ----------------------------------------------------------------------------------------------------
+
+uisequenceview_drawmiddleline_emptyspace
+
+		lda #$20
+		sta [uidraw_scrptr],z
+		lda #$08
+		sta [uidraw_colptr],z
+		inz
+		inz
+
+		lda #$20
+		sta [uidraw_scrptr],z
+		lda #$08
+		sta [uidraw_colptr],z
+		inz
+		inz
 
 		rts
 

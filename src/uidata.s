@@ -111,11 +111,11 @@ tabgroupchildren
 
 tab1_contents
 		UIELEMENT_ADD ui_sequenceview,			nineslice,			sequenceviewelements,	 1,  0, 10, 24,  0,		$ffff,						uidefaultflags	
-		UIELEMENT_ADD ui_patternview,			nineslice,			patternviewelements,	12,  0, 54, 24,  0,		$ffff,						uidefaultflags	
-		UIELEMENT_ADD ui_scopeview1,			nineslice,			$ffff,					67,  0, 12,  6,  0,		$ffff,						uidefaultflags	
-		UIELEMENT_ADD ui_scopeview2,			nineslice,			$ffff,					67,  6, 12,  6,  0,		$ffff,						uidefaultflags	
-		UIELEMENT_ADD ui_scopeview3,			nineslice,			$ffff,					67, 12, 12,  6,  0,		$ffff,						uidefaultflags	
-		UIELEMENT_ADD ui_scopeview4,			nineslice,			$ffff,					67, 18, 12,  6,  0,		$ffff,						uidefaultflags	
+		UIELEMENT_ADD ui_patternview,			nineslice,			patternviewelements,	12,  0, 56, 24,  0,		$ffff,						uidefaultflags	
+		UIELEMENT_ADD ui_scopeview1,			nineslice,			$ffff,					69,  0, 10,  6,  0,		$ffff,						uidefaultflags	
+		UIELEMENT_ADD ui_scopeview2,			nineslice,			$ffff,					69,  6, 10,  6,  0,		$ffff,						uidefaultflags	
+		UIELEMENT_ADD ui_scopeview3,			nineslice,			$ffff,					69, 12, 10,  6,  0,		$ffff,						uidefaultflags	
+		UIELEMENT_ADD ui_scopeview4,			nineslice,			$ffff,					69, 18, 10,  6,  0,		$ffff,						uidefaultflags	
 		UIELEMENT_END
 
 tab2_contents
@@ -162,11 +162,11 @@ sequenceviewelements
 		UIELEMENT_END
 
 patternviewelements
-		UIELEMENT_ADD chanview1,				channelview,		$ffff,					 4,  2, 10,  2,  0,		chanview1_data,				uidefaultflags
-		UIELEMENT_ADD chanview2,				channelview,		$ffff,					16,  2, 10,  2,  0,		chanview2_data,				uidefaultflags
-		UIELEMENT_ADD chanview3,				channelview,		$ffff,					28,  2, 10,  2,  0,		chanview3_data,				uidefaultflags
-		UIELEMENT_ADD chanview4,				channelview,		$ffff,					40,  2, 10,  2,  0,		chanview4_data,				uidefaultflags
-		UIELEMENT_ADD tvlistbox,				patternview,		$ffff,					 4,  5, -8, -7,  0,		tvlistbox_data,				uidefaultflags
+		UIELEMENT_ADD chanview1,				channelview,		$ffff,					 5,  2, 10,  2,  0,		chanview1_data,				uidefaultflags
+		UIELEMENT_ADD chanview2,				channelview,		$ffff,					17,  2, 10,  2,  0,		chanview2_data,				uidefaultflags
+		UIELEMENT_ADD chanview3,				channelview,		$ffff,					29,  2, 10,  2,  0,		chanview3_data,				uidefaultflags
+		UIELEMENT_ADD chanview4,				channelview,		$ffff,					41,  2, 10,  2,  0,		chanview4_data,				uidefaultflags
+		UIELEMENT_ADD tvlistbox,				patternview,		$ffff,					 5,  5, -8, -7,  0,		tvlistbox_data,				uidefaultflags
 		UIELEMENT_ADD tvscrollbartrack,			scrolltrack,		$ffff,					-3,  5,  2, -7,  0,		tvscrollbar_data,			uidefaultflags
 		UIELEMENT_END
 
@@ -183,13 +183,13 @@ sampleviewelements
 
 ; ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ data
 
-chanview1_data				.word $ffff,														0, $3d, $00				; channel, colour, vu strength
-chanview2_data				.word $ffff,														1, $31, $00
-chanview3_data				.word $ffff,														2, $7a, $00
-chanview4_data				.word $ffff,														3, $a0, $00
+chanview1_data				.word $ffff,														0, $b7, $00				; channel, colour, vu strength
+chanview2_data				.word $ffff,														1, $b7, $00
+chanview3_data				.word $ffff,														2, $b7, $00
+chanview4_data				.word $ffff,														3, $b7, $00
 
 svscrollbar_data			.word svscrollbar_functions, 										0, 1, 128, sequenceview1	; start position, selection index, number of entries, ptr to list
-sequenceview_data			.word $ffff,														svscrollbar_data, sequencedata
+sequenceview_data			.word svscrollbar_functions,										svscrollbar_data, sequencedata
 
 textbox1_data				.word $ffff,														uitxt_textbox1, 0, 0			; ptr to text, cursor position, end position
 
@@ -525,18 +525,18 @@ userfunc_openfile
 ; ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 sequencedata
-		.byte 9, 8, 7, 6, 5, 4, 3, 2, 1, 0
-		.byte 9, 8, 7, 6, 5, 4, 3, 2, 1, 0
-		.byte 9, 8, 7, 6, 5, 4, 3, 2, 1, 0
-		.byte 9, 8, 7, 6, 5, 4, 3, 2, 1, 0
-		.byte 9, 8, 7, 6, 5, 4, 3, 2, 1, 0
-		.byte 9, 8, 7, 6, 5, 4, 3, 2, 1, 0
-		.byte 9, 8, 7, 6, 5, 4, 3, 2, 1, 0
-		.byte 9, 8, 7, 6, 5, 4, 3, 2, 1, 0
-		.byte 9, 8, 7, 6, 5, 4, 3, 2, 1, 0
-		.byte 9, 8, 7, 6, 5, 4, 3, 2, 1, 0
-		.byte 9, 8, 7, 6, 5, 4, 3, 2, 1, 0
-		.byte 9, 8, 7, 6, 5, 4, 3, 2, 1, 0
-		.byte 9, 8, 7, 6, 5, 4, 3, 2, $ff
+		.byte 10, 20, 30, 40, 5, 4, 3, 2, 1, 6
+		.byte 10, 20, 30, 40, 5, 4, 3, 2, 1, 7
+		.byte 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
+		.byte 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
+		.byte 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
+		.byte 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
+		.byte 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
+		.byte 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
+		.byte 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
+		.byte 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
+		.byte 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
+		.byte 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
+		.byte 0, 0, 0, 0, 0, 0, 0, 0, $ff
 
 ; ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
