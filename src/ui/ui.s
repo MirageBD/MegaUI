@@ -732,6 +732,9 @@ ui_user_update
 :		UICORE_CALLELEMENTFUNCTION tvlistbox, uipatternview_update
 		UICORE_CALLELEMENTFUNCTION tvlistbox, uipatternview_draw
 
+		UICORE_CALLELEMENTFUNCTION sequenceview1, uisequenceview_update
+		UICORE_CALLELEMENTFUNCTION sequenceview1, uisequenceview_draw
+
 		UICORE_CALLELEMENTFUNCTION chanview1, uichannelview_update
 		UICORE_CALLELEMENTFUNCTION chanview2, uichannelview_update
 		UICORE_CALLELEMENTFUNCTION chanview3, uichannelview_update

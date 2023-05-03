@@ -157,7 +157,8 @@ listarea1elements
 ; ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ scrollbar elements
 
 sequenceviewelements
-		;UIELEMENT_ADD sequenceview1,			sequenceview,		$ffff,					 1,  1,-2, -1,  0,		sequenceview_data,			uidefaultflags
+		UIELEMENT_ADD sequenceview1,			sequenceview,		$ffff,					 1,  2, -4, -4,  0,		sequenceview_data,			uidefaultflags
+		UIELEMENT_ADD svscrollbartrack,			scrolltrack,		$ffff,					-3,  2,  2, -4,  0,		svscrollbar_data,			uidefaultflags
 		UIELEMENT_END
 
 patternviewelements
@@ -187,9 +188,10 @@ chanview2_data				.word $ffff,														1, $31, $00
 chanview3_data				.word $ffff,														2, $7a, $00
 chanview4_data				.word $ffff,														3, $a0, $00
 
-sequenceview_data			.word $ffff,														0
+svscrollbar_data			.word svscrollbar_functions, 										0, 1, 128, sequenceview1	; start position, selection index, number of entries, ptr to list
+sequenceview_data			.word $ffff,														svscrollbar_data, sequencedata
 
-textbox1_data				.word $ffff,														uitxt_textbox1, 0, 0	; ptr to text, cursor position, end position
+textbox1_data				.word $ffff,														uitxt_textbox1, 0, 0			; ptr to text, cursor position, end position
 
 paddlexlabel_data			.word $ffff,														uitxt_paddlex
 hexlabel1_data				.word $ffff,														mouse_d419, 1
@@ -273,6 +275,10 @@ la1scrollbar_functions			.word la1scrollbartrack,				uiscrolltrack_draw
 
 tvscrollbar_functions			.word tvscrollbartrack,					uiscrolltrack_draw
 								.word tvlistbox,						uipatternview_draw
+								.word $ffff
+
+svscrollbar_functions			.word svscrollbartrack,					uiscrolltrack_draw
+								.word sequenceview1,					uisequenceview_draw
 								.word $ffff
 
 ;radiobutton_functions			.word radiobutton1,						uiradiobutton_draw
@@ -515,5 +521,22 @@ userfunc_openfile
 		UICORE_CALLELEMENTFUNCTION la1listbox, uilistbox_draw
 
 :		rts
+
+; ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+sequencedata
+		.byte 9, 8, 7, 6, 5, 4, 3, 2, 1, 0
+		.byte 9, 8, 7, 6, 5, 4, 3, 2, 1, 0
+		.byte 9, 8, 7, 6, 5, 4, 3, 2, 1, 0
+		.byte 9, 8, 7, 6, 5, 4, 3, 2, 1, 0
+		.byte 9, 8, 7, 6, 5, 4, 3, 2, 1, 0
+		.byte 9, 8, 7, 6, 5, 4, 3, 2, 1, 0
+		.byte 9, 8, 7, 6, 5, 4, 3, 2, 1, 0
+		.byte 9, 8, 7, 6, 5, 4, 3, 2, 1, 0
+		.byte 9, 8, 7, 6, 5, 4, 3, 2, 1, 0
+		.byte 9, 8, 7, 6, 5, 4, 3, 2, 1, 0
+		.byte 9, 8, 7, 6, 5, 4, 3, 2, 1, 0
+		.byte 9, 8, 7, 6, 5, 4, 3, 2, 1, 0
+		.byte 9, 8, 7, 6, 5, 4, 3, 2, $ff
 
 ; ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
