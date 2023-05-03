@@ -55,13 +55,7 @@ uisequenceview_move
 		rts
 
 uisequenceview_keypress
-		lda keyboard_pressedeventarg
-		cmp #KEYBOARD_INSERTDEL
-		bne :+
-		UICORE_CALLELEMENTFUNCTION tvlistbox, uipatternview_clearpattern
 		rts
-
-:		rts
 
 uisequenceview_keyrelease
 		rts
@@ -76,7 +70,43 @@ uisequenceview_doubleclick
 		rts
 
 uisequenceview_release
+		jsr uisequenceview_setselectedindex
+		jsr uisequenceview_confinevertical
+		jsr uisequenceview_draw
 
+		jsr uielement_calluifunc
+
+		rts
+
+uisequenceview_setselectedindex
+
+		jsr uimouse_calculate_pos_in_uielement
+
+		ldy #$02										; put scrollbar1_data in zpptr2
+		jsr ui_getelementdata_2
+
+		ldy #UIELEMENT::height
+		lda (zpptr0),y
+		lsr
+		sta uisequenceview_middlepos
+
+		lda uimouse_uielement_ypos+0					; set selected index + added start address
+		lsr
+		lsr
+		lsr
+		clc
+		ldy #$02
+		adc (zpptr2),y
+		sec
+		sbc uisequenceview_middlepos
+		ldy #$02
+		sta (zpptr2),y
+
+		sta cntPepSeqP
+
+		rts
+
+/*
 		jsr uimouse_calculate_pos_in_uielement
 
 		lsr uimouse_uielement_xpos+1
@@ -93,7 +123,9 @@ uisequenceview_release
 		lda #$00
 		sta cntPepPRow
 
-:		rts
+:
+*/
+		rts
 
 uisequenceview_draw
 		jsr uisequenceview_drawbkgreleased
@@ -444,6 +476,55 @@ uisequenceview_drawmiddleline_emptyspace
 		sta [uidraw_colptr],z
 		inz
 		inz
+
+		rts
+
+; ----------------------------------------------------------------------------------------------------
+
+uisequenceview_confinevertical
+		ldy #$02										; put scrollbar1_data in zpptr2
+		jsr ui_getelementdata_2
+
+		ldy #$02										; get start index
+		lda (zpptr2),y
+		bpl :+											; if negative then it's definitely wrong
+		lda #$00
+		sta (zpptr2),y
+
+:		cmp #128										; compare with max sequence number
+		bmi :+											; ok when smaller
+		lda #128
+		sec
+		sbc #$01
+		ldy #$02										; get start
+		sta (zpptr2),y
+		rts
+
+:		sec												; get selection index and subtract startpos
+		ldy #$02
+		sbc (zpptr2),y
+
+		bpl :+											; ok when > 0
+		ldy #$02										; when < get start index and put in startpos
+		lda (zpptr2),y
+		ldy #$02
+		sta (zpptr2),y
+		rts
+
+:		ldy #UIELEMENT::height							; compare with height
+		cmp (zpptr0),y
+		bpl :+											; ok if < height
+		rts
+
+:		ldy #$02										; get start index
+		lda (zpptr2),y
+		sec
+		ldy #UIELEMENT::height
+		sbc (zpptr0),y
+		clc
+		adc #$01
+		ldy #$02
+		sta (zpptr2),y									; put in startpos
 
 		rts
 

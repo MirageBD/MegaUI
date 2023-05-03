@@ -157,8 +157,8 @@ listarea1elements
 ; ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ scrollbar elements
 
 sequenceviewelements
-		UIELEMENT_ADD sequenceview1,			sequenceview,		$ffff,					 1,  2, -4, -4,  0,		sequenceview_data,			uidefaultflags
-		UIELEMENT_ADD svscrollbartrack,			scrolltrack,		$ffff,					-3,  2,  2, -4,  0,		svscrollbar_data,			uidefaultflags
+		UIELEMENT_ADD sequenceview1,			sequenceview,		$ffff,					 1,  5, -4, -7,  0,		sequenceview_data,			uidefaultflags
+		UIELEMENT_ADD svscrollbartrack,			scrolltrack,		$ffff,					-3,  5,  2, -7,  0,		svscrollbar_data,			uidefaultflags
 		UIELEMENT_END
 
 patternviewelements
@@ -188,7 +188,7 @@ chanview2_data				.word $ffff,														1, $b7, $00
 chanview3_data				.word $ffff,														2, $b7, $00
 chanview4_data				.word $ffff,														3, $b7, $00
 
-svscrollbar_data			.word svscrollbar_functions, 										0, 1, 128, sequenceview1	; start position, selection index, number of entries, ptr to list
+svscrollbar_data			.word svscrollbar_functions, 										0, 1, 128+2*7+1, sequenceview1	; start position, selection index, number of entries, ptr to list
 sequenceview_data			.word svscrollbar_functions,										svscrollbar_data, sequencedata
 
 textbox1_data				.word $ffff,														uitxt_textbox1, 0, 0			; ptr to text, cursor position, end position
@@ -240,7 +240,7 @@ fa1filebox_data				.word fa1scrollbar_functions,			filebox1_functions,			fa1scro
 la1scrollbar_data			.word la1scrollbar_functions, 										0, 0, 19, la1listbox			; start position, selection index, number of entries, ptr to list
 la1listbox_data				.word la1scrollbar_functions,			listbox1_functions,			la1scrollbar_data, la1boxtxt
 
-tvscrollbar_data			.word tvscrollbar_functions, 										0, 1, 64+2*7, tvlistbox			; start position, selection index, number of entries, ptr to list
+tvscrollbar_data			.word tvscrollbar_functions, 										0, 1, 64+2*7+2, tvlistbox			; start position, selection index, number of entries, ptr to list
 tvlistbox_data				.word tvscrollbar_functions,										tvscrollbar_data, tvboxtxt
 
 checkbox1_data				.word $ffff,														1, ((3*16+ 8) | (3*16+10)<<8)
