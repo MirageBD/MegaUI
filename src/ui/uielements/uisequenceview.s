@@ -311,11 +311,13 @@ uisequenceview_drawnonmiddleline
 		inz
 		inz
 
-		lda zpptrtmp+0
-		bne :+
+		lda uisequenceview_current_draw_pos
+		cmp valPepMaxP
+		bcc :+
 		jmp uisequenceview_drawnonmiddleline_emptyspace
 
-:		lsr
+:		lda zpptrtmp+0
+		lsr
 		lsr
 		lsr
 		lsr
@@ -393,11 +395,13 @@ uisequenceview_drawmiddleline
 		inz
 		inz
 
-		lda zpptrtmp+0
-		bne :+
-		jmp uisequenceview_drawmiddleline_emptyspace
+		lda uisequenceview_current_draw_pos
+		cmp valPepMaxP
+		bcc :+
+		jmp uisequenceview_drawnonmiddleline_emptyspace
 
-:		lsr
+:		lda zpptrtmp+0
+		lsr
 		lsr
 		lsr
 		lsr
