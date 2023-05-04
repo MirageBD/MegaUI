@@ -278,7 +278,10 @@ valPepSin0:
 	.byte	255, 253, 250, 244, 235, 224, 212, 197
 	.byte	180, 161, 141, 120,  97,  74,  49,  24
 
-
+valPepCurrentSamples:
+	.repeat 4
+		.byte 0
+	.endrepeat
 
 
 
@@ -1806,7 +1809,10 @@ peppitoPerformRow:
 		LSR
 		ORA	valPepTmp0
 
-		LDY	#PEP_NOTDATA::valIns
+		beq :+
+		sta valPepCurrentSamples,x
+
+:		LDY	#PEP_NOTDATA::valIns
 		STA	(ptrPepTmpA), Y
 
 ;	Effect
