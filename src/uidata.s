@@ -325,7 +325,7 @@ volumeslider_functions			.word volumeslider,						userfunc_setvolume
 
 userfunc_playmod
 		UICORE_CALLELEMENTFUNCTION tvlistbox, uipatternview_storepositions
-		jsr peppitoReset
+		;jsr peppitoReset
 		;jsr peppitoInit
 		lda #$01
 		sta valPepPlaying

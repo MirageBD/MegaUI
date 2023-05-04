@@ -624,7 +624,7 @@ uisampleview_drawbackground
 		ldx uidraw_width
 
 		ldz #$00
-		lda #9*16+9
+		lda #9*16+8
 :		sta [uidraw_scrptr],z
 		inz
 		inz
