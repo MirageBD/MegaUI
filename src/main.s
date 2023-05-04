@@ -318,8 +318,22 @@ populate_samplelist_loop
 		sta zpptrtmp2+3
 
 		ldz #$00
+		ldz #22											; sample length (word) specified after sample name
+		lda [zpptrtmp2],z
+		bne :+
+		inz
+		lda [zpptrtmp2],z
+		bne :+
+		lda #$00
+		bra :++
+:		lda #$01	
+:
 		ldy #$00
-:		lda [zpptrtmp2],z
+		sta (zpptrtmp),y
+		iny
+
+		ldz #$00
+:		lda [zpptrtmp2],z								; sample name is the first thing in the header
 		sta (zpptrtmp),y
 		iny
 		inz

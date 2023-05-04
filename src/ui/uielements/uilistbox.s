@@ -427,7 +427,21 @@ uilistbox_drawlistitem
 		inz
 		inz
 
+		ldy #$00
+		lda (zpptrtmp),y
+		bne :+
+
 		lda #$3e
+		sta [uidraw_scrptr],z
+		lda #$10
+		sta [uidraw_colptr],z
+		inz
+		lda #$05
+		sta [uidraw_scrptr],z
+		inz
+		bra :++
+
+:		lda #$3e
 		sta [uidraw_scrptr],z
 		lda #$93
 		sta [uidraw_colptr],z
@@ -436,13 +450,13 @@ uilistbox_drawlistitem
 		sta [uidraw_scrptr],z
 		inz
 
-		lda #$20
+:		lda #$20
 		adc ulb_font
 		sta [uidraw_scrptr],z
 		inz
 		inz
 
-		ldy #$00
+		iny
 :		lda (zpptrtmp),y
 		tax
 		lda ui_textremap,x
