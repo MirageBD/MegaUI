@@ -32,7 +32,7 @@ la1boxtxt
 
 .repeat 32,I
 	.ident(.sprintf("la1boxtxt%s", .string(I)))
-		.byte "                      ", 0
+		.byte "                       ", 0
 .endrepeat
 
 

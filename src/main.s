@@ -317,7 +317,6 @@ populate_samplelist_loop
 		lda (zpptr0),y
 		sta zpptrtmp2+3
 
-		ldz #$00
 		ldz #22											; sample length (word) specified after sample name
 		lda [zpptrtmp2],z
 		bne :+
