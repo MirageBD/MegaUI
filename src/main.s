@@ -325,7 +325,7 @@ populate_samplelist_loop
 		bne :+
 		lda #$00
 		bra :++
-:		lda #$01	
+:		
 :
 		ldy #$00
 		sta (zpptrtmp),y

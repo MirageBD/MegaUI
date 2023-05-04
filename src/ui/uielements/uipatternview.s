@@ -1025,22 +1025,22 @@ uipatternview_drawlistreleased
 
 		jsr uidraw_set_draw_position
 
-		ldy #$02										; put scrollbar1_data into zpptr2
+		ldy #$02												; put scrollbar1_data into zpptr2
 		jsr ui_getelementdata_2
 
-		lda uidraw_height								; $0f
+		lda uidraw_height										; $0f
 		lsr
-		sta uipatternview_middlepos						; $07
+		sta uipatternview_middlepos								; $07
 
-		ldy #$02										; store startpos
+		ldy #$02												; store startpos
 		lda (zpptr2),y
 		sta uipatternview_startpos
 
-		ldy #$04										; put listboxtxt into zpptr2
+		ldy #$04												; put listboxtxt into zpptr2
 		jsr ui_getelementdata_2
 
 		sec
-		lda uipatternview_startpos						; add startpos to listboxtxt pointer
+		lda uipatternview_startpos								; add startpos to listboxtxt pointer
 		sbc uipatternview_middlepos
 		sta uipatternview_current_draw_pos
 		bpl :+
@@ -1056,7 +1056,7 @@ uipatternview_drawlistreleased
 		lda #$00
 		sta uipatternview_rowpos
 
-uipatternview_drawlistreleased_loop						; start drawing the list
+uipatternview_drawlistreleased_loop								; start drawing the list
 
 		ldy #$00
 		lda (zpptr2),y

@@ -280,8 +280,10 @@ uisequenceview_drawnonmiddleline
 		lsr
 		tax
 		lda hextodec,x
+		clc
+		adc #$80
 		sta [uidraw_scrptr],z
-		lda #$10
+		lda #$08
 		sta [uidraw_colptr],z
 		inz
 		lda #$04
@@ -294,8 +296,10 @@ uisequenceview_drawnonmiddleline
 		and #$0f
 		tax
 		lda hextodec,x
+		clc
+		adc #$80
 		sta [uidraw_scrptr],z
-		lda #$10
+		lda #$08
 		sta [uidraw_colptr],z
 		inz
 		lda #$04
@@ -312,7 +316,7 @@ uisequenceview_drawnonmiddleline
 		inz
 
 		lda uisequenceview_current_draw_pos
-		cmp valPepMaxP
+		cmp uisequenceview_numpatterns
 		bcc :+
 		jmp uisequenceview_drawnonmiddleline_emptyspace
 
@@ -323,8 +327,10 @@ uisequenceview_drawnonmiddleline
 		lsr
 		tax
 		lda hextodec,x
+		clc
+		adc #$80
 		sta [uidraw_scrptr],z
-		lda #$10
+		lda #$31
 		sta [uidraw_colptr],z
 		inz
 		lda #$04
@@ -337,8 +343,10 @@ uisequenceview_drawnonmiddleline
 		and #$0f
 		tax
 		lda hextodec,x
+		clc
+		adc #$80
 		sta [uidraw_scrptr],z
-		lda #$10
+		lda #$31
 		sta [uidraw_colptr],z
 		inz
 		lda #$04
@@ -369,7 +377,7 @@ uisequenceview_drawmiddleline
 		tax
 		lda hextodec,x
 		sta [uidraw_scrptr],z
-		lda #$08
+		lda #$04
 		sta [uidraw_colptr],z
 		inz
 		lda #$04
@@ -381,22 +389,24 @@ uisequenceview_drawmiddleline
 		tax
 		lda hextodec,x
 		sta [uidraw_scrptr],z
-		lda #$08
+		lda #$04
 		sta [uidraw_colptr],z
 		inz
 		lda #$04
 		sta [uidraw_scrptr],z
 		inz
 
-		lda #$20
+		lda #$70
 		sta [uidraw_scrptr],z
-		lda #$08
+		lda #$04
 		sta [uidraw_colptr],z
 		inz
+		lda #$05
+		sta [uidraw_scrptr],z
 		inz
 
 		lda uisequenceview_current_draw_pos
-		cmp valPepMaxP
+		cmp uisequenceview_numpatterns
 		bcc :+
 		jmp uisequenceview_drawnonmiddleline_emptyspace
 
@@ -408,7 +418,7 @@ uisequenceview_drawmiddleline
 		tax
 		lda hextodec,x
 		sta [uidraw_scrptr],z
-		lda #$08
+		lda #$04
 		sta [uidraw_colptr],z
 		inz
 		lda #$04
@@ -422,7 +432,7 @@ uisequenceview_drawmiddleline
 		tax
 		lda hextodec,x
 		sta [uidraw_scrptr],z
-		lda #$08
+		lda #$04
 		sta [uidraw_colptr],z
 		inz
 		lda #$04
@@ -431,12 +441,14 @@ uisequenceview_drawmiddleline
 		sta [uidraw_colptr],z
 		inz
 
-		lda #$20
+		lda #$71
 		sta [uidraw_scrptr],z
-		lda #$10
+		lda #$04
 		sta [uidraw_colptr],z
-		;inz
-		;inz
+		inz
+		lda #$05
+		sta [uidraw_scrptr],z
+		inz
 
 		rts
 

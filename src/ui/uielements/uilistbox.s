@@ -443,7 +443,7 @@ uilistbox_drawlistitem
 
 :		lda #$3e
 		sta [uidraw_scrptr],z
-		lda #$93
+		lda #$06
 		sta [uidraw_colptr],z
 		inz
 		lda #$05
