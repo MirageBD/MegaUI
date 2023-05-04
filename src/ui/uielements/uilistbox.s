@@ -67,6 +67,7 @@ uilistbox_keyrelease
 
 uilistbox_draw
 		jsr uilistbox_drawbkgreleased
+		jsr uilistbox_startdrawlistreleased
 		jsr uilistbox_drawlistreleased
 		rts
 
@@ -296,7 +297,7 @@ uilistbox_drawbkgreleased
 
 ; ----------------------------------------------------------------------------------------------------
 
-uilistbox_drawlistreleased
+uilistbox_startdrawlistreleased
 
 		jsr uidraw_set_draw_position
 
@@ -324,21 +325,57 @@ uilistbox_drawlistreleased
 		adc #$00
 		sta zpptr2+1
 
-uilistbox_drawlistreleased_loop							; start drawing the list
+		rts
 
-		lda uilistbox_current_draw_pos
+uilistbox_drawlistreleased		
+
+		lda uilistbox_current_draw_pos					; is this line the selected line?
 		cmp uilistbox_selected_index
 		bne :+
-
 		lda #$c0
 		sta ulb_font
+		lda #$0f
+		sta ulb_fontcolour
 		bra :++
-
 :		lda #$80
 		sta ulb_font
-
-:		lda #$0f
+		lda #$08
 		sta ulb_fontcolour
+:
+		jsr uilistbox_drawemptyline
+
+		ldy #$00
+		lda (zpptr2),y
+		sta zpptrtmp+0
+		iny
+		lda (zpptr2),y
+		sta zpptrtmp+1
+		cmp #$ff										; bail out if at the end of the list
+		beq :+
+
+		jsr uilistbox_drawlistitem
+
+		clc
+		lda zpptr2+0
+		adc #$02
+		sta zpptr2+0
+		lda zpptr2+1
+		adc #$00
+		sta zpptr2+1
+
+:		jsr uidraw_increase_row
+		inc uilistbox_current_draw_pos
+
+		dec uidraw_height
+		lda uidraw_height
+		bne uilistbox_drawlistreleased
+
+		rts
+
+; ----------------------------------------------------------------------------------------------------
+
+uilistbox_drawemptyline
+
 		ldx uidraw_width								; clear line
 		ldz #$00
 :		lda #$20
@@ -356,17 +393,56 @@ uilistbox_drawlistreleased_loop							; start drawing the list
 		dex
 		bne :-
 
-		ldy #$00
-		lda (zpptr2),y
-		sta zpptrtmp+0
-		iny
-		lda (zpptr2),y
-		sta zpptrtmp+1
-		cmp #$ff
-		beq :+++
+		rts
+
+uilistbox_drawlistitem
+
+		ldz #$00
+		lda uilistbox_current_draw_pos
+		lsr
+		lsr
+		lsr
+		lsr
+		tax
+		lda hextodec,x
+		clc
+		adc ulb_font
+		sta [uidraw_scrptr],z
+		inz
+		inz
+
+		lda uilistbox_current_draw_pos
+		and #$0f
+		tax
+		lda hextodec,x
+		clc
+		adc ulb_font
+		sta [uidraw_scrptr],z
+		inz
+		inz
+
+		lda #$20
+		adc ulb_font
+		sta [uidraw_scrptr],z
+		inz
+		inz
+
+		lda #$3e
+		sta [uidraw_scrptr],z
+		lda #$93
+		sta [uidraw_colptr],z
+		inz
+		lda #$05
+		sta [uidraw_scrptr],z
+		inz
+
+		lda #$20
+		adc ulb_font
+		sta [uidraw_scrptr],z
+		inz
+		inz
 
 		ldy #$00
-		ldz #$00
 :		lda (zpptrtmp),y
 		tax
 		lda ui_textremap,x
@@ -384,22 +460,6 @@ uilistbox_drawlistreleased_loop							; start drawing the list
 		inz
 		iny
  		bra :-
-
-:		clc
-		lda zpptr2+0
-		adc #$02
-		sta zpptr2+0
-		lda zpptr2+1
-		adc #$00
-		sta zpptr2+1
-
-:		jsr uidraw_increase_row
-		inc uilistbox_current_draw_pos
-
-		dec uidraw_height
-		lda uidraw_height
-		beq :+
-		jmp uilistbox_drawlistreleased_loop
 
 :		rts
 
