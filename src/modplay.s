@@ -279,9 +279,7 @@ valPepSin0:
 	.byte	180, 161, 141, 120,  97,  74,  49,  24
 
 valPepCurrentSamples:
-	.repeat 4
-		.byte 0
-	.endrepeat
+	.byte 1,3,5,16
 
 
 

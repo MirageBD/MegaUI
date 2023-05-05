@@ -745,6 +745,12 @@ ui_user_update
 		UICORE_CALLELEMENTFUNCTION chanview3, uichannelview_draw
 		UICORE_CALLELEMENTFUNCTION chanview4, uichannelview_draw
 
+		;UICORE_CALLELEMENTFUNCTION chanview4, uilistbox_update
+		;UICORE_CALLELEMENTFUNCTION chanview4, uilistbox_draw
+
+		UICORE_CALLELEMENTFUNCTION la1listbox, uilistbox_update
+		UICORE_CALLELEMENTFUNCTION la1listbox, uilistbox_draw
+
         rts
 
 ; ----------------------------------------------------------------------------------------------------

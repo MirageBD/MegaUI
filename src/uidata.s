@@ -565,7 +565,7 @@ populate_samplelist_loop
 		bne :+
 		lda #$00
 		bra :++
-:		
+:		lda #$01
 :
 		ldy #$00
 		sta (zpptrtmp),y
@@ -593,6 +593,71 @@ populate_samplelist_loop
 		inx
 		cpx #32
 		bne populate_samplelist_loop
+
+		rts
+
+; ----------------------------------------------------------------------------------------------------
+
+populate_samplestate
+
+		lda #<la1boxtxt
+		sta zpptr2+0
+		lda #>la1boxtxt
+		sta zpptr2+1
+
+:		ldy #$00
+		lda (zpptr2),y
+		sta zpptrtmp+0
+		iny
+		lda (zpptr2),y
+		sta zpptrtmp+1
+		cmp #$ff										; bail out if at the end of the list
+		bne :+
+		bra populate_samplestate_setstates
+
+:		ldy #$00
+		lda (zpptrtmp),y
+		and #%00000001
+		sta (zpptrtmp),y
+
+		clc
+		lda zpptr2+0
+		adc #$02
+		sta zpptr2+0
+		lda zpptr2+1
+		adc #$00
+		sta zpptr2+1
+		bra :--
+
+populate_samplestate_setstates
+
+		lda #<la1boxtxt
+		sta zpptr2+0
+		lda #>la1boxtxt
+		sta zpptr2+1
+
+		ldx #$00
+
+populate_samplestate_loop
+
+		lda valPepCurrentSamples,x
+		asl
+		tay
+
+		lda (zpptr2),y
+		sta zpptrtmp+0
+		iny
+		lda (zpptr2),y
+		sta zpptrtmp+1
+
+		ldy #$00
+		lda (zpptrtmp),y
+		ora #%00000010
+		sta (zpptrtmp),y
+
+		inx
+		cpx #$04
+		bne populate_samplestate_loop
 
 		rts
 

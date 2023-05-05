@@ -6,6 +6,18 @@ uilistbox_current_draw_pos		.byte 0
 
 ; ----------------------------------------------------------------------------------------------------
 
+uilistbox_update
+		lda valPepPlaying
+		bne :+
+		rts
+
+:		jsr populate_samplestate
+		jsr uilistbox_draw
+
+		rts
+
+; ----------------------------------------------------------------------------------------------------
+
 uilistbox_layout
 		jsr uielement_layout
 		rts
@@ -429,28 +441,47 @@ uilistbox_drawlistitem
 
 		ldy #$00
 		lda (zpptrtmp),y
-		bne :+
+		and #%00000001
+		bne :+									; not sample with 0 length?
 
 		lda #$3e
 		sta [uidraw_scrptr],z
-		lda #$10
+		lda #$10								; sample with 0 length = black
 		sta [uidraw_colptr],z
 		inz
 		lda #$05
 		sta [uidraw_scrptr],z
 		inz
-		bra :++
+		bra uilistbox_drawlistitem_skipbox
+
+:		lda (zpptrtmp),y
+		and #%00000010
+		cmp #%00000010
+		bne :+									; sample that is currently playing?
+		lda #$3e
+		sta [uidraw_scrptr],z
+		lda #$43								; sample with some length + playing = nice colour
+		sta [uidraw_colptr],z
+		inz
+		lda #$05
+		sta [uidraw_scrptr],z
+		inz
+		bra uilistbox_drawlistitem_skipbox
 
 :		lda #$3e
 		sta [uidraw_scrptr],z
-		lda #$06
+		lda #$06								; sample with some length = middle gray
 		sta [uidraw_colptr],z
 		inz
 		lda #$05
 		sta [uidraw_scrptr],z
 		inz
+		bra uilistbox_drawlistitem_skipbox
 
-:		lda #$20
+uilistbox_drawlistitem_skipbox
+
+		lda #$20
+		clc
 		adc ulb_font
 		sta [uidraw_scrptr],z
 		inz
