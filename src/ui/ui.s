@@ -729,7 +729,10 @@ ui_user_update
 		bne :+
 		rts
 
-:		UICORE_CALLELEMENTFUNCTION tvlistbox, uipatternview_update
+:		UICORE_CALLELEMENTFUNCTION la1listbox, uilistbox_update
+		UICORE_CALLELEMENTFUNCTION la1listbox, uilistbox_draw
+
+		UICORE_CALLELEMENTFUNCTION tvlistbox, uipatternview_update
 		UICORE_CALLELEMENTFUNCTION tvlistbox, uipatternview_draw
 
 		UICORE_CALLELEMENTFUNCTION sequenceview1, uisequenceview_update
@@ -747,9 +750,6 @@ ui_user_update
 
 		;UICORE_CALLELEMENTFUNCTION chanview4, uilistbox_update
 		;UICORE_CALLELEMENTFUNCTION chanview4, uilistbox_draw
-
-		UICORE_CALLELEMENTFUNCTION la1listbox, uilistbox_update
-		UICORE_CALLELEMENTFUNCTION la1listbox, uilistbox_draw
 
         rts
 

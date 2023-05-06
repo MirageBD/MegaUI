@@ -333,9 +333,11 @@ userfunc_playmod
 
 userfunc_stopmod
 		jsr peppitoStop
+		jsr peppitoClearCurrentSamples
 		;jsr peppitoInit
 		lda #$00
 		sta valPepPlaying
+		UICORE_CALLELEMENTFUNCTION la1listbox, uilistbox_init
 		UICORE_CALLELEMENTFUNCTION tvlistbox, uipatternview_restorepositions
 		rts
 
@@ -641,7 +643,11 @@ populate_samplestate_setstates
 populate_samplestate_loop
 
 		lda valPepCurrentSamples,x
-		asl
+		sec
+		sbc #$01
+		bpl :+
+		bra populate_samplestate_continue
+:		asl
 		tay
 
 		lda (zpptr2),y
@@ -655,6 +661,7 @@ populate_samplestate_loop
 		ora #%00000010
 		sta (zpptrtmp),y
 
+populate_samplestate_continue
 		inx
 		cpx #$04
 		bne populate_samplestate_loop

@@ -18,6 +18,13 @@ uilistbox_update
 
 ; ----------------------------------------------------------------------------------------------------
 
+uilistbox_init
+		jsr populate_samplestate
+		jsr uilistbox_draw
+		rts
+
+; ----------------------------------------------------------------------------------------------------
+
 uilistbox_layout
 		jsr uielement_layout
 		rts
@@ -411,6 +418,8 @@ uilistbox_drawlistitem
 
 		ldz #$00
 		lda uilistbox_current_draw_pos
+		clc
+		adc #$01
 		lsr
 		lsr
 		lsr
@@ -424,6 +433,8 @@ uilistbox_drawlistitem
 		inz
 
 		lda uilistbox_current_draw_pos
+		clc
+		adc #$01
 		and #$0f
 		tax
 		lda hextodec,x
@@ -470,7 +481,7 @@ uilistbox_drawlistitem
 
 :		lda #$3e
 		sta [uidraw_scrptr],z
-		lda #$06								; sample with some length = middle gray
+		lda #$04								; sample with some length = middle gray
 		sta [uidraw_colptr],z
 		inz
 		lda #$05

@@ -330,7 +330,7 @@ uisequenceview_drawnonmiddleline
 		clc
 		adc #$80
 		sta [uidraw_scrptr],z
-		lda #$31
+		lda #11*16+14
 		sta [uidraw_colptr],z
 		inz
 		lda #$04
@@ -346,7 +346,7 @@ uisequenceview_drawnonmiddleline
 		clc
 		adc #$80
 		sta [uidraw_scrptr],z
-		lda #$31
+		lda #11*16+14
 		sta [uidraw_colptr],z
 		inz
 		lda #$04

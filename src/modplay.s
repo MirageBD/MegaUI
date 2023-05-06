@@ -279,7 +279,7 @@ valPepSin0:
 	.byte	180, 161, 141, 120,  97,  74,  49,  24
 
 valPepCurrentSamples:
-	.byte 1,3,5,16
+	.byte 0,0,0,0
 
 
 
@@ -510,6 +510,16 @@ valPepFTn0:
 ;	Result in $D76C-
 	.endmacro
 
+
+;-----------------------------------------------------------
+peppitoClearCurrentSamples:
+
+		lda #$00
+		sta valPepCurrentSamples+0
+		sta valPepCurrentSamples+1
+		sta valPepCurrentSamples+2
+		sta valPepCurrentSamples+3
+		rts
 
 ;-----------------------------------------------------------
 peppitoNOP:
