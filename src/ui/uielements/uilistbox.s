@@ -202,10 +202,16 @@ uilistbox_startaddentries
 		lda #$00
 		ldy #$02
 		sta (zpptr3),y									; set scrollbar position to 0
-		ldy #$04
+		iny
+		sta (zpptr3),y
+		iny
 		sta (zpptr3),y									; set selection index to 0
-		ldy #$06
+		iny
+		sta (zpptr3),y
+		iny
 		sta (zpptr3),y									; set number of entries to 0
+		iny
+		sta (zpptr3),y
 
 		ldy #$06										; put start of text list into zpptr2
 		jsr ui_getelementdata_2
@@ -225,6 +231,10 @@ uilistbox_addentry
 		ldy #$06
 		lda (zpptr3),y
 		adc #$01
+		sta (zpptr3),y
+		iny		
+		lda (zpptr3),y
+		adc #$00
 		sta (zpptr3),y
 
 		ldy #$00											; set list pointer to text

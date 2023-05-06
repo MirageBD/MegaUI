@@ -274,7 +274,12 @@ uifilebox_processdirentry
 
 uifilebox_drawlistreleased
 
-		jsr uidraw_set_draw_position
+		lda zpptrtmp+1
+		cmp #$ff
+		bne :+
+		rts
+
+:		jsr uidraw_set_draw_position
 
 		ldy #$04										; put scrollbar1_data into zpptr2
 		jsr ui_getelementdata_2

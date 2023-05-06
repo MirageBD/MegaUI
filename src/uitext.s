@@ -58,46 +58,8 @@ uitxt_textbox1		.byte 0, "                "
 .align 256
 
 fa1boxtxt			.word fa1boxtxt00
-					.word fa1boxtxt01
-					.word fa1boxtxt02
-					.word fa1boxtxt03
-					.word fa1boxtxt04
-					.word fa1boxtxt05
-					.word fa1boxtxt06
-					.word fa1boxtxt07
-					.word fa1boxtxt08
-					.word fa1boxtxt09
-					.word fa1boxtxt10
-					.word fa1boxtxt11
-					.word fa1boxtxt12
-					.word fa1boxtxt13
-					.word fa1boxtxt14
-					.word fa1boxtxt15
-					.word fa1boxtxt16
-					.word fa1boxtxt17
-					.word fa1boxtxt18
-					.word fa1boxtxt19
 					.word $ffff
 
-.align 256			; leave enough room for fa1boxtxt to grow. 128 directory entries allowed
+.align 512			; leave enough room for fa1boxtxt to grow. 256 directory entries allowed
 
-fa1boxtxt00			.byte %00010000, $31, ".",            0
-fa1boxtxt01			.byte %00010000, $31, "..",           0
-fa1boxtxt02			.byte %00010000, $31, "mods",    0
-fa1boxtxt03			.byte %00100000, $0f, "xmas65.d81",   0
-fa1boxtxt04			.byte %00100000, $0f, "megaui.d81",   0
-fa1boxtxt05			.byte %00100000, $0f, "xmas65.d81",   0
-fa1boxtxt06			.byte %00100000, $0f, "alphavil.mod", 0
-fa1boxtxt07			.byte %00100000, $0f, "cyberno2.mod", 0
-fa1boxtxt08			.byte %00100000, $0f, "impact14.mod", 0
-fa1boxtxt09			.byte %00100000, $0f, "spankit.mod",  0
-fa1boxtxt10			.byte %00100000, $0f, "testlast.mod", 0
-fa1boxtxt11			.byte %00100000, $0f, "spiritmx.mod", 0
-fa1boxtxt12			.byte %00100000, $0f, "nuseup42.mod", 0
-fa1boxtxt13			.byte %00100000, $0d, "samples.bin",  0
-fa1boxtxt14			.byte %00100000, $0d, "glyphs.bin",   0
-fa1boxtxt15			.byte %00100000, $0d, "font.bin",     0
-fa1boxtxt16			.byte %00100000, $0d, "to.bin",       0
-fa1boxtxt17			.byte %00100000, $0d, "cs.bin",       0
-fa1boxtxt18			.byte %00100000, $0d, "foo.bin",      0
-fa1boxtxt19			.byte %00100000, $0d, "bar.bin",      0
+fa1boxtxt00			.byte %00010000, $31, $03, "",            0
