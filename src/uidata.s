@@ -481,7 +481,7 @@ userfunc_openfile
 		jsr uifilebox_getstringptr									; get filename/dir string
 
 		ldx #$00
-		ldy #$02													; skip attributes and file type
+		ldy #$03													; skip attributes, file type and length-until-extension
 :		lda (zpptrtmp),y
 		beq :+
 		and #$7f

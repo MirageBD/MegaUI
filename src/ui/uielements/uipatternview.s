@@ -1253,7 +1253,7 @@ upv_times71tablehi
 .endrepeat
 
 upv_effectcommandtocolour
-		.byte $04, $be, $be, $be, $be, $be, $be, $be, $be, $be, $be, $3d, $be, $3d, $be, $3d
+		.byte $04, $be, $be, $be, $be, $be, $be, $be, $be, $be, $be, $43, $be, $43, $be, $43
 
 ;         0        1        2         3       4         5       6        7
 ; +---+--------+--------+--------+--------+--------+--------+--------+--------+

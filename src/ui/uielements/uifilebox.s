@@ -4,6 +4,8 @@ uifilebox_selected_index		.byte 0
 uifilebox_startpos				.byte 0
 uifilebox_current_draw_pos		.byte 0
 
+uifilebox_filenameextensionpos	.byte 0
+
 ; ----------------------------------------------------------------------------------------------------
 
 uifilebox_layout
@@ -168,6 +170,12 @@ uifilebox_processdirentry_directory
 
 uifilebox_processdirentry
 
+		lda sdc_transferbuffer+$0040						; filenames longer than 30 chars not allowed
+		cmp #30
+		bmi :+
+		rts
+
+:
 		clc													; increase number of entries
 		ldy #$06
 		lda (zpptr3),y
@@ -204,6 +212,7 @@ uifilebox_processdirentry
 		ldy #$00
 		lda sdc_transferbuffer+$0056						; read attribute and store in first byte
 		sta (zpptrtmp),y
+		iny
 
 		and #%00010000
 		cmp #%00010000
@@ -211,13 +220,35 @@ uifilebox_processdirentry
 
 		lda #$31											; colour directory differently
 		bra :++
-
 :		lda #$0f
-:		iny
+:		sta (zpptrtmp),y
+		iny
+
+:
+		ldy #$00
+		ldx #$00											; try to find last '.' (or the end of the filename if . doesn't exist) to determine extension
+:		lda sdc_transferbuffer+$0000,x
+		cmp #$2e
+		bne :+
+		txa
+		tay
+:		inx
+		cpx sdc_transferbuffer+$0040
+		bne :--
+		
+		cpy #$00											; if no . found, set to end of filename
+		bne :+
+		txa
+		tay
+
+:		tya
+		clc
+		adc #$03
+		ldy #$02
 		sta (zpptrtmp),y
 		iny
 
-:		ldx #$00
+		ldx #$00
 :		lda sdc_transferbuffer+$0000,x						; 00 = long filename, $41 is 8.3 filename
 		sta (zpptrtmp),y
 		iny
@@ -346,14 +377,15 @@ uifilebox_drawlistreleased_loop							; start drawing the list
 
 uifilebox_drawfile
 
-		ldy #$02										; set to 2 to skip 'file type and attribute bits' and 'extension type'
+		ldy #$02
+		lda (zpptrtmp),y
+		sta uifilebox_filenameextensionpos
+
+		ldy #$03										; set to 2 to skip 'file type and attribute bits' and 'extension type'
 		ldz #$00
 :		lda (zpptrtmp),y
-		cmp #$2e
-		beq :+
 		tax
 		lda ui_textremap,x
-		beq :++
 		clc
 		adc ufb_font
 		sta [uidraw_scrptr],z
@@ -364,15 +396,20 @@ uifilebox_drawfile
 		sta [uidraw_scrptr],z
 		lda #$00
 		sta [uidraw_colptr],z
-		inz
 		iny
- 		bra :-
+		inz
+ 		cpy uifilebox_filenameextensionpos
+		bne :-
 
-		iny
-:		lda (zpptrtmp),y								; draw extension until end of line
+		lda (zpptrtmp),y								; is we at the end of the filename, or is there an extension?
+		beq :++
+
+		iny												; skip extension
+		ldz #$38
+:		lda (zpptrtmp),y
+		beq :+
 		tax
 		lda ui_textremap,x
-		beq :+
 		clc
 		adc ufb_font
 		sta [uidraw_scrptr],z
@@ -383,17 +420,18 @@ uifilebox_drawfile
 		sta [uidraw_scrptr],z
 		lda #$00
 		sta [uidraw_colptr],z
-		inz
 		iny
- 		bra :-		
-		
-:		rts
+		inz
+		bra :-
+
+:
+		rts
 
 ; ----------------------------------------------------------------------------------------------------
 
 uifilebox_drawdirectory
 
-		ldy #$02										; set to 2 to skip 'file type and attribute bits' and 'extension type'
+		ldy #$03										; set to 2 to skip 'file type and attribute bits', 'extension type' and length-till-extension
 		ldz #$00
 :		lda (zpptrtmp),y
 		beq :+

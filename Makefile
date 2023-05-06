@@ -2,7 +2,7 @@
 
 megabuild		= 1
 finalbuild		= 1
-attachdebugger	= 1
+attachdebugger	= 0
 
 # -----------------------------------------------------------------------------
 
