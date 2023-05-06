@@ -217,33 +217,15 @@ uifilebox_processdirentry
 		sta (zpptrtmp),y
 		iny
 
-		ldx #$00
-:		lda sdc_transferbuffer+$0041,x
-		cmp #$20
-		beq :+
+:		ldx #$00
+:		lda sdc_transferbuffer+$0000,x						; 00 = long filename, $41 is 8.3 filename
 		sta (zpptrtmp),y
 		iny
 		inx
-		cpx #$08
+		cpx sdc_transferbuffer+$0040						; 40 = length of filename
 		bne :-
 
-:		lda sdc_transferbuffer+$0041+8						; read extension. if it's a space then don't add dot or extension
-		cmp #$20
-		beq :++
-
-		lda #$2e											; add dot
-		sta (zpptrtmp),y
-		iny
-
-		ldx #$00											; read extension
-:		lda sdc_transferbuffer+$0041+8,x
-		sta (zpptrtmp),y
-		iny
-		inx
-		cpx #$03
-		bne :-
-
-:		lda #$00											; add 0 string terminator
+		lda #$00
 		sta (zpptrtmp),y
 		iny
 
@@ -385,21 +367,6 @@ uifilebox_drawfile
 		inz
 		iny
  		bra :-
-
-:		lda #$20										; add spaces until extension
-		clc
-		adc ufb_font
-		sta [uidraw_scrptr],z
-		lda ufb_fontcolour
-		sta [uidraw_colptr],z
-		inz
-		lda #$04
-		sta [uidraw_scrptr],z
-		lda #$00
-		sta [uidraw_colptr],z
-		inz
-		cpz #2*10
-		bne :-
 
 		iny
 :		lda (zpptrtmp),y								; draw extension until end of line
