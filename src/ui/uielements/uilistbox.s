@@ -1,10 +1,50 @@
 ; ----------------------------------------------------------------------------------------------------
 
-uilistbox_selected_index		.byte 0
-uilistbox_startpos				.byte 0
-uilistbox_current_draw_pos		.byte 0
+uilistbox_selected_index		.byte 0, 0, 0, 0
+uilistbox_startpos				.byte 0, 0, 0, 0
+uilistbox_numentries			.byte 0, 0, 0, 0
+uilistbox_listheight			.byte 0, 0, 0, 0
+uilistbox_current_draw_pos		.byte 0, 0, 0, 0
+uilistbox_current_draw_posx2	.byte 0, 0, 0, 0
+uilistbox_numerator				.byte 0, 0, 0, 0
+uilistbox_denominator			.byte 0, 0, 0, 0
 
 ; ----------------------------------------------------------------------------------------------------
+
+uilistbox_resetqvalues
+		lda #$00
+		sta uilistbox_selected_index+0
+		sta uilistbox_selected_index+1
+		sta uilistbox_selected_index+2
+		sta uilistbox_selected_index+3
+		sta uilistbox_startpos+0
+		sta uilistbox_startpos+1
+		sta uilistbox_startpos+2
+		sta uilistbox_startpos+3
+		sta uilistbox_numentries+0
+		sta uilistbox_numentries+1
+		sta uilistbox_numentries+2
+		sta uilistbox_numentries+3
+		sta uilistbox_current_draw_pos+0
+		sta uilistbox_current_draw_pos+1
+		sta uilistbox_current_draw_pos+2
+		sta uilistbox_current_draw_pos+3
+		sta uilistbox_current_draw_posx2+0
+		sta uilistbox_current_draw_posx2+1
+		sta uilistbox_current_draw_posx2+2
+		sta uilistbox_current_draw_posx2+3
+		sta uilistbox_numerator+0
+		sta uilistbox_numerator+1
+		sta uilistbox_numerator+2
+		sta uilistbox_numerator+3
+		sta uilistbox_denominator+0
+		sta uilistbox_denominator+1
+		sta uilistbox_denominator+2
+		sta uilistbox_denominator+3
+		rts
+
+; ----------------------------------------------------------------------------------------------------
+
 
 uilistbox_update
 		lda valPepPlaying
@@ -110,6 +150,10 @@ uilistbox_setselectedindex
 		adc (zpptr2),y
 		ldy #$04
 		sta (zpptr2),y
+		ldy #$03
+		adc #$00
+		ldy #$04
+		sta (zpptr2),y
 
 		rts
 
@@ -124,6 +168,10 @@ uilistbox_increase_selection
 		lda (zpptr2),y
 		adc #$01
 		sta (zpptr2),y
+		iny
+		lda (zpptr2),y
+		adc #$00
+		sta (zpptr2),y
 
 		rts
 
@@ -136,54 +184,95 @@ uilistbox_decrease_selection
 		lda (zpptr2),y
 		sbc #$01
 		sta (zpptr2),y
+		iny
+		lda (zpptr2),y
+		sbc #$00
+		sta (zpptr2),y
 
 		rts
 
 uilistbox_confine
+
 		ldy #$04										; put scrollbar1_data in zpptr2
 		jsr ui_getelementdata_2
 
 		ldy #$04										; get selection index
 		lda (zpptr2),y
-		bpl :+											; if negative then it's definitely wrong
+		sta uilistbox_selected_index+2
+		iny
+		lda (zpptr2),y
+		sta uilistbox_selected_index+3
+
+		MATH_POSITIVE uilistbox_selected_index
+
+		bcs :+											; positive -> ok
+		ldy #$04										; negative -> underflow
 		lda #$00
+		sta (zpptr2),y
+		iny
 		sta (zpptr2),y
 
 :		ldy #$06
-		cmp (zpptr2),y									; compare with numentries
-		bmi :+											; ok when smaller
+		lda (zpptr2),y									; store numentries
+		sta uilistbox_numentries+2
+		iny
 		lda (zpptr2),y
-		sec
+		sta uilistbox_numentries+3
+
+		MATH_BIGGER uilistbox_numentries, uilistbox_selected_index, uilistbox_numerator
+		bcs :+											; numentries > selected -> ok
+
+		sec												; selected > numentries -> set selected to numentries - 1
+		ldy #$06
+		lda (zpptr2),y
 		sbc #$01
-		ldy #$04										; get selection
+		ldy #$04
+		sta (zpptr2),y
+		ldy #$07
+		lda (zpptr2),y
+		sbc #$00
+		ldy #$05
 		sta (zpptr2),y
 		rts
 
-:		sec												; get selection index and subtract startpos
-		ldy #$02
-		sbc (zpptr2),y
+:		ldy #$02
+		lda (zpptr2),y
+		sta uilistbox_startpos+2
+		iny
+		lda (zpptr2),y
+		sta uilistbox_startpos+3
 
-		bpl :+											; ok when > 0
-		ldy #$04										; when < get selection index and put in startpos
+		MATH_SUB uilistbox_selected_index, uilistbox_startpos, uilistbox_numerator
+		MATH_POSITIVE uilistbox_numerator				; is selection index bigger than startpos?
+		bcs :+											; yes, so not going up
+
+		ldy #$04										; nope, put selection index in startpos so we move up
 		lda (zpptr2),y
 		ldy #$02
+		sta (zpptr2),y
+		ldy #$05
+		lda (zpptr2),y
+		ldy #$03
 		sta (zpptr2),y
 		rts
 
 :		ldy #UIELEMENT::height							; compare with height
-		cmp (zpptr0),y
-		bpl :+											; ok if < height
+		lda (zpptr0),y
+		sta uilistbox_listheight+2
+		MATH_BIGGER uilistbox_numerator, uilistbox_listheight, uilistbox_denominator
+		bcs :+											; ok if < height
 		rts
 
-:		ldy #$04										; get selection index
-		lda (zpptr2),y
-		sec
-		ldy #UIELEMENT::height
-		sbc (zpptr0),y
+:		MATH_SUB uilistbox_selected_index, uilistbox_listheight, uilistbox_denominator
 		clc
+		ldy #$02										; put in startpos
+		lda uilistbox_denominator+2
 		adc #$01
-		ldy #$02
-		sta (zpptr2),y									; put in startpos
+		sta (zpptr2),y
+		iny
+		lda uilistbox_denominator+3
+		adc #$00
+		sta (zpptr2),y
 
 		rts
 
@@ -328,6 +417,7 @@ uilistbox_drawbkgreleased
 
 uilistbox_startdrawlistreleased
 
+		jsr uilistbox_resetqvalues
 		jsr uidraw_set_draw_position
 
 		ldy #$04										; put scrollbar1_data into zpptr2
@@ -335,32 +425,47 @@ uilistbox_startdrawlistreleased
 
 		ldy #$02										; store startpos
 		lda (zpptr2),y
-		sta uilistbox_startpos
-
-		ldy #$04
+		sta uilistbox_startpos+2
+		iny
 		lda (zpptr2),y
-		sta uilistbox_selected_index
+		sta uilistbox_startpos+3
+		iny
+
+		ldy #$04										; store selected index
+		lda (zpptr2),y
+		sta uilistbox_selected_index+2
+		iny
+		lda (zpptr2),y
+		sta uilistbox_selected_index+3
 
 		ldy #$06										; put listboxtxt into zpptr2
 		jsr ui_getelementdata_2
 
+		lda uilistbox_startpos+2
+		sta uilistbox_current_draw_pos+2
+		sta uilistbox_current_draw_posx2+2
+		lda uilistbox_startpos+3
+		sta uilistbox_current_draw_pos+3
+		sta uilistbox_current_draw_posx2+3
+
+		asl uilistbox_current_draw_posx2+2
+		rol uilistbox_current_draw_posx2+3
+
 		clc
-		lda uilistbox_startpos
-		sta uilistbox_current_draw_pos
-		asl
-		adc zpptr2+0
+		lda zpptr2+0
+		adc uilistbox_current_draw_posx2+2
 		sta zpptr2+0
 		lda zpptr2+1
-		adc #$00
+		adc uilistbox_current_draw_posx2+3
 		sta zpptr2+1
 
 		rts
 
 uilistbox_drawlistreleased		
 
-		lda uilistbox_current_draw_pos					; is this line the selected line?
-		cmp uilistbox_selected_index
-		bne :+
+		MATH_EQUAL uilistbox_current_draw_pos, uilistbox_selected_index 				; is this line the selected line?
+		bcc :+
+
 		lda #$c0
 		sta ulb_font
 		lda #$0f
@@ -393,7 +498,13 @@ uilistbox_drawlistreleased
 		sta zpptr2+1
 
 :		jsr uidraw_increase_row
-		inc uilistbox_current_draw_pos
+		clc
+		lda uilistbox_current_draw_pos+2
+		adc #$01
+		sta uilistbox_current_draw_pos+2
+		lda uilistbox_current_draw_pos+3
+		adc #$00
+		sta uilistbox_current_draw_pos+3
 
 		dec uidraw_height
 		lda uidraw_height
@@ -427,7 +538,7 @@ uilistbox_drawemptyline
 uilistbox_drawlistitem
 
 		ldz #$00
-		lda uilistbox_current_draw_pos
+		lda uilistbox_current_draw_pos+2
 		clc
 		adc #$01
 		lsr
@@ -442,7 +553,7 @@ uilistbox_drawlistitem
 		inz
 		inz
 
-		lda uilistbox_current_draw_pos
+		lda uilistbox_current_draw_pos+2
 		clc
 		adc #$01
 		and #$0f

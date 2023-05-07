@@ -60,6 +60,10 @@ uitxt_textbox1		.byte 0, "                "
 fa1boxtxt			.word fa1boxtxt00
 					.word $ffff
 
-.align 512			; leave enough room for fa1boxtxt to grow. 256 directory entries allowed
+					.repeat 512
+					.byte 0
+					.endrepeat
+
+.align 256			; leave enough room for fa1boxtxt to grow. 256 directory entries allowed
 
 fa1boxtxt00			.byte %00010000, $31, $03, "",            0

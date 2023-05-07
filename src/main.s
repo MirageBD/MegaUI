@@ -3,11 +3,11 @@
 
 .define screen					$e000	; size = 80*50*2 = $1f40
 
-.define sprptrs					$c000
-.define sprites					$c100
-.define kbsprites				$c300
-.define spritepal				$c800
-.define emptychar				$cf80	; size = 64
+.define sprptrs					$cd00
+.define sprites					$ce00
+.define kbsprites				$cf00
+.define spritepal				$f800
+.define emptychar				$ff80	; size = 64
 
 .define uichars					$10000	; $10000 - $14000     size = $4000
 .define glchars					$14000	; $14000 - $1d000     size = $9000

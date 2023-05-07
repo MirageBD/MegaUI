@@ -11,6 +11,53 @@
 .define FP_C			$a8
 .define FP_R			$ac
 
+.macro MATH_BIGGER op1, op2, temp
+.scope
+		ldq op1
+		sec
+		sbcq op2
+		stq temp
+		bit temp+3
+		bmi negtive
+		sec					; op1 > op2 -> c = 1
+		bra end
+negtive	clc					; op1 < op2 -> c = 0
+end
+.endscope
+.endmacro
+
+.macro MATH_POSITIVE op1
+.scope
+		bit op1+3
+		bmi negtive
+		sec					; op1 > 0 -> c = 1
+		bra end
+negtive	clc					; op1 < 0 -> c = 0
+end
+.endscope
+.endmacro
+
+.macro MATH_EQUAL op1, op2
+.scope
+		lda op1+0
+		cmp op2+0
+		bne notsame
+		lda op1+1
+		cmp op2+1
+		bne notsame
+		lda op1+2
+		cmp op2+2
+		bne notsame
+		lda op1+3
+		cmp op2+3
+		bne notsame
+		sec					; op1 == op2 -> c = 1
+		bra end
+notsame	clc					; op1 != op2 -> c = 0
+end
+.endscope
+.endmacro
+
 .macro MATH_ROUND from, to
 .scope
 		ldq from
@@ -27,7 +74,7 @@
 		ldq from
 		clc
 		adcq with
-        stq to
+		stq to
 .endscope
 .endmacro
 
@@ -36,7 +83,7 @@
 		ldq from
 		sec
 		sbcq with
-        stq to
+		stq to
 .endscope
 .endmacro
 
@@ -46,21 +93,21 @@
 .endmacro
 
 .macro MATH_NEG from, to
-        lda #0
-        tax
-        tay
-        taz
-        sec
-        sbcq from
-        stq to
+		lda #0
+		tax
+		tay
+		taz
+		sec
+		sbcq from
+		stq to
 .endmacro
 
 .macro MATH_ABS from, to
 .scope
-        bit from+3
-        bpl pos
-        MATH_NEG from, to
-        bra end
+		bit from+3
+		bpl pos
+		MATH_NEG from, to
+		bra end
 pos		MATH_MOV from, to
 end
 .endscope
@@ -89,11 +136,11 @@ end
 		lda DIVOUTWHOLE+1
 		sta FP_A+3
 
-        bit numerator+3
-        bmi negtive						; a is not negative
-        bit denominator+3
-        bmi nnegtive					; a is negative, but b is not, use negative result
-        bra plus						; a is negative and b also. use result as is
+		bit numerator+3
+		bmi negtive						; a is not negative
+		bit denominator+3
+		bmi nnegtive					; a is negative, but b is not, use negative result
+		bra plus						; a is negative and b also. use result as is
 negtive
 		bit denominator+3
 		bmi plus						; b is also not negative. use result as is
@@ -111,11 +158,11 @@ end
 		MATH_ABS opA, MULTINA
 		MATH_ABS opB, MULTINB
 
-        bit opA+3
-        bmi negtive						; a is not negative
-        bit opB+3
-        bmi nnegtive					; a is negative, but b is not, use negative result
-        bra plus						; a is negative and b also. use result as is
+		bit opA+3
+		bmi negtive						; a is not negative
+		bit opB+3
+		bmi nnegtive					; a is negative, but b is not, use negative result
+		bra plus						; a is negative and b also. use result as is
 negtive
 		bit opB+3
 		bmi plus						; b is also not negative. use result as is

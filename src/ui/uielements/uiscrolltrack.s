@@ -116,6 +116,9 @@ uiscrolltrack_press
 		ldy #$06
 		lda (zpptrtmp),y						; list entries: 30
 		sta uiscrolltrack_numentries+2
+		iny
+		lda (zpptrtmp),y						; list entries: 30
+		sta uiscrolltrack_numentries+3
 
 		MATH_SUB uiscrolltrack_numentries,	uiscrolltrack_listheight,	uiscrolltrack_numerator
 		MATH_DIV uiscrolltrack_startpos,	uiscrolltrack_height,		uiscrolltrack_denominator
@@ -128,9 +131,11 @@ uiscrolltrack_press
 		lsr uiscrolltrack_denominator+3
 		ror uiscrolltrack_denominator+2
 
-		lda uiscrolltrack_denominator+2
-
 		ldy #$02
+		lda uiscrolltrack_denominator+2
+		sta (zpptrtmp),y
+		iny
+		lda uiscrolltrack_denominator+3
 		sta (zpptrtmp),y
 
 		jsr uiscrolltrack_confine
@@ -143,27 +148,55 @@ uiscrolltrack_press
 
 uiscrolltrack_confine
 
+		jsr uiscrolltrack_resetqvalues
+
 		ldy #$02										; get start pos
 		lda (zpptrtmp),y
-		bpl :+
-		lda #$00										; smaller than 0, set to 0
+		sta uiscrolltrack_startpos+2
+		iny
+		lda (zpptrtmp),y
+		sta uiscrolltrack_startpos+3
+
+		MATH_POSITIVE uiscrolltrack_startpos
+		bcs :+											; positive? ok, continue
+
+		ldy #$02										; negative, set to 0
+		lda #$00
+		sta (zpptrtmp),y
+		iny
 		sta (zpptrtmp),y
 		rts
 
-:		ldy #$06										; get number of entries
+:		ldy #$06										; store number of entries
 		lda (zpptrtmp),y
-		ldy #UIELEMENT::height							; subtract height
-		sec
-		sbc (zpptr0),y
-		;sec
-		;sbc #$01 ; 									; LV TODO - subtracting 2 here for scrollbar buttons. Is that really right?
-		bpl :+											; smaller than 0 ? i.e. entries fit into box without scrolling
-		lda #$00
-		sta (zpptrtmp),y								; set scrolpos to 0
+		sta uiscrolltrack_numentries+2
+		iny
+		lda (zpptrtmp),y
+		sta uiscrolltrack_numentries+3
 
-:		ldy #$02
-		cmp (zpptrtmp),y								; compare with startpos
-		bpl :+											; if bigger than ok
+		ldy #UIELEMENT::height
+		lda (zpptr0),y
+		sta uiscrolltrack_listheight+2
+
+		MATH_SUB uiscrolltrack_numentries, uiscrolltrack_listheight, uiscrolltrack_numerator
+		MATH_POSITIVE uiscrolltrack_numerator
+		bcs :+											; carry set   = uiscrolltrack_numentries > uiscrolltrack_listheight
+
+		ldy #$02										; carry clear = uiscrolltrack_numentries < uiscrolltrack_listheight i.e. entries fit into box without scrolling
+		lda #$00										; set scrollpos to 0
+		sta (zpptrtmp),y
+		iny
+		sta (zpptrtmp),y
+		rts
+
+:		MATH_BIGGER uiscrolltrack_numerator, uiscrolltrack_startpos, uiscrolltrack_denominator
+		bcs :+
+
+		ldy #$02
+		lda uiscrolltrack_numerator+2
+		sta (zpptrtmp),y
+		iny
+		lda uiscrolltrack_numerator+3
 		sta (zpptrtmp),y
 
 :		rts
@@ -259,6 +292,9 @@ uiscrolltrack_draw_released_puck
 		ldy #$06
 		lda (zpptrtmp),y						; num entries: 30
 		sta uiscrolltrack_numentries+2
+		iny
+		lda (zpptrtmp),y						; num entries: 30
+		sta uiscrolltrack_numentries+3
 
 		ldy #UIELEMENT::height					; list height: 12
 		lda (zpptr2),y
@@ -266,8 +302,8 @@ uiscrolltrack_draw_released_puck
 
 		lda uiscrolltrack_numentries+2
 		cmp uiscrolltrack_listheight+2
-		bpl :+
-		rts										; dont draw puck if entries < list height
+		;bpl :+
+		;rts									; dont draw puck if entries < list height
 
 :		ldy #UIELEMENT::height					; track height: 8-1=7
 		lda (zpptr0),y
@@ -278,6 +314,9 @@ uiscrolltrack_draw_released_puck
 		ldy #$02
 		lda (zpptrtmp),y						; startpos: 0,1,2,3,4.
 		sta uiscrolltrack_startpos+2
+		iny
+		lda (zpptrtmp),y
+		sta uiscrolltrack_startpos+3
 
 		MATH_SUB uiscrolltrack_numentries,	uiscrolltrack_listheight,	uiscrolltrack_numerator		; 20-12=8
 		MATH_DIV uiscrolltrack_startpos,	uiscrolltrack_numerator,	uiscrolltrack_denominator	; 0/5, 1/5

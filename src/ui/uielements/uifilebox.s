@@ -1,8 +1,11 @@
 ; ----------------------------------------------------------------------------------------------------
 
-uifilebox_selected_index		.byte 0
-uifilebox_startpos				.byte 0
-uifilebox_current_draw_pos		.byte 0
+uifilebox_selected_index		.word 0
+uifilebox_startpos				.word 0
+uifilebox_current_draw_pos		.word 0
+;uifilebox_listheight			.word 0
+
+uifilebox_current_draw_posx2	.word 0
 
 uifilebox_filenameextensionpos	.byte 0
 
@@ -175,16 +178,15 @@ uifilebox_processdirentry
 		bmi :+
 		rts
 
-:
-		clc													; increase number of entries
+:		clc													; increase number of entries
 		ldy #$06
 		lda (zpptr3),y
 		adc #$01
-		cmp #125
-		bne :+
-		rts
-
-:		sta (zpptr3),y
+		sta (zpptr3),y
+		iny
+		lda (zpptr3),y
+		adc #$00
+		lda (zpptr3),y
 
 		ldy #$00											; set list pointer to text
 		lda zpptrtmp+0
@@ -286,23 +288,36 @@ uifilebox_drawlistreleased
 
 		ldy #$02										; store startpos
 		lda (zpptr2),y
-		sta uifilebox_startpos
+		sta uifilebox_startpos+0
+		iny
+		lda (zpptr2),y
+		sta uifilebox_startpos+1
 
 		ldy #$04
 		lda (zpptr2),y
-		sta uifilebox_selected_index
+		sta uifilebox_selected_index+0
+		iny
+		lda (zpptr2),y
+		sta uifilebox_selected_index+1
 
 		ldy #$06										; put listboxtxt into zpptr2
 		jsr ui_getelementdata_2
 
+		lda uifilebox_startpos+0
+		sta uifilebox_current_draw_pos+0
+		sta uifilebox_current_draw_posx2+0
+		lda uifilebox_startpos+1
+		sta uifilebox_current_draw_pos+1
+		sta uifilebox_current_draw_posx2+1
+
+		asl uifilebox_current_draw_posx2+0
+		rol uifilebox_current_draw_posx2+1
 		clc
-		lda uifilebox_startpos
-		sta uifilebox_current_draw_pos
-		asl
-		adc zpptr2+0
+		lda zpptr2+0
+		adc uifilebox_current_draw_posx2+0
 		sta zpptr2+0
 		lda zpptr2+1
-		adc #$00
+		adc uifilebox_current_draw_posx2+1
 		sta zpptr2+1
 
 uifilebox_drawlistreleased_loop							; start drawing the list
@@ -314,8 +329,8 @@ uifilebox_drawlistreleased_loop							; start drawing the list
 		lda (zpptr2),y
 		sta zpptrtmp+1
 
-		lda uifilebox_current_draw_pos
-		cmp uifilebox_selected_index
+		lda uifilebox_current_draw_pos+0
+		cmp uifilebox_selected_index+0
 		bne :+
 
 		lda #$c0
