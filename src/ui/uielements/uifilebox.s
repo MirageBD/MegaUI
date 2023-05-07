@@ -7,6 +7,8 @@ uifilebox_current_draw_pos		.word 0
 
 uifilebox_current_draw_posx2	.word 0
 
+uifilebox_numerator				.byte 0, 0, 0, 0
+
 uifilebox_filenameextensionpos	.byte 0
 
 ; ----------------------------------------------------------------------------------------------------
@@ -120,11 +122,20 @@ uifilebox_getstringptr
 
 		ldy #$04										; get selection index
 		lda (zpptrtmp),y
-		asl												; *2
-		adc zpptr2+0									; add to text list ptr
+		sta uifilebox_numerator+2
+		iny
+		lda (zpptrtmp),y
+		sta uifilebox_numerator+3
+
+		asl uifilebox_numerator+2
+		rol uifilebox_numerator+3
+
+		clc
+		lda zpptr2+0									; add to text list ptr
+		adc uifilebox_numerator+2
 		sta zpptr2+0
 		lda zpptr2+1
-		adc #$00
+		adc uifilebox_numerator+3
 		sta zpptr2+1
 
 		clc

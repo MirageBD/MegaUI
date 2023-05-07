@@ -478,6 +478,8 @@ userfunc_populatesample
 		rts
 
 userfunc_openfile
+		jsr peppitoStop
+
 		jsr uifilebox_getstringptr									; get filename/dir string
 
 		ldx #$00
