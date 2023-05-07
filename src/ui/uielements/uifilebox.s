@@ -3,8 +3,6 @@
 uifilebox_selected_index		.word 0
 uifilebox_startpos				.word 0
 uifilebox_current_draw_pos		.word 0
-;uifilebox_listheight			.word 0
-
 uifilebox_current_draw_posx2	.word 0
 
 uifilebox_numerator				.byte 0, 0, 0, 0

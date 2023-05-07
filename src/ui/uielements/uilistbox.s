@@ -212,11 +212,14 @@ uilistbox_confine
 		iny
 		sta (zpptr2),y
 
-:		ldy #$06
+:		sec
+		ldy #$06
 		lda (zpptr2),y									; store numentries
+		sbc #$01
 		sta uilistbox_numentries+2
 		iny
 		lda (zpptr2),y
+		sbc #$00
 		sta uilistbox_numentries+3
 
 		MATH_BIGGER uilistbox_numentries, uilistbox_selected_index, uilistbox_numerator
