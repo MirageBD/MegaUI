@@ -1,8 +1,6 @@
 .segment "TEXT"
 
-uitxt_button0		.byte "f1 play", 0
-uitxt_button1		.byte "f3 stop", 0
-uitxt_button2		.byte "f5 pause", 0
+uitxt_save			.byte "save", 0
 
 uitxt_finetune		.byte "finetune", 0
 uitxt_volume		.byte "volume", 0
@@ -53,7 +51,8 @@ tvboxtxt
 		.byte 0
 .endrepeat
 
-uitxt_textbox1		.byte 0, "                "
+uitxt_samplebox		.byte 0, "                      "
+uitxt_filenamebox	.byte 0, "                              "
 
 .align 256
 

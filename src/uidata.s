@@ -30,6 +30,10 @@ window0area
 
 		UIELEMENT_ADD topdivider2,				divider,			$ffff,					33,  0,  1,  3,  0,		$ffff,						uidefaultflags
 
+		UIELEMENT_ADD filenamens,				nineslice,			filenametextboxelements,52,  0, 20,  3,  0,		$ffff,						uidefaultflags
+
+		UIELEMENT_ADD savefilebutton,			ctextbutton,		$ffff,					72,  0,  8,  3,  0,		savefilebutton_data,		uidefaultflags
+
 		;UIELEMENT_ADD ctextbutton1,			ctextbutton,		$ffff,					 4,  0, 12,  3,  0,		ctextbutton1_data,			uidefaultflags
 		;UIELEMENT_ADD ctextbutton2,			ctextbutton,		$ffff,					16,  0, 12,  3,  0,		ctextbutton2_data,			uidefaultflags
 		;UIELEMENT_ADD ctextbutton3,			ctextbutton,		$ffff,					28,  0, 12,  3,  0,		ctextbutton3_data,			uidefaultflags
@@ -119,7 +123,7 @@ tab1_contents
 		UIELEMENT_END
 
 tab2_contents
-		UIELEMENT_ADD ui_textbox,				nineslice,			textboxelements,		 7,  2, 22,  3,  0,		$ffff,						%00000001
+		UIELEMENT_ADD sample_textbox,			nineslice,			sampletextboxelements,	 7,  2, 22,  3,  0,		$ffff,						%00000001
 
 		UIELEMENT_ADD lblfinetune,				label,				$ffff,					12,  6,  9,  1,  0,		lblfinetune_data,			%00000001
 		UIELEMENT_ADD lblvolume,				label,				$ffff,					14,  8,  9,  1,  0,		lblvolume_data,				%00000001
@@ -172,8 +176,12 @@ patternviewelements
 
 ; ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ data
 
-textboxelements
-		UIELEMENT_ADD textbox1,					textbox,			$ffff,					 1,  1,-1, -1,  0,		textbox1_data,				uidefaultflags
+sampletextboxelements
+		UIELEMENT_ADD sampletextbox,			textbox,			$ffff,					 1,  1,-1, -1,  0,		sampletextbox_data,			uidefaultflags
+		UIELEMENT_END
+
+filenametextboxelements
+		UIELEMENT_ADD filenametextbox,			textbox,			$ffff,					 1,  1,-1, -1,  0,		filenametextbox_data,		uidefaultflags
 		UIELEMENT_END
 
 sampleviewelements
@@ -191,7 +199,10 @@ chanview4_data				.word $ffff,														3, $b7, $00
 svscrollbar_data			.word svscrollbar_functions, 										0, 1, 128+2*7+1, sequenceview1	; start position, selection index, number of entries, ptr to list
 sequenceview_data			.word svscrollbar_functions,										svscrollbar_data, idxPepPtn0
 
-textbox1_data				.word $ffff,														uitxt_textbox1, 0, 0			; ptr to text, cursor position, end position
+sampletextbox_data			.word $ffff,														uitxt_samplebox, 0, 0			; ptr to text, cursor position, end position
+filenametextbox_data		.word $ffff,														uitxt_filenamebox, 0, 0			; ptr to text, cursor position, end position
+
+savefilebutton_data			.word $ffff,														uitxt_save
 
 paddlexlabel_data			.word $ffff,														uitxt_paddlex
 hexlabel1_data				.word $ffff,														mouse_d419, 1
@@ -503,7 +514,7 @@ userfunc_openfile
 		jsr sdc_chdir
 		jsr uifilebox_opendir
 		jsr uifilebox_draw
-		bra :++
+		rts
 
 :		jsr sdc_openfile
 
@@ -523,12 +534,22 @@ userfunc_openfile
 		lda #>idxPepPtn0
 		sta sequenceview_data+1,y
 
+		ldx #$00												; copy loaded filename to filename textbox
+:		lda sdc_transferbuffer,x
+		beq :+
+		sta uitxt_filenamebox,x
+		inx
+		bra :-
+:		sta uitxt_filenamebox,x
+
+		UICORE_CALLELEMENTFUNCTION filenametextbox, uitextbox_draw
+
 		UICORE_CALLELEMENTFUNCTION la1listbox, uilistbox_startaddentries
 		jsr populate_samplelist
 		UICORE_CALLELEMENTFUNCTION la1listbox, uilistbox_endaddentries
 		UICORE_CALLELEMENTFUNCTION la1listbox, uilistbox_draw
 
-:		rts
+		rts
 
 ; ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
