@@ -1,12 +1,12 @@
 
-.define uipal					$b800	; size = $0300
 
 .define screen					$e000	; size = 80*50*2 = $1f40
 
+.define uipal					$c700	; size = $0300
+.define spritepal				$ca00
 .define sprptrs					$cd00
 .define sprites					$ce00
 .define kbsprites				$cf00
-.define spritepal				$f800
 .define emptychar				$ff80	; size = 64
 
 .define uichars					$10000	; $10000 - $14000     size = $4000

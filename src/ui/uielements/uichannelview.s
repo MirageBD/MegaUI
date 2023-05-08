@@ -59,7 +59,7 @@ uichannelview_release
 		rts
 
 uichannelview_draw
-		jsr uichannelview_drawbkgreleased
+		;jsr uichannelview_drawbkgreleased
 		jsr uichannelview_drawbarsreleased
 		rts
 

@@ -49,6 +49,7 @@ upv_columnends
 upv_reversecolumnlookup
 
 		; "... .. ...  " 0
+		.byte    0,    0,    0
 		.byte    0,    0,    0,    1,    1,    1,    2,    2,    3,    3,    3,    3
 		.byte  4+0,  4+0,  4+0,  4+1,  4+1,  4+1,  4+2,  4+2,  4+3,  4+3,  4+3,  4+3
 		.byte  8+0,  8+0,  8+0,  8+1,  8+1,  8+1,  8+2,  8+2,  8+3,  8+3,  8+3,  8+3
@@ -57,6 +58,7 @@ upv_reversecolumnlookup
 upv_reversecolumninchannellookup
 
 		; "... .. ...  " 0
+		.byte    0,    0,    0
 		.byte    0,    0,    0,    1,    1,    1,    2,    2,    3,    3,    3,    3
 		.byte    0,    0,    0,    1,    1,    1,    2,    2,    3,    3,    3,    3
 		.byte    0,    0,    0,    1,    1,    1,    2,    2,    3,    3,    3,    3
@@ -1129,8 +1131,51 @@ uipatternview_drawemptyline
 
 uipatternview_drawnonmiddleline
 
-		ldy #$00
 		ldz #$00
+
+		lda uipatternview_current_draw_pos
+		lsr
+		lsr
+		lsr
+		lsr
+		tax
+		lda hextodec,x
+		clc
+		adc #$80
+		sta [uidraw_scrptr],z
+		lda #$08
+		sta [uidraw_colptr],z
+		inz
+		lda #$04
+		sta [uidraw_scrptr],z
+		lda #$00
+		sta [uidraw_colptr],z
+		inz
+
+		lda uipatternview_current_draw_pos
+		and #$0f
+		tax
+		lda hextodec,x
+		clc
+		adc #$80
+		sta [uidraw_scrptr],z
+		lda #$08
+		sta [uidraw_colptr],z
+		inz
+		lda #$04
+		sta [uidraw_scrptr],z
+		lda #$00
+		sta [uidraw_colptr],z
+		inz
+
+		lda #$20
+		sta [uidraw_scrptr],z
+		lda #$10
+		sta [uidraw_colptr],z
+		inz
+		inz
+
+		ldy #$00
 :		lda (zpptrtmp),y
 		beq :++
 		cmp #$ff
@@ -1161,8 +1206,55 @@ upvdnml	lda #$00
 
 uipatternview_drawmiddleline
 
-		ldy #$00
 		ldz #$00
+
+		lda uipatternview_current_draw_pos
+		lsr
+		lsr
+		lsr
+		lsr
+		tax
+		lda hextodec,x
+		clc
+		adc #$c0
+		sta [uidraw_scrptr],z
+		lda #$0f
+		sta [uidraw_colptr],z
+		inz
+		lda #$04
+		sta [uidraw_scrptr],z
+		lda #$00
+		sta [uidraw_colptr],z
+		inz
+
+		lda uipatternview_current_draw_pos
+		and #$0f
+		tax
+		lda hextodec,x
+		clc
+		adc #$c0
+		sta [uidraw_scrptr],z
+		lda #$0f
+		sta [uidraw_colptr],z
+		inz
+		lda #$04
+		sta [uidraw_scrptr],z
+		lda #$00
+		sta [uidraw_colptr],z
+		inz
+
+		lda #$e0
+		sta [uidraw_scrptr],z
+		lda #$10
+		sta [uidraw_colptr],z
+		inz
+		lda #$04
+		sta [uidraw_scrptr],z
+		lda #$00
+		sta [uidraw_colptr],z
+		inz
+
+		ldy #$00
 :
 		cpy uipatternview_cursorstart
 		bmi :+
@@ -1253,7 +1345,7 @@ upv_times71tablehi
 .endrepeat
 
 upv_effectcommandtocolour
-		.byte $04, $be, $be, $be, $be, $be, $be, $be, $be, $be, $be, $43, $be, $43, $be, $43
+		.byte $04, $be, $be, $be, $be, $be, $be, $be, $be, $be, $be, $43, $be, $43, $c4, $43
 
 ;         0        1        2         3       4         5       6        7
 ; +---+--------+--------+--------+--------+--------+--------+--------+--------+

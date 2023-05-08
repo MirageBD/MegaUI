@@ -128,7 +128,7 @@ uisequenceview_setselectedindex
 		rts
 
 uisequenceview_draw
-		jsr uisequenceview_drawbkgreleased
+		;jsr uisequenceview_drawbkgreleased
 		jsr uisequenceview_drawlistreleased
 		rts
 
@@ -149,7 +149,7 @@ uisequenceview_drawbkgreleased
 
 :		ldx uidraw_width
 		ldz #$00
-:		lda #$20
+:		lda #$40
 		sta [uidraw_scrptr],z
 		inz
 		lda #$00

@@ -119,8 +119,8 @@ tabgroupchildren
 ; ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ child windows
 
 tab1_contents
-		UIELEMENT_ADD ui_sequenceview,			nineslice,			sequenceviewelements,	 1,  0, 10, 24,  0,		$ffff,						uidefaultflags	
-		UIELEMENT_ADD ui_patternview,			nineslice,			patternviewelements,	12,  0, 56, 24,  0,		$ffff,						uidefaultflags	
+		UIELEMENT_ADD ui_sequenceview,			nineslice,			sequenceviewelements,	 1,  0, 12, 24,  0,		$ffff,						uidefaultflags	
+		UIELEMENT_ADD ui_patternview,			nineslice,			patternviewelements,	14,  0, 54, 24,  0,		$ffff,						uidefaultflags	
 		UIELEMENT_ADD ui_scopeview1,			nineslice,			$ffff,					69,  0, 10,  6,  0,		$ffff,						uidefaultflags	
 		UIELEMENT_ADD ui_scopeview2,			nineslice,			$ffff,					69,  6, 10,  6,  0,		$ffff,						uidefaultflags	
 		UIELEMENT_ADD ui_scopeview3,			nineslice,			$ffff,					69, 12, 10,  6,  0,		$ffff,						uidefaultflags	
@@ -166,16 +166,16 @@ listarea1elements
 ; ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ scrollbar elements
 
 sequenceviewelements
-		UIELEMENT_ADD sequenceview1,			sequenceview,		$ffff,					 1,  5, -4, -7,  0,		sequenceview_data,			uidefaultflags
+		UIELEMENT_ADD sequenceview1,			sequenceview,		$ffff,					 2,  5, -5, -7,  0,		sequenceview_data,			uidefaultflags
 		UIELEMENT_ADD svscrollbartrack,			scrolltrack,		$ffff,					-3,  5,  2, -7,  0,		svscrollbar_data,			uidefaultflags
 		UIELEMENT_END
 
 patternviewelements
-		UIELEMENT_ADD chanview1,				channelview,		$ffff,					 5,  2, 10,  2,  0,		chanview1_data,				uidefaultflags
-		UIELEMENT_ADD chanview2,				channelview,		$ffff,					17,  2, 10,  2,  0,		chanview2_data,				uidefaultflags
-		UIELEMENT_ADD chanview3,				channelview,		$ffff,					29,  2, 10,  2,  0,		chanview3_data,				uidefaultflags
-		UIELEMENT_ADD chanview4,				channelview,		$ffff,					41,  2, 10,  2,  0,		chanview4_data,				uidefaultflags
-		UIELEMENT_ADD tvlistbox,				patternview,		$ffff,					 5,  5, -8, -7,  0,		tvlistbox_data,				uidefaultflags
+		UIELEMENT_ADD chanview1,				channelview,		$ffff,					 4,  2, 10,  2,  0,		chanview1_data,				uidefaultflags
+		UIELEMENT_ADD chanview2,				channelview,		$ffff,					16,  2, 10,  2,  0,		chanview2_data,				uidefaultflags
+		UIELEMENT_ADD chanview3,				channelview,		$ffff,					28,  2, 10,  2,  0,		chanview3_data,				uidefaultflags
+		UIELEMENT_ADD chanview4,				channelview,		$ffff,					40,  2, 10,  2,  0,		chanview4_data,				uidefaultflags
+		UIELEMENT_ADD tvlistbox,				patternview,		$ffff,					 1,  5, -5, -7,  0,		tvlistbox_data,				uidefaultflags
 		UIELEMENT_ADD tvscrollbartrack,			scrolltrack,		$ffff,					-3,  5,  2, -7,  0,		tvscrollbar_data,			uidefaultflags
 		UIELEMENT_END
 

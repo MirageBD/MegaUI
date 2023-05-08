@@ -53,8 +53,8 @@ tvboxtxt
 		.byte 0
 .endrepeat
 
-uitxt_samplebox		.byte 0, "                      "
-uitxt_filenamebox	.byte 0, "                              "
+uitxt_samplebox		.byte 0, "a                     "
+uitxt_filenamebox	.byte 0, "babe                          "
 
 .align 256
 
