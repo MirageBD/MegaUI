@@ -128,7 +128,7 @@ tab1_contents
 		UIELEMENT_END
 
 tab2_contents
-		UIELEMENT_ADD sample_textbox,			nineslice,			sampletextboxelements,	 7,  2, 22,  3,  0,		$ffff,						%00000001
+		UIELEMENT_ADD sample_textbox,			nineslice,			sampletextboxelements,	 5,  2, 24,  3,  0,		$ffff,						%00000001
 
 		UIELEMENT_ADD lblfinetune,				label,				$ffff,					12,  6,  9,  1,  0,		lblfinetune_data,			%00000001
 		UIELEMENT_ADD lblvolume,				label,				$ffff,					14,  8,  9,  1,  0,		lblvolume_data,				%00000001
@@ -422,11 +422,11 @@ userfunc_populatesample
 		asl
 		tax
 		lda idxPepIns0+0,x											; put pointer to instrument struct into zpptrtmp
-		sta zpptrtmp+0
+		sta zpptrtmp+0												; $2e
 		lda idxPepIns0+1,x
-		sta zpptrtmp+1
+		sta zpptrtmp+1												; $3c
 
-		ldy #0														; put pointer to instrument header into zpptrtmp2
+		ldy #0														; put pointer to instrument header (4 bytes) into zpptrtmp2
 		lda (zpptrtmp),y
 		sta zpptrtmp2+0
 		iny
@@ -442,9 +442,11 @@ userfunc_populatesample
 		ldy #$00
 		ldz #$00
 :		lda [zpptrtmp2],z
+		tax
+		lda ui_textremap,x
 		sta uitxt_samplebox,y
-		inz
 		iny
+		inz
 		cpz #22
 		bne :-
 		lda #$00
