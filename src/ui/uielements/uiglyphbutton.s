@@ -36,10 +36,10 @@ uiglyphbutton_draw
 
 		jsr uidraw_set_draw_position
 
-		ldy #$02
+		ldy #$02											; get glyph
 		jsr ui_getelementdata_2
 
-		lda zpptr2+0
+		lda zpptr2+0										; draw it
 		ldz #$00
 		sta [uidraw_scrptr],z
 
@@ -63,7 +63,7 @@ uiglyphbutton_doubleclick
 uiglyphbutton_release
 		lda #3
 		sta uiglyphbutton_colour
-		jsr uiglyphbutton_drawreleased
+		;jsr uiglyphbutton_drawreleased						; don't turn off button on release, let user functions handle this.
 		jsr uielement_release
 
 		ldy #$00

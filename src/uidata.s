@@ -322,10 +322,13 @@ scaletrack_functions			.word samplescaletrack,					uiscaletrack_draw
 playbutton_functions			.word playbutton,						userfunc_playmod
 								.word $ffff
 
-playpatternbutton_functions		.word playpatternbutton,				userfunc_playmod
+playpatternbutton_functions		.word playpatternbutton,				uiglyphbutton_drawreleased
 								.word $ffff
 
-stopbutton_functions			.word stopbutton,						userfunc_stopmod
+stopbutton_functions			.word playbutton,						uiglyphbutton_drawreleased
+								.word recordbutton,						uiglyphbutton_drawreleased
+								.word stopbutton,						uiglyphbutton_drawreleased
+								.word stopbutton,						userfunc_stopmod
 								.word $ffff
 
 recordbutton_functions			.word recordbutton,						userfunc_recordmod
@@ -353,6 +356,7 @@ userfunc_playmod
 
 userfunc_stopmod
 		jsr peppitoStop
+		jsr peppitoClearChans
 		jsr peppitoClearCurrentSamples
 		;jsr peppitoInit
 		lda #$00
