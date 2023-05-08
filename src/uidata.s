@@ -30,7 +30,12 @@ window0area
 
 		UIELEMENT_ADD topdivider2,				divider,			$ffff,					33,  0,  1,  3,  0,		$ffff,						uidefaultflags
 
-		UIELEMENT_ADD filenamens,				nineslice,			filenametextboxelements,52,  0, 20,  3,  0,		$ffff,						uidefaultflags
+		UIELEMENT_ADD bpmlabel,					label,				$ffff,					35,  1,  3,  1,  0,		bpmlabel_data,				uidefaultflags
+		UIELEMENT_ADD nbbpm,					cnumericbutton,		$ffff,					38,  0,  7,  3,  0,		nbbpm_data,					uidefaultflags
+
+		UIELEMENT_ADD topdivider3,				divider,			$ffff,					45,  0,  1,  3,  0,		$ffff,						uidefaultflags
+
+		UIELEMENT_ADD filenamens,				nineslice,			filenametextboxelements,47,  0, 24,  3,  0,		$ffff,						uidefaultflags
 
 		UIELEMENT_ADD savefilebutton,			ctextbutton,		$ffff,					72,  0,  8,  3,  0,		savefilebutton_data,		uidefaultflags
 
@@ -199,6 +204,8 @@ chanview4_data				.word $ffff,														3, $b7, $00
 svscrollbar_data			.word svscrollbar_functions, 										0, 1, 128+2*7+1, sequenceview1	; start position, selection index, number of entries, ptr to list
 sequenceview_data			.word svscrollbar_functions,										svscrollbar_data, idxPepPtn0
 
+bpmlabel_data				.word $ffff,														uitxt_bpm
+
 sampletextbox_data			.word $ffff,														0, 0, 0, 22, uitxt_samplebox 		; start position, cursor pos, text length, max text size, ptr to text
 filenametextbox_data		.word $ffff,														0, 0, 0, 30, uitxt_filenamebox		; start position, cursor pos, text length, max text size, ptr to text
 
@@ -239,11 +246,13 @@ lbllength_data				.word $ffff,														uitxt_length
 lblrepeat_data				.word $ffff,														uitxt_repeat
 lblrepeatlen_data			.word $ffff,														uitxt_repeatlen
 
-nbfinetune_data				.word $ffff,														$0000, $babe, 1, 0, 0, 255, 0		; value, address, number of bytes, hexadecimal or not, min value, max value, signed offset
-nbvolume_data				.word $ffff,														$0000, $babe, 1, 0, 0, 255, 0
+nbfinetune_data				.word $ffff,														$0000, $babe, 1, 0, 0,   255, 0		; value, address, number of bytes, hexadecimal or not, min value, max value, signed offset
+nbvolume_data				.word $ffff,														$0000, $babe, 1, 0, 0,   255, 0
 nblength_data				.word $ffff,														$0000, $babe, 2, 0, 0, 65535, 0
 nbrepeat_data				.word $ffff,														$0000, $babe, 2, 0, 0, 65535, 0
 nbrepeatlen_data			.word $ffff,														$0000, $babe, 2, 0, 0, 65535, 0
+
+nbbpm_data					.word $ffff,														$0000, $babe, 1, 0, 0,   255, 0
 
 fa1scrollbar_data			.word fa1scrollbar_functions, 										0, 0, 20, fa1filebox			; start position, selection index, number of entries, ptr to list
 fa1filebox_data				.word fa1scrollbar_functions,			filebox1_functions,			fa1scrollbar_data, fa1boxtxt
