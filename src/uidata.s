@@ -421,10 +421,34 @@ userfunc_populatesample
 
 		asl
 		tax
-		lda idxPepIns0+0,x											; put pointer to instrument struct in zpptrtmp
+		lda idxPepIns0+0,x											; put pointer to instrument struct into zpptrtmp
 		sta zpptrtmp+0
 		lda idxPepIns0+1,x
 		sta zpptrtmp+1
+
+		ldy #0														; put pointer to instrument header into zpptrtmp2
+		lda (zpptrtmp),y
+		sta zpptrtmp2+0
+		iny
+		lda (zpptrtmp),y
+		sta zpptrtmp2+1
+		iny
+		lda (zpptrtmp),y
+		sta zpptrtmp2+2
+		iny
+		lda (zpptrtmp),y
+		sta zpptrtmp2+3
+
+		ldy #$00
+		ldz #$00
+:		lda [zpptrtmp2],z
+		sta uitxt_samplebox,y
+		inz
+		iny
+		cpz #22
+		bne :-
+		lda #$00
+		sta uitxt_samplebox,y
 
 		ldy #4														; feed volume into volume button
 		lda (zpptrtmp),y
@@ -489,6 +513,8 @@ userfunc_populatesample
 		lda zpptrtmp+1
 		adc #0
 		sta nbrepeatlen_data+5
+
+		UICORE_CALLELEMENTFUNCTION sampletextbox, uitextbox_draw
 
 		UICORE_CALLELEMENTFUNCTION sampleview1, uisampleview_draw
 		UICORE_CALLELEMENTFUNCTION samplescaletrack, uiscaletrack_draw
