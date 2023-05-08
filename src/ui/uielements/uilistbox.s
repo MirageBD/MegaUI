@@ -211,6 +211,7 @@ uilistbox_confine
 		sta (zpptr2),y
 		iny
 		sta (zpptr2),y
+		rts
 
 :		sec
 		ldy #$06

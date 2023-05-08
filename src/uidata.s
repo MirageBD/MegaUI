@@ -199,10 +199,10 @@ chanview4_data				.word $ffff,														3, $b7, $00
 svscrollbar_data			.word svscrollbar_functions, 										0, 1, 128+2*7+1, sequenceview1	; start position, selection index, number of entries, ptr to list
 sequenceview_data			.word svscrollbar_functions,										svscrollbar_data, idxPepPtn0
 
-sampletextbox_data			.word $ffff,														uitxt_samplebox, 0, 0			; ptr to text, cursor position, end position
-filenametextbox_data		.word $ffff,														uitxt_filenamebox, 0, 0			; ptr to text, cursor position, end position
+sampletextbox_data			.word $ffff,														0, 0, 0, 22, uitxt_samplebox 		; start position, cursor pos, text length, max text size, ptr to text
+filenametextbox_data		.word $ffff,														0, 0, 0, 30, uitxt_filenamebox		; start position, cursor pos, text length, max text size, ptr to text
 
-savefilebutton_data			.word $ffff,														uitxt_save
+savefilebutton_data			.word $ffff,														uitxt_save, 0, 0, 0, 0			; ptr to text, position of cursor, start pos, selection start, selection end
 
 paddlexlabel_data			.word $ffff,														uitxt_paddlex
 hexlabel1_data				.word $ffff,														mouse_d419, 1
@@ -537,10 +537,13 @@ userfunc_openfile
 		ldx #$00												; copy loaded filename to filename textbox
 :		lda sdc_transferbuffer,x
 		beq :+
+		tay
+		lda ui_textremap,y
 		sta uitxt_filenamebox,x
 		inx
 		bra :-
 :		sta uitxt_filenamebox,x
+		stx filenametextbox_data+6								; store length of filename
 
 		UICORE_CALLELEMENTFUNCTION filenametextbox, uitextbox_draw
 
