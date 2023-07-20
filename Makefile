@@ -1,6 +1,6 @@
 # -----------------------------------------------------------------------------
 
-megabuild		= 0
+megabuild		= 1
 finalbuild		= 1
 attachdebugger	= 0
 
@@ -8,7 +8,7 @@ attachdebugger	= 0
 
 MAKE			= make
 CP				= cp
-MV				= mv
+MV				= mv 
 RM				= rm -f
 
 SRC_DIR			= ./src

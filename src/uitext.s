@@ -56,6 +56,8 @@ tvboxtxt
 uitxt_samplebox		.byte 0, "a                     "
 uitxt_filenamebox	.byte 0, "babe                          "
 
+fa1directorytxt		.byte 0, "                              "
+
 .align 256
 
 fa1boxtxt			.word fa1boxtxt00

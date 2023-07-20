@@ -201,7 +201,7 @@ chanview2_data				.word $ffff,														1, $b7, $00
 chanview3_data				.word $ffff,														2, $b7, $00
 chanview4_data				.word $ffff,														3, $b7, $00
 
-svscrollbar_data			.word svscrollbar_functions, 										0, 1, 128+2*7+1, sequenceview1	; start position, selection index, number of entries, ptr to list
+svscrollbar_data			.word svscrollbar_functions, 										0, 1, 128+2*7+2, sequenceview1	; start position, selection index, number of entries, ptr to list
 sequenceview_data			.word svscrollbar_functions,										svscrollbar_data, idxPepPtn0
 
 bpmlabel_data				.word $ffff,														uitxt_bpm
@@ -255,7 +255,7 @@ nbrepeatlen_data			.word $ffff,														$0000, $babe, 2, 0, 0, 65535, 0
 nbbpm_data					.word $ffff,														$0000, $babe, 1, 0, 0,   255, 0
 
 fa1scrollbar_data			.word fa1scrollbar_functions, 										0, 0, 20, fa1filebox			; start position, selection index, number of entries, ptr to list
-fa1filebox_data				.word fa1scrollbar_functions,			filebox1_functions,			fa1scrollbar_data, fa1boxtxt
+fa1filebox_data				.word fa1scrollbar_functions,			filebox1_functions,			fa1scrollbar_data, fa1boxtxt, fa1directorytxt
 
 la1scrollbar_data			.word la1scrollbar_functions, 										0, 0, 19, la1listbox			; start position, selection index, number of entries, ptr to list
 la1listbox_data				.word la1scrollbar_functions,			listbox1_functions,			la1scrollbar_data, la1boxtxt
