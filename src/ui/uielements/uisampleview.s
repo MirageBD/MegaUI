@@ -129,12 +129,13 @@ uisampleview_draw
 		ora #%00111100
 		sta $d015
 
-
+		; uncomment this to make it work in xemu
+/*
 		lda $d01b
 		and #%11000011
 		ora #%00111100
 		sta $d01b
-
+*/
 
 		lda $d010
 		and #%11000011
