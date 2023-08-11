@@ -32,6 +32,7 @@ basicend	.byte 0
 .include "modplay.s"
 
 .include "drivers/mouse.s"
+.include "drivers/joystick.s"
 .include "drivers/sdc.s"
 .include "drivers/keyboard.s"
 .include "drivers/audiodma.s"
@@ -42,6 +43,7 @@ basicend	.byte 0
 .include "ui/ui.s"
 .include "ui/uidebug.s"
 .include "ui/uimouse.s"
+.include "ui/uijoystick.s"
 .include "ui/uikeyboard.s"
 
 .include "ui/uielements/uielement.s"

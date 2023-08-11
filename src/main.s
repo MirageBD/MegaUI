@@ -169,6 +169,7 @@ entry_main
 		jsr peppitoInit
 
 		jsr mouse_init									; initialise drivers
+		jsr joystick_init
 
 		;UICORE_HIDEELEMENT ui_sequenceview				; turn parts of the UI off as a test
 		;UICORE_HIDEELEMENT ui_patternview				; turn parts of the UI off as a test

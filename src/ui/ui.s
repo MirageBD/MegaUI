@@ -115,6 +115,7 @@ ui_init
 
 
 		jsr uimouse_init
+		jsr uijoystick_init
 		jsr uikeyboard_init
 
 		; pal y border start
@@ -704,7 +705,9 @@ ueqe1	jsr $babe
 ui_update
 
 		jsr mouse_update
+		jsr joystick_update
 		jsr uimouse_update
+		jsr uijoystick_update
 		jsr keyboard_update
 		jsr uikeyboard_update
 		jsr ui_eventqueue_execute
