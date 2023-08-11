@@ -77,6 +77,7 @@ $(EXE_DIR)/boot.o:	$(SRC_DIR)/boot.s \
 					$(SRC_DIR)/uitext.s \
 					$(SRC_DIR)/modplay.s \
 					$(DRVRS_SRC_DIR)/mouse.s \
+					$(DRVRS_SRC_DIR)/joystick.s \
 					$(DRVRS_SRC_DIR)/sdc.s \
 					$(DRVRS_SRC_DIR)/keyboard.s \
 					$(DRVRS_SRC_DIR)/audiodma.s \
@@ -87,6 +88,7 @@ $(EXE_DIR)/boot.o:	$(SRC_DIR)/boot.s \
 					$(UI_SRC_DIR)/ui.s \
 					$(UI_SRC_DIR)/uidebug.s \
 					$(UI_SRC_DIR)/uimouse.s \
+					$(UI_SRC_DIR)/uijoystick.s \
 					$(UI_SRC_DIR)/uikeyboard.s \
 					$(UIELT_SRC_DIR)/uielement.s \
 					$(UIELT_SRC_DIR)/uiroot.s \

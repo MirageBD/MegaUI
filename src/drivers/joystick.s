@@ -18,4 +18,31 @@ joystick_init
 		rts
 
 joystick_update
+		ldx $dc00									; #$7f when nothing is pressed
+
+		txa
+		and #%00000001								; up
+		bne joystick_down
+		;dec cursor_y_pos
+		jmp joystick_left
+joystick_down
+		txa
+		and #%00000010								; down
+		bne joystick_left
+		;inc cursor_y_pos
+joystick_left
+		txa
+		and #%00000100								; left
+		bne joystick_right
+		;dec cursor_x_pos
+		jmp joystick_fire
+joystick_right
+		txa
+		and #%00001000								; right
+		bne joystick_fire
+		;inc cursor_x_pos
+joystick_fire
+		txa
+		and #%00010000								; fire
+
 		rts
