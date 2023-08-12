@@ -214,7 +214,8 @@ mouse_check_end
 
 		lda #$ff										; enable keyboard again
 		sta $dc02
-	
+		sta $dc00
+
 		rts
 
 ; -------------------------------------------		
