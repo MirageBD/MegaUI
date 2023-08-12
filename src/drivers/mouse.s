@@ -163,6 +163,7 @@ mouse_update
         and #$10										; isolate button bit
         beq mouse_event_pressed
 		
+mouse_event_released		
 		lda mouse_held									; mouse is not pressed, check if it was pressed before
 		bne :+
 		bra mouse_check_end
