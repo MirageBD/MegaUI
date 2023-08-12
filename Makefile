@@ -1,6 +1,7 @@
 # -----------------------------------------------------------------------------
 
 megabuild		= 1
+useetherload	= 1
 finalbuild		= 1
 attachdebugger	= 0
 
@@ -32,7 +33,9 @@ GCC				= gcc
 MC				= MegaConvert
 ADDADDR			= addaddr
 MEGAMOD			= MegaMod
+EL				= etherload -i 192.168.1.255
 XMEGA65			= F:\xemu\xmega65.exe
+MEGAFTP			= mega65_ftp -i 192.168.1.255
 
 CONVERTBREAK	= 's/al [0-9A-F]* \.br_\([a-z]*\)/\0\nbreak \.br_\1/'
 CONVERTWATCH	= 's/al [0-9A-F]* \.wh_\([a-z]*\)/\0\nwatch store \.wh_\1/'
@@ -148,6 +151,13 @@ run: $(EXE_DIR)/disk.d81
 
 ifeq ($(megabuild), 1)
 
+ifeq ($(useetherload), 1)
+
+	$(MEGAFTP) -c "put D:\Mega\MegaUI\exe\disk.d81 megaui.d81" -c "quit"
+	$(EL) -m MEGAUI.D81 -r $(EXE_DIR)/bootaddr.prg
+
+else
+
 	m65 -l COM3 -F
 	mega65_ftp.exe -l COM3 -s 2000000 -c "cd /" \
 	-c "put D:\Mega\MegaUI\exe\disk.d81 megaui.d81"
@@ -163,6 +173,8 @@ ifeq ($(megabuild), 1)
 	m65 -l COM3 -T 'load "boot"'
 	m65 -l COM3 -T 'list'
 	m65 -l COM3 -T 'run'
+
+endif
 
 ifeq ($(attachdebugger), 1)
 	m65dbg --device /dev/ttyS2
