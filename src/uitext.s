@@ -60,7 +60,7 @@ fa1directorytxt		.byte 0, "                              "
 
 .align 256
 
-fa1boxtxt			.word fa1boxtxt00
+fa1boxtxt			.word $0a00 ; put directory entries just after sdc_transferbuffer ($0900) fa1boxtxt00
 					.word $ffff
 
 					.repeat 512

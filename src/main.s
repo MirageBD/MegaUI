@@ -138,13 +138,14 @@ entry_main
 
 		jsr fl_init
 		jsr fl_waiting
-		FLOPPY_FAST_LOAD uichars,			$30, $30
-		FLOPPY_FAST_LOAD glchars,			$30, $31
-		FLOPPY_FAST_LOAD uipal,				$30, $32
-		FLOPPY_FAST_LOAD sprites,			$30, $33
-		FLOPPY_FAST_LOAD kbsprites,			$30, $34
-		FLOPPY_FAST_LOAD spritepal,			$30, $35
-		FLOPPY_FAST_LOAD moddata,			$30, $36
+		FLOPPY_IFFL_FAST_LOAD_INIT "MEGAMOD.IFFLCRCH"
+		FLOPPY_IFFL_FAST_LOAD
+		FLOPPY_IFFL_FAST_LOAD
+		FLOPPY_IFFL_FAST_LOAD
+		FLOPPY_IFFL_FAST_LOAD
+		FLOPPY_IFFL_FAST_LOAD
+		FLOPPY_IFFL_FAST_LOAD
+		FLOPPY_IFFL_FAST_LOAD
 		jsr fl_exit
 
 		sei

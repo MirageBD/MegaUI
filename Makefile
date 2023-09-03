@@ -31,10 +31,12 @@ BBMEGA			= b2mega
 LC				= crush 6
 GCC				= gcc
 MC				= MegaConvert
-ADDADDR			= addaddr
+MEGAADDRESS		= megatool -a
+MEGACRUNCH		= megatool -c
+MEGAIFFL		= megatool -i
 MEGAMOD			= MegaMod
 EL				= etherload -i 192.168.1.255
-XMEGA65			= F:\xemu\xmega65.exe
+XMEGA65			= H:\xemu\xmega65.exe
 MEGAFTP			= mega65_ftp -i 192.168.1.255
 
 CONVERTBREAK	= 's/al [0-9A-F]* \.br_\([a-z]*\)/\0\nbreak \.br_\1/'
@@ -47,6 +49,30 @@ CONVERTVICEMAP	= 's/al //'
 default: all
 
 OBJS = $(EXE_DIR)/boot.o $(EXE_DIR)/main.o
+
+BINFILES  = $(BIN_DIR)/font_chars1.bin
+BINFILES += $(BIN_DIR)/glyphs_chars1.bin
+BINFILES += $(BIN_DIR)/glyphs_pal1.bin
+BINFILES += $(BIN_DIR)/cursor_sprites1.bin
+BINFILES += $(BIN_DIR)/kbcursor_sprites1.bin
+BINFILES += $(BIN_DIR)/cursor_pal1.bin
+BINFILES += $(BIN_DIR)/song.mod
+
+BINFILESADDR  = $(BIN_DIR)/font_chars1.bin.addr
+BINFILESADDR += $(BIN_DIR)/glyphs_chars1.bin.addr
+BINFILESADDR += $(BIN_DIR)/glyphs_pal1.bin.addr
+BINFILESADDR += $(BIN_DIR)/cursor_sprites1.bin.addr
+BINFILESADDR += $(BIN_DIR)/kbcursor_sprites1.bin.addr
+BINFILESADDR += $(BIN_DIR)/cursor_pal1.bin.addr
+BINFILESADDR += $(BIN_DIR)/song.mod.addr
+
+BINFILESMC  = $(BIN_DIR)/font_chars1.bin.addr.mc
+BINFILESMC += $(BIN_DIR)/glyphs_chars1.bin.addr.mc
+BINFILESMC += $(BIN_DIR)/glyphs_pal1.bin.addr.mc
+BINFILESMC += $(BIN_DIR)/cursor_sprites1.bin.addr.mc
+BINFILESMC += $(BIN_DIR)/kbcursor_sprites1.bin.addr.mc
+BINFILESMC += $(BIN_DIR)/cursor_pal1.bin.addr.mc
+BINFILESMC += $(BIN_DIR)/song.mod.addr.mc
 
 # % is a wildcard
 # $< is the first dependency
@@ -71,9 +97,27 @@ $(BIN_DIR)/kbcursor_sprites1.bin: $(BIN_DIR)/kbcursor.bin
 	$(MC)
 	$(MC) $< cm1:1 d1:0 cl1:14000 rc1:0 sm1:1
 
+$(BIN_DIR)/alldata.bin: $(BINFILES)
+	$(MEGAADDRESS) $(BIN_DIR)/font_chars1.bin          00010000
+	$(MEGAADDRESS) $(BIN_DIR)/glyphs_chars1.bin        00014000
+	$(MEGAADDRESS) $(BIN_DIR)/glyphs_pal1.bin          0000c700
+	$(MEGAADDRESS) $(BIN_DIR)/cursor_sprites1.bin      0000ce00
+	$(MEGAADDRESS) $(BIN_DIR)/kbcursor_sprites1.bin    0000cf00
+	$(MEGAADDRESS) $(BIN_DIR)/cursor_pal1.bin          0000ca00
+	$(MEGAADDRESS) $(BIN_DIR)/song.mod                 00020000
+	$(MEGACRUNCH) $(BIN_DIR)/font_chars1.bin.addr
+	$(MEGACRUNCH) $(BIN_DIR)/glyphs_chars1.bin.addr
+	$(MEGACRUNCH) $(BIN_DIR)/glyphs_pal1.bin.addr
+	$(MEGACRUNCH) $(BIN_DIR)/cursor_sprites1.bin.addr
+	$(MEGACRUNCH) $(BIN_DIR)/kbcursor_sprites1.bin.addr
+	$(MEGACRUNCH) $(BIN_DIR)/cursor_pal1.bin.addr
+	$(MEGACRUNCH) $(BIN_DIR)/song.mod.addr
+	$(MEGAIFFL) $(BINFILESMC) $(BIN_DIR)/alldata.bin
+
 $(EXE_DIR)/boot.o:	$(SRC_DIR)/boot.s \
 					$(SRC_DIR)/main.s \
 					$(SRC_DIR)/irqload.s \
+					$(SRC_DIR)/decruncher.s \
 					$(SRC_DIR)/macros.s \
 					$(SRC_DIR)/mathmacros.s \
 					$(SRC_DIR)/uidata.s \
@@ -125,48 +169,42 @@ $(EXE_DIR)/boot.o:	$(SRC_DIR)/boot.s \
 					Makefile Linkfile
 	$(AS) $(ASFLAGS) -o $@ $<
 
-$(EXE_DIR)/boot.prg: $(EXE_DIR)/boot.o Linkfile
-	$(LD) -Ln $(EXE_DIR)/boot.maptemp --dbgfile $(EXE_DIR)/boot.dbg -C Linkfile -o $@ $(EXE_DIR)/boot.o
-	$(ADDADDR) $(EXE_DIR)/boot.prg $(EXE_DIR)/bootaddr.prg 8193
+$(EXE_DIR)/boot.prg.addr: $(EXE_DIR)/boot.o Linkfile
+	$(LD) -Ln $(EXE_DIR)/boot.maptemp --dbgfile $(EXE_DIR)/boot.dbg -C Linkfile -o $(EXE_DIR)/boot.prg $(EXE_DIR)/boot.o
+	$(MEGAADDRESS) $(EXE_DIR)/boot.prg 2001
 	$(SED) $(CONVERTVICEMAP) < $(EXE_DIR)/boot.maptemp > boot.map
 	$(SED) $(CONVERTVICEMAP) < $(EXE_DIR)/boot.maptemp > boot.list
 
-$(EXE_DIR)/disk.d81: $(EXE_DIR)/boot.prg $(BIN_DIR)/font_chars1.bin $(BIN_DIR)/glyphs_chars1.bin $(BIN_DIR)/cursor_sprites1.bin $(BIN_DIR)/kbcursor_sprites1.bin
+$(EXE_DIR)/megamod.d81: $(EXE_DIR)/boot.prg.addr $(BIN_DIR)/alldata.bin
 	$(RM) $@
-	$(CC1541) -n "mega" -i " 2022" -d 19 -v\
+	$(CC1541) -n "megamod" -i " 2023" -d 19 -v\
 	 \
-	 -f "boot" -w $(EXE_DIR)/bootaddr.prg \
-	 -f "00" -w $(BIN_DIR)/font_chars1.bin \
-	 -f "01" -w $(BIN_DIR)/glyphs_chars1.bin \
-	 -f "02" -w $(BIN_DIR)/glyphs_pal1.bin \
-	 -f "03" -w $(BIN_DIR)/cursor_sprites1.bin \
-	 -f "04" -w $(BIN_DIR)/kbcursor_sprites1.bin \
-	 -f "05" -w $(BIN_DIR)/cursor_pal1.bin \
-	 -f "06" -w $(BIN_DIR)/song.mod \
+	 -f "megamod" -w $(EXE_DIR)/boot.prg.addr \
+	 -f "megamod.ifflcrch" -w $(BIN_DIR)/alldata.bin \
 	$@
 
 # -----------------------------------------------------------------------------
 
-run: $(EXE_DIR)/disk.d81
+run: $(EXE_DIR)/megamod.d81
 
 ifeq ($(megabuild), 1)
 
 ifeq ($(useetherload), 1)
 
-	$(MEGAFTP) -c "put D:\Mega\MegaUI\exe\disk.d81 megaui.d81" -c "quit"
-	$(EL) -m MEGAUI.D81 -r $(EXE_DIR)/bootaddr.prg
+	$(MEGAFTP) -c "put D:\Mega\MegaUI\exe\megamod.d81 megamod.d81" -c "quit"
+	$(EL) -m MEGAMOD.D81 -r $(EXE_DIR)/boot.prg.addr
 
 else
 
 	m65 -l COM3 -F
 	mega65_ftp.exe -l COM3 -s 2000000 -c "cd /" \
-	-c "put D:\Mega\MegaUI\exe\disk.d81 megaui.d81"
+	-c "put D:\Mega\MegaUI\exe\megamod.d81 megamod.d81"
 
 	m65 -l COM3 -F
 	m65 -l COM3 -T 'list'
 	m65 -l COM3 -T 'list'
 	m65 -l COM3 -T 'list'
-	m65 -l COM3 -T 'mount "megaui.d81"'
+	m65 -l COM3 -T 'mount "megamod.d81"'
 	m65 -l COM3 -T 'load "$$"'
 	m65 -l COM3 -T 'list'
 	m65 -l COM3 -T 'list'
@@ -183,7 +221,7 @@ endif
 else
 
 #	cmd.exe /c $(XMEGA65) -mastervolume 50 -autoload -8 $(EXE_DIR)/disk.d81
-	cmd.exe /c $(XMEGA65) -autoload -8 $(EXE_DIR)/disk.d81
+	cmd.exe /c $(XMEGA65) -autoload -8 $(EXE_DIR)/megamod.d81
 
 endif
 
