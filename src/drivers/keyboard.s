@@ -128,6 +128,7 @@ keyboard_toascii
 .define KEYBOARD_KEY7			3*8 + 0
 .define KEYBOARD_KEY8			3*8 + 3
 .define KEYBOARD_KEY9			4*8 + 0
+.define KEYBOARD_ESC			7*8 + 1
 .define KEYBOARD_NOKEY			255
 
 .define KEYBOARD_F1				0*8 + 4

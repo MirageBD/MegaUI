@@ -52,8 +52,58 @@ uiroot_move
 
 uiroot_keypress
 		jsr uielement_keypress
-		rts
 
+		lda keyboard_pressedeventarg
+		cmp #KEYBOARD_ESC
+		bne uiroot_keypress_end
+
+		sei
+		bra :+
+romfilename .byte .sprintf("MEGA65.ROM"), 0
+:		lda #$37
+		sta $01
+		; Disable C65 ROM write protection via Hypervisor trap
+		lda #$02
+		sta $d641
+		clv
+		; copy rom filename to bank 0
+		ldx #$0b
+:	    lda romfilename,x
+		sta $0200,x
+		dex
+		bpl :-
+		; set rom filename
+		ldy #$02
+		lda #$2e
+		sta $d640
+		clv
+		; load rom file to $20000
+		lda #$00
+		tax
+		tay
+	    ldz #$02
+	    lda #$36
+	    sta $d640
+	    clv
+		; Set bit 7 - HOTREG
+		lda #%10000000
+		tsb $d05d
+		; disable Super-Extended Attribute Mode
+		lda #$00
+		sta $d054
+		; disable SPRENV400
+		lda #$00
+		sta $d076
+		; restore palette
+		lda #$00
+		sta $d070
+		; RESET!
+		;jmp $e4b8
+		jmp ($fffc)
+
+uiroot_keypress_end
+		rts
+    
 uiroot_keyrelease
 		jsr uielement_keyrelease
 		rts
