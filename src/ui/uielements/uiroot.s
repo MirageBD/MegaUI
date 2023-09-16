@@ -57,6 +57,7 @@ uiroot_keypress
 		cmp #KEYBOARD_ESC
 		bne uiroot_keypress_end
 
+/*
 		sei
 		bra :+
 romfilename .byte .sprintf("MEGA65.ROM"), 0
@@ -100,6 +101,7 @@ romfilename .byte .sprintf("MEGA65.ROM"), 0
 		; RESET!
 		;jmp $e4b8
 		jmp ($fffc)
+*/
 
 uiroot_keypress_end
 		rts
