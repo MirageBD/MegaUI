@@ -58,61 +58,19 @@ BINFILES += $(BIN_DIR)/kbcursor_sprites1.bin
 BINFILES += $(BIN_DIR)/cursor_pal1.bin
 BINFILES += $(BIN_DIR)/song.mod
 
-BINFILESADDR  = $(BIN_DIR)/font_chars1.bin.addr
-BINFILESADDR += $(BIN_DIR)/glyphs_chars1.bin.addr
-BINFILESADDR += $(BIN_DIR)/glyphs_pal1.bin.addr
-BINFILESADDR += $(BIN_DIR)/cursor_sprites1.bin.addr
-BINFILESADDR += $(BIN_DIR)/kbcursor_sprites1.bin.addr
-BINFILESADDR += $(BIN_DIR)/cursor_pal1.bin.addr
-BINFILESADDR += $(BIN_DIR)/song.mod.addr
-
-BINFILESMC  = $(BIN_DIR)/font_chars1.bin.addr.mc
-BINFILESMC += $(BIN_DIR)/glyphs_chars1.bin.addr.mc
-BINFILESMC += $(BIN_DIR)/glyphs_pal1.bin.addr.mc
-BINFILESMC += $(BIN_DIR)/cursor_sprites1.bin.addr.mc
-BINFILESMC += $(BIN_DIR)/kbcursor_sprites1.bin.addr.mc
-BINFILESMC += $(BIN_DIR)/cursor_pal1.bin.addr.mc
-BINFILESMC += $(BIN_DIR)/song.mod.addr.mc
-
-# % is a wildcard
-# $< is the first dependency
-# $@ is the target
-# $^ is all dependencies
-
 # -----------------------------------------------------------------------------
 
 $(BIN_DIR)/font_chars1.bin: $(BIN_DIR)/font.bin
-	$(MC)
 	$(MC) $< cm1:1 d1:0 cl1:10000 rc1:0
 
 $(BIN_DIR)/glyphs_chars1.bin: $(BIN_DIR)/glyphs.bin
-	$(MC)
 	$(MC) $< cm1:1 d1:0 cl1:14000 rc1:0
 
 $(BIN_DIR)/cursor_sprites1.bin: $(BIN_DIR)/cursor.bin
-	$(MC)
 	$(MC) $< cm1:1 d1:0 cl1:14000 rc1:0 sm1:1
 
 $(BIN_DIR)/kbcursor_sprites1.bin: $(BIN_DIR)/kbcursor.bin
-	$(MC)
 	$(MC) $< cm1:1 d1:0 cl1:14000 rc1:0 sm1:1
-
-$(BIN_DIR)/alldata.bin: $(BINFILES)
-	$(MEGAADDRESS) $(BIN_DIR)/font_chars1.bin          00010000
-	$(MEGAADDRESS) $(BIN_DIR)/glyphs_chars1.bin        00014000
-	$(MEGAADDRESS) $(BIN_DIR)/glyphs_pal1.bin          0000c700
-	$(MEGAADDRESS) $(BIN_DIR)/cursor_sprites1.bin      0000ce00
-	$(MEGAADDRESS) $(BIN_DIR)/kbcursor_sprites1.bin    0000cf00
-	$(MEGAADDRESS) $(BIN_DIR)/cursor_pal1.bin          0000ca00
-	$(MEGAADDRESS) $(BIN_DIR)/song.mod                 00020000
-	$(MEGACRUNCH) $(BIN_DIR)/font_chars1.bin.addr
-	$(MEGACRUNCH) $(BIN_DIR)/glyphs_chars1.bin.addr
-	$(MEGACRUNCH) $(BIN_DIR)/glyphs_pal1.bin.addr
-	$(MEGACRUNCH) $(BIN_DIR)/cursor_sprites1.bin.addr
-	$(MEGACRUNCH) $(BIN_DIR)/kbcursor_sprites1.bin.addr
-	$(MEGACRUNCH) $(BIN_DIR)/cursor_pal1.bin.addr
-	$(MEGACRUNCH) $(BIN_DIR)/song.mod.addr
-	$(MEGAIFFL) $(BINFILESMC) $(BIN_DIR)/alldata.bin
 
 $(EXE_DIR)/boot.o:	$(SRC_DIR)/boot.s \
 					$(SRC_DIR)/main.s \
@@ -169,18 +127,16 @@ $(EXE_DIR)/boot.o:	$(SRC_DIR)/boot.s \
 					Makefile Linkfile
 	$(AS) $(ASFLAGS) -o $@ $<
 
-$(EXE_DIR)/boot.prg.addr: $(EXE_DIR)/boot.o Linkfile
+$(EXE_DIR)/boot.prg.addr.mc: $(BINFILES) $(EXE_DIR)/boot.o Linkfile
 	$(LD) -Ln $(EXE_DIR)/boot.maptemp --dbgfile $(EXE_DIR)/boot.dbg -C Linkfile -o $(EXE_DIR)/boot.prg $(EXE_DIR)/boot.o
-	$(MEGAADDRESS) $(EXE_DIR)/boot.prg 2001
-	$(SED) $(CONVERTVICEMAP) < $(EXE_DIR)/boot.maptemp > boot.map
-	$(SED) $(CONVERTVICEMAP) < $(EXE_DIR)/boot.maptemp > boot.list
+	$(MEGAADDRESS) $(EXE_DIR)/boot.prg 00002100
+	$(MEGACRUNCH) -e 00002100 $(EXE_DIR)/boot.prg.addr
 
-$(EXE_DIR)/megamod.d81: $(EXE_DIR)/boot.prg.addr $(BIN_DIR)/alldata.bin
+$(EXE_DIR)/megamod.d81: $(EXE_DIR)/boot.prg.addr.mc
 	$(RM) $@
 	$(CC1541) -n "megamod" -i " 2023" -d 19 -v\
 	 \
-	 -f "megamod" -w $(EXE_DIR)/boot.prg.addr \
-	 -f "megamod.ifflcrch" -w $(BIN_DIR)/alldata.bin \
+	 -f "megamod" -w $(EXE_DIR)/boot.prg.addr.mc \
 	$@
 
 # -----------------------------------------------------------------------------
@@ -188,41 +144,12 @@ $(EXE_DIR)/megamod.d81: $(EXE_DIR)/boot.prg.addr $(BIN_DIR)/alldata.bin
 run: $(EXE_DIR)/megamod.d81
 
 ifeq ($(megabuild), 1)
-
-ifeq ($(useetherload), 1)
-
-	$(MEGAFTP) -c "put D:\Mega\MegaUI\exe\megamod.d81 megamod.d81" -c "quit"
-	$(EL) -m MEGAMOD.D81 -r $(EXE_DIR)/boot.prg.addr
-
-else
-
-	m65 -l COM3 -F
-	mega65_ftp.exe -l COM3 -s 2000000 -c "cd /" \
-	-c "put D:\Mega\MegaUI\exe\megamod.d81 megamod.d81"
-
-	m65 -l COM3 -F
-	m65 -l COM3 -T 'list'
-	m65 -l COM3 -T 'list'
-	m65 -l COM3 -T 'list'
-	m65 -l COM3 -T 'mount "megamod.d81"'
-	m65 -l COM3 -T 'load "$$"'
-	m65 -l COM3 -T 'list'
-	m65 -l COM3 -T 'list'
-	m65 -l COM3 -T 'load "boot"'
-	m65 -l COM3 -T 'list'
-	m65 -l COM3 -T 'run'
-
-endif
-
+	$(EL) -r $(EXE_DIR)/boot.prg.addr.mc
 ifeq ($(attachdebugger), 1)
 	m65dbg --device /dev/ttyS2
 endif
-
 else
-
-#	cmd.exe /c $(XMEGA65) -mastervolume 50 -autoload -8 $(EXE_DIR)/disk.d81
 	cmd.exe /c $(XMEGA65) -autoload -8 $(EXE_DIR)/megamod.d81
-
 endif
 
 clean:
