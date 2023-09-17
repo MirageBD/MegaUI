@@ -1,8 +1,6 @@
 # -----------------------------------------------------------------------------
 
 megabuild		= 1
-useetherload	= 1
-finalbuild		= 1
 attachdebugger	= 0
 
 # -----------------------------------------------------------------------------
@@ -21,7 +19,7 @@ BIN_DIR			= ./bin
 
 # mega65 fork of ca65: https://github.com/dillof/cc65
 AS				= ca65mega
-ASFLAGS			= -g -D finalbuild=$(finalbuild) -D megabuild=$(megabuild) --cpu 45GS02 -U --feature force_range -I ./exe
+ASFLAGS			= -g -D megabuild=$(megabuild) --cpu 45GS02 -U --feature force_range -I ./exe
 LD				= ld65
 C1541			= c1541
 CC1541			= cc1541
@@ -74,8 +72,6 @@ $(BIN_DIR)/kbcursor_sprites1.bin: $(BIN_DIR)/kbcursor.bin
 
 $(EXE_DIR)/boot.o:	$(SRC_DIR)/boot.s \
 					$(SRC_DIR)/main.s \
-					$(SRC_DIR)/irqload.s \
-					$(SRC_DIR)/decruncher.s \
 					$(SRC_DIR)/macros.s \
 					$(SRC_DIR)/mathmacros.s \
 					$(SRC_DIR)/uidata.s \
@@ -129,8 +125,8 @@ $(EXE_DIR)/boot.o:	$(SRC_DIR)/boot.s \
 
 $(EXE_DIR)/boot.prg.addr.mc: $(BINFILES) $(EXE_DIR)/boot.o Linkfile
 	$(LD) -Ln $(EXE_DIR)/boot.maptemp --dbgfile $(EXE_DIR)/boot.dbg -C Linkfile -o $(EXE_DIR)/boot.prg $(EXE_DIR)/boot.o
-	$(MEGAADDRESS) $(EXE_DIR)/boot.prg 00002100
-	$(MEGACRUNCH) -e 00002100 $(EXE_DIR)/boot.prg.addr
+	$(MEGAADDRESS) $(EXE_DIR)/boot.prg 00000600
+	$(MEGACRUNCH) -e 00000600 $(EXE_DIR)/boot.prg.addr
 
 $(EXE_DIR)/megamod.d81: $(EXE_DIR)/boot.prg.addr.mc
 	$(RM) $@
@@ -144,6 +140,7 @@ $(EXE_DIR)/megamod.d81: $(EXE_DIR)/boot.prg.addr.mc
 run: $(EXE_DIR)/megamod.d81
 
 ifeq ($(megabuild), 1)
+	$(MEGAFTP) -c "put D:\Mega\MegaUI\exe\megamod.d81 megamod.d81" -c "quit"
 	$(EL) -r $(EXE_DIR)/boot.prg.addr.mc
 ifeq ($(attachdebugger), 1)
 	m65dbg --device /dev/ttyS2

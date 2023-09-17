@@ -1,11 +1,11 @@
 MEMORY
 {
-	RAM:		start=$2100, size=$50000;
+	RAM:		start=$0600, size=$50000;
 }
 
 SEGMENTS
 {
-	MAIN:			load=RAM, start=$2100;
+	MAIN:			load=RAM, start=$0600;
 	TEXT:			load=RAM, align=256;
 
 	GLYPHSPAL:		load=RAM, start=$c700;
@@ -15,5 +15,5 @@ SEGMENTS
 	FONT:			load=RAM, start=$10000;
 	GLYPHS:			load=RAM, start=$14000;
 
-	SONG:			load=RAM, start=$20000;
+	SONG:			load=RAM, start=$19000;
 }

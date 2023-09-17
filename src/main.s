@@ -1,19 +1,19 @@
 
 
-.define screen					$e000	; size = 80*50*2 = $1f40
-
 .define uipal					$c700	; size = $0300
 .define spritepal				$ca00
 .define sprptrs					$cd00
 .define sprites					$ce00
 .define kbsprites				$cf00
 
-.define uichars					$10000	; $10000 - $14000     size = $4000
-.define glchars					$14000	; $14000 - $1d000     size = $9000
-.define samplespritesbuf		$1d000	; $1d000 - $1d800
-.define samplesprites			$1d800	; $1d000 - $1d800
+.define screen					$e000	; size = 80*50*2 = $1f40
 
-.define moddata					$20000
+.define uichars					$10000	; $10000 - $14000     size = $4000
+.define glchars					$14000	; $14000 - $18000     size = $9000
+.define samplespritesbuf		$1d000	; $18000 - $18800
+.define samplesprites			$1d800	; $18800 - $19000
+
+.define moddata					$19000
 
 ; ----------------------------------------------------------------------------------------------------
 
@@ -57,11 +57,18 @@ entry_main
 		map
 		eom
 
+		lda #$41										; enable 40MHz
+		sta $00
+
 		lda #$47										; enable C65GS/VIC-IV IO registers
 		sta $d02f
 		lda #$53
 		sta $d02f
 		eom
+
+		lda #%10000000									; force PAL mode, because I can't be bothered with fixing it for NTSC
+		trb $d06f										; clear bit 7 for PAL ; trb $d06f 
+		;tsb $d06f										; set bit 7 for NTSC  ; tsb $d06f
 
 		lda #$05										; enable Super-Extended Attribute Mode by asserting the FCLRHI and CHR16 signals - set bits 2 and 0 of $D054.
 		sta $d054

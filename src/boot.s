@@ -13,8 +13,6 @@ filebuffer = $0200
 .include "ui/uimacros.s"
 
 .include "main.s"
-.include "irqload.s"
-.include "decruncher.s"
 .include "modplay.s"
 
 .include "drivers/mouse.s"

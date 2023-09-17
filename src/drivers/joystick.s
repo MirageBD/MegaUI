@@ -34,6 +34,8 @@ joystick_update
 		; $dc03 = Data Direction Port B
 		; 	Bit X: 0=Input (read only), 1=Output (read and write)
 
+		rts
+
 		ldx $dc00									; #$7f when nothing is pressed
 
 		txa
