@@ -16,7 +16,7 @@ uitxt_sample		.byte "sample", 0
 
 uitxt_bpm			.byte "bpm", 0
 
-uitxt_status		.byte "status", $3a, " all right", 0
+uitxt_status		.byte "status", $3a, " deft made me do it", 0
 
 uitxt_checkbox		.byte "checkbox", 0
 uitxt_radiobutton	.byte "radiobtn", 0
