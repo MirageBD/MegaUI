@@ -1,6 +1,6 @@
 # -----------------------------------------------------------------------------
 
-megabuild		= 1
+megabuild		= 0
 attachdebugger	= 0
 
 # -----------------------------------------------------------------------------
@@ -34,7 +34,7 @@ MEGACRUNCH		= megatool -c
 MEGAIFFL		= megatool -i
 MEGAMOD			= MegaMod
 EL				= etherload
-XMEGA65			= H:\xemu\xmega65.exe
+XMEGA65			= D:\PCTOOLS\xemu\xmega65.exe
 MEGAFTP			= mega65_ftp -e
 
 CONVERTBREAK	= 's/al [0-9A-F]* \.br_\([a-z]*\)/\0\nbreak \.br_\1/'
