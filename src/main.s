@@ -6,7 +6,7 @@
 .define sprites					$ce00
 .define kbsprites				$cf00
 
-.define screen					$e000	; size = 80*50*2 = $1f40
+.define screen					$a000	; size = 80*50*2 = $1f40
 
 .define uichars					$10000	; $10000 - $14000     size = $4000
 .define glchars					$14000	; $14000 - $18000     size = $9000
@@ -165,7 +165,6 @@ irq1
 		jsr ui_user_update
 		;lda #$00
 		;sta $d020
-
 
 .if megabuild = 1
 		lda #$ff
